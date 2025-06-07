@@ -1,0 +1,15 @@
+services:
+  kometa:
+    image: kometateam/kometa
+    container_name: kometa
+    env_file:
+      - ../../.env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - KOMETA_RUN=true
+    volumes:
+      - ${DOCKER_PATH}/kometa/config:/config
+    restart: unless-stopped
+networks: {}

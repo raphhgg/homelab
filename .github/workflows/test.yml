@@ -1,0 +1,216 @@
+name: Homelab Integration Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths: [ 'services/**' ]
+
+jobs:
+  validate-compose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup test environment
+        run: |
+          # Create test .env
+          cat > .env << EOF
+          PUID=1000
+          PGID=1000
+          UMASK=002
+          TZ=Europe/Brussels
+          DOCKER_PATH=/tmp/docker
+          MEDIA_PATH=/tmp/media
+          PLEX_CLAIM=test-claim
+          MYSQL_ROOT_PASSWORD=test-password
+          POSTGRES_PASSWORD=test-password
+          SONARR_API_KEY=test-api-key
+          RADARR_API_KEY=test-api-key
+          PROWLARR_API_KEY=test-api-key
+          DISCORD_WEBHOOK=https://discord.com/api/webhooks/test
+          EOF
+          
+          # Create required directories
+          sudo mkdir -p /tmp/docker /tmp/media /tmp/downloads
+          sudo chown -R 1000:1000 /tmp/docker /tmp/media /tmp/downloads
+
+      - name: Test changed services
+        run: |
+          # Get changed services
+          changed_files=$(git diff --name-only origin/main...HEAD | grep "^services/" || true)
+          
+          if [ -n "$changed_files" ]; then
+            changed_services=$(echo "$changed_files" | cut -d'/' -f2 | sort -u)
+            
+            for service in $changed_services; do
+              if [ -f "services/$service/docker-compose.yml" ]; then
+                echo "🧪 Testing $service..."
+                
+                # 1. Validate compose syntax
+                cd "services/$service"
+                docker-compose config --quiet
+                echo "✅ $service: Compose syntax valid"
+                
+                # 2. Start the service
+                docker-compose up -d
+                echo "🚀 $service: Container started"
+                
+                # 3. Wait for container to be ready
+                sleep 30
+                
+                # 4. Check container health
+                container_name=$(docker-compose ps --services | head -1)
+                if [ -n "$container_name" ]; then
+                  # Check if container is running
+                  if ! docker-compose ps | grep -q "Up"; then
+                    echo "❌ $service: Container failed to start"
+                    docker-compose logs
+                    exit 1
+                  fi
+                  
+                  # Check container health if health check exists
+                  full_container_name="${service}_${container_name}_1"
+                  if docker inspect "$full_container_name" 2>/dev/null | grep -q "Health"; then
+                    health_status=$(docker inspect --format='{{.State.Health.Status}}' "$full_container_name" 2>/dev/null || echo "unknown")
+                    if [ "$health_status" != "healthy" ] && [ "$health_status" != "starting" ]; then
+                      echo "❌ $service: Container unhealthy ($health_status)"
+                      docker-compose logs
+                      exit 1
+                    fi
+                    echo "✅ $service: Container health check passed"
+                  fi
+                  
+                  echo "✅ $service: Container started successfully"
+                fi
+                
+                # 5. Test specific service functionality
+                bash ../../scripts/test-service.sh "$service"
+                
+                # 6. Cleanup
+                docker-compose down -v
+                docker system prune -f
+                cd ../..
+                
+                echo "🧹 $service: Cleanup completed"
+              fi
+            done
+          else
+            echo "ℹ️  No service changes detected"
+          fi
+
+      - name: Security scan
+        run: |
+          echo "🔍 Running security scan..."
+          
+          # Check for insecure configurations
+          security_issues=0
+          
+          # Check for default passwords
+          if grep -r -i "password.*admin\|admin.*admin\|password.*123\|root.*root" services/ --include="*.yml" --include="*.yaml"; then
+            echo "❌ Default passwords found"
+            security_issues=$((security_issues + 1))
+          fi
+          
+          # Check for privileged containers
+          if grep -r "privileged.*true" services/ --include="*.yml" --include="*.yaml"; then
+            echo "⚠️  Privileged containers found - review needed"
+          fi
+          
+          # Check for services binding to 0.0.0.0
+          if grep -rE "ports:.*0\.0\.0\.0" services/ --include="*.yml" --include="*.yaml"; then
+            echo "⚠️  Services binding to 0.0.0.0 - review needed"
+          fi
+          
+          if [ $security_issues -gt 0 ]; then
+            echo "❌ Security scan failed with $security_issues issues"
+            exit 1
+          else
+            echo "✅ Security scan passed"
+          fi
+
+      - name: Resource limits check
+        run: |
+          echo "📊 Checking resource limits..."
+          
+          missing_limits=0
+          for compose in services/*/docker-compose.yml; do
+            service_name=$(dirname "$compose" | xargs basename)
+            
+            if ! grep -q -E "(mem_limit|memory:|cpus:|cpu_shares)" "$compose"; then
+              echo "⚠️  $service_name: No resource limits set"
+              missing_limits=$((missing_limits + 1))
+            fi
+          done
+          
+          if [ $missing_limits -gt 0 ]; then
+            echo "ℹ️  $missing_limits services without resource limits (consider adding them)"
+          else
+            echo "✅ All services have resource limits"
+          fi
+
+  integration-test:
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'integration-test')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup full test environment
+        run: |
+          # Setup test environment
+          cat > .env << EOF
+          PUID=1000
+          PGID=1000
+          UMASK=002
+          TZ=Europe/Brussels
+          DOCKER_PATH=/tmp/docker
+          MEDIA_PATH=/tmp/media
+          PLEX_CLAIM=test-claim
+          MYSQL_ROOT_PASSWORD=test-password
+          POSTGRES_PASSWORD=test-password
+          SONARR_API_KEY=test-api-key
+          RADARR_API_KEY=test-api-key
+          PROWLARR_API_KEY=test-api-key
+          DISCORD_WEBHOOK=https://discord.com/api/webhooks/test
+          EOF
+          
+          sudo mkdir -p /tmp/docker /tmp/media /tmp/downloads
+          sudo chown -R 1000:1000 /tmp/docker /tmp/media /tmp/downloads
+
+      - name: Test service dependencies
+        run: |
+          echo "🔗 Testing service dependencies..."
+          
+          # Test *arr stack integration
+          echo "Starting Prowlarr..."
+          cd services/prowlarr
+          docker-compose up -d
+          sleep 90
+          
+          echo "Starting Sonarr..."
+          cd ../sonarr  
+          docker-compose up -d
+          sleep 90
+          
+          # Test if services can communicate
+          prowlarr_ip=$(docker inspect prowlarr_prowlarr_1 --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 2>/dev/null || echo "")
+          
+          if [ -n "$prowlarr_ip" ]; then
+            if docker exec sonarr_sonarr_1 nc -z "$prowlarr_ip" 9696 2>/dev/null; then
+              echo "✅ Sonarr can reach Prowlarr at $prowlarr_ip:9696"
+            else
+              echo "❌ Sonarr cannot reach Prowlarr"
+              exit 1
+            fi
+          else
+            echo "⚠️  Could not determine Prowlarr IP for connectivity test"
+          fi
+          
+          # Cleanup
+          docker-compose down -v
+          cd ../prowlarr
+          docker-compose down -v
+          cd ../..
+          
+          echo "✅ Integration test completed" 

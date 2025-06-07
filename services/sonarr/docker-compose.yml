@@ -1,0 +1,23 @@
+services:
+  sonarr:
+    image: ghcr.io/hotio/sonarr:latest
+    container_name: sonarr
+    env_file:
+      - ../../.env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - TP_HOTIO=true
+      - TP_THEME=organizr
+    network_mode: main
+    volumes:
+      - ${DOCKER_PATH}/sonarr:/config:rw
+      - /volume2/downloads/torrents:/data/torrents:rw
+      - /volume2/downloads/usenet:/data/usenet:rw
+      - ${MEDIA_PATH}:/data/medias:rw
+      - ${DOCKER_PATH}/themepark/98-themepark-sonarr:/etc/cont-init.d/98-themepark
+    ports:
+      - 8988:8989
+    restart: unless-stopped
+networks: {}

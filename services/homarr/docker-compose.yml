@@ -1,0 +1,30 @@
+services:
+  homarr:
+    image: ghcr.io/ajnart/homarr:latest
+    container_name: homarr
+    env_file:
+      - ../../.env
+    networks:
+      - main
+      - dns_network
+      - socket_proxy
+    restart: unless-stopped
+    environment:
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+      - DOCKER_HOST=tcp://10.10.2.2:2375
+      - DOCKER_PORT=2375
+    volumes:
+      - ${DOCKER_PATH}/homarr/configs/:/app/data/configs
+      - ${DOCKER_PATH}/homarr/icons/:/app/public/icons
+      - ${DOCKER_PATH}/homarr/data/:/data
+    ports:
+      - 7575:7575
+    dns:
+      - 172.23.0.7
+networks:
+  main:
+    external: true
+  dns_network:
+    external: true
+  socket_proxy:
+    external: true

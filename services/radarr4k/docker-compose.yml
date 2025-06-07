@@ -1,0 +1,24 @@
+services:
+  radarr:
+    image: ghcr.io/hotio/radarr:latest
+    container_name: radarr4k
+    env_file:
+      - ../../.env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - TP_HOTIO=true
+      - TP_THEME=organizr
+      - TP_ADDON=radarr-4k-logo
+    network_mode: main
+    volumes:
+      - ${DOCKER_PATH}/radarr4k:/config:rw
+      - /volume2/downloads/torrents:/data/torrents:rw
+      - /volume2/downloads/usenet:/data/usenet:rw
+      - ${MEDIA_PATH}:/data/medias:rw
+      - ${DOCKER_PATH}/themepark/98-themepark-radarr:/etc/cont-init.d/98-themepark
+    ports:
+      - 7879:7878
+    restart: unless-stopped
+networks: {}

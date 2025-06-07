@@ -1,0 +1,18 @@
+services:
+  bazarr:
+    image: ghcr.io/hotio/bazarr
+    container_name: bazarr
+    env_file:
+      - ../../.env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=${UMASK}
+      - TZ=${TZ}
+    ports:
+      - 6767:6767
+    volumes:
+      - ${DOCKER_PATH}/bazarr:/config
+      - ${MEDIA_PATH}:/data/medias
+    restart: unless-stopped
+networks: {}

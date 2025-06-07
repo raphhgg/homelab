@@ -1,0 +1,28 @@
+name: Deploy to Synology NAS
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'services/**' ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Deploy changed services
+        run: |
+          chmod +x ./scripts/deploy.sh
+          ./scripts/deploy.sh
+
+  notify:
+    needs: deploy
+    runs-on: self-hosted
+    if: always()
+    steps:
+      - name: Notify deployment status
+        run: |
+          # Add notification logic (Discord, Slack, etc.)
+          echo "Deployment completed with status: ${{ needs.deploy.result }}" 

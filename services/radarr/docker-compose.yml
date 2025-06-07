@@ -1,0 +1,23 @@
+services:
+  radarr:
+    image: ghcr.io/hotio/radarr:latest
+    container_name: radarr
+    env_file:
+      - ../../.env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - TP_HOTIO=true
+      - TP_THEME=organizr
+    volumes:
+      - ${DOCKER_PATH}/radarr:/config
+      - /volume2/downloads/torrents:/data/torrents
+      - /volume2/downloads/usenet:/data/usenet
+      - ${MEDIA_PATH}:/data/medias
+      - ${DOCKER_PATH}/themepark/98-themepark-radarr:/etc/cont-init.d/98-themepark
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+networks: {}
+

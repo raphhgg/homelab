@@ -1,0 +1,53 @@
+services:
+  sabnzbd:
+    container_name: sabnzbd
+    image: ghcr.io/hotio/sabnzbd:release-4.4.0
+    env_file:
+      - ../../.env
+    networks:
+      - main
+    ports:
+      - 8090:8080/tcp
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=${UMASK}
+      - TZ=${TZ}
+      - VPN_ENABLED=true
+      - VPN_CONF=wg0-fix
+      - VPN_PROVIDER=pia
+      - VPN_LAN_NETWORK=10.10.2.0/24
+      - VPN_LAN_LEAK_ENABLED=false #
+      - VPN_EXPOSE_PORTS_ON_LAN #
+      - VPN_AUTO_PORT_FORWARD=true #
+      - VPN_KEEP_LOCAL_DNS=true #
+      - VPN_FIREWALL_TYPE=auto #
+      - VPN_HEALTHCHECK_ENABLED=true #
+      - VPN_PIA_USER=${VPN_PIA_USER}
+      - VPN_PIA_PASS=${VPN_PIA_PASS}
+      - VPN_PIA_PREFERRED_REGION=swiss #Switzerland #,Romania,Iceland,Panama
+      - VPN_PIA_DIP_TOKEN=no #
+      - VPN_PIA_PORT_FORWARD_PERSIST=false #
+      - PRIVOXY_ENABLED=false #
+      - UNBOUND_ENABLED=false #
+      - TP_HOTIO=true
+      - TP_THEME=space-gray
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+    volumes:
+      - ${DOCKER_PATH}/sabnzbd:/config:rw
+      - /volume2/downloads/usenet:/data/usenet:rw
+      - ${DOCKER_PATH}/themepark/98-themepark-sabnzbd:/etc/cont-init.d/98-themepark:rw
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv6.conf.all.disable_ipv6=1
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    restart: unless-stopped
+networks:
+  main:
+    external: true
+    name: main

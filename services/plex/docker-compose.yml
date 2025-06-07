@@ -1,0 +1,31 @@
+services:
+  plex:
+    image: ghcr.io/hotio/plex
+    container_name: plex
+    env_file:
+      - ../../.env
+    network_mode: host
+    mem_limit: 4g
+    cpu_shares: 1024
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=${UMASK}
+      - TZ=${TZ}
+      - PLEX_CLAIM=${PLEX_CLAIM}
+      - PLEX_ADVERTISE_URL=http://10.10.2.2:32400
+      - PLEX_NO_AUTH_NETWORKS=10.10.2.0/24
+      - PLEX_BETA_INSTALL=false
+      - PLEX_PURGE_CODECS=false
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:32400/web
+    volumes:
+      - ${DOCKER_PATH}/plex/config:/config
+      - /dev/shm:/transcode
+      - ${MEDIA_PATH}:/data/medias
+    ports:
+      - 32400:32400
+    devices:
+      - /dev/dri:/dev/dri
+    restart: unless-stopped
+networks: {}

@@ -1,0 +1,19 @@
+services:
+  overseerr:
+    container_name: overseerr
+    image: ghcr.io/hotio/overseerr
+    env_file:
+      - ../../.env
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - 5055:5055
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=${UMASK}
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_PATH}/overseerr:/config
+    restart: unless-stopped
+networks: {}
