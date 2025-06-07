@@ -48,6 +48,7 @@ jobs:
           VPN_PIA_USER=test-user
           VPN_PIA_PASS=test-pass
           VPN_PIA_PREFERRED_REGION=us_east
+          PIHOLE_WEBPASSWORD=test-password
           EOF
           
           # Create required directories
@@ -60,6 +61,7 @@ jobs:
           # Create networks that services expect
           docker network create main || echo "Network main already exists"
           docker network create dns_network || echo "Network dns_network already exists"
+          docker network create socket_proxy || echo "Network socket_proxy already exists"
 
       - name: Test changed services only
         run: |
@@ -120,9 +122,7 @@ jobs:
                 fi
                 
                 # 5. Test specific service functionality
-                cd ../..
-                bash scripts/test-service.sh "$service"
-                cd "services/$service"
+                bash ../../scripts/test-service.sh "$service"
                 
                 # 6. Cleanup
                 docker-compose down -v
