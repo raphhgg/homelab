@@ -53,9 +53,9 @@ jobs:
           docker-compose --version
           docker --version
         
-      - name: Setup test environment
+              - name: Setup test environment
         run: |
-          # Create test .env
+          # Create test .env in root
           cat > .env << EOF
           PUID=1000
           PGID=1000
@@ -63,6 +63,7 @@ jobs:
           TZ=Europe/Brussels
           DOCKER_PATH=/tmp/docker
           MEDIA_PATH=/tmp/media
+          DOWNLOAD_PATH=/tmp/downloads
           PLEX_CLAIM=test-claim
           MYSQL_ROOT_PASSWORD=test-password
           POSTGRES_PASSWORD=test-password
@@ -86,8 +87,9 @@ jobs:
           if [ -f "services/$service/docker-compose.yml" ]; then
             echo "🧪 Testing $service (ALL SERVICES MODE)..."
             
-            # 1. Validate compose syntax
+            # 1. Copy .env file to service directory and validate compose syntax
             cd "services/$service"
+            cp ../../.env .
             docker-compose config --quiet
             echo "✅ $service: Compose syntax valid"
             
@@ -248,18 +250,21 @@ jobs:
           # Start Prowlarr first (indexer management)
           echo "Starting Prowlarr..."
           cd services/prowlarr
+          cp ../../.env .
           docker-compose up -d
           sleep 120  # Prowlarr needs time to initialize
           
           # Start Sonarr
           echo "Starting Sonarr..."
-          cd ../sonarr  
+          cd ../sonarr
+          cp ../../.env .
           docker-compose up -d
           sleep 90
           
           # Start Radarr
           echo "Starting Radarr..."
           cd ../radarr
+          cp ../../.env .
           docker-compose up -d
           sleep 90
           
@@ -303,12 +308,14 @@ jobs:
           # Start qBittorrent
           echo "Starting qBittorrent..."
           cd services/qbittorrent
+          cp ../../.env .
           docker-compose up -d
           sleep 60
           
           # Start Sonarr to test download client connectivity
           echo "Starting Sonarr for download client test..."
           cd ../sonarr
+          cp ../../.env .
           docker-compose up -d
           sleep 90
           

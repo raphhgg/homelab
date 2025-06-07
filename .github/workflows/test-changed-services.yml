@@ -37,6 +37,7 @@ jobs:
           TZ=Europe/Brussels
           DOCKER_PATH=/tmp/docker
           MEDIA_PATH=/tmp/media
+          DOWNLOAD_PATH=/tmp/downloads
           PLEX_CLAIM=test-claim
           MYSQL_ROOT_PASSWORD=test-password
           POSTGRES_PASSWORD=test-password
@@ -63,8 +64,9 @@ jobs:
               if [ -f "services/$service/docker-compose.yml" ]; then
                 echo "🧪 Testing $service..."
                 
-                # 1. Validate compose syntax
+                # 1. Copy .env file to service directory and validate compose syntax
                 cd "services/$service"
+                cp ../../.env .
                 docker-compose config --quiet
                 echo "✅ $service: Compose syntax valid"
                 
