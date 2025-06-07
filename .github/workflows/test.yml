@@ -23,8 +23,6 @@ jobs:
           DOCKER_PATH=/tmp/docker
           MEDIA_PATH=/tmp/media
           PLEX_CLAIM=test-claim
-          MYSQL_ROOT_PASSWORD=test-password
-          POSTGRES_PASSWORD=test-password
           SONARR_API_KEY=test-api-key
           RADARR_API_KEY=test-api-key
           PROWLARR_API_KEY=test-api-key

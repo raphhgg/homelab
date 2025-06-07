@@ -15,7 +15,7 @@ services:
       - 85:80/tcp
       - 440:443/tcp
     environment:
-      TZ: Europe/Brussels
+      TZ: ${TZ}
       WEBPASSWORD: ${PIHOLE_WEBPASSWORD}
       PIHOLE_DNS_: 172.23.0.8#5053
     volumes:

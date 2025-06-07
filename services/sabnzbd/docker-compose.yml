@@ -25,7 +25,7 @@ services:
       - VPN_HEALTHCHECK_ENABLED=true #
       - VPN_PIA_USER=${VPN_PIA_USER}
       - VPN_PIA_PASS=${VPN_PIA_PASS}
-      - VPN_PIA_PREFERRED_REGION=swiss #Switzerland #,Romania,Iceland,Panama
+      - VPN_PIA_PREFERRED_REGION=${VPN_PIA_PREFERRED_REGION} #Switzerland #,Romania,Iceland,Panama
       - VPN_PIA_DIP_TOKEN=no #
       - VPN_PIA_PORT_FORWARD_PERSIST=false #
       - PRIVOXY_ENABLED=false #
@@ -37,7 +37,7 @@ services:
       - 1.0.0.1
     volumes:
       - ${DOCKER_PATH}/sabnzbd:/config:rw
-      - /volume2/downloads/usenet:/data/usenet:rw
+      - ${DOWNLOAD_PATH}/usenet:/data/usenet:rw
       - ${DOCKER_PATH}/themepark/98-themepark-sabnzbd:/etc/cont-init.d/98-themepark:rw
     cap_add:
       - NET_ADMIN
