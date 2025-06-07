@@ -1,0 +1,304 @@
+name: Test All Services
+
+on:
+  pull_request:
+    branches: [ main ]
+    types: [labeled, synchronize, opened, reopened]
+
+jobs:
+  test-all-services:
+    runs-on: ubuntu-latest
+    # Only run when test-all label is present
+    if: contains(github.event.pull_request.labels.*.name, 'test-all')
+    strategy:
+      fail-fast: false
+      matrix:
+        service: 
+          - audiobookshelf
+          - autoscan
+          - bazarr
+          - calibre
+          - homarr
+          - imagemaid
+          - kometa
+          - notifiarr
+          - overseerr
+          - pihole_unbound
+          - plex
+          - prowlarr
+          - qbittorrent
+          - radarr
+          - radarr4k
+          - sabnzbd
+          - sonarr
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup test environment
+        run: |
+          # Create test .env
+          cat > .env << EOF
+          PUID=1000
+          PGID=1000
+          UMASK=002
+          TZ=Europe/Brussels
+          DOCKER_PATH=/tmp/docker
+          MEDIA_PATH=/tmp/media
+          PLEX_CLAIM=test-claim
+          MYSQL_ROOT_PASSWORD=test-password
+          POSTGRES_PASSWORD=test-password
+          SONARR_API_KEY=test-api-key
+          RADARR_API_KEY=test-api-key
+          PROWLARR_API_KEY=test-api-key
+          BAZARR_API_KEY=test-api-key
+          DISCORD_WEBHOOK=https://discord.com/api/webhooks/test
+          SLACK_WEBHOOK=https://hooks.slack.com/services/test
+          NETWORK_SUBNET=172.20.0.0/16
+          EOF
+          
+          # Create required directories
+          sudo mkdir -p /tmp/docker /tmp/media /tmp/downloads
+          sudo chown -R 1000:1000 /tmp/docker /tmp/media /tmp/downloads
+
+      - name: Test ${{ matrix.service }}
+        run: |
+          service="${{ matrix.service }}"
+          
+          if [ -f "services/$service/docker-compose.yml" ]; then
+            echo "🧪 Testing $service (ALL SERVICES MODE)..."
+            
+            # 1. Validate compose syntax
+            cd "services/$service"
+            docker-compose config --quiet
+            echo "✅ $service: Compose syntax valid"
+            
+            # 2. Start the service
+            docker-compose up -d
+            echo "🚀 $service: Container started"
+            
+            # 3. Wait for container to be ready (longer wait for all services)
+            sleep 45
+            
+            # 4. Check container health
+            container_name=$(docker-compose ps --services | head -1)
+            if [ -n "$container_name" ]; then
+              # Check if container is running
+              if ! docker-compose ps | grep -q "Up"; then
+                echo "❌ $service: Container failed to start"
+                docker-compose logs
+                exit 1
+              fi
+              
+              # Check container health if health check exists
+              full_container_name="${service}_${container_name}_1"
+              if docker inspect "$full_container_name" 2>/dev/null | grep -q "Health"; then
+                health_status=$(docker inspect --format='{{.State.Health.Status}}' "$full_container_name" 2>/dev/null || echo "unknown")
+                if [ "$health_status" != "healthy" ] && [ "$health_status" != "starting" ]; then
+                  echo "❌ $service: Container unhealthy ($health_status)"
+                  docker-compose logs
+                  exit 1
+                fi
+                echo "✅ $service: Container health check passed"
+              fi
+              
+              echo "✅ $service: Container started successfully"
+            fi
+            
+            # 5. Test specific service functionality
+            bash ../../scripts/test-service.sh "$service"
+            
+            # 6. Cleanup
+            docker-compose down -v
+            docker system prune -f
+            cd ../..
+            
+            echo "🧹 $service: Cleanup completed"
+          else
+            echo "⚠️  $service: docker-compose.yml not found"
+            exit 1
+          fi
+
+  security-scan-all:
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'test-all')
+    needs: test-all-services
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Comprehensive security scan
+        run: |
+          echo "🔍 Running comprehensive security scan on ALL services..."
+          
+          security_issues=0
+          privileged_containers=0
+          exposed_services=0
+          missing_limits=0
+          
+          for compose in services/*/docker-compose.yml; do
+            service_name=$(dirname "$compose" | xargs basename)
+            echo "🔍 Scanning $service_name..."
+            
+            # Check for default passwords
+            if grep -i "password.*admin\|admin.*admin\|password.*123\|root.*root" "$compose"; then
+              echo "❌ $service_name: Default passwords found"
+              security_issues=$((security_issues + 1))
+            fi
+            
+            # Check for privileged containers
+            if grep "privileged.*true" "$compose"; then
+              echo "⚠️  $service_name: Privileged container found"
+              privileged_containers=$((privileged_containers + 1))
+            fi
+            
+            # Check for services binding to 0.0.0.0
+            if grep -E "ports:.*0\.0\.0\.0" "$compose"; then
+              echo "⚠️  $service_name: Service binding to 0.0.0.0"
+              exposed_services=$((exposed_services + 1))
+            fi
+            
+            # Check for resource limits
+            if ! grep -q -E "(mem_limit|memory:|cpus:|cpu_shares)" "$compose"; then
+              echo "ℹ️  $service_name: No resource limits set"
+              missing_limits=$((missing_limits + 1))
+            fi
+          done
+          
+          echo ""
+          echo "📊 Security Scan Summary:"
+          echo "  - Security issues: $security_issues"
+          echo "  - Privileged containers: $privileged_containers"
+          echo "  - Services exposed to 0.0.0.0: $exposed_services"  
+          echo "  - Services without resource limits: $missing_limits"
+          
+          if [ $security_issues -gt 0 ]; then
+            echo "❌ Security scan failed with $security_issues critical issues"
+            exit 1
+          else
+            echo "✅ Security scan passed for all services"
+          fi
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'test-all')
+    needs: test-all-services
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup integration test environment
+        run: |
+          # Setup test environment
+          cat > .env << EOF
+          PUID=1000
+          PGID=1000
+          UMASK=002
+          TZ=Europe/Brussels
+          DOCKER_PATH=/tmp/docker
+          MEDIA_PATH=/tmp/media
+          PLEX_CLAIM=test-claim
+          MYSQL_ROOT_PASSWORD=test-password
+          POSTGRES_PASSWORD=test-password
+          SONARR_API_KEY=test-api-key
+          RADARR_API_KEY=test-api-key
+          PROWLARR_API_KEY=test-api-key
+          BAZARR_API_KEY=test-api-key
+          DISCORD_WEBHOOK=https://discord.com/api/webhooks/test
+          EOF
+          
+          sudo mkdir -p /tmp/docker /tmp/media /tmp/downloads
+          sudo chown -R 1000:1000 /tmp/docker /tmp/media /tmp/downloads
+
+      - name: Test *arr stack integration
+        run: |
+          echo "🔗 Testing *arr stack integration..."
+          
+          # Start Prowlarr first (indexer management)
+          echo "Starting Prowlarr..."
+          cd services/prowlarr
+          docker-compose up -d
+          sleep 120  # Prowlarr needs time to initialize
+          
+          # Start Sonarr
+          echo "Starting Sonarr..."
+          cd ../sonarr  
+          docker-compose up -d
+          sleep 90
+          
+          # Start Radarr
+          echo "Starting Radarr..."
+          cd ../radarr
+          docker-compose up -d
+          sleep 90
+          
+          # Test connectivity between services
+          prowlarr_ip=$(docker inspect prowlarr_prowlarr_1 --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 2>/dev/null || echo "")
+          
+          if [ -n "$prowlarr_ip" ]; then
+            # Test Sonarr -> Prowlarr connectivity
+            if docker exec sonarr_sonarr_1 nc -z "$prowlarr_ip" 9696 2>/dev/null; then
+              echo "✅ Sonarr can reach Prowlarr at $prowlarr_ip:9696"
+            else
+              echo "❌ Sonarr cannot reach Prowlarr"
+              exit 1
+            fi
+            
+            # Test Radarr -> Prowlarr connectivity  
+            if docker exec radarr_radarr_1 nc -z "$prowlarr_ip" 9696 2>/dev/null; then
+              echo "✅ Radarr can reach Prowlarr at $prowlarr_ip:9696"
+            else
+              echo "❌ Radarr cannot reach Prowlarr"
+              exit 1
+            fi
+          else
+            echo "⚠️  Could not determine Prowlarr IP for connectivity test"
+          fi
+          
+          # Cleanup
+          docker-compose down -v
+          cd ../sonarr
+          docker-compose down -v
+          cd ../prowlarr  
+          docker-compose down -v
+          cd ../..
+          
+          echo "✅ *arr stack integration test completed"
+
+      - name: Test download client integration
+        run: |
+          echo "📥 Testing download client integration..."
+          
+          # Start qBittorrent
+          echo "Starting qBittorrent..."
+          cd services/qbittorrent
+          docker-compose up -d
+          sleep 60
+          
+          # Start Sonarr to test download client connectivity
+          echo "Starting Sonarr for download client test..."
+          cd ../sonarr
+          docker-compose up -d
+          sleep 90
+          
+          # Test connectivity
+          qbt_ip=$(docker inspect qbittorrent_qbittorrent_1 --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 2>/dev/null || echo "")
+          
+          if [ -n "$qbt_ip" ]; then
+            if docker exec sonarr_sonarr_1 nc -z "$qbt_ip" 8080 2>/dev/null; then
+              echo "✅ Sonarr can reach qBittorrent at $qbt_ip:8080"
+            else
+              echo "❌ Sonarr cannot reach qBittorrent"
+              exit 1
+            fi
+          else
+            echo "⚠️  Could not determine qBittorrent IP for connectivity test"
+          fi
+          
+          # Cleanup
+          docker-compose down -v
+          cd ../qbittorrent
+          docker-compose down -v
+          cd ../..
+          
+          echo "✅ Download client integration test completed" 
