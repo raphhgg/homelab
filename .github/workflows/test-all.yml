@@ -165,8 +165,8 @@ jobs:
             
             # 6. Cleanup
             echo "🧹 $service: Cleaning up containers and networks..."
-            docker-compose down -v
-            docker system prune -f
+            docker-compose down -v > /dev/null 2>&1
+            docker system prune -f > /dev/null 2>&1
             cd ../..
             
             echo "✅ $service: Cleanup completed"
