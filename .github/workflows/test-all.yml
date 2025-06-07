@@ -79,6 +79,9 @@ jobs:
           # Create required directories
           sudo mkdir -p /tmp/docker /tmp/media /tmp/downloads
           sudo chown -R 1000:1000 /tmp/docker /tmp/media /tmp/downloads
+          
+          # Create the main network that services expect
+          docker network create main || echo "Network main already exists"
 
       - name: Test ${{ matrix.service }}
         run: |
@@ -242,6 +245,9 @@ jobs:
           
           sudo mkdir -p /tmp/docker /tmp/media /tmp/downloads
           sudo chown -R 1000:1000 /tmp/docker /tmp/media /tmp/downloads
+          
+          # Create the main network that integration tests expect
+          docker network create main || echo "Network main already exists"
 
       - name: Test *arr stack integration
         run: |
