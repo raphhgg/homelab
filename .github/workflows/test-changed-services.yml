@@ -1,4 +1,4 @@
-name: Test Changed Services
+name: Homelab CI
 
 on:
   pull_request:
@@ -101,9 +101,9 @@ jobs:
                     if [[ "$service" =~ ^(qbittorrent|sabnzbd|radarr|radarr4k|sonarr|prowlarr|bazarr|autoscan)$ ]]; then
                       echo "⚠️  $service: Container startup failed in CI environment (likely s6-overlay permissions)"
                       echo "ℹ️  This is expected in CI - syntax validation passed"
-                      echo "🧹 $service: Skipping functional tests and cleaning up"
-                      docker-compose down -v 2>/dev/null || true
-                      docker system prune -f
+                                             echo "🧹 $service: Skipping functional tests and cleaning up..."
+                       docker-compose down -v 2>/dev/null || true
+                       docker system prune -f
                       cd ../..
                       echo "✅ $service: CI validation completed (syntax check passed)"
                       exit 0
@@ -131,11 +131,12 @@ jobs:
                 bash ../../scripts/test-service.sh "$service"
                 
                 # 6. Cleanup
+                echo "🧹 $service: Cleaning up containers and networks..."
                 docker-compose down -v
                 docker system prune -f
                 cd ../..
                 
-                echo "🧹 $service: Cleanup completed"
+                echo "✅ $service: Cleanup completed"
               fi
             done
           else

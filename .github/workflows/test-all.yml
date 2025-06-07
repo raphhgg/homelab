@@ -1,4 +1,4 @@
-name: Test All
+name: Homelab CI
 
 on:
   pull_request:
@@ -109,7 +109,7 @@ jobs:
               echo "✅ $service: Compose syntax checked only"
               docker-compose config --quiet
               cd ../..
-              echo "🧹 $service: Cleanup completed"
+              echo "✅ $service: Cleanup completed"
             else
             
             docker-compose config --quiet
@@ -134,7 +134,7 @@ jobs:
                 if [[ "$service" =~ ^(qbittorrent|sabnzbd|radarr|radarr4k|sonarr|prowlarr|bazarr|autoscan)$ ]]; then
                   echo "⚠️  $service: Container startup failed in CI environment (likely s6-overlay permissions)"
                   echo "ℹ️  This is expected in CI - syntax validation passed"
-                  echo "🧹 $service: Skipping functional tests and cleaning up"
+                  echo "🧹 $service: Skipping functional tests and cleaning up..."
                   docker-compose down -v 2>/dev/null || true
                   docker system prune -f
                   cd ../..
@@ -164,11 +164,12 @@ jobs:
             bash ../../scripts/test-service.sh "$service"
             
             # 6. Cleanup
+            echo "🧹 $service: Cleaning up containers and networks..."
             docker-compose down -v
             docker system prune -f
             cd ../..
             
-            echo "🧹 $service: Cleanup completed"
+            echo "✅ $service: Cleanup completed"
             fi
           else
             echo "⚠️  $service: docker-compose.yml not found"
