@@ -53,7 +53,7 @@ jobs:
           docker-compose --version
           docker --version
         
-              - name: Setup test environment
+      - name: Setup test environment
         run: |
           # Create test .env in root
           cat > .env << EOF
