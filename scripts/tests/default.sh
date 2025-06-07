@@ -14,8 +14,8 @@ else
 fi
 
 # Check if container has health check defined
-container_name=$(docker-compose ps --services | head -1)
-full_container_name="${service}_${container_name}_1"
+# Use the service name as container name (matches container_name in compose files)
+full_container_name="$service"
 
 if docker inspect "$full_container_name" 2>/dev/null | grep -q "Health"; then
     health_status=$(docker inspect --format='{{.State.Health.Status}}' "$full_container_name" 2>/dev/null || echo "unknown")

@@ -6,31 +6,36 @@ on:
     types: [labeled, synchronize, opened, reopened]
 
 jobs:
+  discover-services:
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'test-all')
+    outputs:
+      services: ${{ steps.set-services.outputs.services }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Discover services
+        id: set-services
+        run: |
+          # Get all services that have docker-compose.yml files
+          services=$(find services -name "docker-compose.yml" -type f | sed 's|services/||' | sed 's|/docker-compose.yml||' | sort)
+          
+          # Convert to JSON array format for matrix
+          json_services=$(echo "$services" | jq -R -s -c 'split("\n")[:-1]')
+          echo "services=$json_services" >> $GITHUB_OUTPUT
+          
+          echo "📋 Discovered services:"
+          echo "$services"
+
   test-all-services:
     runs-on: ubuntu-latest
-    # Only run when test-all label is present
+    needs: discover-services
     if: contains(github.event.pull_request.labels.*.name, 'test-all')
     strategy:
       fail-fast: false
       matrix:
-        service: 
-          - audiobookshelf
-          - autoscan
-          - bazarr
-          - calibre
-          - homarr
-          - imagemaid
-          - kometa
-          - notifiarr
-          - overseerr
-          - pihole_unbound
-          - plex
-          - prowlarr
-          - qbittorrent
-          - radarr
-          - radarr4k
-          - sabnzbd
-          - sonarr
+        service: ${{ fromJson(needs.discover-services.outputs.services) }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -103,10 +108,10 @@ jobs:
                 exit 1
               fi
               
-              # Check container health if health check exists
-              full_container_name="${service}_${container_name}_1"
-              if docker inspect "$full_container_name" 2>/dev/null | grep -q "Health"; then
-                health_status=$(docker inspect --format='{{.State.Health.Status}}' "$full_container_name" 2>/dev/null || echo "unknown")
+              # Check container health if health check exists  
+              # Use service name as container name (matches container_name in compose files)
+              if docker inspect "$service" 2>/dev/null | grep -q "Health"; then
+                health_status=$(docker inspect --format='{{.State.Health.Status}}' "$service" 2>/dev/null || echo "unknown")
                 if [ "$health_status" != "healthy" ] && [ "$health_status" != "starting" ]; then
                   echo "❌ $service: Container unhealthy ($health_status)"
                   docker-compose logs
@@ -259,11 +264,11 @@ jobs:
           sleep 90
           
           # Test connectivity between services
-          prowlarr_ip=$(docker inspect prowlarr_prowlarr_1 --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 2>/dev/null || echo "")
+          prowlarr_ip=$(docker inspect prowlarr --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 2>/dev/null || echo "")
           
           if [ -n "$prowlarr_ip" ]; then
             # Test Sonarr -> Prowlarr connectivity
-            if docker exec sonarr_sonarr_1 nc -z "$prowlarr_ip" 9696 2>/dev/null; then
+            if docker exec sonarr nc -z "$prowlarr_ip" 9696 2>/dev/null; then
               echo "✅ Sonarr can reach Prowlarr at $prowlarr_ip:9696"
             else
               echo "❌ Sonarr cannot reach Prowlarr"
@@ -271,7 +276,7 @@ jobs:
             fi
             
             # Test Radarr -> Prowlarr connectivity  
-            if docker exec radarr_radarr_1 nc -z "$prowlarr_ip" 9696 2>/dev/null; then
+            if docker exec radarr nc -z "$prowlarr_ip" 9696 2>/dev/null; then
               echo "✅ Radarr can reach Prowlarr at $prowlarr_ip:9696"
             else
               echo "❌ Radarr cannot reach Prowlarr"
@@ -308,10 +313,10 @@ jobs:
           sleep 90
           
           # Test connectivity
-          qbt_ip=$(docker inspect qbittorrent_qbittorrent_1 --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 2>/dev/null || echo "")
+          qbt_ip=$(docker inspect qbittorrent --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 2>/dev/null || echo "")
           
           if [ -n "$qbt_ip" ]; then
-            if docker exec sonarr_sonarr_1 nc -z "$qbt_ip" 8080 2>/dev/null; then
+            if docker exec sonarr nc -z "$qbt_ip" 8080 2>/dev/null; then
               echo "✅ Sonarr can reach qBittorrent at $qbt_ip:8080"
             else
               echo "❌ Sonarr cannot reach qBittorrent"

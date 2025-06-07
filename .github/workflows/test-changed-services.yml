@@ -86,9 +86,9 @@ jobs:
                   fi
                   
                   # Check container health if health check exists
-                  full_container_name="${service}_${container_name}_1"
-                  if docker inspect "$full_container_name" 2>/dev/null | grep -q "Health"; then
-                    health_status=$(docker inspect --format='{{.State.Health.Status}}' "$full_container_name" 2>/dev/null || echo "unknown")
+                  # Use service name as container name (matches container_name in compose files)
+                  if docker inspect "$service" 2>/dev/null | grep -q "Health"; then
+                    health_status=$(docker inspect --format='{{.State.Health.Status}}' "$service" 2>/dev/null || echo "unknown")
                     if [ "$health_status" != "healthy" ] && [ "$health_status" != "starting" ]; then
                       echo "❌ $service: Container unhealthy ($health_status)"
                       docker-compose logs
