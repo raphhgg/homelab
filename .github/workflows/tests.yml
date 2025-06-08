@@ -317,7 +317,7 @@ jobs:
   security-scan:
     runs-on: ubuntu-latest
     if: contains(github.event.pull_request.labels.*.name, 'test-all')
-    needs: all-services
+    needs: test-all-services
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -377,7 +377,7 @@ jobs:
   security-scan-changed:
     runs-on: ubuntu-latest
     if: "!contains(github.event.pull_request.labels.*.name, 'test-all')"
-    needs: changed-services
+    needs: test-changed-services
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -457,7 +457,7 @@ jobs:
   integration-tests:
     runs-on: ubuntu-latest
     if: contains(github.event.pull_request.labels.*.name, 'test-all')
-    needs: all-services
+    needs: test-all-services
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
