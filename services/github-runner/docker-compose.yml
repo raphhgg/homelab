@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  github-runner:
+    image: myoung34/github-runner:latest
+    container_name: github-actions-runner
+    restart: unless-stopped
+    environment:
+      # Required: Your repository URL
+      REPO_URL: "https://github.com/raphaelgrau/homelab"
+      
+      # Required: Runner registration token (get from GitHub repo settings)
+      RUNNER_TOKEN: "${GITHUB_RUNNER_TOKEN}"
+      
+      # Optional: Labels for the runner (comma separated)
+      LABELS: "synology,docker,self-hosted"
+      
+      # Optional: Working directory inside container
+      RUNNER_WORKDIR: "/tmp/runner/work"
+      
+      # Optional: Replace existing runner with same name
+      RUNNER_REPLACE_EXISTING: "true"
+      
+      # Optional: Run as ephemeral runner (removes itself after job)
+      EPHEMERAL: "false"
+      
+      # Optional: Disable automatic updates
+      DISABLE_RUNNER_UPDATE: "false"
+      
+      # Optional: Additional runner arguments
+      # RUNNER_SCOPE: "repo"  # or "org" for organization-wide
+      
+    volumes:
+      # Persist runner data and work directory
+      - ${DOCKER_PATH}/github-runner/data:/runner
+      - ${DOCKER_PATH}/github-runner/work:/tmp/runner/work
+      
+      # Mount Docker socket if you need Docker-in-Docker capabilities
+      - /var/run/docker.sock:/var/run/docker.sock
+    
+    # Optional: Custom network (if you need specific networking)
+    # networks:
+    #   - github-runner-network
+
+    # Optional: Run with specific user (security consideration)
+    # user: "1000:1000"  # Use your Synology user ID
+    
+    # Optional: Privileged mode (only if absolutely necessary)
+    # privileged: true
+    
+    # Optional: Security options
+    security_opt:
+      - no-new-privileges:true
+    
+    # Optional: Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
