@@ -1,4 +1,4 @@
-name: Homelab CI
+name: homelab-test-changed
 
 on:
   pull_request:
