@@ -6,6 +6,11 @@ service=$1
 echo "🔧 Running default tests for $service..."
 
 # Basic container health check
+# Change to the service directory if not already there
+if [ ! -f "docker-compose.yml" ]; then
+    cd "services/$service" || { echo "❌ Cannot find service directory"; exit 1; }
+fi
+
 if docker-compose ps | grep -q "Up"; then
     echo "✅ $service container is running"
 else
@@ -14,8 +19,8 @@ else
 fi
 
 # Check if container has health check defined
-container_name=$(docker-compose ps --services | head -1)
-full_container_name="${service}_${container_name}_1"
+# Use the service name as container name (matches container_name in compose files)
+full_container_name="$service"
 
 if docker inspect "$full_container_name" 2>/dev/null | grep -q "Health"; then
     health_status=$(docker inspect --format='{{.State.Health.Status}}' "$full_container_name" 2>/dev/null || echo "unknown")
@@ -42,6 +47,11 @@ if [ -n "$exposed_ports" ]; then
     echo "ℹ️  $service has exposed ports: $exposed_ports"
 else
     echo "ℹ️  $service has no exposed ports"
+fi
+
+# Change back to original directory if we changed
+if [ "$(basename "$PWD")" = "$service" ]; then
+    cd ../..
 fi
 
 echo "ℹ️  Default tests completed - consider adding specific tests at scripts/tests/${service}.sh" 
