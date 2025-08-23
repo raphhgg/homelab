@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma
+    container_name: uptime-kuma
+    networks:
+      - main
+      - socket_proxy
+    ports:
+      - 3001:3001
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/uptime-kuma/data:/app/data
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - DOCKER_HOST=${DOCKER_HOST}
+
+networks:
+  main:
+    external: true
+  socket_proxy:
+    external: true

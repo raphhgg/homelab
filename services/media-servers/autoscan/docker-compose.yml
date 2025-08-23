@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  autoscan:
+    image: ghcr.io/hotio/autoscan
+    container_name: autoscan
+    networks:
+      - main
+    ports:
+      - 3030:3030
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=${UMASK}
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/autoscan/config:/config
+      - ${MEDIAS_PATH:-/volume1/data/medias}:/data/medias
+    restart: unless-stopped
+
+networks:                      
+  main:                        
+    external: true 

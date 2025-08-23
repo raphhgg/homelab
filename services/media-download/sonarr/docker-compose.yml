@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  sonarr:
+    image: ghcr.io/hotio/sonarr
+    container_name: sonarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - TP_HOTIO=true
+      - TP_THEME=organizr
+    networks:
+      - main
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/sonarr:/config:rw
+      - ${DOWNLOAD_PATH}/torrents:/data/torrents:rw
+      - ${DOWNLOAD_PATH}/usenet:/data/usenet:rw
+      - ${MEDIAS_PATH:-/volume1/data/medias}:/data/medias:rw
+      - ${DOCKER_APPDATA_PATH}/themepark/98-themepark-sonarr:/etc/cont-init.d/98-themepark
+    ports:
+      - 8988:8989
+    restart: unless-stopped
+
+networks:
+  main:
+    external: true

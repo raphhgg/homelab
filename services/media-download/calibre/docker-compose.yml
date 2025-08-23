@@ -1,0 +1,68 @@
+services:
+  calibre-main:
+    image: lscr.io/linuxserver/calibre
+    container_name: calibre-main
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/calibre:/config
+      - ${MEDIAS_PATH}/books:/books
+      - ${MEDIAS_PATH}/books/calibre_library:/books/calibre_library
+    ports:
+      - 8082:8080    # Web UI
+      - 8183:8081    # Calibre content server
+    restart: unless-stopped
+    networks:
+      - main
+
+  calibre-web:
+    image: crocodilestick/calibre-web-automated
+    container_name: calibre-web
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      # CW users migrating should stop their existing CW instance, make a copy of the config folder, and bind that here to carry over all of their user settings ect.
+      - ${DOCKER_APPDATA_PATH}/calibre-web:/config 
+      # This is an ingest dir, NOT a library one. Anything added here will be automatically added to your library according to the settings you have configured in CWA Settings page. All files placed here are REMOVED AFTER PROCESSING
+      - ${DOWNLOAD_PATH}/cwa_ingest:/cwa-book-ingest
+      - ${MEDIAS_PATH}/books/calibre_library:/calibre-library
+    ports:
+      # Change the first number to change the port you want to access the Web UI, not the second
+      - 8071:8083 
+    restart: unless-stopped
+    networks:
+      - main
+
+  calibre-web-dl:
+    image: ghcr.io/calibrain/calibre-web-automated-book-downloader
+    container_name: calibre-web-dl
+    environment:
+      - FLASK_PORT=8084
+      - LOG_LEVEL=info
+      - DEBUG=true
+      - BOOK_LANGUAGE=en,fr
+      - INGEST_DIR=/cwa-book-ingest
+      - USE_BOOK_TITLE=true
+      - FLASK_DEBUG=false
+      - APP_ENV=prod
+      - UID=${PUID}
+      - GID=${PGID}
+      - TZ=${TZ}
+    ports:
+      - 8072:8084
+    restart: unless-stopped
+    volumes:
+      # This is where the books will be downloaded to, usually it would be 
+      # the same as whatever you gave in "calibre-web-automated"
+      - ${DOCKER_APPDATA_PATH}/calibre-web-dl:/cwa-book-downloader 
+      - ${DOWNLOAD_PATH}/cwa_ingest:/cwa-book-ingest
+    networks:
+      - main
+
+networks:
+  main:
+    external: true

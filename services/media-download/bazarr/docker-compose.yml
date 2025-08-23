@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  bazarr:
+    image: ghcr.io/hotio/bazarr
+    container_name: bazarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=${UMASK}
+      - TZ=${TZ}
+    ports:
+      - 6767:6767
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/bazarr:/config
+      - ${MEDIAS_PATH:-/volume1/data/medias}:/data/medias
+    restart: unless-stopped
+    networks:
+      - main
+
+networks:
+  main:
+    external: true

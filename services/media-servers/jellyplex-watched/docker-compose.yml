@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  jellyplex-watched:
+    image: luigi311/jellyplex-watched
+    container_name: jellyplex-watched
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+    env_file:
+      - ./.env
+    networks:
+      - main
+
+networks:
+  main:
+    external: true

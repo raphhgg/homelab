@@ -1,0 +1,19 @@
+services:
+  jellyseerr:
+    image: fallenbagel/jellyseerr
+    container_name: jellyseerr
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=${TZ}
+      - PORT=5055 #optional
+    ports:
+      - 5055:5055
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/jellyseerr/config:/app/config
+    restart: unless-stopped
+    networks:
+      - main
+
+networks:
+  main:
+    external: true

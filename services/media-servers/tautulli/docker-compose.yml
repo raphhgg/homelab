@@ -1,0 +1,19 @@
+services:
+  tautulli:
+    image: ghcr.io/hotio/tautulli
+    container_name: tautulli
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=${UMASK}
+      - WEBUI_PORTS=8181/tcp,8181/udp
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/tautulli:/config
+    ports:
+      - 8181:8181
+    restart: unless-stopped
+
+networks:
+  main:
+    external: true

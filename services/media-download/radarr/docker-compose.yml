@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  radarr:
+    image: ghcr.io/hotio/radarr
+    container_name: radarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - TP_HOTIO=true
+      - TP_THEME=organizr
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/radarr:/config
+      - ${DOWNLOAD_PATH}/torrents:/data/torrents
+      - ${DOWNLOAD_PATH}/usenet:/data/usenet
+      - ${MEDIAS_PATH:-/volume1/data/medias}:/data/medias
+      - ${DOCKER_APPDATA_PATH}/themepark/98-themepark-radarr:/etc/cont-init.d/98-themepark
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+    networks:
+      - main
+
+networks:
+  main:
+    external: true

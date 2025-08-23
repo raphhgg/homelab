@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  ofelia:
+    image: mcuadros/ofelia
+    container_name: ofelia
+    networks:
+      - socket_proxy
+      - main
+    environment:
+      - DOCKER_HOST=${DOCKER_HOST}
+    volumes:
+      - ./config:/opt/ofelia/config:ro
+    command: daemon --config=/opt/ofelia/config/main.ini
+    restart: unless-stopped
+
+networks:
+  socket_proxy:
+    external: true
+  main:
+    external: true

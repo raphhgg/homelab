@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  profilarr:
+    image: santiagosayshey/profilarr
+    container_name: profilarr
+    networks:
+      - main
+    ports:
+      - 6868:6868
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/profilarr:/config
+    restart: unless-stopped
+
+networks:
+  main:
+    external: true

@@ -1,0 +1,18 @@
+services:
+  plex-trakt-sync:
+    image: ghcr.io/taxel/plextraktsync
+    container_name: plex-trakt-sync
+    command: watch
+    networks:
+      - main
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/plex-trakt-sync/config:/app/config
+    restart: on-failure:2
+
+networks:
+  main:
+    external: true

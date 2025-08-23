@@ -1,0 +1,27 @@
+services:
+  imagemaid:
+    image: kometateam/imagemaid
+    container_name: imagemaid
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - SCHEDULE=23:00|daily|mode=remove
+      - PLEX_URL=${PLEX_URL}
+      - PLEX_TOKEN=${PLEX_TOKEN}
+      - MODE=remove
+      - OVERLAYS_ONLY=True
+      - EMPTY_TRASH=True
+      - CLEAN_BUNDLES=True
+      - OPTIMIZE_DB=True
+      - PHOTO_TRANSCODER=True
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/kometa/config:/config
+      - ${DOCKER_APPDATA_PATH}/plex/config:/plex
+    restart: unless-stopped
+    networks:
+      - main
+
+networks:
+  main:
+    external: true

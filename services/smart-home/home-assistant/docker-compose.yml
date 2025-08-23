@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  home-assistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: home-assistant
+    network_mode: host
+    ports:
+      - 8123:8123
+    environment:
+      - TZ=${TZ}
+      - UMASK=${UMASK}
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/home-assistant:/config
+    restart: unless-stopped

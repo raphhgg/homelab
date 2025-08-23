@@ -1,0 +1,19 @@
+services:
+  kometa:
+    image: kometateam/kometa:nightly
+    container_name: kometa
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - KOMETA_TIMES=06:00,13:00,15:00,18:00,21:00
+      # - KOMETA_CONFIG=./config/config.yml
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/kometa/config:/config
+    restart: unless-stopped
+    networks:
+      - main
+
+networks:
+  main:
+    external: true

@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+  cloudflare-ddns:
+    image: favonia/cloudflare-ddns
+    container_name: cloudflare-ddns
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=${UMASK}
+      - CF_API_TOKEN=${CF_API_TOKEN}
+      - DOMAINS=raphh.me, www.raphh.me
+      - PROXIED=true
+    restart: always
+    networks:
+      - main
+
+networks:
+  main:
+    external: true
