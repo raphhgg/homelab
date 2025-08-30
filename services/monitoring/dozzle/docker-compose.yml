@@ -5,6 +5,7 @@ services:
     image: amir20/dozzle
     container_name: dozzle
     networks:
+      - main
       - socket_proxy
     ports:
       - 8088:8080
@@ -12,5 +13,7 @@ services:
       - DOCKER_HOST=${DOCKER_HOST}
 
 networks:
+  main:
+    external: true
   socket_proxy:
     external: true

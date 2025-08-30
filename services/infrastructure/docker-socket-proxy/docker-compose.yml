@@ -5,7 +5,8 @@ services:
     image: tecnativa/docker-socket-proxy
     container_name: docker-proxy
     networks:
-      - socket_proxy
+      socket_proxy:
+        ipv4_address: 172.26.0.22
     ports:
       - 2375:2375
     environment:
