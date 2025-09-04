@@ -45,6 +45,9 @@ services:
       - LOG_LEVEL=info
       - DEBUG=true
       - BOOK_LANGUAGE=en,fr
+      - PRIORITIZE_WELIB=true
+      - USE_CF_BYPASS=true
+      # - USING_EXTERNAL_BYPASSER=true
       - INGEST_DIR=/cwa-book-ingest
       - USE_BOOK_TITLE=true
       - FLASK_DEBUG=false
