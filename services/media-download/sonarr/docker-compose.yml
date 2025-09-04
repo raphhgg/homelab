@@ -14,9 +14,7 @@ services:
       - main
     volumes:
       - ${DOCKER_APPDATA_PATH}/sonarr:/config:rw
-      - ${DOWNLOAD_PATH}/torrents:/data/torrents:rw
-      - ${DOWNLOAD_PATH}/usenet:/data/usenet:rw
-      - ${MEDIAS_PATH:-/volume1/data/medias}:/data/medias:rw
+      - ${MEDIAS_PATH}:/data/medias
       - ${DOCKER_APPDATA_PATH}/themepark/98-themepark-sonarr:/etc/cont-init.d/98-themepark
     ports:
       - 8988:8989

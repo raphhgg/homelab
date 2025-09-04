@@ -12,9 +12,7 @@ services:
       - TP_THEME=organizr
     volumes:
       - ${DOCKER_APPDATA_PATH}/radarr:/config
-      - ${DOWNLOAD_PATH}/torrents:/data/torrents
-      - ${DOWNLOAD_PATH}/usenet:/data/usenet
-      - ${MEDIAS_PATH:-/volume1/data/medias}:/data/medias
+      - ${MEDIAS_PATH}:/data/medias
       - ${DOCKER_APPDATA_PATH}/themepark/98-themepark-radarr:/etc/cont-init.d/98-themepark
     ports:
       - 7878:7878

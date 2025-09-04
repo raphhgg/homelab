@@ -35,7 +35,8 @@ services:
       - 1.0.0.1
     volumes:
       - ${DOCKER_APPDATA_PATH}/sabnzbd:/config:rw
-      - ${DOWNLOAD_PATH}/usenet:/data/usenet:rw
+      - ${DOWNLOAD_PATH}/usenet/incomplete:/data/usenet/incomplete:rw
+      - ${MEDIAS_PATH}:/data/medias
       - ${DOCKER_APPDATA_PATH}/themepark/98-themepark-sabnzbd:/etc/cont-init.d/98-themepark:rw
     cap_add:
       - NET_ADMIN
