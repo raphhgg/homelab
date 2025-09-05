@@ -34,7 +34,7 @@ services:
     volumes:
       - ${DOCKER_APPDATA_PATH}/qbittorrent:/config:rw
       - ${DOWNLOAD_PATH}/torrents/incomplete:/data/medias/downloads/torrents/incomplete:rw
-      - ${MEDIAS_PATH}:/data/medias
+      - ${MEDIAS_PATH}:/data/medias:rw
       - ${DOCKER_APPDATA_PATH}/themepark/98-themepark-qbittorrent:/etc/cont-init.d/98-themepark:rw
     cap_add:
       - NET_ADMIN

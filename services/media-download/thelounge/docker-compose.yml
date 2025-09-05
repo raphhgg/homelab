@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  thelounge:
+    image: ghcr.io/thelounge/thelounge
+    container_name: thelounge
+    user: ${PUID}:${PGID}
+    environment:
+      - TZ=${TZ}
+    ports:
+      - 9001:9000
+    networks:
+      - main
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/thelounge:/var/opt/thelounge
+    restart: always
+
+networks:
+  main:
+    external: true

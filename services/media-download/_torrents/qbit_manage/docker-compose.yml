@@ -5,7 +5,6 @@ services:
     image: ghcr.io/stuffanthings/qbit_manage
     volumes:
       - ${DOCKER_APPDATA_PATH}/qbit_manage:/config
-      # - ${DOWNLOAD_PATH}/torrents:/data/torrents
       - ${MEDIAS_PATH}/downloads/torrents:/data/medias/downloads/torrents
       - ${DOCKER_APPDATA_PATH}/qbittorrent:/qbittorrent:ro
     ports:

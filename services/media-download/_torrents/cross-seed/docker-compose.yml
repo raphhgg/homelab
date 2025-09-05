@@ -13,9 +13,7 @@ services:
       - main
     volumes:
       - ${DOCKER_APPDATA_PATH}/cross-seed:/config
-      - ${DOWNLOAD_PATH}/torrents:/data/torrents
-      - ${MEDIAS_PATH:-/volume1/data/medias}:/data/medias
-      # You will need at least one extra volume for your media drive if using https://www.cross-seed.org/docs/tutorials/linking
+      - ${MEDIAS_PATH}:/data/medias:rw
     command: daemon
     restart: unless-stopped
 

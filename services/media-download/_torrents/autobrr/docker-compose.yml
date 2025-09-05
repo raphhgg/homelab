@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  autobrr:
+    image: ghcr.io/autobrr/autobrr
+    container_name: autobrr
+    user: ${PUID}:${PGID}
+    environment:
+      - TZ=${TZ}
+    ports:
+      - 7474:7474
+    networks:
+      - main
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/autobrr:/config
+    restart: unless-stopped
+
+networks:
+  main:
+    external: true
