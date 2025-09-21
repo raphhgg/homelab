@@ -1,0 +1,12 @@
+services:
+  mam_seedboxapi:
+    image: myanonamouse/seedboxapi
+    container_name: mam_seedboxapi
+    user: ${PUID}:${PGID}
+    network_mode: "container:qbittorrent"
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/mam_seedboxapi:/config
+    environment:
+      - DEBUG=1
+      - mam_id=${MAM_SESSION_ID}
+    restart: unless-stopped

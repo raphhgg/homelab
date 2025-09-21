@@ -10,7 +10,8 @@ services:
     ports:
       - 2468:2468
     networks:
-      - main
+      main:
+        ipv4_address: 172.21.0.130
     volumes:
       - ${DOCKER_APPDATA_PATH}/cross-seed:/config
       - ${MEDIAS_PATH}:/data/medias:rw
@@ -20,3 +21,8 @@ services:
 networks:
   main:
     external: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.21.0.0/16
+          ip_range: 172.21.0.128/25  # Reserve .128-.255 for static IPs

@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  lazydocker:
+    image: lazyteam/lazydocker
+    container_name: lazydocker
+    networks:
+      - main
+      - socket_proxy
+    stdin_open: true
+    tty: true
+    environment:
+      - DOCKER_HOST=${DOCKER_HOST}
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/lazydocker:/.config/jesseduffield/lazydocker
+    restart: no
+
+networks:
+  main:
+    external: true
+  socket_proxy:
+    external: true

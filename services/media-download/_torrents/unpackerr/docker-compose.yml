@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  unpackerr:
+    image: golift/unpackerr
+    container_name: unpackerr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UN_SONARR_0_URL=http://10.10.2.2:8988
+      - UN_SONARR_0_API_KEY=${SONARR_API_KEY}
+      - UN_RADARR_0_URL=http://10.10.2.2:7878
+      - UN_RADARR_0_API_KEY=${RADARR_API_KEY}
+      - UN_LOG_FILE=/downloads/torrents/unpackerr.log
+      - UN_FOLDER_0_PATH=/data/medias/downloads/torrents/complete
+    networks:
+      - main
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/unpackerr:/config
+      - ${MEDIAS_PATH}:/data/medias
+    restart: always
+
+networks:
+  main:
+    external: true
