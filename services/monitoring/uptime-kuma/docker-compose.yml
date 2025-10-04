@@ -15,6 +15,7 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - DOCKER_HOST=${DOCKER_HOST}
+    restart: always
 
 networks:
   main:

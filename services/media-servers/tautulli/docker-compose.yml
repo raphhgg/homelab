@@ -14,7 +14,7 @@ services:
       - main
     ports:
       - 8181:8181
-    restart: unless-stopped
+    restart: always
 
 networks:
   main:

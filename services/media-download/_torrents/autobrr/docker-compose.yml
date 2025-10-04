@@ -13,7 +13,7 @@ services:
       - main
     volumes:
       - ${DOCKER_APPDATA_PATH}/autobrr:/config
-    restart: unless-stopped
+    restart: always
 
 networks:
   main:

@@ -10,7 +10,7 @@ services:
       - 5055:5055
     volumes:
       - ${DOCKER_APPDATA_PATH}/jellyseerr/config:/app/config
-    restart: unless-stopped
+    restart: always
     networks:
       - main
 

@@ -10,7 +10,7 @@ services:
       - ${DOCKER_APPDATA_PATH}/prowlarr:/config
     ports:
       - 9696:9696
-    restart: unless-stopped
+    restart: always
     networks:
       - main
 

@@ -12,7 +12,7 @@ services:
     volumes:
       - ./config:/opt/ofelia/config:ro
     command: daemon --config=/opt/ofelia/config/main.ini
-    restart: unless-stopped
+    restart: always
 
 networks:
   socket_proxy:

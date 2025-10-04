@@ -9,4 +9,4 @@ services:
     environment:
       - DEBUG=1
       - mam_id=${MAM_SESSION_ID}
-    restart: unless-stopped
+    restart: always

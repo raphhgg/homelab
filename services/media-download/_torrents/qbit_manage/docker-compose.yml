@@ -7,8 +7,9 @@ services:
       - ${DOCKER_APPDATA_PATH}/qbit_manage:/config
       - ${MEDIAS_PATH}/downloads/torrents:/data/medias/downloads/torrents
       - ${DOCKER_APPDATA_PATH}/qbittorrent:/qbittorrent:ro
+      - ${DOWNLOAD_PATH}/torrents/complete:/downloads/complete
     ports:
-      - 8081:8080  # Web API port (when enabled)
+      - 8081:8080  # Web API port (when enabled)x
     environment:
       - PUID=${PUID}
       - PGID=${PGID}

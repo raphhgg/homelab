@@ -39,7 +39,7 @@ services:
     privileged: true
     security_opt:
       - no-new-privileges:true
-    restart: unless-stopped
+    restart: always
 
 networks:
   socket_proxy:

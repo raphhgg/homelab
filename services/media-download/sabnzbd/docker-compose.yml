@@ -45,7 +45,7 @@ services:
       - net.ipv6.conf.all.disable_ipv6=1
     devices:
       - /dev/net/tun:/dev/net/tun
-    restart: unless-stopped
+    restart: always
 
 networks:
   main:

@@ -18,7 +18,7 @@ services:
     volumes:
       - ${DOCKER_APPDATA_PATH}/kometa/config:/config
       - ${DOCKER_APPDATA_PATH}/plex/config:/plex
-    restart: unless-stopped
+    restart: always
     networks:
       - main
 

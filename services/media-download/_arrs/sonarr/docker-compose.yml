@@ -18,7 +18,7 @@ services:
       - ${DOCKER_APPDATA_PATH}/themepark/98-themepark-sonarr:/etc/cont-init.d/98-themepark
     ports:
       - 8988:8989
-    restart: unless-stopped
+    restart: always
 
 networks:
   main:

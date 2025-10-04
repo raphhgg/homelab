@@ -12,7 +12,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ${DOCKER_APPDATA_PATH}/profilarr:/config
-    restart: unless-stopped
+    restart: always
 
 networks:
   main:

@@ -27,13 +27,15 @@ services:
       - PRIVOXY_ENABLED=false #
       - UNBOUND_ENABLED=false #
       - TP_HOTIO=true
-      - TP_THEME=organizr
+      - TP_THEME=catppuccin-mocha
+      - S6_LOGGING=1
+      # - TP_THEME=organizr
     dns:
       - 1.1.1.1
       - 1.0.0.1
     volumes:
       - ${DOCKER_APPDATA_PATH}/qbittorrent:/config:rw
-      - ${DOWNLOAD_PATH}/torrents/incomplete:/data/medias/downloads/torrents/incomplete:rw
+      - ${DOWNLOAD_PATH}/torrents:/downloads/torrents:rw
       - ${MEDIAS_PATH}:/data/medias:rw
       - ${DOCKER_APPDATA_PATH}/themepark/98-themepark-qbittorrent:/etc/cont-init.d/98-themepark:rw
     cap_add:
@@ -43,7 +45,7 @@ services:
       - net.ipv6.conf.all.disable_ipv6=1
     devices:
       - /dev/net/tun:/dev/net/tun
-    restart: unless-stopped
+    restart: always
     networks:
       - main
 

@@ -17,7 +17,7 @@ services:
     volumes:
       - ${DOCKER_APPDATA_PATH}/syncthing/config:/config
       - ${DOCUMENTS_PATH}/obsidian:/syncthing/obsidian:rw
-    restart: unless-stopped
+    restart: always
 
 networks:                      
   main:                        

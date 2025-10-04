@@ -10,7 +10,7 @@ services:
       # - KOMETA_CONFIG=./config/config.yml
     volumes:
       - ${DOCKER_APPDATA_PATH}/kometa/config:/config
-    restart: unless-stopped
+    restart: always
     networks:
       - main
 
