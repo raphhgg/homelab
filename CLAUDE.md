@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a homelab infrastructure repository that manages Docker-based services on a Synology NAS using docker-compose. The repository contains 38+ services organized into categories, with automated deployment via GitHub Actions.
+This is a homelab infrastructure repository that manages Docker-based services on a Synology NAS using docker-compose. The repository contains 38+ services organized into categories.
 
 ## Repository Structure
 
@@ -20,7 +20,9 @@ Services are organized in the `services/` directory with the following categorie
 - **media-servers/**: Media streaming and management
   - `_plex/`: Plex and related services (Plex, Kometa, Autoscan, ImageMaid, Plex-Auto-Languages, Plex-Trakt-Sync)
   - `_jellyfin/`: Jellyfin and Jellyplex-Watched
-  - Other: Tautulli, Trailarr, Yamtrack
+  - Other: Tautulli, Trailarr
+
+  - Note: The `jellyfin` stack is not really used at the moment. Same for Trailarr.
 
 - **infrastructure/**: Core infrastructure services
   - GitHub Actions runner (self-hosted)
@@ -113,7 +115,7 @@ Located in `scripts/media-download/`:
 
 ## Deployment Pipeline
 
-The repository uses GitHub Actions for automated deployment:
+- Note: Altough the `github-runner` docker-compose file is present in `/infrastructure`, the GitHub Actions deployement pipeline is currently not used.
 
 ### Triggers
 - **Automatic**: Push to `main` branch affecting `services/**`
@@ -151,17 +153,9 @@ The repository uses GitHub Actions for automated deployment:
    - Use `_` prefix for grouping folders (not individual services)
    - Each service gets its own subdirectory with docker-compose.yml
 
-### Media Download Hardlink System
-
-Recent commits show a hardlink setup between download locations and final media storage:
-- qBittorrent and SABnzbd download to temporary locations
-- Services like Sonarr/Radarr use hardlinks to move files to final locations
-- The `hardlink_creator.sh` script helps deduplicate existing files
-- This saves disk space while maintaining seeding capability
-
 ### Theme Park Integration
 
-Many services support Theme Park for UI theming:
+All the services using hotio's containers support Theme Park for UI theming:
 - Environment variables: `TP_HOTIO=true`, `TP_THEME=<theme-name>`
 - Themes: `catppuccin-mocha`, `organizr`
 - Volume mount: `${DOCKER_APPDATA_PATH}/themepark/98-themepark-<service>:/etc/cont-init.d/98-themepark`
