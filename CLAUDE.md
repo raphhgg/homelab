@@ -115,23 +115,19 @@ Located in `scripts/media-download/`:
 
 ## Deployment Pipeline
 
-- Note: Altough the `github-runner` docker-compose file is present in `/infrastructure`, the GitHub Actions deployement pipeline is currently not used.
-
-### Triggers
-- **Automatic**: Push to `main` branch affecting `services/**`
-- **Manual**: Workflow dispatch with dry-run or deploy-all options
-
-### Workflow Process
-1. **Environment Setup**: Creates `.env` from GitHub secrets
-2. **Deploy Services**: Deploys changed or all services
-3. **Sync to NAS**: Syncs repository to compose directory on NAS
-4. **Notify**: Sends status to Discord
+- Note: The GitHub Actions deployment pipeline for the homelab repository is currently not used.
 
 ### Self-Hosted Runner
 - Runs on Synology NAS (container: `github-actions-runner`)
-- Labels: `synology,docker,self-hosted`
+- **Currently configured for**: `raaphhh/dotfiles` repository
+- Labels: `synology,dotfiles,self-hosted`
+- Runner name: `ds423plus-runner-dotfiles`
 - Uses Docker Socket Proxy for security
 - Configuration in [services/infrastructure/github-runner](services/infrastructure/github-runner)
+
+**Note**: This runner can only serve one repository at a time. To use it with multiple personal repositories, you would need to either:
+- Run multiple runner instances (one per repository)
+- Create a free GitHub organization and use organization-level runners
 
 ## Development Notes
 
@@ -160,16 +156,6 @@ All the services using hotio's containers support Theme Park for UI theming:
 - Themes: `catppuccin-mocha`, `organizr`
 - Volume mount: `${DOCKER_APPDATA_PATH}/themepark/98-themepark-<service>:/etc/cont-init.d/98-themepark`
 
-## Commit Message Guidelines
-
-**Important**: This repository does NOT use Claude Code's default commit message format. When making commits:
-
-- **DO NOT** include "🤖 Generated with [Claude Code](https://claude.ai/code)" lines
-- **DO NOT** include "Co-Authored-By: Claude <noreply@anthropic.com>" lines
-- **DO NOT** add any Claude attribution or generation markers
-
-Use clean, standard commit messages that focus on the changes made. The commit history has been cleaned to remove previous Claude attribution lines and should remain that way.
-
 ## Git Workflow
 
 - Main branch: `main`
@@ -184,3 +170,9 @@ This repository uses a specific SSH key configuration:
 - **SSH Key**: `~/.ssh/id_ed25519_personal`
 
 When cloning or working with this repository, ensure you're using the `github-personal` SSH host alias, not the direct `github.com` URL.
+
+## Linear Issue Management
+
+**Default Project:** All Linear issues for this homelab repository should be created in the **"self-hosted"** project unless otherwise specified.
+
+When creating issues related to this repository, always use the "self-hosted" project by default.
