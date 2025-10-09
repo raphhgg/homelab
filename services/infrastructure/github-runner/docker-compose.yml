@@ -13,16 +13,16 @@ services:
       TZ: ${TZ}
 
       # Repository configuration
-      REPO_URL: "https://github.com/raphaelgrau/homelab" 
+      REPO_URL: "https://github.com/raaphhh/dotfiles"
       ACCESS_TOKEN: "${GH_PAT_TOKEN}"
 
-      RUNNER_NAME: "synology-nas-runner"
+      RUNNER_NAME: "ds423plus-runner-dotfiles"
 
       # Required for persistence
       CONFIGURED_ACTIONS_RUNNER_FILES_DIR: /runner/data
 
       # Runner configuration
-      LABELS: "synology,docker,self-hosted"
+      LABELS: "synology,dotfiles,self-hosted"
       RUNNER_WORKDIR: "/tmp/runner/work"
       RUNNER_SCOPE: "repo"
       EPHEMERAL: "false"
@@ -36,6 +36,7 @@ services:
     volumes:
       - ${DOCKER_APPDATA_PATH}/github-runner/data:/tmp/runner/data
       - ${DOCKER_APPDATA_PATH}/github-runner/tmp/runner:/tmp/runner
+      - /var/services/homes/raphh/.dotfiles:/dotfiles
     security_opt:
       - no-new-privileges:true
     # Logging configuration for better debugging
