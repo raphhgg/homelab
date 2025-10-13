@@ -176,3 +176,58 @@ When cloning or working with this repository, ensure you're using the `github-pe
 **Default Project:** All Linear issues for this homelab repository should be created in the **"self-hosted"** project unless otherwise specified.
 
 When creating issues related to this repository, always use the "self-hosted" project by default.
+
+## Troubleshooting
+
+### Unresponsive Docker Containers on Synology
+
+If Docker containers become completely unresponsive (commands like `docker exec`, `docker inspect`, `docker logs` hang indefinitely), this is a known issue with Synology's ContainerManager and BTRFS storage driver.
+
+**Symptoms:**
+- All Docker commands targeting a specific container timeout
+- Container appears to be running but is not responsive
+- Cannot stop or restart the container normally
+
+**Solution:**
+Restart the ContainerManager service to reset all containers:
+
+```bash
+sudo /var/packages/ContainerManager/scripts/start-stop-status stop
+sudo /var/packages/ContainerManager/scripts/start-stop-status start
+```
+
+**Important Notes:**
+- This will restart ALL Docker containers on the system
+- Containers with `restart: always` will come back automatically
+- This is the Synology-specific way to manage Docker (not standard `systemctl`)
+- The issue is related to BTRFS and Docker's interaction with the Synology kernel
+
+### Cronicle Shell Plugin Permission Issues
+
+When running Cronicle on Synology with shell scripts, you may encounter permission errors preventing job execution.
+
+**Two common issues:**
+
+1. **Temp directory execution restrictions** (GitHub issue [#673](https://github.com/jhuckaby/Cronicle/issues/673))
+   - **Symptom:** Shell plugin crashes immediately, "Permission denied" on temp scripts
+   - **Cause:** `/tmp` mounted with noexec restrictions
+   - **Solution:** Set custom temp directory with execution permissions
+   ```yaml
+   environment:
+     - TMP=/opt/cronicle/tmp
+     - TMPDIR=/opt/cronicle/tmp
+   volumes:
+     - ${DOCKER_APPDATA_PATH}/cronicle/tmp:/opt/cronicle/tmp:rw
+   ```
+
+2. **Log directory access restrictions**
+   - **Symptom:** "EACCES: permission denied" when writing to `/opt/cronicle/logs/jobs/*.log`
+   - **Cause:** Parent `/opt/cronicle/logs/` directory has 700 permissions (owner-only)
+   - **Solution:** Make logs directory readable by the shell plugin user
+   ```bash
+   chmod 755 /volume2/docker/appdata/cronicle/logs
+   # Or inside container:
+   docker exec cronicle chmod 755 /opt/cronicle/logs/
+   ```
+
+Both fixes are required for Cronicle shell plugin to work properly on Synology NAS.
