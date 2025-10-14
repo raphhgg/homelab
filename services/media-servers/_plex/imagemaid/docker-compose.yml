@@ -2,6 +2,9 @@ services:
   imagemaid:
     image: kometateam/imagemaid
     container_name: imagemaid
+    # Override entrypoint to keep container running idle
+    # ImageMaid will be triggered externally via Cronicle
+    entrypoint: ["/bin/sh", "-c", "tail -f /dev/null"]
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -9,7 +12,6 @@ services:
       - PLEX_URL=${PLEX_URL}
       - PLEX_TOKEN=${PLEX_TOKEN}
       - MODE=remove
-      - OVERLAYS_ONLY=True
       - EMPTY_TRASH=True
       - CLEAN_BUNDLES=True
       - OPTIMIZE_DB=True

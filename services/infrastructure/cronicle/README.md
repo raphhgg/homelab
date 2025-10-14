@@ -50,7 +50,7 @@ This Cronicle instance handles all scheduled tasks for Kometa and ImageMaid, rep
 
 **23:00 - ImageMaid - Cleanup**
 - Plex image cleanup (overlays, trash, bundles, DB)
-- Command: `docker exec imagemaid python3 -u imagemaid.py --mode remove --overlays-only --empty-trash --clean-bundles --optimize-db --photo-transcoder`
+- Command: `docker exec imagemaid python3 -u imagemaid.py --mode remove --empty-trash --clean-bundles --optimize-db --photo-transcoder`
 
 **23:30 - Kometa - Operations**
 - Mass rating updates and library maintenance
