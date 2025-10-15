@@ -1,0 +1,46 @@
+collections:
+  4K HDR10+ or DV Shows:
+    plex_search:
+      any:
+        hdr: true
+        dovi: true
+    filters:
+      filepath.regex: 'HDR10\+|HDR10P|DV|Dolby[ ._-]?Vision'
+    collection_order: episode_release.desc
+    sort_title: +040_4K_HDR+_DV_Quality_Collection
+    sync_mode: sync
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+
+  # Low Quality (720p and under?)
+
+
+
+
+
+
+
+
+
+  # #### Release
+  # Recently Released Episodes
+  # Useful for series we are following and watching week after week (not a lot)
+  # - show episodes released since last week and not watched
+  # - should show one episode per serie max
+
+  # ### Type
+  # Miniseries Shows:
+  #   plex_all: true
+  #   filters:
+  #     tmdb_type: miniseries
+  #     genre.not:
+  #       - "Documentary"
+  #       - "Biography"
+  #   collection_order: added.desc
+  #   sync_mode: sync
+  #   visible_home: true
+  #   visible_shared: true
+  #   visible_library: true
+  
+  # HBO Classics

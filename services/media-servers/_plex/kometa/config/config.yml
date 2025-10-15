@@ -1,0 +1,349 @@
+libraries:
+
+  ### MOVIE LIBRARY ###
+  Movies:
+    report_path: /data/missing/Movies_report.yml
+    collection_files:
+    - file: /config-repo/collections/movies/00_radarr_tags_sync.yml
+    - file: /config-repo/collections/movies/01_genres.yml
+    - file: /config-repo/collections/movies/02_languages.yml
+    - file: /config-repo/collections/movies/03_dates.yml
+    - file: /config-repo/collections/movies/04_quality.yml
+    - file: /config-repo/collections/movies/05_people.yml
+    - file: /config-repo/collections/movies/06_letterboxd_lists.yml
+    - file: /config-repo/collections/movies/07_franchises.yml
+
+    # MOVIE OVERLAYS 
+    remove_overlays: false   
+    reapply_overlays: false
+    overlay_files:
+    - default: resolution
+    - default: audio_codec
+    - default: mediastinger
+    - default: runtimes
+    - default: ratings
+      template_variables:
+        rating1: user
+        rating1_image: rt_tomato
+        rating1_font: /config-repo/custom_fonts/Adlib.ttf
+        rating1_font_size: 63
+
+        rating2: critic
+        rating2_image: imdb
+        rating2_font: /config-repo/custom_fonts/Impact.ttf
+        rating2_font_size: 70
+
+        rating3: audience
+        rating3_image: tmdb
+        rating3_font: /config-repo/custom_fonts/Avenir_95_Black.ttf
+        rating3_font_size: 70
+
+        horizontal_position: right
+    - default: network
+    - default: streaming
+    - default: studio
+    - default: video_format
+    - default: languages
+      template_variables:
+        languages:
+        - en
+        - fr
+        use_subtitles: true
+        style: half
+        vertical_position: top3
+
+    # MOVIE OPERATIONS
+    operations:
+      mass_user_rating_update: mdb_tomatoes
+      mass_critic_rating_update: imdb
+      mass_audience_rating_update: tmdb
+      split_duplicates: false
+      assets_for_all: false
+      delete_collections:
+        configured: false
+        managed: true
+    settings:
+      asset_directory:
+      - /data/assets/movies
+
+  ### TV SHOWS LIBRARY ###
+  TV Shows:
+    report_path: /data/missing/TV_Shows_report.yml
+    collection_files:
+    - file: /config-repo/collections/tvshows/00_sonarr_tags_sync.yml
+    - file: /config-repo/collections/tvshows/01_genres.yml
+    - file: /config-repo/collections/tvshows/02_languages.yml
+    - file: /config-repo/collections/tvshows/03_dates.yml
+    - file: /config-repo/collections/tvshows/04_quality.yml
+
+    # TV SHOWS OVERLAYS
+    remove_overlays: false
+    reapply_overlays: false
+    overlay_files:
+    - default: resolution
+    - default: audio_codec
+    - default: mediastinger
+    - default: runtimes
+      template_variables:
+        builder_level: episode
+      font: /config-repo/custom_fonts/Inter-Bold.ttf
+    - default: ratings
+      template_variables:
+        rating1: user
+        rating1_image: rt_tomato
+        rating1_font: /config-repo/custom_fonts/Adlib.ttf
+        rating1_font_size: 63
+
+        rating2: critic
+        rating2_image: imdb
+        rating2_font: /config-repo/custom_fonts/Impact.ttf
+        rating2_font_size: 70
+
+        rating3: audience
+        rating3_image: tmdb
+        rating3_font: /config-repo/custom_fonts/Avenir_95_Black.ttf
+        rating3_font_size: 70
+
+        horizontal_position: right
+    - default: streaming
+    - default: video_format
+    - default: languages
+      template_variables:
+        languages:
+        - en
+        - fr
+        use_subtitles: true
+        style: half
+        vertical_position: top3
+
+    # SEASON OVERLAYS
+    - default: resolution
+      template_variables:
+        builder_level: season
+    - default: audio_codec
+      template_variables:
+        builder_level: season
+    - default: streaming
+      template_variables:
+        builder_level: season
+    - default: video_format
+      template_variables:
+        builder_level: season
+    - default: languages
+      template_variables:
+        builder_level: season
+        languages:
+        - en
+        - fr
+        use_subtitles: true
+        style: half
+
+    # EPISODE OVERLAYS
+    - default: resolution
+      template_variables:
+        builder_level: episode
+    - default: audio_codec
+      template_variables:
+        builder_level: episode
+    - default: ratings
+      template_variables:
+        rating1: critic
+        rating1_image: imdb
+        rating1_font: /config-repo/custom_fonts/Impact.ttf
+        rating1_font_size: 70
+      
+        rating2: audience
+        rating2_image: tmdb
+        rating2_font: /config-repo/custom_fonts/Avenir_95_Black.ttf
+        rating2_font_size: 70
+
+        horizontal_position: right
+        builder_level: episode
+    - default: video_format
+      template_variables:
+        builder_level: episode
+    - default: episode_info
+      template_variables:
+        builder_level: episode
+    - default: runtimes
+      template_variables:
+        builder_level: episode
+    - default: languages
+      template_variables:
+        builder_level: episode
+        languages:
+        - en
+        - fr
+        use_subtitles: true
+        style: half
+
+    # TV SHOWS OPERATIONS
+    operations:
+      mass_user_rating_update: mdb_tomatoes
+      mass_critic_rating_update: imdb
+      mass_audience_rating_update: tmdb
+      mass_episode_critic_rating_update: imdb
+      mass_episode_audience_rating_update: tmdb
+      split_duplicates: false
+      assets_for_all: false
+      delete_collections:
+        configured: false
+        managed: true
+    settings:
+      asset_directory:
+      - /data/assets/tvshows
+
+playlist_files:
+- default: playlist
+  template_variables:
+    libraries: Movies, TV Shows
+
+settings:
+  run_order:
+  - operations
+  - metadata
+  - collections
+  - overlays
+  cache: true
+  cache_expiration: 60
+  asset_directory: config/assets
+  asset_folders: true
+  asset_depth: 0
+  create_asset_folders: true
+  prioritize_assets: false
+  dimensional_asset_rename: false
+  download_url_assets: false
+  show_missing_season_assets: false
+  show_missing_episode_assets: false
+  show_asset_not_needed: true
+  sync_mode: append
+  minimum_items: 1
+  default_collection_order: year.desc
+  delete_below_minimum: true
+  delete_not_scheduled: false
+  run_again_delay: 2
+  missing_only_released: false
+  only_filter_missing: false
+  show_unmanaged: true
+  show_unconfigured: true
+  show_filtered: false
+  show_options: true
+  show_missing: true
+  show_missing_assets: true
+  save_report: false
+  tvdb_language: eng
+  ignore_ids:
+  ignore_imdb_ids:
+  item_refresh_delay: 0
+  playlist_sync_to_users: all
+  playlist_exclude_users:
+  playlist_report: false
+  verify_ssl: true
+  custom_repo:
+  overlay_artwork_filetype: jpg
+  overlay_artwork_quality: 75
+  show_unfiltered: false
+
+webhooks:
+  error:
+  version:
+  run_start:
+  run_end:
+  changes:
+  delete:
+
+plex:
+  url: http://10.10.2.2:32400
+  token: 23DyfRJ6SjpxwHMYkN5K
+  timeout: 60
+  db_cache:
+  clean_bundles: false
+  empty_trash: false
+  optimize: false
+  verify_ssl:
+
+# https://kometa.wiki/en/latest/config/sonarr/
+sonarr:
+  url: http://10.10.2.2:8988
+  token: e3d546a29d164cfb9c77e95adf2a2c35
+
+  # Add missing shows from collections.
+  add_missing: false
+  # Add existing shows from collections (shows that are in Plex but are not already in Sonarr)
+  add_existing: false
+  # Upgrade existing shows to match collection quality profile.
+  upgrade_existing: false
+  # Apply monitor settings to existing shows.
+  monitor_existing: false
+
+  # Default root folder path for new shows.
+  root_folder_path: /data/medias/tvshows/tvshows
+
+  # Monitor setting to apply when adding shows.
+  # - first: All episodes of the first season
+  monitor: none
+
+  # Quality profile for new shows.
+  quality_profile: 2160p Quality (Season Pack Only)
+  # Language profile for new shows.
+  language_profile: English
+  # Series type when adding new shows.
+  series_type: standard
+  # Whether to use season folders.
+  season_folder: true
+  # Default tags for new shows.
+  tag: 
+
+  # Start search for missing episodes when adding shows.
+  search: false
+  # Start search for unmet cutoff episodes.
+  cutoff_search: false
+
+  # When using add_existing or sonarr_add_all (Adds every item in the library to Sonarr) Convert this part of the path to sonarr_path.
+  sonarr_path:
+  # When using add_existing or sonarr_add_all (Adds every item in the library to Sonarr) Convert the plex_path part of the path to this.
+  plex_path:
+
+  ignore_cache: false
+
+radarr:
+  url: http://10.10.2.2:7878
+  token: 65aa12a2c361442299ccd95c5db036c0
+  add_missing: false
+  add_existing: false
+  upgrade_existing: false
+  monitor_existing: false
+  root_folder_path: /data/medias/movies/movies
+  monitor: false
+  availability: released
+  quality_profile: 2160p Quality
+  tag: 
+  search: false
+  radarr_path: 
+  plex_path: 
+  ignore_cache: false
+
+tmdb:
+  apikey: 773db029ad39c7e6639e984b6c0cab6b
+  language: en
+  cache_expiration: 60
+  region:
+
+########## GENERATED BY TRAKTAUTH ##########
+trakt:
+  client_id: 5311188ef5bb148c30491749d1ae92819d72a01e120149c80b417ba6706ef35f
+  client_secret: b433de478eb73a3f84102249f89c05cdc1c4bcdad5a0692dbf95ce9c2b15b4b4
+  authorization:
+    access_token: d869b4591e8e1800ef805e68fcebe7b54823ec45c7fab4f48514e68893836bb4
+    token_type: Bearer
+    expires_in: 86400
+    refresh_token: 028bb5069f7cac82d76121365e7b177f0c3ea91579b6107296442f7b3cf4edc8
+    scope: public
+    created_at: 1751799641
+  pin:
+  force_refresh:
+############################################
+
+mdblist:
+  apikey: y9hg0imkufiqeyu6j0tv9kxk2
+  cache_expiration: 60

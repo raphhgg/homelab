@@ -72,6 +72,63 @@ Services follow consistent volume mounting:
 - Media: `${MEDIAS_PATH}:/data/medias`
 - Downloads: `${DOWNLOAD_PATH}:/downloads`
 
+### Special Case: Kometa (Version-Controlled Configuration)
+
+**Kometa uses a unique dual-volume setup to separate version-controlled configuration from runtime artifacts.**
+
+**Structure:**
+```
+services/media-servers/_plex/kometa/
+├── docker-compose.yml
+└── config/                          # VERSION CONTROLLED
+    ├── config.yml                   # Main configuration
+    ├── collections/                 # Collection definitions
+    │   ├── movies/
+    │   └── tvshows/
+    ├── custom_fonts/                # Custom fonts for overlays
+    ├── .gitignore                   # Ignores symlinks and backups
+    └── [symlinks - created at runtime, NOT tracked]
+        ├── logs -> /data/logs
+        ├── config.cache -> /data/config.cache
+        └── UUID -> /data/UUID
+```
+
+**Volume Mounts:**
+```yaml
+volumes:
+  - ./config:/config-repo:rw        # Config from git repo
+  - ${DOCKER_APPDATA_PATH}/kometa:/data:rw  # Runtime data
+environment:
+  - KOMETA_CONFIG=/config-repo/config.yml
+```
+
+**Runtime Files (in appdata, NOT git):**
+- `/data/logs/` - Log files (~200MB)
+- `/data/overlays/` - Generated overlay images (~3GB)
+- `/data/assets/` - Custom posters/artwork (~26MB)
+- `/data/config.cache` - Runtime cache (~54MB)
+- `/data/UUID` - Instance identifier
+- `/data/missing/` - Generated reports
+
+**Path Convention in config.yml:**
+- Configuration files: `/config-repo/collections/...`, `/config-repo/custom_fonts/...`
+- Runtime files: `/data/assets/...`, `/data/missing/...`, `/data/overlays/...`
+
+**Symlinks:**
+Container entrypoint automatically creates symlinks on startup to redirect Kometa's runtime files to appdata:
+```bash
+ln -sf /data/logs /config-repo/logs
+ln -sf /data/config.cache /config-repo/config.cache
+ln -sf /data/UUID /config-repo/UUID
+```
+
+**Why This Approach:**
+- ✅ Only ~600KB of pure configuration in git repo
+- ✅ ~3.5GB of runtime artifacts stay in appdata
+- ✅ Clean separation for backups and version control
+- ✅ Container fully reproducible from git repo
+- ✅ Scheduled execution via Cronicle (external scheduling)
+
 ## Common Operations
 
 ### Deploying a Service

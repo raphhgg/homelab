@@ -1,0 +1,192 @@
+templates:
+  # Genre mapped from sonarr's root folders (autotags)
+  Genre:
+    plex_search:
+      all:
+        label: Sonarr <<tag>>
+    collection_order: year.desc
+    label: <<collection_name>> Collection
+    sort_title: +010_<<tag>>_Shows
+    sync_mode: sync
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+
+  Pre Streaming:
+    smart_filter:
+      all:
+        collection: <<parent_collection_name>>
+        release.before: 2014-01-01
+      sort_by: year.desc
+    sort_title: +010_<<parent_collection_name>>_<<collection_name>>
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+  
+  Post Streaming:
+    smart_filter:
+      all:
+        collection: <<parent_collection_name>>
+        release.after: 2014-01-01
+      sort_by: year.desc
+    sort_title: +010_<<parent_collection_name>>_<<collection_name>>
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+
+  Separator:
+    smart_label: random
+    sync_mode: sync
+    imdb_id: tt0411008
+
+# Basic genre collections from Sonarr autotags
+collections:
+  Favorites Shows:
+    template: { name: Genre, tag: Favorite }
+    summary: "My All Time Favorites TV Shows."
+    visible_home: true
+    visible_shared: true
+    sort_title: +00_Favorites_Shows
+    # file_poster: config/
+    # visible_shared: weekly(wednesday)
+    # smart_filter:
+    #   sort_by: random
+    #   limit: 200
+    #   validate: false
+    #   all:
+    #     audience_rating.gte: 7.0
+    #     genre: action
+  # Genres: # Works but match 2 items
+  #   template: { name: Separator }
+  #   sort_title: +00_zz
+    # summary: Award collections up next.
+    # file_poster: config/posters/Award Collections.png
+
+  Anime Shows:
+    template: { name: Genre, tag: Anime }
+    summary: "Japanese animated series across all genres and styles."
+
+  Cartoons Shows:
+    template: { name: Genre, tag: Cartoon }
+    summary: "Western animated shows, from adult comedy to kids’ classics."
+
+  Conspiracy & Espionage Shows:
+    template: { name: Genre, tag: Conspiracy-Espionage }
+    summary: "Thrillers about spies, conspiracy, and shadowy global plots."
+
+  Crime & Mystery Shows:
+    template: { name: Genre, tag: Crime-Mystery }
+    summary: "Investigations into murders and crimes where solving the case drives the story."
+
+  Documentary Shows:
+    template: { name: Genre, tag: Documentary }
+    summary: "Non-fiction series exploring real people, events or ideas."
+
+  Drama Shows:
+    template: { name: Genre, tag: Drama }
+    summary: "Character-driven, serious storytelling often tackling moral or emotional dilemmas."
+
+  Dramedy Shows:
+    template: { name: Genre, tag: Dramedy }
+    summary: "Shows blending drama with humor, balancing tension and comedy."
+
+  Horror Shows:
+    template: { name: Genre, tag: Horror }
+    summary: "Supernatural or psychological tales designed to unsettle and scare."
+
+  Organized Crime Shows:
+    template: { name: Genre, tag: Organized-Crime }
+    summary: "Stories about the mafia, cartels, and criminal empires from the inside."
+
+  Reality-TV Shows:
+    template: { name: Genre, tag: Reality-TV }
+    summary: "Competition, lifestyle, or unscripted shows featuring real people."
+
+  Sci-Fi Shows:
+    template: { name: Genre, tag: Sci-Fi }
+    summary: "Futuristic, space-bound, or speculative worlds exploring science and technology."
+
+  Sitcom Shows:
+    template: { name: Genre, tag: Sitcom }
+    summary: "Half-hour comedies built around recurring characters and everyday situations."
+  
+  Classic Sitcom Shows:
+    template: { name: Pre Streaming, parent_collection_name: Sitcom Shows }
+    summary: "Classic sitcoms from the pre-streaming era."
+
+  Modern Sitcom Shows:
+    template: { name: Post Streaming, parent_collection_name: Sitcom Shows }
+    summary: "Modern sitcoms from the streaming era."
+
+  Sports Shows:
+    template: { name: Genre, tag: Sports }
+    summary: "Live competitions, game coverage, and documentaries exploring athletes, teams, and sporting culture."
+
+  Superheroes Shows:
+    template: { name: Genre, tag: Superhero-Mystery }
+    summary: "Gritty superhero stories with a strong investigative or noir element."
+
+  Supernatural Shows:
+    template: { name: Genre, tag: Supernatural-Mystery }
+    summary: "Mysteries fueled by the unexplainable, from the otherworldly to the metaphysical."
+
+  True Crime Shows:
+    template: { name: Genre, tag: True-Crime }
+    summary: "Real-life cases of crime, murder, and justice, retold with documentary detail."
+
+
+
+  # Recently Released Episodes
+  # Useful for series we are following and watching week after week (not a lot)
+  # - show episodes released since last week and not watched
+  # - should show one episode per serie max
+  
+  # Recently Released Series
+  # - released this month vs sorted by release date
+  # - not been watched yet
+
+  # #### Language
+  # French Shows: # Should not include sitcoms
+  #   sonarr_taglist: french
+  #   collection_order: added.desc
+  #   sync_mode: sync
+  #   visible_home: true
+  #   visible_shared: true
+  #   visible_library: true
+  # Korean Shows: # Ok
+  #   sonarr_taglist: korean
+  #   collection_order: added.desc
+  #   sync_mode: sync
+  #   visible_home: true
+  #   visible_shared: true
+  #   visible_library: true
+  # Non-English Shows: # Ok
+  #   plex_all: true
+  #   filters:
+  #     original_language.not: en,ja,ko
+  #   collection_order: added.desc
+  #   sync_mode: sync
+  #   visible_home: true
+  #   visible_shared: true
+  #   visible_library: true
+  # #### Year
+  # Pre-Streaming Shows: # Should not include sitcoms, anime
+  #   sonarr_taglist: tvshows-pre-streaming
+  #   collection_order: added.desc
+  #   sync_mode: sync
+  #   visible_home: true
+  #   visible_shared: true
+  #   visible_library: true
+  # ### Type
+  # Miniseries Shows:
+  #   plex_all: true
+  #   filters:
+  #     tmdb_type: miniseries
+  #     genre.not:
+  #       - "Documentary"
+  #       - "Biography"
+  #   collection_order: added.desc
+  #   sync_mode: sync
+  #   visible_home: true
+  #   visible_shared: true
+  #   visible_library: true

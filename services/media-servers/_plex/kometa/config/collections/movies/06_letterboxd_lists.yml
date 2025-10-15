@@ -1,0 +1,27 @@
+templates:
+  Letterboxd:
+    letterboxd_list_details: <<list_url>>
+    sync_mode: sync
+    sort_title: +060_<<tag>>_Letterboxd_Lists
+    visible_home: true
+    visible_shared: true
+    visible_library: true
+
+collections:
+  Favorites Movies:
+    template:
+      name: Letterboxd
+      list_url: https://letterboxd.com/raphh11/list/favorites-movies/
+    collection_order: year.desc
+    summary: "My All Time Favorites Movies, in no particular order."
+
+  Best 2024 Movies:
+    template:
+      name: Letterboxd
+      list_url: https://letterboxd.com/raphh11/list/best-of-2024/
+    collection_order: custom
+    summary: "Best Movies released in 2024, ranked."
+
+
+  # Best released in 2025
+  # Best watched in 2025

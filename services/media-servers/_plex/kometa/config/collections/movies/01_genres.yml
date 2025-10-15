@@ -1,0 +1,39 @@
+templates:
+  # Genre mapped from Radarr's root folders (autotags)
+  Genre:
+    plex_search:
+      all:
+        label: Radarr <<tag>>
+    collection_order: year.desc
+    label: <<collection_name>> Collection
+    sort_title: +010_<<tag>>_Movies
+    sync_mode: sync
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+
+# Basic genre collections from Radarr autotags
+collections:
+  Horror Movies:
+    template: { name: Genre, tag: Horror }
+    summary: "Films designed to evoke fear, tension, and dread through the supernatural, psychological, or visceral."
+
+  True Crime Movies:
+    template: { name: Genre, tag: True-Crime }
+    summary: "Documentaries based on real criminal cases and investigations"
+
+  Live Music Movies:
+    template: { name: Genre, tag: Live-Music }
+    summary: "Concert films and performances capturing artists and bands playing live."
+
+  Documentary Movies:
+    template: { name: Genre, tag: Documentary-Other }
+    summary: "Nonfiction films exploring real events, people, and ideas with factual storytelling."
+
+  Music Documentary Movies:
+    template: { name: Genre, tag: Documentary-Music }
+    summary: "Documentaries focused on musicians, music history, and cultural impact of sound."
+
+  Sport Documentary Movies:
+    template: { name: Genre, tag: Documentary-Sport }
+    summary: "Documentaries that follow athletes, teams, and iconic sporting moments."

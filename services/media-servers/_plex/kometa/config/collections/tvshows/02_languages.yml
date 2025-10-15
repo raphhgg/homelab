@@ -1,0 +1,77 @@
+templates:  
+  Language:
+    plex_all: true
+    filters:
+      original_language: <<original_language>>
+    collection_order: year.desc
+    label: <<collection_name>> Collection
+    sort_title: +020_<<tag>>_Shows
+    sync_mode: sync
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+
+collections:
+  Non-English Shows:
+    plex_all: true
+    filters:
+      original_language.not: en,ja,ko # Japanese eliminate animes
+    collection_order: year.desc
+    label: <<collection_name>> Collection
+    sort_title: +021_Non-English_Shows
+    sync_mode: sync
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+  
+  French Shows:
+    template: { name: Language, original_language: fr } 
+  
+  Asian Shows:
+    plex_all: true
+    filters:
+      original_language: ja,ko
+      collection.not: Anime Shows
+    collection_order: year.desc
+    label: <<collection_name>> Collection
+    sort_title: +020_Asian_Shows
+    sync_mode: sync
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+
+
+  # #### Release
+  # Recently Released Episodes
+  # Useful for series we are following and watching week after week (not a lot)
+  # - show episodes released since last week and not watched
+  # - should show one episode per serie max
+  
+  # Recently Released Series
+  # - released this month vs sorted by release date
+  # - not been watched yet
+
+  # #### Year
+  # Pre-Streaming Shows: # Should not include sitcoms, anime
+  #   sonarr_taglist: tvshows-pre-streaming
+  #   collection_order: added.desc
+  #   sync_mode: sync
+  #   visible_home: true
+  #   visible_shared: true
+  #   visible_library: true
+
+  # ### Type
+  # Miniseries Shows:
+  #   plex_all: true
+  #   filters:
+  #     tmdb_type: miniseries
+  #     genre.not:
+  #       - "Documentary"
+  #       - "Biography"
+  #   collection_order: added.desc
+  #   sync_mode: sync
+  #   visible_home: true
+  #   visible_shared: true
+  #   visible_library: true
+  
+  # HBO Classics

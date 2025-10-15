@@ -1,0 +1,21 @@
+templates:
+  Franchise:
+    letterboxd_list_details: <<list_url>>
+    sync_mode: sync
+    sort_title: +070_<<tag>>_Letterboxd_Franchises_Lists
+    letterboxd_description: <<list_url>>
+    collection_order: custom
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+
+collections:
+  The Conjuring Franchise Movies:
+    template:
+      name: Franchise
+      list_url: https://letterboxd.com/raphh11/list/franchise-the-conjuring/
+
+  Scream Franchise Movies:
+    template:
+      name: Franchise
+      list_url: https://letterboxd.com/raphh11/list/franchise-scream/

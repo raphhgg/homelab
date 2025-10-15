@@ -1,0 +1,16 @@
+collections:
+  4K HDR10+ or DV Movies:
+    plex_search:
+      any:
+        hdr: true
+        dovi: true
+    filters:
+      filepath.regex: 'HDR10\+|HDR10P|DV|Dolby[ ._-]?Vision'
+    collection_order: release.desc
+    sort_title: +040_4K_HDR+_DV_Quality_Movies_Collection
+    sync_mode: sync
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+
+  # Low Quality (720p and under?)

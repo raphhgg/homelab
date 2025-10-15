@@ -1,0 +1,40 @@
+templates:  
+  Language:
+    plex_all: true
+    filters:
+      original_language: <<original_language>>
+    collection_order: year.desc
+    label: <<collection_name>> Collection
+    sort_title: +020_<<tag>>_Movies
+    sync_mode: sync
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+
+collections:
+  Non-English Movies:
+    plex_all: true
+    filters:
+      original_language.not: en,ja,ko,th,fr # Remove languages already in specific collections
+    collection_order: year.desc
+    label: <<collection_name>> Collection
+    sort_title: +021_Non-English_Movies
+    sync_mode: sync
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+  
+  French Movies:
+    template: { name: Language, original_language: fr } 
+  
+  Asian Movies:
+    plex_all: true
+    filters:
+      original_language: ja,ko,th
+    collection_order: year.desc
+    label: <<collection_name>> Collection
+    sort_title: +020_Asian_Movies
+    sync_mode: sync
+    visible_home: false
+    visible_shared: false
+    visible_library: true

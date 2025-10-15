@@ -1,0 +1,31 @@
+# Sonar Tag Template
+templates:
+  Radarr Tag:
+    radarr_taglist: <<tag>>
+    item_label: radarr <<tag>>
+    sync_mode: sync
+    build_collection: false
+
+# Add Radarr tags as Labels in Plex
+collections:
+  # Remove Radarr Labels:
+  #   plex_all: true
+  #   item_label.remove: ...
+  #   build_collection: false
+
+  # Genres
+  Add Horror Label:
+    template: { name: Radarr Tag, tag: Horror }
+  Add True Crime Label:
+    template: { name: Radarr Tag, tag: True-Crime }
+  Add Live Music Label:
+    template: { name: Radarr Tag, tag: Live-Music }
+  Add Documentary Label:
+    template: { name: Radarr Tag, tag: Documentary-Other }
+    plex_search:
+      all:
+        title: Europa
+  Add Documentary Music Label:
+    template: { name: Radarr Tag, tag: Documentary-Music }
+  Add Documentary Sport Label:
+    template: { name: Radarr Tag, tag: Documentary-Sport }
