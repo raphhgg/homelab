@@ -88,6 +88,16 @@ MONITOR_GROUPS = {
             "maxretries": 2,
             "description": "Docker log viewer",
         },
+        {
+            "name": "beszel",
+            "type": MonitorType.HTTP,
+            "url": "http://10.10.2.2:8091",
+            "interval": 120,
+            "retryInterval": 30,
+            "maxretries": 2,
+            "critical": True,
+            "description": "System performance monitoring",
+        },
     ],
     "media-server": [
         {

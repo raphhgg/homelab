@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  beszel:
+    image: henrygd/beszel:latest
+    container_name: beszel
+    networks:
+      - main
+    ports:
+      - 8091:8090
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/beszel/data:/beszel_data
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    restart: always
+
+  beszel-agent:
+    image: henrygd/beszel-agent:latest
+    container_name: beszel-agent
+    networks:
+      - main
+      - socket_proxy
+    volumes:
+      # Monitor only main volumes - accurate filesystem-level usage
+      # For directory-level usage (docker, downloads, movies, etc.), use Cronicle scripts
+      - /volume1:/extra-filesystems/cachedev_1__Volume1:ro
+      - /volume2:/extra-filesystems/cachedev_0__Volume2:ro
+    environment:
+      - PORT=45876
+      - KEY=${BESZEL_AGENT_KEY}
+      - DOCKER_HOST=${DOCKER_HOST}
+      # Set main filesystem to Volume1 using the container mount point
+      # Beszel will use this for the main "Disk Usage" panel
+      - FILESYSTEM=/extra-filesystems/cachedev_1__Volume1
+    restart: always
+
+networks:
+  main:
+    external: true
+  socket_proxy:
+    external: true

@@ -30,7 +30,7 @@ Services are organized in the `services/` directory with the following categorie
   - Docker Socket Proxy
   - Ofelia (cron scheduler)
 
-- **monitoring/**: Monitoring and management tools (Dozzle, Lazydocker, Uptime-kuma)
+- **monitoring/**: Monitoring and management tools (Beszel, Dozzle, Lazydocker, Uptime-kuma)
 
 - **syncthing/**: File synchronization
 
@@ -135,9 +135,10 @@ ln -sf /data/UUID /config-repo/UUID
 
 When adding a new service to the repository:
 1. Create the service directory structure with `docker-compose.yml` and `.env.example`
-2. **IMPORTANT**: After adding the service, ask the user if they want to add a monitor for it in Uptime Kuma
-3. If yes, add the monitor configuration to `services/monitoring/uptime-kuma/setup_monitors.py` in the appropriate category section
-4. Monitor should use the container name (lowercase) and proper endpoint (IP-based for HTTP monitors)
+2. **Note on `.gitignore`**: Do NOT create individual `.gitignore` files in service folders. The root `.gitignore` handles all necessary patterns (`.env`, logs, data directories, etc.). Only create a service-specific `.gitignore` if there are unique patterns not covered by the root file.
+3. **IMPORTANT**: After adding the service, ask the user if they want to add a monitor for it in Uptime Kuma
+4. If yes, add the monitor configuration to `services/monitoring/uptime-kuma/setup_monitors.py` in the appropriate category section
+5. Monitor should use the container name (lowercase) and proper endpoint (IP-based for HTTP monitors)
 
 ### Deploying a Service
 
@@ -165,6 +166,115 @@ docker-compose up -d
 ```bash
 docker-compose down
 ```
+
+## Monitoring Stack
+
+The homelab uses a multi-layered monitoring approach with complementary tools:
+
+### Beszel - Hardware & Resource Monitoring
+
+**Location**: `services/monitoring/beszel/`
+**Port**: 8091
+**Access**: `http://nas:8091`
+
+**Purpose**: System performance and resource monitoring
+
+**What it monitors:**
+- **Hardware metrics**: CPU usage, memory (RAM + swap), disk space, disk I/O, network bandwidth, temperature sensors
+- **Filesystem monitoring**: Volume1 (11TB) and Volume2 (3.6TB) - main volumes only
+- **Docker containers**: Per-container CPU/memory/network usage with historical data
+- **Historical data**: 90-day retention (configurable) with time-series charts
+
+**Note on filesystem monitoring:**
+- Monitors volume-level usage (Volume1/Volume2 overall)
+- For directory-level usage (docker, downloads, movies, etc.), use Cronicle-scheduled scripts
+- BTRFS subvolumes show total volume usage, not individual directory size
+
+**Architecture:**
+- **Hub**: Web dashboard for viewing all metrics (PocketBase-based)
+- **Agent**: Lightweight collector running on the NAS, connects via Docker Socket Proxy
+
+**Key features:**
+- Real-time and historical performance charts
+- Configurable alerts (disk space, CPU, memory, temperature)
+- Automatic backups (S3-compatible or local)
+- Very lightweight (<50MB RAM usage)
+
+**Configuration:**
+- Agent key stored in `.env` file (generated during first setup)
+- Data stored in `${DOCKER_APPDATA_PATH}/beszel/data`
+- Uses Docker Socket Proxy for secure Docker API access
+
+**Alert thresholds** (recommended):
+- Disk space: 95%
+- CPU sustained usage: 80%+
+- Memory usage: 90%+
+- Temperature: 70°C+ (if available)
+
+**Common operations:**
+```bash
+# View logs
+cd services/monitoring/beszel && docker-compose logs -f
+
+# Restart service
+docker-compose restart beszel
+
+# Check metrics collection
+docker-compose logs beszel-agent
+```
+
+### Uptime Kuma - Service Availability Monitoring
+
+**Location**: `services/monitoring/uptime-kuma/`
+**Port**: 3001
+**Access**: `http://nas:3001`
+
+**Purpose**: Monitor if services are up/down and responding
+
+**What it monitors:**
+- HTTP/HTTPS endpoints (Plex, Sonarr, Radarr, etc.)
+- TCP port availability
+- Docker container status (up/down)
+- Ping monitoring (network devices)
+- DNS records, SSL certificates
+
+**Key features:**
+- 90+ notification channels via Apprise
+- Status pages for public/team visibility
+- Uptime history and response time tracking
+- Groups and tags for organization
+
+**Automated monitor setup:**
+Run `services/monitoring/uptime-kuma/setup_monitors.py` to automatically create/update monitors for all services
+
+### Dozzle - Log Viewer
+
+**Location**: `services/monitoring/dozzle/`
+**Port**: 8088
+**Access**: `http://nas:8088`
+
+**Purpose**: Real-time Docker container log viewing
+
+**Key features:**
+- Live streaming logs
+- SQL queries on log data
+- Shell access to containers
+- Multi-host support
+
+### Monitoring Stack Architecture
+
+```
+Layer 1: Availability → Uptime Kuma (Is it alive?)
+Layer 2: Performance → Beszel (How is it performing?)
+Layer 3: Logs → Dozzle (What happened?)
+Layer 4: Alerting → Apprise/n8n (Notify me)
+```
+
+**When to use what:**
+- Service went down? → Check Uptime Kuma for uptime status
+- High CPU/memory? → Check Beszel for resource usage trends
+- Service behaving oddly? → Check Dozzle for error logs
+- Need historical performance data? → Check Beszel charts
 
 ## Scripts
 
