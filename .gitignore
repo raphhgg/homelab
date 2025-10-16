@@ -1,3 +1,11 @@
 .env
 .DS_Store
 settings.local.json
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
