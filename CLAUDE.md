@@ -131,6 +131,14 @@ ln -sf /data/UUID /config-repo/UUID
 
 ## Common Operations
 
+### Adding a New Service
+
+When adding a new service to the repository:
+1. Create the service directory structure with `docker-compose.yml` and `.env.example`
+2. **IMPORTANT**: After adding the service, ask the user if they want to add a monitor for it in Uptime Kuma
+3. If yes, add the monitor configuration to `services/monitoring/uptime-kuma/setup_monitors.py` in the appropriate category section
+4. Monitor should use the container name (lowercase) and proper endpoint (IP-based for HTTP monitors)
+
 ### Deploying a Service
 
 ```bash
@@ -233,6 +241,38 @@ When cloning or working with this repository, ensure you're using the `github-pe
 **Default Project:** All Linear issues for this homelab repository should be created in the **"self-hosted"** project unless otherwise specified.
 
 When creating issues related to this repository, always use the "self-hosted" project by default.
+
+### Linear MCP Not Working in Cursor/VSCode
+
+**Issue:** Linear MCP server connection fails with error `SSE MCP servers are currently not supported in native builds.`
+
+**Root Cause:**
+- Linear's official MCP server uses SSE (Server-Sent Events) transport
+- Claude Code's native binary (used by Cursor/VSCode extensions) does NOT support SSE MCP servers
+- This is a platform limitation, not a configuration issue
+- The Linear MCP configuration in `~/.claude.json` is correct but cannot be used in IDE extensions
+
+**Verification:**
+Check Claude extension logs for this error:
+```
+[ERROR] MCP server "linear" Connection failed: SSE MCP servers are currently not supported in native builds.
+```
+
+**Workaround - Use Linear GraphQL API:**
+
+Since the Linear MCP doesn't work in Cursor/VSCode, use the Linear GraphQL API directly via curl:
+
+```bash
+curl -s -X POST https://api.linear.app/graphql \
+  -H "Authorization: lin_api_b5FUKZXuG93dR2A7PiNBGzqUMQmCIs3Gs9pcgJaw" \
+  -H "Content-Type: application/json" \
+  -d '{"query":"query { issue(id: \"ISSUE-ID\") { id title description state { name } assignee { name } labels { nodes { name } } createdAt updatedAt } }"}' \
+  | python3 -m json.tool
+```
+
+Replace `ISSUE-ID` with the actual issue identifier (e.g., `RGR-113`).
+
+**Note:** The Linear MCP works fine in the Claude CLI (`claude` command), but not in IDE extensions. If you need full MCP functionality, use the CLI version of Claude Code instead of the Cursor/VSCode extension.
 
 ## Troubleshooting
 
