@@ -12,3 +12,6 @@ services:
     volumes:
       - ${DOCKER_APPDATA_PATH}/home-assistant:/config
     restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.monitor-only=true"

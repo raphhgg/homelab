@@ -13,9 +13,12 @@ services:
     ports:
       - 8082:8080    # Web UI
       - 8183:8081    # Calibre content server
-    restart: unless-stopped
+    restart: always
     networks:
       - main
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.monitor-only=true"
 
   calibre-web:
     image: crocodilestick/calibre-web-automated
@@ -32,10 +35,13 @@ services:
       - ${MEDIAS_PATH}/books/calibre_library:/calibre-library
     ports:
       # Change the first number to change the port you want to access the Web UI, not the second
-      - 8071:8083 
-    restart: unless-stopped
+      - 8071:8083
+    restart: always
     networks:
       - main
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.monitor-only=true"
 
   calibre-web-dl:
     image: ghcr.io/calibrain/calibre-web-automated-book-downloader
@@ -57,7 +63,7 @@ services:
       - TZ=${TZ}
     ports:
       - 8072:8084
-    restart: unless-stopped
+    restart: always
     volumes:
       # This is where the books will be downloaded to, usually it would be 
       # the same as whatever you gave in "calibre-web-automated"
@@ -65,6 +71,9 @@ services:
       - ${DOWNLOAD_PATH}/cwa_ingest:/cwa-book-ingest
     networks:
       - main
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.monitor-only=true"
 
 networks:
   main:

@@ -46,9 +46,13 @@ services:
       - QBT_LOG_COUNT=5
       - QBT_DIVIDER==
       - QBT_WIDTH=100
-    restart: on-failure:2
+    restart: always
     networks:
       - main
+    labels:
+      
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.monitor-only=true"
 
 networks:
   main:

@@ -98,6 +98,16 @@ MONITOR_GROUPS = {
             "critical": True,
             "description": "System performance monitoring",
         },
+        {
+            "name": "watchtower",
+            "type": MonitorType.DOCKER,
+            "docker_container": "watchtower",
+            "docker_host": 1,
+            "interval": 120,
+            "retryInterval": 30,
+            "maxretries": 2,
+            "description": "Docker container auto-updater",
+        },
     ],
     "media-server": [
         {

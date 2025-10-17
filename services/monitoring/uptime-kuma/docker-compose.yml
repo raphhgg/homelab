@@ -16,6 +16,8 @@ services:
       - PGID=${PGID}
       - DOCKER_HOST=${DOCKER_HOST}
     restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
   main:

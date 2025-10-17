@@ -26,6 +26,9 @@ services:
       - ${DOCKER_APPDATA_PATH}/cronicle/tmp:/opt/cronicle/tmp:rw
       - /usr/local/bin/docker:/usr/bin/docker:ro
     restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.monitor-only=true"
 
 networks:
   main:

@@ -35,9 +35,12 @@ services:
       # Log file path (inside container)
       # If not defined, logs to stdout
       QUI__LOG_PATH: "/config/logs/qui.log"
-    restart: unless-stopped
+    restart: always
     networks:
       - main
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.monitor-only=true"
 
 networks:
   main:

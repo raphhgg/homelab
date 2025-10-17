@@ -19,6 +19,9 @@ services:
       - ${DOWNLOAD_PATH}/torrents/complete/tvshows:/downloads/torrents/complete/tvshows
       - ${DOWNLOAD_PATH}/torrents/complete/movies:/downloads/torrents/complete/movies
     restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.monitor-only=true"
 
 networks:
   main:

@@ -3,7 +3,7 @@ services:
   github-runner:
     image: myoung34/github-runner:latest
     container_name: github-actions-runner
-    restart: unless-stopped
+    restart: always
     networks:
       - socket_proxy
     environment:
@@ -43,8 +43,11 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "50m" 
+        max-size: "50m"
         max-file: "5"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.monitor-only=true"
 
 networks:
   socket_proxy:

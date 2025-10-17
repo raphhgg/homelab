@@ -10,3 +10,6 @@ services:
       - DEBUG=1
       - mam_id=${MAM_SESSION_ID}
     restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.monitor-only=true"

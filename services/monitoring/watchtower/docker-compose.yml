@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    networks:
+      - main
+      - socket_proxy
+    ports:
+      - 8082:8080  # HTTP API port
+    environment:
+      - TZ=${TZ}
+      - DOCKER_HOST=${DOCKER_HOST}
+
+      # HTTP API MODE - Manual trigger via Cronicle or API calls
+      - WATCHTOWER_HTTP_API_UPDATE=true
+      - WATCHTOWER_HTTP_API_TOKEN=${WATCHTOWER_HTTP_API_TOKEN}
+
+      # Allow periodic checks alongside HTTP API (for manual --run-once checks)
+      - WATCHTOWER_HTTP_API_PERIODIC_POLLS=true
+
+      # NO BUILT-IN SCHEDULE - All scheduling managed by Cronicle
+      # Cronicle will trigger via --run-once checks or HTTP API calls
+
+      # Whitelist mode: only check/update containers with enable=true label
+      - WATCHTOWER_LABEL_ENABLE=true
+
+      # Cleanup old images after update
+      - WATCHTOWER_CLEANUP=true
+
+      # Include stopped/restarting containers in checks
+      - WATCHTOWER_INCLUDE_STOPPED=true
+      - WATCHTOWER_INCLUDE_RESTARTING=true
+
+      # Logging
+      - WATCHTOWER_LOG_LEVEL=info
+
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  main:
+    external: true
+  socket_proxy:
+    external: true

@@ -20,6 +20,9 @@ services:
       - ${DOCKER_APPDATA_PATH}/autopulse/data:/app/data
       - ${MEDIAS_PATH}:/data/medias:ro
     restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.monitor-only=true"
 
 networks:
   main:
