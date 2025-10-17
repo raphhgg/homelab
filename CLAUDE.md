@@ -138,7 +138,7 @@ Layer 5: Alerting → Apprise/n8n (Notify me)
 **Location**: `services/infrastructure/cronicle/`
 **Port**: 3012
 **Access**: `http://nas:3012`
-**API Key**: Available in `.env` file as `CRONICLE_API_KEY=159a3772fe5a3303bf81172da7c4c0ac`
+**API Key**: `159a3772fe5a3303bf81172da7c4c0ac`
 
 **Purpose**: Schedule and automate recurring tasks (cron replacement with web UI)
 
@@ -148,222 +148,35 @@ Layer 5: Alerting → Apprise/n8n (Notify me)
 - Watchtower update checks (daily container update scanning)
 - Other scheduled maintenance tasks
 
-### Managing Cronicle Jobs via API
+**Claude Integration:**
+- Claude can create/update/delete Cronicle jobs programmatically using the HTTP API
+- Job categories: Media Server (`cmgm06foc04`), Monitoring (`cmgumlb1w1e`)
+- When adding jobs for new categories, Claude must ask user to create category via Web UI first
 
-**Important**: Claude can create/update/delete Cronicle jobs programmatically using the HTTP API.
-
-**API Endpoints:**
-- Base URL: `http://10.10.2.2:3012/api/app/`
-- API Key: `159a3772fe5a3303bf81172da7c4c0ac` (passed as query parameter)
-
-**Common Operations:**
-
-```bash
-# List all scheduled jobs
-curl -s "http://10.10.2.2:3012/api/app/get_schedule/v1?api_key=159a3772fe5a3303bf81172da7c4c0ac"
-
-# Get job status
-curl -s "http://10.10.2.2:3012/api/app/get_job_status/v1?api_key=159a3772fe5a3303bf81172da7c4c0ac&id=JOB_ID"
-
-# Trigger job manually
-curl -s -X POST "http://10.10.2.2:3012/api/app/run_event/v1" \
-  -H "Content-Type: application/json" \
-  -H "X-API-Key: 159a3772fe5a3303bf81172da7c4c0ac" \
-  -d '{"id":"EVENT_ID"}'
-
-# Create new event (job)
-curl -s -X POST "http://10.10.2.2:3012/api/app/create_event/v1" \
-  -H "Content-Type: application/json" \
-  -H "X-API-Key: 159a3772fe5a3303bf81172da7c4c0ac" \
-  -d '{
-    "title": "Job Title",
-    "enabled": 1,
-    "category": "CATEGORY_ID",
-    "plugin": "shellplug",
-    "target": "allgrp",
-    "params": {
-      "script": "#!/bin/bash\necho \"Job script here\"",
-      "annotate": 1
-    },
-    "timing": {
-      "hours": [3],
-      "minutes": [0]
-    },
-    "timezone": "Europe/Brussels",
-    "notes": "Job description"
-  }'
-
-# Update existing event
-curl -s -X POST "http://10.10.2.2:3012/api/app/update_event/v1" \
-  -H "Content-Type: application/json" \
-  -H "X-API-Key: 159a3772fe5a3303bf81172da7c4c0ac" \
-  -d '{"id":"EVENT_ID", ...}'
-
-# Delete event
-curl -s -X POST "http://10.10.2.2:3012/api/app/delete_event/v1" \
-  -H "Content-Type: application/json" \
-  -H "X-API-Key: 159a3772fe5a3303bf81172da7c4c0ac" \
-  -d '{"id":"EVENT_ID"}'
-```
-
-### Job Categories
-
-Cronicle jobs are organized by categories. Current categories:
-- **Media Server** (`cmgm06foc04`) - Kometa, ImageMaid, Plex-related jobs
-- **Monitoring** (`cmgumlb1w1e`) - Watchtower, monitoring, health check jobs
-
-**When Claude adds a Cronicle job:**
-
-1. **For existing services in known categories**: Add the job to the appropriate category:
-   - **Media Server jobs**: Kometa, ImageMaid, Plex, Jellyfin operations → Use `cmgm06foc04`
-   - **Monitoring jobs**: Watchtower, Beszel checks, Uptime Kuma tasks → Use `cmgumlb1w1e`
-
-2. **For services that don't fit existing categories**: Ask the user:
-   - "This job is for [SERVICE_NAME] which doesn't fit existing categories (Media Server, Monitoring). Should I:
-     - Add it to one of the existing categories? Which one?
-     - Create a new category? If so, what should it be called?"
-
-3. **If user requests a new category**:
-   - Ask the user to create it via Cronicle web UI (Admin > Categories)
-   - Reason: The `create_category` API requires admin authentication which Claude doesn't have
-   - Once created, ask the user for the new category ID (format: `cmXXXXXXXXX`)
-   - Update this section in CLAUDE.md with the new category
-
-4. **Category naming convention**:
-   - Use clear, descriptive names (e.g., "Media Server", "Infrastructure", "Monitoring")
-   - Categories help organize jobs in the Cronicle UI
-   - Choose colors that make categories visually distinct
-
-### Job Timing Format
-
-Cronicle uses a timing object for scheduling (similar to cron but JSON format):
-
-```json
-{
-  "timing": {
-    "years": [2025],           // Optional: specific years
-    "months": [1, 6, 12],      // Optional: specific months (1-12)
-    "days": [1, 15],           // Optional: specific days of month (1-31)
-    "weekdays": [0, 6],        // Optional: specific weekdays (0=Sunday, 6=Saturday)
-    "hours": [3],              // Hours (0-23)
-    "minutes": [0, 30]         // Minutes (0-59)
-  },
-  "timezone": "Europe/Brussels"
-}
-```
-
-**Examples:**
-- Daily at 3 AM: `{"hours": [3], "minutes": [0]}`
-- Every 6 hours: `{"hours": [0, 6, 12, 18], "minutes": [0]}`
-- Three times a day: `{"hours": [5, 13, 21], "minutes": [0]}`
-- Weekly on Sunday at 2 AM: `{"weekdays": [0], "hours": [2], "minutes": [0]}`
-
-### Shell Plugin Parameters
-
-Most jobs use the Shell Plugin (`"plugin": "shellplug"`) with these parameters:
-
-```json
-{
-  "params": {
-    "script": "#!/bin/bash\nYOUR_SCRIPT_HERE",
-    "annotate": 1,           // Add timestamps to log output
-    "json": 0,               // Parse JSON in output (usually 0)
-    "lang": "shell",         // Syntax highlighting
-    "theme": "default"       // Editor theme
-  }
-}
-```
-
-**Script guidelines:**
-- Always include shebang: `#!/bin/bash`
-- Use `docker exec` for running commands in containers
-- Add `-u` flag for unbuffered output: `python3 -u script.py`
-- Return proper exit codes (0 = success, non-zero = failure)
-
-### Common Job Patterns
-
-**Docker exec pattern:**
-```bash
-#!/bin/bash
-docker exec CONTAINER_NAME command --flags
-```
-
-**Docker run pattern (for one-off containers):**
-```bash
-#!/bin/bash
-docker run --rm \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -e DOCKER_HOST=tcp://docker-proxy:2375 \
-  --network socket_proxy \
-  IMAGE_NAME \
-  --flags
-```
-
-**API call pattern:**
-```bash
-#!/bin/bash
-TOKEN="${ENV_VARIABLE}"
-curl -X POST \
-  -H "Authorization: Bearer ${TOKEN}" \
-  "http://service:port/api/endpoint"
-```
-
-### Example: Adding a Watchtower Daily Check Job
-
-When Claude is asked to add a Watchtower daily check job:
-
-```json
-{
-  "title": "Watchtower - Daily Update Check",
-  "enabled": 1,
-  "category": "cmgumlb1w1e",
-  "plugin": "shellplug",
-  "target": "allgrp",
-  "params": {
-    "script": "#!/bin/bash\n# Check for container updates\n\ndocker run --rm \\\n  -v /var/run/docker.sock:/var/run/docker.sock \\\n  -e DOCKER_HOST=tcp://docker-proxy:2375 \\\n  --network socket_proxy \\\n  containrrr/watchtower \\\n  --run-once \\\n  --label-enable \\\n  2>&1 | tee /tmp/watchtower-check.log\n\n# Future Phase 2: Parse output and send Apprise notifications",
-    "annotate": 1,
-    "lang": "shell",
-    "theme": "default"
-  },
-  "timing": {
-    "hours": [3],
-    "minutes": [0]
-  },
-  "timezone": "Europe/Brussels",
-  "notes": "Daily container update check. Auto-updates Tier 1 containers, logs updates for Tier 2 (manual approval).",
-  "max_children": 1,
-  "timeout": 0
-}
-```
-
-### Troubleshooting Cronicle Jobs
-
-**View job logs:**
-- Check via Cronicle web UI: http://nas:3012
-- Or via filesystem: `/volume2/docker/appdata/cronicle/logs/jobs/`
-
-**Common issues:**
-- **Permission errors**: See CLAUDE.md "Troubleshooting > Cronicle Shell Plugin Permission Issues"
-- **Temp directory errors**: Ensure `TMP=/opt/cronicle/tmp` is set in docker-compose.yml
-- **Log directory errors**: Ensure logs directory has 755 permissions
-
-**Job execution notes:**
-- Jobs support Python scripts with proper shebang: `#!/usr/bin/env python3`
-- Jobs can accept parameters (future enhancement)
-- Jobs can chain together (run job B after job A completes)
-- Jobs can have webhooks for external triggers
+**See [services/infrastructure/cronicle/README.md](services/infrastructure/cronicle/README.md) for complete documentation including:**
+- API endpoints and usage examples
+- Job categories and category management
+- Job timing format and examples
+- Shell plugin parameters and script guidelines
+- Common job patterns (docker exec, docker run, API calls)
+- Troubleshooting and management
 
 ## Scripts
 
-Located in `scripts/media-download/`:
+Utility scripts for homelab automation and maintenance.
 
-- **hardlink_creator.sh**: Creates hardlinks between duplicate files across folders to save disk space
-  - Uses `jdupes` to find duplicates (files >100MB)
-  - Keeps original files, replaces copies with hardlinks
-  - Has episode detection to avoid linking different episodes with same content
-  - Usage: `./hardlink_creator.sh /path/to/original /path/to/copy`
+**Location**: `scripts/`
 
-- **organize_trailers.sh**: Organizes trailer files
+**Available Scripts:**
+- **media-download/hardlink_creator.sh**: Creates hardlinks between duplicate files to save disk space
+- **media-download/organize_trailers.sh**: Organizes trailer files for Plex libraries
+
+**See [scripts/README.md](scripts/README.md) for complete documentation including:**
+- Detailed script descriptions and usage
+- Requirements and dependencies
+- Best practices for adding new scripts
+- Common script patterns
+- Integration with Cronicle for scheduling
 
 ## Deployment Pipeline
 

@@ -107,9 +107,192 @@ All Kometa jobs use the `-u` flag for unbuffered Python output to ensure real-ti
 
 ### API Access
 
-API Key is stored in `.env`:
+**API Key**: Available in `.env` file as `CRONICLE_API_KEY=159a3772fe5a3303bf81172da7c4c0ac`
+
+**Important**: Claude can create/update/delete Cronicle jobs programmatically using the HTTP API.
+
+**API Endpoints:**
+- Base URL: `http://10.10.2.2:3012/api/app/`
+- API Key: `159a3772fe5a3303bf81172da7c4c0ac` (passed as query parameter)
+
+**Common Operations:**
+
 ```bash
-CRONICLE_API_KEY=159a3772fe5a3303bf81172da7c4c0ac
+# List all scheduled jobs
+curl -s "http://10.10.2.2:3012/api/app/get_schedule/v1?api_key=159a3772fe5a3303bf81172da7c4c0ac"
+
+# Get job status
+curl -s "http://10.10.2.2:3012/api/app/get_job_status/v1?api_key=159a3772fe5a3303bf81172da7c4c0ac&id=JOB_ID"
+
+# Trigger job manually
+curl -s -X POST "http://10.10.2.2:3012/api/app/run_event/v1" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: 159a3772fe5a3303bf81172da7c4c0ac" \
+  -d '{"id":"EVENT_ID"}'
+
+# Create new event (job)
+curl -s -X POST "http://10.10.2.2:3012/api/app/create_event/v1" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: 159a3772fe5a3303bf81172da7c4c0ac" \
+  -d '{
+    "title": "Job Title",
+    "enabled": 1,
+    "category": "CATEGORY_ID",
+    "plugin": "shellplug",
+    "target": "allgrp",
+    "params": {
+      "script": "#!/bin/bash\necho \"Job script here\"",
+      "annotate": 1
+    },
+    "timing": {
+      "hours": [3],
+      "minutes": [0]
+    },
+    "timezone": "Europe/Brussels",
+    "notes": "Job description"
+  }'
+
+# Update existing event
+curl -s -X POST "http://10.10.2.2:3012/api/app/update_event/v1" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: 159a3772fe5a3303bf81172da7c4c0ac" \
+  -d '{"id":"EVENT_ID", ...}'
+
+# Delete event
+curl -s -X POST "http://10.10.2.2:3012/api/app/delete_event/v1" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: 159a3772fe5a3303bf81172da7c4c0ac" \
+  -d '{"id":"EVENT_ID"}'
+```
+
+### Job Categories
+
+Cronicle jobs are organized by categories. Current categories:
+- **Media Server** (`cmgm06foc04`) - Kometa, ImageMaid, Plex-related jobs
+- **Monitoring** (`cmgumlb1w1e`) - Watchtower, monitoring, health check jobs
+
+**When Claude adds a Cronicle job:**
+
+1. **For existing services in known categories**: Add the job to the appropriate category:
+   - **Media Server jobs**: Kometa, ImageMaid, Plex, Jellyfin operations → Use `cmgm06foc04`
+   - **Monitoring jobs**: Watchtower, Beszel checks, Uptime Kuma tasks → Use `cmgumlb1w1e`
+
+2. **For services that don't fit existing categories**: Ask the user:
+   - "This job is for [SERVICE_NAME] which doesn't fit existing categories (Media Server, Monitoring). Should I:
+     - Add it to one of the existing categories? Which one?
+     - Create a new category? If so, what should it be called?"
+
+3. **If user requests a new category**:
+   - Ask the user to create it via Cronicle web UI (Admin > Categories)
+   - Reason: The `create_category` API requires admin authentication which Claude doesn't have
+   - Once created, ask the user for the new category ID (format: `cmXXXXXXXXX`)
+   - Update the categories list above with the new category
+
+4. **Category naming convention**:
+   - Use clear, descriptive names (e.g., "Media Server", "Infrastructure", "Monitoring")
+   - Categories help organize jobs in the Cronicle UI
+   - Choose colors that make categories visually distinct
+
+### Job Timing Format
+
+Cronicle uses a timing object for scheduling (similar to cron but JSON format):
+
+```json
+{
+  "timing": {
+    "years": [2025],           // Optional: specific years
+    "months": [1, 6, 12],      // Optional: specific months (1-12)
+    "days": [1, 15],           // Optional: specific days of month (1-31)
+    "weekdays": [0, 6],        // Optional: specific weekdays (0=Sunday, 6=Saturday)
+    "hours": [3],              // Hours (0-23)
+    "minutes": [0, 30]         // Minutes (0-59)
+  },
+  "timezone": "Europe/Brussels"
+}
+```
+
+**Examples:**
+- Daily at 3 AM: `{"hours": [3], "minutes": [0]}`
+- Every 6 hours: `{"hours": [0, 6, 12, 18], "minutes": [0]}`
+- Three times a day: `{"hours": [5, 13, 21], "minutes": [0]}`
+- Weekly on Sunday at 2 AM: `{"weekdays": [0], "hours": [2], "minutes": [0]}`
+
+### Shell Plugin Parameters
+
+Most jobs use the Shell Plugin (`"plugin": "shellplug"`) with these parameters:
+
+```json
+{
+  "params": {
+    "script": "#!/bin/bash\nYOUR_SCRIPT_HERE",
+    "annotate": 1,           // Add timestamps to log output
+    "json": 0,               // Parse JSON in output (usually 0)
+    "lang": "shell",         // Syntax highlighting
+    "theme": "default"       // Editor theme
+  }
+}
+```
+
+**Script guidelines:**
+- Always include shebang: `#!/bin/bash`
+- Use `docker exec` for running commands in containers
+- Add `-u` flag for unbuffered output: `python3 -u script.py`
+- Return proper exit codes (0 = success, non-zero = failure)
+
+### Common Job Patterns
+
+**Docker exec pattern:**
+```bash
+#!/bin/bash
+docker exec CONTAINER_NAME command --flags
+```
+
+**Docker run pattern (for one-off containers):**
+```bash
+#!/bin/bash
+docker run --rm \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -e DOCKER_HOST=tcp://docker-proxy:2375 \
+  --network socket_proxy \
+  IMAGE_NAME \
+  --flags
+```
+
+**API call pattern:**
+```bash
+#!/bin/bash
+TOKEN="${ENV_VARIABLE}"
+curl -X POST \
+  -H "Authorization: Bearer ${TOKEN}" \
+  "http://service:port/api/endpoint"
+```
+
+### Example: Adding a Watchtower Daily Check Job
+
+When Claude is asked to add a Watchtower daily check job:
+
+```json
+{
+  "title": "Watchtower - Daily Update Check",
+  "enabled": 1,
+  "category": "cmgumlb1w1e",
+  "plugin": "shellplug",
+  "target": "allgrp",
+  "params": {
+    "script": "#!/bin/bash\n# Check for container updates\n\ndocker run --rm \\\n  -v /var/run/docker.sock:/var/run/docker.sock \\\n  -e DOCKER_HOST=tcp://docker-proxy:2375 \\\n  --network socket_proxy \\\n  containrrr/watchtower \\\n  --run-once \\\n  --label-enable \\\n  2>&1 | tee /tmp/watchtower-check.log\n\n# Future Phase 2: Parse output and send Apprise notifications",
+    "annotate": 1,
+    "lang": "shell",
+    "theme": "default"
+  },
+  "timing": {
+    "hours": [3],
+    "minutes": [0]
+  },
+  "timezone": "Europe/Brussels",
+  "notes": "Daily container update check. Auto-updates Tier 1 containers, logs updates for Tier 2 (manual approval).",
+  "max_children": 1,
+  "timeout": 0
+}
 ```
 
 ### Docker Socket Access
@@ -131,33 +314,32 @@ All jobs run in `Europe/Brussels` timezone.
 ### View Job Status
 
 ```bash
-# Via API
-curl -s "http://10.10.2.2:3012/api/app/get_schedule/v1?api_key=159a3772fe5a3303bf81172da7c4c0ac"
-
 # Via Web UI
 Open http://10.10.2.2:3012 and navigate to Schedule
-```
 
-### Run Job Manually
-
-```bash
-# Replace <event_id> with the job ID (e.g., emgm0196w02)
-curl -s -X POST "http://10.10.2.2:3012/api/app/run_event/v1" \
-  -H "Content-Type: application/json" \
-  -H "X-API-Key: 159a3772fe5a3303bf81172da7c4c0ac" \
-  -d '{"id":"<event_id>"}'
+# Via API (see API Access section for more operations)
+curl -s "http://10.10.2.2:3012/api/app/get_schedule/v1?api_key=159a3772fe5a3303bf81172da7c4c0ac"
 ```
 
 ### View Job Logs
 
-Logs are compressed and stored in `/volume2/docker/appdata/cronicle/data/jobs/`:
+Logs are compressed and stored in `/volume2/docker/appdata/cronicle/data/jobs/` or `/volume2/docker/appdata/cronicle/logs/jobs/`:
 
 ```bash
-# Find recent logs
+# Via Web UI (easiest)
+Open http://10.10.2.2:3012 and click "Completed" tab
+
+# Find recent logs (data/jobs)
 docker exec cronicle find /opt/cronicle/data/jobs -name "*.gz" -type f -mmin -60
 
-# Read a log file
+# Find recent logs (logs/jobs)
+docker exec cronicle find /opt/cronicle/logs/jobs -name "*.log" -type f -mmin -60
+
+# Read a compressed log file
 docker exec cronicle zcat /opt/cronicle/data/jobs/<path>/log.txt.gz
+
+# Read a plain log file
+docker exec cronicle cat /opt/cronicle/logs/jobs/<filename>.log
 ```
 
 ## Troubleshooting
