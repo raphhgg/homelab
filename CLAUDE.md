@@ -72,7 +72,7 @@ Services follow consistent volume mounting:
 - Media: `${MEDIAS_PATH}:/data/medias`
 - Downloads: `${DOWNLOAD_PATH}:/downloads`
 
-**Note**: For detailed service-specific documentation (architecture, configuration, usage), refer to the `README.md` file in each service's directory (e.g., `services/monitoring/watchtower/README.md`).
+**Note**: For detailed service-specific documentation (architecture, configuration, usage), refer to the `README.md` file in each service's directory (e.g., `services/monitoring/watchtower/README.md`) or in a subcategory (e.g., `monitoring/README.md`, `infrastructure/README.md`).
 
 ## Common Operations
 
@@ -114,52 +114,17 @@ docker-compose down
 
 ## Monitoring Stack
 
-The homelab uses a multi-layered monitoring approach with complementary tools:
-
-**Stack Architecture:**
-```
-Layer 1: Availability → Uptime Kuma (Is it alive?)
-Layer 2: Performance → Beszel (How is it performing?)
-Layer 3: Logs → Dozzle (What happened?)
-Layer 4: Updates → Watchtower (Is it up to date?)
-Layer 5: Alerting → Apprise/n8n (Notify me)
-```
-
-**Services:**
-- **Beszel** (port 8091): Hardware & resource monitoring (CPU, RAM, disk, containers)
-- **Uptime Kuma** (port 3001): Service availability monitoring (HTTP/Docker/Port checks)
-- **Dozzle** (port 8088): Real-time log viewer with SQL queries
-- **Watchtower** (port 8082): Container update automation with HTTP API
+The homelab uses a multi-layered monitoring approach with complementary tools.
 
 **See [services/monitoring/README.md](services/monitoring/README.md) for complete monitoring stack documentation.**
 
 ## Cronicle - Job Scheduler
 
 **Location**: `services/infrastructure/cronicle/`
-**Port**: 3012
-**Access**: `http://nas:3012`
-**API Key**: `159a3772fe5a3303bf81172da7c4c0ac`
-
 **Purpose**: Schedule and automate recurring tasks (cron replacement with web UI)
+**Claude Integration:** Claude can create/update/delete Cronicle jobs programmatically using the HTTP API
 
-**What runs on Cronicle:**
-- Kometa operations (library maintenance, collections, overlays, metadata updates)
-- ImageMaid cleanup (Plex image optimization)
-- Watchtower update checks (daily container update scanning)
-- Other scheduled maintenance tasks
-
-**Claude Integration:**
-- Claude can create/update/delete Cronicle jobs programmatically using the HTTP API
-- Job categories: Media Server (`cmgm06foc04`), Monitoring (`cmgumlb1w1e`)
-- When adding jobs for new categories, Claude must ask user to create category via Web UI first
-
-**See [services/infrastructure/cronicle/README.md](services/infrastructure/cronicle/README.md) for complete documentation including:**
-- API endpoints and usage examples
-- Job categories and category management
-- Job timing format and examples
-- Shell plugin parameters and script guidelines
-- Common job patterns (docker exec, docker run, API calls)
-- Troubleshooting and management
+**See [services/infrastructure/cronicle/README.md](services/infrastructure/cronicle/README.md) for complete documentation.**
 
 ## Scripts
 
@@ -167,35 +132,13 @@ Utility scripts for homelab automation and maintenance.
 
 **Location**: `scripts/`
 
-**Available Scripts:**
-- **media-download/hardlink_creator.sh**: Creates hardlinks between duplicate files to save disk space
-- **media-download/organize_trailers.sh**: Organizes trailer files for Plex libraries
-
-**See [scripts/README.md](scripts/README.md) for complete documentation including:**
-- Detailed script descriptions and usage
-- Requirements and dependencies
-- Best practices for adding new scripts
-- Common script patterns
-- Integration with Cronicle for scheduling
+**See [scripts/README.md](scripts/README.md) for complete documentation.**
 
 ## GitHub Actions Self-Hosted Runner
 
 **Location**: `services/infrastructure/github-runner/`
-**Container**: `github-actions-runner`
 
-**Currently configured for**: `raaphhh/dotfiles` repository (deployment pipeline for homelab repository is not used)
-
-**Key Details:**
-- Runner name: `ds423plus-runner-dotfiles`
-- Labels: `synology`, `dotfiles`, `self-hosted`
-- Uses Docker Socket Proxy for secure container operations
-- **Limitation**: Can only serve one repository at a time
-
-**See [services/infrastructure/github-runner/README.md](services/infrastructure/github-runner/README.md) for complete documentation including:**
-- Configuration and token generation
-- Workflow usage examples
-- Multi-repository setup options (multiple runners or organization-level)
-- Troubleshooting and migration guide
+**See [services/infrastructure/github-runner/README.md](services/infrastructure/github-runner/README.md) for complete documentation.**
 
 ## Development Notes
 
@@ -304,30 +247,4 @@ sudo /var/packages/ContainerManager/scripts/start-stop-status start
 
 ### Cronicle Shell Plugin Permission Issues
 
-When running Cronicle on Synology with shell scripts, you may encounter permission errors preventing job execution.
-
-**Two common issues:**
-
-1. **Temp directory execution restrictions** (GitHub issue [#673](https://github.com/jhuckaby/Cronicle/issues/673))
-   - **Symptom:** Shell plugin crashes immediately, "Permission denied" on temp scripts
-   - **Cause:** `/tmp` mounted with noexec restrictions
-   - **Solution:** Set custom temp directory with execution permissions
-   ```yaml
-   environment:
-     - TMP=/opt/cronicle/tmp
-     - TMPDIR=/opt/cronicle/tmp
-   volumes:
-     - ${DOCKER_APPDATA_PATH}/cronicle/tmp:/opt/cronicle/tmp:rw
-   ```
-
-2. **Log directory access restrictions**
-   - **Symptom:** "EACCES: permission denied" when writing to `/opt/cronicle/logs/jobs/*.log`
-   - **Cause:** Parent `/opt/cronicle/logs/` directory has 700 permissions (owner-only)
-   - **Solution:** Make logs directory readable by the shell plugin user
-   ```bash
-   chmod 755 /volume2/docker/appdata/cronicle/logs
-   # Or inside container:
-   docker exec cronicle chmod 755 /opt/cronicle/logs/
-   ```
-
-Both fixes are required for Cronicle shell plugin to work properly on Synology NAS.
+See [services/infrastructure/cronicle/README.md#shell-plugin-permission-issues](services/infrastructure/cronicle/README.md#shell-plugin-permission-issues) for detailed troubleshooting of Cronicle permission issues on Synology NAS.

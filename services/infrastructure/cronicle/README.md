@@ -344,21 +344,44 @@ docker exec cronicle cat /opt/cronicle/logs/jobs/<filename>.log
 
 ## Troubleshooting
 
-### Shell Plugin Permissions
+### Shell Plugin Permission Issues
 
-If jobs fail with permission errors, ensure:
+When running Cronicle on Synology with shell scripts, you may encounter permission errors preventing job execution.
 
-1. **Temp directory has execution permissions**:
-   ```bash
-   docker exec cronicle ls -ld /opt/cronicle/tmp
+**Two common issues:**
+
+1. **Temp directory execution restrictions** (GitHub issue [#673](https://github.com/jhuckaby/Cronicle/issues/673))
+   - **Symptom:** Shell plugin crashes immediately, "Permission denied" on temp scripts
+   - **Cause:** `/tmp` mounted with noexec restrictions
+   - **Solution:** Set custom temp directory with execution permissions
+   ```yaml
+   environment:
+     - TMP=/opt/cronicle/tmp
+     - TMPDIR=/opt/cronicle/tmp
+   volumes:
+     - ${DOCKER_APPDATA_PATH}/cronicle/tmp:/opt/cronicle/tmp:rw
    ```
 
-2. **Logs directory is accessible**:
+2. **Log directory access restrictions**
+   - **Symptom:** "EACCES: permission denied" when writing to `/opt/cronicle/logs/jobs/*.log`
+   - **Cause:** Parent `/opt/cronicle/logs/` directory has 700 permissions (owner-only)
+   - **Solution:** Make logs directory readable by the shell plugin user
    ```bash
    chmod 755 /volume2/docker/appdata/cronicle/logs
+   # Or inside container:
+   docker exec cronicle chmod 755 /opt/cronicle/logs/
    ```
 
-See [main CLAUDE.md](../../../CLAUDE.md#cronicle-shell-plugin-permission-issues) for detailed troubleshooting.
+**Important**: Both fixes are required for Cronicle shell plugin to work properly on Synology NAS.
+
+**Verification:**
+```bash
+# Check temp directory permissions
+docker exec cronicle ls -ld /opt/cronicle/tmp
+
+# Check logs directory permissions
+docker exec cronicle ls -ld /opt/cronicle/logs
+```
 
 ### Container Restarts
 
