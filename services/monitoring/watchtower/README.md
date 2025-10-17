@@ -117,14 +117,7 @@ A single Cronicle job handles daily update checks:
 #!/bin/bash
 # Daily container update check
 
-docker run --rm \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -e DOCKER_HOST=tcp://docker-proxy:2375 \
-  --network socket_proxy \
-  containrrr/watchtower \
-  --run-once \
-  --label-enable \
-  2>&1 | tee /tmp/watchtower-check.log
+docker exec watchtower watchtower --run-once --label-enable 2>&1 | tee /tmp/watchtower-check.log
 
 # Future Phase 2: Parse output and send Apprise notifications
 ```

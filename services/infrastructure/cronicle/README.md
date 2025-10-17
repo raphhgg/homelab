@@ -279,7 +279,7 @@ When Claude is asked to add a Watchtower daily check job:
   "plugin": "shellplug",
   "target": "allgrp",
   "params": {
-    "script": "#!/bin/bash\n# Check for container updates\n\ndocker run --rm \\\n  -v /var/run/docker.sock:/var/run/docker.sock \\\n  -e DOCKER_HOST=tcp://docker-proxy:2375 \\\n  --network socket_proxy \\\n  containrrr/watchtower \\\n  --run-once \\\n  --label-enable \\\n  2>&1 | tee /tmp/watchtower-check.log\n\n# Future Phase 2: Parse output and send Apprise notifications",
+    "script": "#!/bin/bash\n# Check for container updates\n\ndocker exec watchtower watchtower --run-once --label-enable 2>&1 | tee /tmp/watchtower-check.log\n\n# Future Phase 2: Parse output and send Apprise notifications",
     "annotate": 1,
     "lang": "shell",
     "theme": "default"
