@@ -156,12 +156,7 @@ Run `services/monitoring/uptime-kuma/setup_monitors.py` to automatically create/
 2. **Tier 2 - Manual Approval (Medium/High Risk)**
    - Labels: `com.centurylinklabs.watchtower.enable=true` + `com.centurylinklabs.watchtower.monitor-only=true`
    - Behavior: Checks for updates but requires manual approval (future: notification with approve button)
-   - Examples: *arr stack, qBittorrent, Tautulli, Jellyseerr, Plex
-
-3. **Tier 3 - Ignored (Critical Infrastructure)**
-   - No labels
-   - Never checked or updated by Watchtower
-   - Examples: Docker Socket Proxy, GitHub Actions Runner, Beszel hub, Kometa
+   - Examples: All the others
 
 **See [watchtower/README.md](watchtower/README.md) for complete Watchtower documentation including:**
 - HTTP API endpoints and usage
