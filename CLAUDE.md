@@ -210,7 +210,7 @@ Since the Linear MCP doesn't work in Cursor/VSCode, use the Linear GraphQL API d
 
 ```bash
 curl -s -X POST https://api.linear.app/graphql \
-  -H "Authorization: lin_api_b5FUKZXuG93dR2A7PiNBGzqUMQmCIs3Gs9pcgJaw" \
+  -H "Authorization: ${LINEAR_API_KEY}" \
   -H "Content-Type: application/json" \
   -d '{"query":"query { issue(id: \"ISSUE-ID\") { id title description state { name } assignee { name } labels { nodes { name } } createdAt updatedAt } }"}' \
   | python3 -m json.tool

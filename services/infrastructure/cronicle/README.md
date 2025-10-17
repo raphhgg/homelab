@@ -107,33 +107,33 @@ All Kometa jobs use the `-u` flag for unbuffered Python output to ensure real-ti
 
 ### API Access
 
-**API Key**: Available in `.env` file as `CRONICLE_API_KEY=159a3772fe5a3303bf81172da7c4c0ac`
+**API Key**: Available in `.env` file as `CRONICLE_API_KEY`
 
 **Important**: Claude can create/update/delete Cronicle jobs programmatically using the HTTP API.
 
 **API Endpoints:**
 - Base URL: `http://10.10.2.2:3012/api/app/`
-- API Key: `159a3772fe5a3303bf81172da7c4c0ac` (passed as query parameter)
+- API Key: Use `${CRONICLE_API_KEY}` environment variable (passed as query parameter or X-API-Key header)
 
 **Common Operations:**
 
 ```bash
 # List all scheduled jobs
-curl -s "http://10.10.2.2:3012/api/app/get_schedule/v1?api_key=159a3772fe5a3303bf81172da7c4c0ac"
+curl -s "http://10.10.2.2:3012/api/app/get_schedule/v1?api_key=${CRONICLE_API_KEY}"
 
 # Get job status
-curl -s "http://10.10.2.2:3012/api/app/get_job_status/v1?api_key=159a3772fe5a3303bf81172da7c4c0ac&id=JOB_ID"
+curl -s "http://10.10.2.2:3012/api/app/get_job_status/v1?api_key=${CRONICLE_API_KEY}&id=JOB_ID"
 
 # Trigger job manually
 curl -s -X POST "http://10.10.2.2:3012/api/app/run_event/v1" \
   -H "Content-Type: application/json" \
-  -H "X-API-Key: 159a3772fe5a3303bf81172da7c4c0ac" \
+  -H "X-API-Key: ${CRONICLE_API_KEY}" \
   -d '{"id":"EVENT_ID"}'
 
 # Create new event (job)
 curl -s -X POST "http://10.10.2.2:3012/api/app/create_event/v1" \
   -H "Content-Type: application/json" \
-  -H "X-API-Key: 159a3772fe5a3303bf81172da7c4c0ac" \
+  -H "X-API-Key: ${CRONICLE_API_KEY}" \
   -d '{
     "title": "Job Title",
     "enabled": 1,
@@ -155,13 +155,13 @@ curl -s -X POST "http://10.10.2.2:3012/api/app/create_event/v1" \
 # Update existing event
 curl -s -X POST "http://10.10.2.2:3012/api/app/update_event/v1" \
   -H "Content-Type: application/json" \
-  -H "X-API-Key: 159a3772fe5a3303bf81172da7c4c0ac" \
+  -H "X-API-Key: ${CRONICLE_API_KEY}" \
   -d '{"id":"EVENT_ID", ...}'
 
 # Delete event
 curl -s -X POST "http://10.10.2.2:3012/api/app/delete_event/v1" \
   -H "Content-Type: application/json" \
-  -H "X-API-Key: 159a3772fe5a3303bf81172da7c4c0ac" \
+  -H "X-API-Key: ${CRONICLE_API_KEY}" \
   -d '{"id":"EVENT_ID"}'
 ```
 
@@ -318,7 +318,7 @@ All jobs run in `Europe/Brussels` timezone.
 Open http://10.10.2.2:3012 and navigate to Schedule
 
 # Via API (see API Access section for more operations)
-curl -s "http://10.10.2.2:3012/api/app/get_schedule/v1?api_key=159a3772fe5a3303bf81172da7c4c0ac"
+curl -s "http://10.10.2.2:3012/api/app/get_schedule/v1?api_key=${CRONICLE_API_KEY}"
 ```
 
 ### View Job Logs
