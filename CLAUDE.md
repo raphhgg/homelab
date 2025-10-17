@@ -42,6 +42,8 @@ Folders prefixed with `_` (underscore) are **parent categories** that group rela
 
 ## Docker Compose Architecture
 
+**Note**: For detailed service-specific documentation (architecture, configuration, usage), refer to the `README.md` file in each service's directory (e.g., `services/monitoring/watchtower/README.md`).
+
 ### Standard Service Structure
 
 Each service directory contains:
@@ -74,60 +76,13 @@ Services follow consistent volume mounting:
 
 ### Special Case: Kometa (Version-Controlled Configuration)
 
-**Kometa uses a unique dual-volume setup to separate version-controlled configuration from runtime artifacts.**
+Kometa uses a unique dual-volume setup to separate version-controlled configuration from runtime artifacts:
+- Config files (~600KB) in git repo: `./config:/config-repo`
+- Runtime artifacts (~3.5GB) in appdata: `${DOCKER_APPDATA_PATH}/kometa:/data`
+- Symlinks created at startup redirect logs, cache, and overlays to appdata
+- Scheduled execution via Cronicle (not built-in scheduler)
 
-**Structure:**
-```
-services/media-servers/_plex/kometa/
-├── docker-compose.yml
-└── config/                          # VERSION CONTROLLED
-    ├── config.yml                   # Main configuration
-    ├── collections/                 # Collection definitions
-    │   ├── movies/
-    │   └── tvshows/
-    ├── custom_fonts/                # Custom fonts for overlays
-    ├── .gitignore                   # Ignores symlinks and backups
-    └── [symlinks - created at runtime, NOT tracked]
-        ├── logs -> /data/logs
-        ├── config.cache -> /data/config.cache
-        └── UUID -> /data/UUID
-```
-
-**Volume Mounts:**
-```yaml
-volumes:
-  - ./config:/config-repo:rw        # Config from git repo
-  - ${DOCKER_APPDATA_PATH}/kometa:/data:rw  # Runtime data
-environment:
-  - KOMETA_CONFIG=/config-repo/config.yml
-```
-
-**Runtime Files (in appdata, NOT git):**
-- `/data/logs/` - Log files (~200MB)
-- `/data/overlays/` - Generated overlay images (~3GB)
-- `/data/assets/` - Custom posters/artwork (~26MB)
-- `/data/config.cache` - Runtime cache (~54MB)
-- `/data/UUID` - Instance identifier
-- `/data/missing/` - Generated reports
-
-**Path Convention in config.yml:**
-- Configuration files: `/config-repo/collections/...`, `/config-repo/custom_fonts/...`
-- Runtime files: `/data/assets/...`, `/data/missing/...`, `/data/overlays/...`
-
-**Symlinks:**
-Container entrypoint automatically creates symlinks on startup to redirect Kometa's runtime files to appdata:
-```bash
-ln -sf /data/logs /config-repo/logs
-ln -sf /data/config.cache /config-repo/config.cache
-ln -sf /data/UUID /config-repo/UUID
-```
-
-**Why This Approach:**
-- ✅ Only ~600KB of pure configuration in git repo
-- ✅ ~3.5GB of runtime artifacts stay in appdata
-- ✅ Clean separation for backups and version control
-- ✅ Container fully reproducible from git repo
-- ✅ Scheduled execution via Cronicle (external scheduling)
+**See [services/media-servers/_plex/kometa/README.md](services/media-servers/_plex/kometa/README.md) for complete architecture documentation.**
 
 ## Common Operations
 
