@@ -178,21 +178,24 @@ Utility scripts for homelab automation and maintenance.
 - Common script patterns
 - Integration with Cronicle for scheduling
 
-## Deployment Pipeline
+## GitHub Actions Self-Hosted Runner
 
-- Note: The GitHub Actions deployment pipeline for the homelab repository is currently not used.
+**Location**: `services/infrastructure/github-runner/`
+**Container**: `github-actions-runner`
 
-### Self-Hosted Runner
-- Runs on Synology NAS (container: `github-actions-runner`)
-- **Currently configured for**: `raaphhh/dotfiles` repository
-- Labels: `synology,dotfiles,self-hosted`
+**Currently configured for**: `raaphhh/dotfiles` repository (deployment pipeline for homelab repository is not used)
+
+**Key Details:**
 - Runner name: `ds423plus-runner-dotfiles`
-- Uses Docker Socket Proxy for security
-- Configuration in [services/infrastructure/github-runner](services/infrastructure/github-runner)
+- Labels: `synology`, `dotfiles`, `self-hosted`
+- Uses Docker Socket Proxy for secure container operations
+- **Limitation**: Can only serve one repository at a time
 
-**Note**: This runner can only serve one repository at a time. To use it with multiple personal repositories, you would need to either:
-- Run multiple runner instances (one per repository)
-- Create a free GitHub organization and use organization-level runners
+**See [services/infrastructure/github-runner/README.md](services/infrastructure/github-runner/README.md) for complete documentation including:**
+- Configuration and token generation
+- Workflow usage examples
+- Multi-repository setup options (multiple runners or organization-level)
+- Troubleshooting and migration guide
 
 ## Development Notes
 
