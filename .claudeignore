@@ -1,0 +1,27 @@
+# Python virtual environments
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node modules
+node_modules/
+
+# Git internals
+.git/objects/
+.git/refs/
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+
+# Large data directories
+.DS_Store
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.secrets

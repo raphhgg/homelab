@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a homelab infrastructure repository that manages Docker-based services on a Synology NAS using docker-compose. The repository contains 38+ services organized into categories.
+This is a homelab infrastructure repository that manages Docker-based services on a Synology NAS using docker-compose. The repository contains 34+ services organized into categories.
 
 ## Repository Structure
 
@@ -17,20 +17,17 @@ Services are organized in the `services/` directory with the following categorie
   - `_torrents/`: Torrent-related services (qBittorrent, qbit_manage, cross-seed, autobrr, unpackerr)
   - Other: Jellyseerr, SABnzbd, TheLounge
 
-- **media-servers/**: Media streaming and management
-  - `_plex/`: Plex and related services (Plex, Kometa, Autoscan, ImageMaid, Plex-Auto-Languages, Plex-Trakt-Sync)
-  - `_jellyfin/`: Jellyfin and Jellyplex-Watched
+- **media-server/**: Media streaming and management
+  - Plex and related services: Plex, Kometa, ImageMaid, Plex-Auto-Languages, Plex-Trakt-Sync
   - Other: Tautulli, Trailarr
 
-  - Note: The `jellyfin` stack is not really used at the moment. Same for Trailarr.
-
 - **infrastructure/**: Core infrastructure services
+  - Cronicle (job scheduler)
   - GitHub Actions runner (self-hosted)
   - Cloudflare DDNS
   - Docker Socket Proxy
-  - Ofelia (cron scheduler)
 
-- **monitoring/**: Monitoring and management tools (Beszel, Dozzle, Uptime-kuma, Watchtower)
+- **monitoring/**: Monitoring and management tools (Apprise, Beszel, Dozzle, Uptime-kuma, Watchtower)
 
 - **syncthing/**: File synchronization
 
@@ -38,7 +35,7 @@ Services are organized in the `services/` directory with the following categorie
 
 ### Folder Naming Convention
 
-Folders prefixed with `_` (underscore) are **parent categories** that group related services together (e.g., `_arrs`, `_torrents`, `_plex`, `_jellyfin`). These are organizational folders, not individual services.
+Folders prefixed with `_` (underscore) are **parent categories** that group related services together (e.g., `_arrs`, `_torrents`). These are organizational folders, not individual services.
 
 ## Docker Compose Architecture
 
@@ -46,18 +43,21 @@ Folders prefixed with `_` (underscore) are **parent categories** that group rela
 
 Each service directory contains:
 - `docker-compose.yml`: Service definition
-- `.env.example`: Template for required environment variables (references root `.env`)
-- `.env`: Local overrides (gitignored)
+- `.env.example`: Template for required environment variables
+- `.env`: Actual environment values (gitignored, created from `.env.example`)
 
 ### Common Environment Variables
 
-Services use a shared `.env` file at the repository root with common variables:
-- `PUID`, `PGID`, `UMASK`: User/group permissions
-- `TZ`: Timezone
-- `DOCKER_APPDATA_PATH`: Base path for application data/config
-- `MEDIAS_PATH`: Base path for media files
-- `DOWNLOAD_PATH`: Base path for downloads
+Services use individual `.env` files in each service directory (**not** a shared root `.env`). Common variables across services:
+- `PUID=1000`, `PGID=1000`: User/group permissions
+- `TZ=Europe/Brussels`: Timezone
+- `DOCKER_APPDATA_PATH=/volume2/docker/appdata`: Base path for application data/config
+- `MEDIAS_PATH=/volume1/medias`: Base path for media files
+- `DOWNLOAD_PATH=/volume1/downloads`: Base path for downloads
+- `DOCKER_HOST=tcp://docker-proxy:2375`: Docker Socket Proxy endpoint (for services needing Docker API access)
 - Service-specific variables (VPN credentials, API tokens, etc.)
+
+**Note**: Each service's `.env` file is created from its `.env.example` template. Values are either filled in directly or reference the same standard values listed above.
 
 ### Network Architecture
 
@@ -206,17 +206,37 @@ Check Claude extension logs for this error:
 
 **Workaround - Use Linear GraphQL API:**
 
-Since the Linear MCP doesn't work in Cursor/VSCode, use the Linear GraphQL API directly via curl:
+Since the Linear MCP doesn't work in Cursor/VSCode, use the Linear GraphQL API directly via curl.
+
+**API Key Location**: The Linear API key is stored in `/volume2/docker/compose/.secrets` (gitignored for security).
+
+**Example Usage**:
 
 ```bash
+# Read API key from file
+LINEAR_KEY=$(grep LINEAR_API_KEY /volume2/docker/compose/.secrets | cut -d'=' -f2)
+
+# Query issue details
 curl -s -X POST https://api.linear.app/graphql \
-  -H "Authorization: ${LINEAR_API_KEY}" \
+  -H "Authorization: $LINEAR_KEY" \
   -H "Content-Type: application/json" \
   -d '{"query":"query { issue(id: \"ISSUE-ID\") { id title description state { name } assignee { name } labels { nodes { name } } createdAt updatedAt } }"}' \
   | python3 -m json.tool
 ```
 
-Replace `ISSUE-ID` with the actual issue identifier (e.g., `RGR-113`).
+Replace `ISSUE-ID` with the actual issue identifier (e.g., `RGR-17`).
+
+**Common Operations**:
+
+```bash
+# Update issue description
+LINEAR_KEY=$(grep LINEAR_API_KEY /volume2/docker/compose/.secrets | cut -d'=' -f2)
+curl -s -X POST https://api.linear.app/graphql \
+  -H "Authorization: $LINEAR_KEY" \
+  -H "Content-Type: application/json" \
+  --data-binary @/tmp/linear_mutation.json \
+  | python3 -m json.tool
+```
 
 **Note:** The Linear MCP works fine in the Claude CLI (`claude` command), but not in IDE extensions. If you need full MCP functionality, use the CLI version of Claude Code instead of the Cursor/VSCode extension.
 

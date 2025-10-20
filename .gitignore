@@ -1,6 +1,8 @@
 .env
+.env.local
 .DS_Store
 settings.local.json
+.secrets
 
 # Python
 venv/
@@ -9,3 +11,6 @@ __pycache__/
 *.pyo
 *.pyd
 .Python
+services/monitoring/apprise/config/*.yml
+services/monitoring/apprise/config/store/
+services/monitoring/apprise/config/.tmp_*
