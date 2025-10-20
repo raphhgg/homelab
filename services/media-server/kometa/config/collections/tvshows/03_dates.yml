@@ -10,8 +10,9 @@ collections:
     sync_mode: sync
     visible_home: false
     visible_shared: false
-    visible_library: true
+    visible_library: false
 
+  # Collections visible in Recommended's sections
   Recently Released Shows:
     smart_filter:
       all:
@@ -20,8 +21,8 @@ collections:
     sort_title: +031_Recently_Released_Shows_Collection
     summary: "A collection of the latest shows with episodes released in 2025, sorted by newest first."
     sync_mode: sync
-    visible_home: false
-    visible_shared: false
+    visible_home: true
+    visible_shared: true
     visible_library: true
 
   Recently Added Shows:
@@ -30,11 +31,11 @@ collections:
     sort_title: +032_Recently_Added_Shows_Collection
     summary: "A collection of the latest shows added, sorted by newest first."
     sync_mode: sync
-    visible_home: false
-    visible_shared: false
+    visible_home: true
+    visible_shared: true
     visible_library: true
 
-  Recently Released Episodes:
+  Recently Released Unwatched Episodes:
     plex_search:
       all:
         episode_air_date.after: 2025-01-01
@@ -44,8 +45,8 @@ collections:
     sort_title: +033_Recently_Released_Episodes_Collection
     summary: "Unwatched episodes from the latest shows released in 2025, sorted by newest first."
     sync_mode: sync
-    visible_home: false
-    visible_shared: false
+    visible_home: true
+    visible_shared: true
     visible_library: true
 
 

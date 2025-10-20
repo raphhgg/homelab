@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  plex-auto-languages:
+    image: journeyover/plex-auto-languages
+    container_name: plex-auto-languages
+    networks:
+      - main
+    environment:
+      - PLEX_URL=${PLEX_URL}
+      - PLEX_TOKEN=${PLEX_TOKEN}
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/plex-auto-languages/config:/config
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  main:
+    external: true

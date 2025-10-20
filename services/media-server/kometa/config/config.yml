@@ -15,7 +15,7 @@ libraries:
 
     # MOVIE OVERLAYS 
     remove_overlays: false   
-    reapply_overlays: false
+    reapply_overlays: true
     overlay_files:
     - default: resolution
     - default: audio_codec
@@ -34,9 +34,10 @@ libraries:
         rating2_font_size: 70
 
         rating3: audience
-        rating3_image: tmdb
-        rating3_font: /config-repo/custom_fonts/Avenir_95_Black.ttf
+        rating3_image: letterboxd
+        rating3_font: /config-repo/custom_fonts/Impact.ttf
         rating3_font_size: 70
+        rating3_style: ""
 
         horizontal_position: right
     - default: network
@@ -56,7 +57,7 @@ libraries:
     operations:
       mass_user_rating_update: mdb_tomatoes
       mass_critic_rating_update: imdb
-      mass_audience_rating_update: tmdb
+      mass_audience_rating_update: mdb_letterboxd
       split_duplicates: false
       assets_for_all: false
       delete_collections:
@@ -206,7 +207,7 @@ settings:
   - overlays
   cache: true
   cache_expiration: 60
-  asset_directory: config/assets
+  asset_directory: data/assets
   asset_folders: true
   asset_depth: 0
   create_asset_folders: true

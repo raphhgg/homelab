@@ -1,5 +1,6 @@
 templates:
-  # Genre mapped from sonarr's root folders (autotags)
+  # Used for Basic Genre Collection - from Sonarr's root folders (autotags)
+  # Only visible in the Library Tab
   Genre:
     plex_search:
       all:
@@ -10,8 +11,9 @@ templates:
     sync_mode: sync
     visible_home: false
     visible_shared: false
-    visible_library: true
+    visible_library: false
 
+  # Only used for Sitcom sub-category
   Pre Streaming:
     smart_filter:
       all:
@@ -21,8 +23,9 @@ templates:
     sort_title: +010_<<parent_collection_name>>_<<collection_name>>
     visible_home: false
     visible_shared: false
-    visible_library: true
+    visible_library: false
   
+  # Only used for Sitcom sub-category
   Post Streaming:
     smart_filter:
       all:
@@ -32,22 +35,39 @@ templates:
     sort_title: +010_<<parent_collection_name>>_<<collection_name>>
     visible_home: false
     visible_shared: false
-    visible_library: true
+    visible_library: false
 
+  # Not working
   Separator:
     smart_label: random
     sync_mode: sync
     imdb_id: tt0411008
+  
+  # Visible in the Recommended sections
+  Recently Added In Genre:
+    smart_filter:
+      any:
+        collection: <<tag>> Shows Collection
+      sort_by: added.desc
+      limit: 10
+    label: <<collection_name>> Collection
+    sort_title: +011_Recently_Added_In_<<tag>>_TV_Shows
+    sync_mode: sync
+    visible_home: true # weekly(wednesday)
+    visible_shared: true # weekly(wednesday)
+    visible_library: true # weekly(wednesday)
 
-# Basic genre collections from Sonarr autotags
 collections:
   Favorites Shows:
     template: { name: Genre, tag: Favorite }
     summary: "My All Time Favorites TV Shows."
     visible_home: true
     visible_shared: true
+    visible_library: true
     sort_title: +00_Favorites_Shows
     # file_poster: config/
+
+    # Some kind of random reco section
     # visible_shared: weekly(wednesday)
     # smart_filter:
     #   sort_by: random
@@ -56,6 +76,7 @@ collections:
     #   all:
     #     audience_rating.gte: 7.0
     #     genre: action
+    
   # Genres: # Works but match 2 items
   #   template: { name: Separator }
   #   sort_title: +00_zz
@@ -74,9 +95,17 @@ collections:
     template: { name: Genre, tag: Conspiracy-Espionage }
     summary: "Thrillers about spies, conspiracy, and shadowy global plots."
 
+  Recently Added in Conspiracy & Espionage Shows:
+    template: { name: Recently Added In Genre, tag: Conspiracy & Espionage }
+    summary: "The 10 latest additions in Conspiracy & Espionage Genre."
+
   Crime & Mystery Shows:
     template: { name: Genre, tag: Crime-Mystery }
     summary: "Investigations into murders and crimes where solving the case drives the story."
+
+  Recently Added in Crime & Mystery Shows:
+    template: { name: Recently Added In Genre, tag: Crime & Mystery }
+    summary: "The 10 latest additions in Crime & Mystery Genre."
 
   Documentary Shows:
     template: { name: Genre, tag: Documentary }
@@ -97,6 +126,10 @@ collections:
   Organized Crime Shows:
     template: { name: Genre, tag: Organized-Crime }
     summary: "Stories about the mafia, cartels, and criminal empires from the inside."
+  
+  Recently Added in Organized Crime Shows:
+    template: { name: Recently Added In Genre, tag: Organized Crime }
+    summary: "The 10 latest additions in Organized Crime Genre."
 
   Reality-TV Shows:
     template: { name: Genre, tag: Reality-TV }
@@ -133,60 +166,3 @@ collections:
   True Crime Shows:
     template: { name: Genre, tag: True-Crime }
     summary: "Real-life cases of crime, murder, and justice, retold with documentary detail."
-
-
-
-  # Recently Released Episodes
-  # Useful for series we are following and watching week after week (not a lot)
-  # - show episodes released since last week and not watched
-  # - should show one episode per serie max
-  
-  # Recently Released Series
-  # - released this month vs sorted by release date
-  # - not been watched yet
-
-  # #### Language
-  # French Shows: # Should not include sitcoms
-  #   sonarr_taglist: french
-  #   collection_order: added.desc
-  #   sync_mode: sync
-  #   visible_home: true
-  #   visible_shared: true
-  #   visible_library: true
-  # Korean Shows: # Ok
-  #   sonarr_taglist: korean
-  #   collection_order: added.desc
-  #   sync_mode: sync
-  #   visible_home: true
-  #   visible_shared: true
-  #   visible_library: true
-  # Non-English Shows: # Ok
-  #   plex_all: true
-  #   filters:
-  #     original_language.not: en,ja,ko
-  #   collection_order: added.desc
-  #   sync_mode: sync
-  #   visible_home: true
-  #   visible_shared: true
-  #   visible_library: true
-  # #### Year
-  # Pre-Streaming Shows: # Should not include sitcoms, anime
-  #   sonarr_taglist: tvshows-pre-streaming
-  #   collection_order: added.desc
-  #   sync_mode: sync
-  #   visible_home: true
-  #   visible_shared: true
-  #   visible_library: true
-  # ### Type
-  # Miniseries Shows:
-  #   plex_all: true
-  #   filters:
-  #     tmdb_type: miniseries
-  #     genre.not:
-  #       - "Documentary"
-  #       - "Biography"
-  #   collection_order: added.desc
-  #   sync_mode: sync
-  #   visible_home: true
-  #   visible_shared: true
-  #   visible_library: true

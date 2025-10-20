@@ -9,7 +9,7 @@ templates:
     sync_mode: sync
     visible_home: false
     visible_shared: false
-    visible_library: true
+    visible_library: false
 
   Actor:
     plex_search:
@@ -21,7 +21,7 @@ templates:
     sync_mode: sync
     visible_home: false
     visible_shared: false
-    visible_library: true
+    visible_library: false
 
 collections:
   

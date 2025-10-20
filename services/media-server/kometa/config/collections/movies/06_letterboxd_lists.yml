@@ -3,7 +3,7 @@ templates:
     letterboxd_list_details: <<list_url>>
     sync_mode: sync
     sort_title: +060_<<tag>>_Letterboxd_Lists
-    visible_home: true
+    visible_home: false
     visible_shared: true
     visible_library: true
 
@@ -14,6 +14,7 @@ collections:
       list_url: https://letterboxd.com/raphh11/list/favorites-movies/
     collection_order: year.desc
     summary: "My All Time Favorites Movies, in no particular order."
+    visible_home: true
 
   Best 2024 Movies:
     template:

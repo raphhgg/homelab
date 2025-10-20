@@ -9,20 +9,20 @@ templates:
     sync_mode: sync
     visible_home: false
     visible_shared: false
-    visible_library: true
+    visible_library: false
 
 collections:
   Non-English Shows:
     plex_all: true
     filters:
-      original_language.not: en,ja,ko # Japanese eliminate animes
+      original_language.not: en,ja,ko,fr # Remove languages already in specific collections
     collection_order: year.desc
     label: <<collection_name>> Collection
     sort_title: +021_Non-English_Shows
     sync_mode: sync
     visible_home: false
     visible_shared: false
-    visible_library: true
+    visible_library: false
   
   French Shows:
     template: { name: Language, original_language: fr } 
@@ -38,7 +38,7 @@ collections:
     sync_mode: sync
     visible_home: false
     visible_shared: false
-    visible_library: true
+    visible_library: false
 
 
   # #### Release
