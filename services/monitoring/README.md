@@ -18,7 +18,7 @@ Layer 5: Alerting → Apprise/n8n (Notify me)
 - High CPU/memory? → Check Beszel for resource usage trends
 - Service behaving oddly? → Check Dozzle for error logs
 - Need historical performance data? → Check Beszel charts
-- Container updates available? → Check Watchtower logs or wait for notification (Phase 2)
+- Container updates? → Check Discord channel for Watchtower notifications (updates run daily at 3 AM)
 
 ## Services
 
@@ -26,7 +26,7 @@ Layer 5: Alerting → Apprise/n8n (Notify me)
 
 **Location**: `services/monitoring/beszel/`
 **Port**: 8091
-**Access**: `http://nas:8091`
+**Access**: `http://ds423plus:8091` or `http://10.10.2.2:8091`
 
 **Purpose**: System performance and resource monitoring
 
@@ -78,7 +78,7 @@ docker-compose logs beszel-agent
 
 **Location**: `services/monitoring/uptime-kuma/`
 **Port**: 3001
-**Access**: `http://nas:3001`
+**Access**: `http://ds423plus:3001` or `http://10.10.2.2:3001`
 
 **Purpose**: Monitor if services are up/down and responding
 
@@ -118,7 +118,7 @@ Run `services/monitoring/uptime-kuma/setup_monitors.py` to automatically create/
 
 **Location**: `services/monitoring/dozzle/`
 **Port**: 8088
-**Access**: `http://nas:8088`
+**Access**: `http://ds423plus:8088` or `http://10.10.2.2:8088`
 
 **Purpose**: Real-time Docker container log viewing
 
@@ -132,7 +132,7 @@ Run `services/monitoring/uptime-kuma/setup_monitors.py` to automatically create/
 
 **Location**: `services/monitoring/watchtower/`
 **Port**: 8082 (HTTP API)
-**Access**: `http://nas:8082`
+**Access**: `http://ds423plus:8082` or `http://10.10.2.2:8082`
 
 **Purpose**: Automated Docker container update management with human-in-the-loop workflow
 
@@ -140,23 +140,19 @@ Run `services/monitoring/uptime-kuma/setup_monitors.py` to automatically create/
 
 **What it does:**
 - Monitors Docker images for updates
-- Updates containers via HTTP API triggers or manual --run-once checks
+- Updates containers via Cronicle-scheduled jobs
 - Cleans up old images after updates
-- Label-based whitelist for selective updates (34 containers: 5 auto-update, 29 manual approval)
+- Label-based whitelist for selective updates (34 containers enabled)
 
 **Configuration Strategy:**
 
-**Two-Tier Labeling System**:
+**Configuration**:
 
-1. **Tier 1 - Auto-Update (Low Risk)**
-   - Label: `com.centurylinklabs.watchtower.enable=true`
-   - Behavior: Auto-updates when Cronicle job runs
-   - Examples: Dozzle, Beszel-agent, Uptime Kuma, TheLounge, Cloudflare DDNS
-
-2. **Tier 2 - Manual Approval (Medium/High Risk)**
-   - Labels: `com.centurylinklabs.watchtower.enable=true` + `com.centurylinklabs.watchtower.monitor-only=true`
-   - Behavior: Checks for updates but requires manual approval (future: notification with approve button)
-   - Examples: All the others
+**Label-based Auto-Update**:
+- Label: `com.centurylinklabs.watchtower.enable=true`
+- Behavior: Automatically updates when Cronicle job runs (daily at 11 PM)
+- Enabled on: All 34 production containers
+- Sends Discord notification via Apprise showing what was updated
 
 **See [watchtower/README.md](watchtower/README.md) for complete Watchtower documentation including:**
 - HTTP API endpoints and usage
@@ -165,9 +161,55 @@ Run `services/monitoring/uptime-kuma/setup_monitors.py` to automatically create/
 - Environment variables and configuration
 - Common operations and troubleshooting
 
+### Apprise - Centralized Notification Hub
+
+**Location**: `services/monitoring/apprise/`
+**Port**: 8089
+**Access**: `http://ds423plus:8089` or `http://10.10.2.2:8089`
+
+**Purpose**: Unified notification system for sending alerts to Discord, Telegram, and 90+ other platforms
+
+**What it does:**
+- Centralizes all notification channels (Discord, Telegram, email, etc.)
+- Provides single API for all homelab notifications
+- Supports tagging for routing notifications to specific services
+- Stateful mode with YAML configuration
+
+**Current Integrations:**
+- **Watchtower**: Container update notifications via Discord (✅ Active)
+- **Uptime Kuma**: Service availability alerts (planned)
+- **Cronicle**: Scheduled job results (planned)
+- **Beszel**: Resource threshold alerts (planned)
+
+**Configuration:**
+- Notification URLs defined in `/config/apprise.yml`
+- Supports Discord webhooks and Telegram bots
+- Tag-based routing (watchtower, cronicle, monitoring, critical)
+
+**API Usage:**
+```bash
+# From containers (use internal port 8000)
+curl -X POST http://apprise:8000/notify/apprise \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Alert","body":"Message","tag":"monitoring"}'
+
+# From host (use external port 8089)
+curl -X POST http://localhost:8089/notify/apprise \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Alert","body":"Message","tag":"monitoring"}'
+```
+
+**See [apprise/README.md](apprise/README.md) for complete Apprise documentation including:**
+- Discord and Telegram setup guides
+- YAML configuration examples
+- Integration examples for Cronicle, Watchtower, Uptime Kuma
+- API endpoints and usage
+- Troubleshooting guide
+
 ## Resources
 
 - **Beszel**: [Official Documentation](https://beszel.dev/)
 - **Uptime Kuma**: [Official Documentation](https://github.com/louislam/uptime-kuma)
 - **Dozzle**: [Official Documentation](https://dozzle.dev/)
 - **Watchtower**: [Official Documentation](https://containrrr.dev/watchtower/)
+- **Apprise**: [Official Documentation](https://github.com/caronc/apprise) | [API Documentation](https://github.com/caronc/apprise)

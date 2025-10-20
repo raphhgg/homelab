@@ -5,18 +5,19 @@ Uptime Kuma Monitor Setup Script
 This script creates monitors in Uptime Kuma organized in groups, skipping any that already exist.
 Uses actual container names and proper hostnames/IPs.
 
-Requirements:
-    python3 -m venv venv
+Installation:
+    python -m venv venv
     source venv/bin/activate
     pip install uptime-kuma-api
 
 Usage:
-    python3 setup_monitors.py           # Create new monitors only
-    python3 setup_monitors.py --force   # Delete and recreate all monitors
+    source venv/bin/activate
+    python setup_monitors.py           # Create new monitors only
+    python setup_monitors.py --force   # Delete and recreate all monitors
 """
 
 import sys
-from uptime_kuma_api import UptimeKumaApi, MonitorType
+from uptime_kuma_api import UptimeKumaApi, MonitorType, NotificationType
 
 # Uptime Kuma connection settings
 UPTIME_KUMA_URL = "http://localhost:3001"
@@ -107,6 +108,16 @@ MONITOR_GROUPS = {
             "retryInterval": 30,
             "maxretries": 2,
             "description": "Docker container auto-updater",
+        },
+        {
+            "name": "apprise",
+            "type": MonitorType.HTTP,
+            "url": "http://10.10.2.2:8089",
+            "interval": 120,
+            "retryInterval": 30,
+            "maxretries": 2,
+            "critical": True,
+            "description": "Centralized notification hub",
         },
     ],
     "media-server": [
@@ -344,6 +355,47 @@ def create_critical_tag(api):
     return new_tag["id"]
 
 
+def setup_apprise_notification(api):
+    """Create or get centralized Apprise notification for all monitors."""
+    # Check if Apprise notification already exists
+    notifications = api.get_notifications()
+    for notif in notifications:
+        if notif["name"] == "Apprise":
+            # Check if it's the correct type (webhook)
+            if notif["type"] == "webhook":
+                print(f"  ⏭️  Apprise webhook notification already exists (ID: {notif['id']})")
+                return notif["id"]
+            else:
+                # Delete the old Apprise-type notification and recreate as webhook
+                print(f"  🗑️  Found old Apprise notification (type: {notif['type']}), deleting...")
+                api.delete_notification(notif["id"])
+                print(f"    ✅ Deleted old notification")
+                break
+
+    # Create new Apprise notification using Webhook type
+    # Note: Uptime Kuma's Apprise type expects direct Apprise URLs (discord://...),
+    # not an Apprise API endpoint. We use Webhook to call our Apprise API instead.
+    print("  Creating Apprise webhook notification...")
+
+    # Custom body with proper format for Apprise API
+    # Both title and body are required by Apprise
+    # If {{msg}} is empty during test, we provide fallback text
+    custom_body = '''{"title":"Uptime Kuma Alert","body":"Status: {{msg}}\\n\\nMonitor: {{monitorJSON.name}}\\n\\nThis is a test notification from Uptime Kuma."}'''
+
+    result = api.add_notification(
+        name="Apprise",
+        type=NotificationType.WEBHOOK,
+        isDefault=True,           # Auto-enable for new monitors
+        applyExisting=True,       # Apply to existing monitors
+        webhookURL="http://apprise:8000/notify/uptime-kuma",
+        webhookContentType="json",
+        webhookCustomBody=custom_body,
+    )
+    notification_id = result["id"]
+    print(f"    ✅ Apprise webhook notification created (ID: {notification_id})")
+    return notification_id
+
+
 def delete_all_monitors(api):
     """Delete all existing monitors."""
     monitors = api.get_monitors()
@@ -473,6 +525,11 @@ def main():
     try:
         api.login(username, password)
         print("✅ Connected")
+
+        # Setup Apprise notification (before creating monitors)
+        print("\n🔔 Setting up Apprise notifications...")
+        print("=" * 60)
+        setup_apprise_notification(api)
 
         # Delete all monitors if force mode
         if force:

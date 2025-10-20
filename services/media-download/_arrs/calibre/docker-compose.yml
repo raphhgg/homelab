@@ -11,14 +11,13 @@ services:
       - ${MEDIAS_PATH}/books:/books
       - ${MEDIAS_PATH}/books/calibre_library:/books/calibre_library
     ports:
-      - 8082:8080    # Web UI
+      - 8084:8080    # Web UI
       - 8183:8081    # Calibre content server
     restart: always
     networks:
       - main
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
-      - "com.centurylinklabs.watchtower.monitor-only=true"
 
   calibre-web:
     image: crocodilestick/calibre-web-automated
@@ -41,7 +40,6 @@ services:
       - main
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
-      - "com.centurylinklabs.watchtower.monitor-only=true"
 
   calibre-web-dl:
     image: ghcr.io/calibrain/calibre-web-automated-book-downloader
@@ -73,7 +71,6 @@ services:
       - main
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
-      - "com.centurylinklabs.watchtower.monitor-only=true"
 
 networks:
   main:

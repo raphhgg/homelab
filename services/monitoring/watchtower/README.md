@@ -47,9 +47,9 @@ curl -X POST -H "Authorization: Bearer YOUR_TOKEN" \
 
 ## Container Labeling
 
-Watchtower uses labels to determine which containers to check and update:
+Watchtower uses labels to determine which containers to automatically update:
 
-### Tier 1: Auto-Update (Low Risk)
+### Auto-Update (All Labeled Containers)
 
 Add to container's `docker-compose.yml`:
 ```yaml
@@ -57,24 +57,13 @@ labels:
   - "com.centurylinklabs.watchtower.enable=true"
 ```
 
-**Currently configured (5 containers)**: watchtower, dozzle, uptime-kuma, cloudflare-ddns, beszel-agent
+**Currently configured: 34 containers** including watchtower, dozzle, uptime-kuma, all *arr services, qBittorrent, Plex, Tautulli, Jellyseerr, SABnzbd, and most other production services.
 
-### Tier 2: Manual Approval (Medium/High Risk)
-
-Add to container's `docker-compose.yml`:
-```yaml
-labels:
-  - "com.centurylinklabs.watchtower.enable=true"
-  - "com.centurylinklabs.watchtower.monitor-only=true"
-```
-
-**Currently configured (29 containers)**: All *arr services, qBittorrent, Plex, Tautulli, Jellyseerr, SABnzbd, and most other services
-
-### Tier 3: Ignored (Critical Infrastructure)
+### Ignored (Critical Infrastructure)
 
 Don't add any labels. Watchtower will ignore these containers.
 
-Examples: Docker Socket Proxy, GitHub Actions Runner, Beszel hub, Kometa
+**Examples**: Kometa (version-controlled config), Portainer, Trailarr
 
 ## Usage
 
@@ -107,44 +96,51 @@ curl -X POST \
 
 ## Cronicle Integration
 
-A single Cronicle job handles daily update checks:
+A single Cronicle job handles daily updates and notifications:
 
-**Job**: "Watchtower - Daily Update Check" (ID: emgumobon1f)
+**Job**: "Watchtower - Daily Container Update Check" (ID: emgumobon1f)
 **Category**: Monitoring (cmgumlb1w1e)
 **Schedule**: Daily at 3 AM Europe/Brussels timezone
 
-```bash
-#!/bin/bash
-# Daily container update check
+The job runs Watchtower to check for updates, applies them automatically to labeled containers, and sends a Discord notification via Apprise with:
+- List of updated containers
+- Version information (old → new)
+- Changelog links for each updated container
+- Timestamp of the update
 
-docker exec watchtower watchtower --run-once --label-enable 2>&1 | tee /tmp/watchtower-check.log
+**Notification Script**: `scripts/monitoring/watchtower_run_and_notify.sh`
+- Have to be copied manually in Cronicle job
 
-# Future Phase 2: Parse output and send Apprise notifications
-```
-
-**Note**: There is NO manual trigger job in Cronicle. Phase 2 will have Apprise call the Watchtower HTTP API directly when users approve updates via notification buttons.
+**Key Features**:
+- Automatic updates for all labeled containers
+- Clean version display (handles edge cases like autopulse "main" → "latest (YYYY-MM-DD)")
+- Direct links to changelog/releases for each container
+- Discord notifications with rich formatting
 
 ## Workflow
 
-### Current (Phase 1)
-1. Cronicle runs daily check at 3 AM
-2. Watchtower checks all 34 labeled containers for updates
-3. **Tier 1 (auto-update)**: 5 containers update automatically
-4. **Tier 2 (manual)**: 29 containers log available updates for manual review
-5. User reviews logs and can manually trigger updates via HTTP API if desired
+### Current Implementation
 
-### Future (Phase 2 - With Apprise)
-1. Cronicle runs daily check at 3 AM
-2. **Tier 1 auto-updates** → Sends notification (audit trail only)
-   - Notification format: "Container X updated: v1.0 → v1.1"
-3. **Tier 2 updates available** → Sends notification with:
-   - Container name, versions (old → new)
-   - Changelog link (GitHub releases or Docker Hub)
-   - [Approve Update] button
-4. **User clicks approve** → Apprise webhook calls Watchtower HTTP API directly → Container updates
-5. All updates tracked in Discord/Telegram channel for audit history
-
-**Key difference from Phase 1**: Apprise calls Watchtower HTTP API directly (no Cronicle manual trigger job needed)
+1. **Cronicle triggers** daily at 3 AM Europe/Brussels timezone
+2. **Watchtower runs** update check on all 34 labeled containers:
+   - Checks for new images
+   - Pulls new images if available
+   - Stops old containers
+   - Starts new containers with updated images
+   - Cleans up old images
+3. **If updates were applied**:
+   - Script parses Watchtower logs
+   - Extracts container names, versions, and images
+   - Generates changelog URLs for each updated container
+   - Sends Discord notification via Apprise
+4. **Discord notification includes**:
+   - Title: "X Containers Updated"
+   - List of updated containers with:
+     - Container name
+     - New version number
+     - Changelog link (GitHub releases or hotio.dev)
+   - Watchtower logo and timestamp
+5. **Audit trail**: All updates tracked in Discord channel with full history
 
 ## Monitoring
 
@@ -178,14 +174,17 @@ docker run --rm \
 
 ## Important Notes
 
-- **34 containers currently labeled**: 5 auto-update, 29 manual approval
+- **34 containers currently labeled** with `watchtower.enable=true` for automatic updates
+- **No `monitor-only` labels** - all labeled containers update automatically
 - Watchtower itself has the `enable=true` label and can update itself
-- Kometa is in Tier 3 (ignored) - version-controlled config could break if auto-updated
-- Docker Socket Proxy, GitHub Actions Runner, Beszel hub also in Tier 3 (critical infrastructure)
-- Use `--monitor-only` flag for dry-run checks without updates
-- HTTP API requires authentication token for all requests
+- **Ignored containers** (no labels): Kometa, Portainer, Trailarr
+  - Kometa: version-controlled config could break if auto-updated
+  - Portainer: manual management UI, should be updated manually
+  - Trailarr: manually managed service
+- HTTP API mode enabled for potential future manual triggers
 - All scheduling is managed by Cronicle (Job ID: emgumobon1f), not Watchtower's built-in scheduler
-- Phase 2 will use Apprise to call HTTP API directly (no manual Cronicle jobs)
+- Discord notifications sent via Apprise (tag: `watchtower`)
+- Script location: `scripts/monitoring/watchtower_run_and_notify.sh` (copied into Cronicle job)
 
 ## Resources
 

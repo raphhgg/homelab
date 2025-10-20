@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  apprise:
+    image: caronc/apprise:latest
+    container_name: apprise
+    networks:
+      - main
+    ports:
+      - 8089:8000  # External:Internal (8000 used by Portainer, 8090 by SABnzbd)
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      # Stateful mode - maps keys to files in /config
+      - APPRISE_STATEFUL_MODE=simple
+      # Lightweight worker count for homelab
+      - APPRISE_WORKER_COUNT=1
+      # Optional: Set default theme
+      - APPRISE_DEFAULT_THEME=dark
+    volumes:
+      - ./config:/config
+      - ${DOCKER_APPDATA_PATH}/apprise/attach:/attach
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  main:
+    external: true

@@ -2,6 +2,28 @@
 
 Utility scripts for homelab automation and maintenance.
 
+## Monitoring Scripts
+
+Located in `monitoring/`:
+
+**See [monitoring/README.md](monitoring/README.md) for complete documentation.**
+
+### watchtower_run_and_notify.sh
+
+Automated container updates with Discord notifications.
+
+**Purpose**: Runs Watchtower to check for container updates, applies them, and sends formatted Discord notifications via Apprise.
+
+**Used by**: Cronicle job "Watchtower - Daily Container Update Check" (daily at 3 AM)
+
+**Key features:**
+- BusyBox-compatible (runs in Cronicle container)
+- Parses Watchtower logs to extract updated containers
+- Fetches version info and generates changelog links
+- Sends rich Discord embeds via Apprise
+
+**Note**: Script must be manually copied into Cronicle job when updated.
+
 ## Media Download Scripts
 
 Located in `media-download/`:

@@ -50,9 +50,7 @@ services:
     networks:
       - main
     labels:
-      
       - "com.centurylinklabs.watchtower.enable=true"
-      - "com.centurylinklabs.watchtower.monitor-only=true"
 
 networks:
   main:
