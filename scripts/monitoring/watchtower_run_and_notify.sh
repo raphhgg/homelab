@@ -1,21 +1,26 @@
 #!/bin/bash
 #
-# Watchtower Update and Notification Script
+# Watchtower Update and Notification Script for Cronicle
 # Runs Watchtower to update containers and sends Discord notification via Apprise
+#
+# This script should be copied into the Cronicle job.
+# Source location: scripts/monitoring/watchtower_run_and_notify.sh
 #
 
 set -euo pipefail
 
-APPRISE_URL="${APPRISE_URL:-http://localhost:8089/notify/watchtower}"
-LOG_FILE="${1:-}"
+export APPRISE_URL="http://apprise:8000/notify/watchtower"
 
-# If no log file provided, run Watchtower and create the log
-if [[ -z "$LOG_FILE" ]]; then
-    LOG_FILE="/tmp/watchtower-update-$(date +%Y%m%d-%H%M%S).log"
-    echo "Running Watchtower with auto-update enabled..."
-    docker exec watchtower /watchtower --run-once --label-enable --cleanup --debug 2>&1 | tee "$LOG_FILE"
-fi
+# Create log file with timestamp
+LOG_FILE="/tmp/watchtower-update-$(date +%Y%m%d-%H%M%S).log"
 
+echo "Running Watchtower - Updating containers..."
+docker exec watchtower /watchtower --run-once --label-enable --cleanup --debug 2>&1 | tee "$LOG_FILE"
+
+echo ""
+echo "Parsing log and sending notification..."
+
+# Verify log file exists
 if [[ ! -f "$LOG_FILE" ]]; then
     echo "Error: Log file not found: $LOG_FILE"
     exit 1
@@ -124,6 +129,9 @@ get_changelog() {
             ;;
         ghcr.io/calibrain/*)
             echo "https://github.com/calibrain/calibre-web-automated-book-downloader/releases"
+            ;;
+        louislam/uptime-kuma*)
+            echo "https://github.com/louislam/uptime-kuma/releases"
             ;;
         *)
             echo ""
