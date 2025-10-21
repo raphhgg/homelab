@@ -119,6 +119,18 @@ MONITOR_GROUPS = {
             "critical": True,
             "description": "Centralized notification hub",
         },
+        {
+            "name": "apprise-middleware",
+            "type": MonitorType.HTTP,
+            "url": "http://apprise-middleware:5000/health",
+            "interval": 120,
+            "retryInterval": 30,
+            "maxretries": 2,
+            "critical": True,
+            "description": "Apprise payload transformation middleware",
+            "conditions": [],  # Required for Uptime Kuma 2.0+
+            # Note: No notification - can't notify about middleware failure through middleware
+        },
     ],
     "media-server": [
         {
@@ -355,44 +367,84 @@ def create_critical_tag(api):
     return new_tag["id"]
 
 
-def setup_apprise_notification(api):
-    """Create or get centralized Apprise notification for all monitors."""
-    # Check if Apprise notification already exists
+def get_apprise_webhook_url(service_name, use_middleware=False):
+    """
+    Get the Apprise webhook URL for a service.
+
+    Args:
+        service_name (str): The service name for the webhook endpoint (e.g., 'uptime-kuma', 'watchtower')
+        use_middleware (bool): If True, route through middleware for payload transformation.
+                               If False, send directly to Apprise API.
+
+    Returns:
+        str: The webhook URL
+    """
+    if use_middleware:
+        return f"http://apprise-middleware:5000/webhook/{service_name}"
+    else:
+        return f"http://apprise:8000/notify/{service_name}"
+
+
+def setup_uptime_kuma_notification(api, service_name, use_middleware=False):
+    """
+    Create or get Uptime Kuma webhook notification that sends to Apprise.
+
+    Args:
+        api: UptimeKumaApi instance
+        service_name (str): The service name for the webhook endpoint (e.g., 'uptime-kuma', 'watchtower')
+        use_middleware (bool): If True, route through middleware for payload transformation.
+                               If False, send directly to Apprise API.
+
+    Returns:
+        int: Notification ID
+    """
+    # Get webhook URL for this service
+    webhook_url = get_apprise_webhook_url(service_name, use_middleware)
+
+    # Create notification name
+    if use_middleware:
+        notif_name = f"Apprise ({service_name} - Middleware)"
+    else:
+        notif_name = f"Apprise ({service_name} - Direct)"
+
+    # Check if notification already exists
     notifications = api.get_notifications()
     for notif in notifications:
-        if notif["name"] == "Apprise":
-            # Check if it's the correct type (webhook)
-            if notif["type"] == "webhook":
-                print(f"  ⏭️  Apprise webhook notification already exists (ID: {notif['id']})")
+        if notif["name"] == notif_name:
+            # Check if it's using the correct webhook URL
+            current_url = notif.get("webhookURL", "")
+
+            if current_url == webhook_url:
+                print(f"  ⏭️  {notif_name} notification already exists (ID: {notif['id']})")
                 return notif["id"]
             else:
-                # Delete the old Apprise-type notification and recreate as webhook
-                print(f"  🗑️  Found old Apprise notification (type: {notif['type']}), deleting...")
+                # URL is outdated or incorrect - delete and recreate
+                print(f"  🗑️  Found {notif_name} with old URL ({current_url}), deleting...")
                 api.delete_notification(notif["id"])
                 print(f"    ✅ Deleted old notification")
                 break
 
-    # Create new Apprise notification using Webhook type
-    # Note: Uptime Kuma's Apprise type expects direct Apprise URLs (discord://...),
-    # not an Apprise API endpoint. We use Webhook to call our Apprise API instead.
-    print("  Creating Apprise webhook notification...")
+    # Create new notification using Webhook type
+    print(f"  Creating {notif_name} notification...")
 
-    # Custom body with proper format for Apprise API
-    # Both title and body are required by Apprise
-    # If {{msg}} is empty during test, we provide fallback text
-    custom_body = '''{"title":"Uptime Kuma Alert","body":"Status: {{msg}}\\n\\nMonitor: {{monitorJSON.name}}\\n\\nThis is a test notification from Uptime Kuma."}'''
+    # Prepare custom body for direct Apprise (if not using middleware)
+    custom_body = None
+    if not use_middleware:
+        # When sending directly to Apprise, we need to transform the payload
+        custom_body = '''{"title":"Uptime Kuma Alert","body":"Status: {{msg}}\\n\\nMonitor: {{monitorJSON.name}}\\n\\nThis is a test notification."}'''
 
     result = api.add_notification(
-        name="Apprise",
+        name=notif_name,
         type=NotificationType.WEBHOOK,
-        isDefault=True,           # Auto-enable for new monitors
-        applyExisting=True,       # Apply to existing monitors
-        webhookURL="http://apprise:8000/notify/uptime-kuma",
+        isDefault=False,          # Don't auto-enable (we'll assign manually per monitor)
+        applyExisting=False,      # Don't apply to existing monitors
+        webhookURL=webhook_url,
         webhookContentType="json",
         webhookCustomBody=custom_body,
     )
     notification_id = result["id"]
-    print(f"    ✅ Apprise webhook notification created (ID: {notification_id})")
+    print(f"    ✅ {notif_name} notification created (ID: {notification_id})")
+    print(f"    ℹ️  Webhook URL: {webhook_url}")
     return notification_id
 
 
@@ -417,6 +469,9 @@ def setup_monitors(api, force=False):
 
     # Create critical tag
     critical_tag_id = create_critical_tag(api)
+
+    # Cache for created notifications (key: use_middleware boolean, value: notification_id)
+    notification_cache = {}
 
     created_count = 0
     skipped_count = 0
@@ -460,14 +515,32 @@ def setup_monitors(api, force=False):
 
             print(f"  Creating: {monitor_name}")
 
-            # Extract critical flag (before copying)
+            # Extract custom flags (before copying)
             is_critical = monitor_config.get("critical", False)
 
-            # Create a copy and remove critical flag (not an API parameter)
-            monitor_config_copy = {k: v for k, v in monitor_config.items() if k != "critical"}
+            # ALL Uptime Kuma monitors use middleware (Uptime Kuma webhook format is incompatible with Apprise)
+            # Create a single shared middleware notification for all monitors
+            notification_id = None
+            if True not in notification_cache:
+                print(f"    🔔 Creating middleware notification (shared by all monitors)...")
+                notification_cache[True] = setup_uptime_kuma_notification(
+                    api,
+                    service_name="uptime-kuma",  # Use generic service name
+                    use_middleware=True
+                )
+            notification_id = notification_cache[True]
+
+            # Create a copy and remove custom flags (not API parameters)
+            # Note: 'conditions' is excluded because uptime-kuma-api 1.2.1 doesn't support it yet
+            monitor_config_copy = {k: v for k, v in monitor_config.items()
+                                   if k not in ["critical", "conditions"]}
 
             # Add parent group to the copy
             monitor_config_copy["parent"] = group_id
+
+            # Assign notification if available
+            if notification_id:
+                monitor_config_copy["notificationIDList"] = {str(notification_id): True}
 
             # Add monitor
             try:
@@ -477,10 +550,16 @@ def setup_monitors(api, force=False):
                 # Add critical tag if needed
                 if is_critical:
                     api.add_monitor_tag(tag_id=critical_tag_id, monitor_id=monitor_id)
-                    print(f"    ✅ Created (critical)")
-                else:
-                    print(f"    ✅ Created")
 
+                # Build status message
+                status_parts = []
+                if is_critical:
+                    status_parts.append("critical")
+                if use_middleware:
+                    status_parts.append("middleware")
+                status_msg = f" ({', '.join(status_parts)})" if status_parts else ""
+
+                print(f"    ✅ Created{status_msg}")
                 created_count += 1
             except Exception as e:
                 print(f"    ❌ Error: {e}")
@@ -526,16 +605,12 @@ def main():
         api.login(username, password)
         print("✅ Connected")
 
-        # Setup Apprise notification (before creating monitors)
-        print("\n🔔 Setting up Apprise notifications...")
-        print("=" * 60)
-        setup_apprise_notification(api)
-
         # Delete all monitors if force mode
         if force:
             delete_all_monitors(api)
 
         # Create monitors in groups
+        # Notifications are created on-demand when monitors request them
         setup_monitors(api, force=force)
 
     except Exception as e:

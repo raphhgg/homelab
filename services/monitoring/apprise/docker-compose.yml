@@ -25,6 +25,27 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
+  middleware:
+    build:
+      context: ./middleware
+      dockerfile: Dockerfile
+    container_name: apprise-middleware
+    networks:
+      - main
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - APPRISE_URL=http://apprise:8000
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./middleware:/app
+    restart: always
+    depends_on:
+      - apprise
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
 networks:
   main:
     external: true

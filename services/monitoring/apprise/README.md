@@ -10,6 +10,32 @@ Apprise acts as the central notification hub for the homelab, providing a single
 - **Web UI**: `http://ds423plus:8089` or `http://10.10.2.2:8089` (from network/browser)
 - **API (from host)**: `http://localhost:8089`
 - **API (from containers)**: `http://apprise:8000` (within Docker `main` network)
+- **Middleware (from containers)**: `http://apprise-middleware:5000` (payload transformation service)
+
+## Architecture
+
+The Apprise stack consists of two services:
+
+1. **Apprise API** (`apprise` container): The main notification service that sends alerts to Discord, Telegram, etc.
+2. **Apprise Middleware** (`apprise-middleware` container): A lightweight Flask service that transforms incompatible webhook payloads into Apprise API format.
+
+### When to Use Middleware
+
+**Use middleware when**:
+- The source service sends webhooks with a payload structure incompatible with Apprise API
+- You need to transform or enrich notification data before sending to Apprise
+- Example: Uptime Kuma's webhook payload needs transformation to extract monitor details
+
+**Use direct Apprise API when**:
+- You can control the payload format (scripts, curl commands)
+- The source service supports custom webhook payloads
+- You want simple, straightforward notifications
+
+### Middleware Endpoints
+
+- `POST /webhook/uptime-kuma` - Transform Uptime Kuma webhook payload to Apprise format
+- `GET /health` - Health check endpoint (monitored by Uptime Kuma)
+- `GET /` - Service information and available endpoints
 
 ## Setup
 
@@ -136,11 +162,44 @@ See updated Cronicle job "Watchtower - Daily Update Check" that parses output an
 
 ### Uptime Kuma
 
-Uptime Kuma has built-in Apprise support:
-1. Go to Settings > Notifications
-2. Setup Type: Apprise (url)
-3. Apprise URL: `http://apprise:8000/notify/apprise`
-4. Set as Default
+Uptime Kuma sends notifications through the **middleware** for rich Discord formatting:
+
+**How it works**:
+1. Uptime Kuma detects a monitor status change (UP/DOWN)
+2. Sends webhook to `http://apprise-middleware:5000/webhook/uptime-kuma` with full monitor data
+3. Middleware transforms the payload:
+   - Extracts monitor name, status, URL, type, error message, duration
+   - Creates rich markdown body with all details
+   - Maps status codes (0=failure, 1=success) to Apprise types
+   - Adds emoji indicators (🔴 Down, 🟢 Up)
+4. Middleware forwards to Apprise API at `http://apprise:8000/notify/uptime-kuma`
+5. Apprise sends to Discord with custom formatting
+
+**Configuration**:
+- Managed automatically by `setup_monitors.py` script
+- Monitors with `use_middleware: True` flag use the middleware webhook
+- Other monitors use direct Apprise API (simpler payload)
+
+**Manual test**:
+```bash
+# Test middleware transformation
+curl -X POST http://localhost:5000/webhook/uptime-kuma \
+  -H "Content-Type: application/json" \
+  -d '{
+    "heartbeat": {
+      "status": 0,
+      "msg": "Connection timeout",
+      "duration": 5000,
+      "time": "2024-01-01 12:00:00"
+    },
+    "monitor": {
+      "name": "Test Service",
+      "type": "http",
+      "url": "http://example.com"
+    },
+    "msg": "[Test Service] [🔴 Down] Connection timeout"
+  }'
+```
 
 ### Cronicle Jobs
 
@@ -203,7 +262,38 @@ Apprise is monitored by Uptime Kuma:
 ### Check container logs
 
 ```bash
-docker-compose logs -f apprise-api
+# Apprise API logs
+docker-compose logs -f apprise
+
+# Middleware logs
+docker-compose logs -f apprise-middleware
+```
+
+### Middleware Issues
+
+**Middleware not responding**:
+```bash
+# Check if middleware is running
+docker ps | grep apprise-middleware
+
+# Check health endpoint
+curl http://localhost:5000/health
+
+# Rebuild if code was updated
+cd /volume2/docker/compose/services/monitoring/apprise
+docker-compose build apprise-middleware
+docker-compose up -d apprise-middleware
+```
+
+**Payload transformation errors**:
+```bash
+# Check middleware logs for transformation errors
+docker-compose logs apprise-middleware | grep ERROR
+
+# Test with sample payload
+curl -X POST http://localhost:5000/webhook/uptime-kuma \
+  -H "Content-Type: application/json" \
+  -d '{"heartbeat":{"status":1},"monitor":{"name":"test"},"msg":"test"}'
 ```
 
 ### Verify configuration

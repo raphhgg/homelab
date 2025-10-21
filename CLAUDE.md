@@ -140,6 +140,36 @@ Utility scripts for homelab automation and maintenance.
 
 **See [services/infrastructure/github-runner/README.md](services/infrastructure/github-runner/README.md) for complete documentation.**
 
+## Important Notes
+
+### Uptime Kuma 2.0 Compatibility
+
+**Issue**: The `uptime-kuma-api` Python library (v1.2.1) does NOT support Uptime Kuma 2.0+.
+
+**Impact**:
+- ❌ Cannot create new monitors via `setup_monitors.py` script (will fail with "NOT NULL constraint failed: monitor.conditions")
+- ✅ Can still create notifications via script
+- ✅ Existing monitors continue to work
+- ✅ Can update existing monitors via script
+
+**Workaround**: Create new monitors manually in Uptime Kuma UI until the library is updated.
+
+**Tracking**: The library supports Uptime Kuma 1.21.3 - 1.23.2. Wait for library update to support 2.0+.
+
+### Apprise Middleware
+
+**Purpose**: Transforms Uptime Kuma webhook payloads to Apprise API-compatible format for rich Discord notifications.
+
+**Architecture**:
+- Uptime Kuma → Middleware (`http://apprise-middleware:5000/webhook/uptime-kuma`) → Apprise API → Discord
+- Middleware extracts monitor details (name, URL, type, error, duration) and creates formatted notifications
+- ALL Uptime Kuma monitors should use the middleware notification (Uptime Kuma's webhook format is incompatible with Apprise API)
+
+**Setup**:
+- Service: `services/monitoring/apprise/middleware/`
+- Notification name in Uptime Kuma: "Apprise (uptime-kuma - Middleware)" or similar
+- Should be set as default and applied to all monitors
+
 ## Development Notes
 
 ### When Modifying Services
