@@ -1,10 +1,11 @@
 version: '3.8'
 services:
   autopulse:
-    image: ghcr.io/dan-online/autopulse:latest-sqlite
+    image: autopulse-with-docker
     container_name: autopulse
     networks:
       - main
+      - socket_proxy
     ports:
       - 2875:2875
     environment:
@@ -15,9 +16,11 @@ services:
       - AUTOPULSE__APP__DATABASE_URL=sqlite:///app/data/autopulse.db
       - AUTOPULSE__APP__USERNAME=${AUTOPULSE_USERNAME}
       - AUTOPULSE__APP__PASSWORD=${AUTOPULSE_PASSWORD}
+      - DOCKER_HOST=${DOCKER_HOST}
     volumes:
       - ${DOCKER_APPDATA_PATH}/autopulse/config.yaml:/app/config.yaml
       - ${DOCKER_APPDATA_PATH}/autopulse/data:/app/data
+      - ${DOCKER_APPDATA_PATH}/autopulse/scripts:/app/scripts
       - ${MEDIAS_PATH}:/data/medias:ro
     restart: always
     labels:
@@ -25,4 +28,6 @@ services:
 
 networks:
   main:
+    external: true
+  socket_proxy:
     external: true

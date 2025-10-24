@@ -18,6 +18,7 @@ services:
     volumes:
       - ${MEDIAS_PATH}/downloads/torrents/complete/tvshows:/downloads/torrents/complete/tvshows
       - ${MEDIAS_PATH}/downloads/torrents/complete/movies:/downloads/torrents/complete/movies
+      - ${MEDIAS_PATH}/downloads/torrents/complete/sports:/downloads/torrents/complete/sports
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"

@@ -1,0 +1,51 @@
+templates:
+  Season:
+    builder_level: season
+    plex_search:
+      type: season
+      all:
+        title: <<collection_name>>
+    collection_order: season.desc
+    sort_title: +00_Season_<<collection_name>>
+    sync_mode: sync
+    visible_home: false
+    visible_shared: false
+    visible_library: false
+
+  Next Season Available:
+    builder_level: season
+    plex_search:
+      type: season
+      all:
+        title: <<show>>
+        episode_unplayed: true
+    collection_order: season.desc
+    sort_title: +01_Next_Season_Available_<<show>>
+    sync_mode: sync
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+
+  Recently Released Seasons:
+    builder_level: season
+    plex_search:
+      type: season
+      all:
+        title: <<show>>
+        episode_unplayed: true
+    collection_order: season.asc
+    sort_title: +02_Recently_Added_Seasons_<<show>>
+    sync_mode: sync
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+
+collections:
+  Formula 1 (2025):
+    template: { name: Season }
+
+  Next F1 Available:
+    template: { name: Next Season Available, show: Formula 1 (2025) }
+  
+  Recently Released F1:
+    template: { name: Recently Released Seasons, show: Formula 1 (2025) }
