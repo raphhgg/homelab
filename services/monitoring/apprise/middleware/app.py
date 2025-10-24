@@ -62,7 +62,8 @@ def transform_uptime_kuma_payload(payload):
         status = heartbeat.get("status")
         error_msg = heartbeat.get("msg", "")
         duration = heartbeat.get("duration", 0)
-        timestamp = heartbeat.get("time", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        # Use localDateTime instead of time (UTC) to show timezone-aware timestamp
+        timestamp = heartbeat.get("localDateTime") or heartbeat.get("time", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
         # Determine status and emoji
         if status == 1:

@@ -76,6 +76,31 @@ get_version() {
     echo "${version:-latest}"
 }
 
+# Function to get image build date
+get_image_date() {
+    local container="$1"
+    local created=$(docker inspect "$container" 2>/dev/null | \
+        grep '"Created"' | head -1 | \
+        sed 's/.*"Created"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | \
+        cut -d'T' -f1)
+    echo "${created:-unknown}"
+}
+
+# Function to get image age in days
+get_image_age() {
+    local created="$1"
+    if [[ "$created" != "unknown" ]]; then
+        local created_epoch=$(date -d "$created" +%s 2>/dev/null || echo "0")
+        local now_epoch=$(date +%s)
+        if [[ "$created_epoch" -gt 0 ]]; then
+            local age_days=$(( (now_epoch - created_epoch) / 86400 ))
+            echo "$age_days"
+            return
+        fi
+    fi
+    echo "unknown"
+}
+
 # Function to get changelog URL from image
 get_changelog() {
     local image="$1"
@@ -142,15 +167,18 @@ get_changelog() {
 # Parse for updates
 declare -A updates
 declare -A images
+declare -A image_ids
 while IFS= read -r line; do
-    if [[ "$line" =~ level=info\ msg=\"Found\ new\ ([^\ ]+)\ image ]]; then
+    if [[ "$line" =~ level=info\ msg=\"Found\ new\ ([^\ ]+)\ image\ \(([a-f0-9]+)\) ]]; then
         image="${BASH_REMATCH[1]}"
+        image_id="${BASH_REMATCH[2]}"
         # Extract container name
         if [[ "$image" =~ /([^/:]+)(:latest|:.+)?$ ]]; then
             container="${BASH_REMATCH[1]}"
             version=$(get_version "$container" "$image")
             updates["$container"]="$version"
             images["$container"]="$image"
+            image_ids["$container"]="$image_id"
         fi
     fi
 done < "$LOG_FILE"
@@ -175,14 +203,41 @@ body=""
 for container in $(printf '%s\n' "${!updates[@]}" | sort); do
     version="${updates[$container]}"
     image="${images[$container]}"
+    image_id="${image_ids[$container]}"
     changelog=$(get_changelog "$image")
 
-    if [[ -n "$changelog" ]]; then
-        body+="- **${container}** → \`${version}\` • [Changelog]($changelog)"$'\n'
-    else
-        body+="- **${container}** → \`${version}\`"$'\n'
+    # Get image build date and age
+    build_date=$(get_image_date "$container")
+    age_days=$(get_image_age "$build_date")
+
+    # Build the line with enhanced info
+    line="- **${container}** → \`${version}\`"
+
+    # Add image age context if available
+    if [[ "$age_days" != "unknown" ]]; then
+        if [[ "$age_days" -eq 0 ]]; then
+            line+=" (built today)"
+        elif [[ "$age_days" -eq 1 ]]; then
+            line+=" (built yesterday)"
+        elif [[ "$age_days" -le 7 ]]; then
+            line+=" (${age_days}d old)"
+        fi
     fi
+
+    # Add changelog link
+    if [[ -n "$changelog" ]]; then
+        line+=" • [Changelog]($changelog)"
+    fi
+
+    # Add image digest as small text for debugging
+    line+=" \`${image_id:0:12}\`"
+
+    body+="${line}"$'\n'
 done
+
+# Add footer with explanation
+body+=$'\n'
+body+="_Updates may include base image patches, dependencies, or new releases._"
 
 # Send using EXACT format from your working command
 curl -X POST "$APPRISE_URL" \
