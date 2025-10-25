@@ -217,6 +217,10 @@ When cloning or working with this repository, ensure you're using the `github-pe
 
 **Default Project:** All Linear issues for this homelab repository should be created in the **"self-hosted"** project unless otherwise specified.
 
+**Linear GraphQL API IDs:**
+- **Team ID**: `9bbf50c0-425a-4736-b5ac-fb98744a5830` (Raphael Grau)
+- **Project ID (self-hosted)**: `91189c04-ae99-46dc-bf34-243cb9f95fb6`
+
 When creating issues related to this repository, always use the "self-hosted" project by default.
 
 ### Linear MCP Not Working in Cursor/VSCode
