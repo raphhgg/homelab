@@ -47,25 +47,15 @@ templates:
   Recently Added In Genre:
     smart_filter:
       any:
-        collection: <<tag>> Shows Collection
+        collection: <<tag>> Shows
       sort_by: added.desc
       limit: 10
     label: <<collection_name>> Collection
-    sort_title: +011_Recently_Added_In_<<tag>>_TV_Shows
+    sort_title: +010_Recently_Added_In_<<tag>>_Shows
     sync_mode: sync
     visible_home: true # weekly(wednesday)
     visible_shared: true # weekly(wednesday)
     visible_library: true # weekly(wednesday)
-
-collections:
-  Favorites Shows:
-    template: { name: Genre, tag: Favorite }
-    summary: "My All Time Favorites TV Shows."
-    visible_home: true
-    visible_shared: true
-    visible_library: true
-    sort_title: +00_Favorites_Shows
-    # file_poster: config/
 
     # Some kind of random reco section
     # visible_shared: weekly(wednesday)
@@ -76,7 +66,8 @@ collections:
     #   all:
     #     audience_rating.gte: 7.0
     #     genre: action
-    
+
+collections:    
   # Genres: # Works but match 2 items
   #   template: { name: Separator }
   #   sort_title: +00_zz

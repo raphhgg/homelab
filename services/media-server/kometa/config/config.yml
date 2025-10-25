@@ -10,11 +10,11 @@ libraries:
     - file: /config-repo/collections/movies/03_dates.yml
     - file: /config-repo/collections/movies/04_quality.yml
     - file: /config-repo/collections/movies/05_people.yml
-    - file: /config-repo/collections/movies/06_letterboxd_lists.yml
-    - file: /config-repo/collections/movies/07_franchises.yml
+    - file: /config-repo/collections/movies/06_letterboxd_franchises.yml
+    - file: /config-repo/collections/movies/07_letterboxd_others.yml
 
     # MOVIE OVERLAYS 
-    remove_overlays: false   
+    remove_overlays: false
     reapply_overlays: true
     overlay_files:
     - default: resolution
@@ -71,11 +71,14 @@ libraries:
   TV Shows:
     report_path: /data/missing/TV_Shows_report.yml
     collection_files:
+    - file: /config-repo/collections/tvshows/00_general.yml
     - file: /config-repo/collections/tvshows/00_sonarr_tags_sync.yml
     - file: /config-repo/collections/tvshows/01_genres.yml
     - file: /config-repo/collections/tvshows/02_languages.yml
     - file: /config-repo/collections/tvshows/03_dates.yml
     - file: /config-repo/collections/tvshows/04_quality.yml
+    - file: /config-repo/collections/tvshows/06_favorites.yml
+
 
     # TV SHOWS OVERLAYS
     remove_overlays: false

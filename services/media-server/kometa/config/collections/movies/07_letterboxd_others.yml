@@ -2,7 +2,7 @@ templates:
   Letterboxd:
     letterboxd_list_details: <<list_url>>
     sync_mode: sync
-    sort_title: +060_<<tag>>_Letterboxd_Lists
+    sort_title: +070_<<tag>>_Letterboxd_Lists
     visible_home: false
     visible_shared: true
     visible_library: true

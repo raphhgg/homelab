@@ -1,0 +1,12 @@
+collections:
+  Favorites Shows:
+    plex_search:
+      all:
+        label: Sonarr Favorite
+    collection_order: year.desc
+    label: <<collection_name>> Collection
+    summary: "My All Time Favorites TV Shows."
+    sort_title: +070_Favorites_Shows
+    visible_home: true
+    visible_shared: true
+    visible_library: true

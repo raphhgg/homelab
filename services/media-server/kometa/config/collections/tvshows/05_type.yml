@@ -1,0 +1,15 @@
+  # ### Type
+  # Miniseries Shows:
+  #   plex_all: true
+  #   filters:
+  #     tmdb_type: miniseries
+  #     genre.not:
+  #       - "Documentary"
+  #       - "Biography"
+  #   collection_order: added.desc
+  #   sync_mode: sync
+  #   visible_home: true
+  #   visible_shared: true
+  #   visible_library: true
+  
+  # HBO Classics
