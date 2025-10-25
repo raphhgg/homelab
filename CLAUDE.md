@@ -202,6 +202,7 @@ All the services using hotio's containers support Theme Park for UI theming:
 - Main branch: `main`
 - Use descriptive commit messages following the existing style (see recent commits)
 - Prefix commits with scope: `[global]`, `[media-download]`, `[scripts]` nor `[service-name]` if changes affects only one single service.
+- **IMPORTANT**: Do NOT add Claude Code attribution or co-authorship lines to commit messages. No "Generated with Claude Code" or "Co-Authored-By: Claude" footers.
 
 ## Git Configuration
 

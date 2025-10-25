@@ -1,119 +1,25 @@
-# ============================================================================
-# Apprise Service Configuration Template
-# ============================================================================
-# This is an example configuration file for Apprise notifications.
-# Copy this file and rename it to match your service (e.g., backup.yml, monitoring.yml)
-#
-# Endpoint URL format: http://localhost:8089/notify/{filename-without-extension}
-# Example: For watchtower.yml → http://localhost:8089/notify/watchtower
-# ============================================================================
+# Service-specific Apprise configuration template
+# Copy and rename to match your service (e.g., backup.yml, monitoring.yml)
+# Endpoint: http://localhost:8089/notify/{filename-without-extension}
 
 version: 1
 
-# ============================================================================
-# Asset Configuration - Controls visual appearance of notifications
-# ============================================================================
 asset:
-  # Footer text (shown at bottom of Discord embed)
-  # This identifies where the notification is coming from
   app_id: "[Service Name] Notification Title"
-
-  # Subtitle/description
-  # Add tags or description to help categorize the notification
-  app_desc: "#category #tags #description"
-
-  # URL when clicking footer
-  # Link to the service dashboard, logs, or relevant page
-  app_url: http://10.10.2.2:port/path/to/service
-
-  # Footer icon (shown in Discord footer - bottom right)
-  # Use a logo that represents the SOURCE of the notification
-  # Examples:
-  #   - Cronicle: https://cronicle.net/images/logo-1024.png
-  #   - Apprise: https://github.com/caronc/apprise/raw/master/apprise/assets/themes/default/apprise-logo.png
+  app_desc: "#category #tags"
+  app_url: http://10.10.2.2:port/path
   image_url_logo: https://path.to/footer-logo.png
-
-  # Avatar/thumbnail icon (shown as message avatar - top left)
-  # Use a logo that represents the SERVICE being monitored
-  # Examples:
-  #   - Watchtower: https://raw.githubusercontent.com/containrrr/watchtower/main/logo.png
-  #   - Docker: https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png
   image_url_mask: https://path.to/avatar-logo.png
 
-# ============================================================================
-# Global Tags
-# ============================================================================
-# Tags help route notifications and can be used for filtering
-# Common tags: monitoring, backup, critical, warning, info
-tag: service-name, category, priority
-
-# ============================================================================
-# Discord Webhook Configuration
-# ============================================================================
-# URL Format: discord://BotName@WebhookID/WebhookToken?params
-#
-# Components:
-#   - BotName: Name displayed as message sender in Discord (e.g., "Watchtower", "Backup Bot")
-#   - WebhookID: Discord webhook ID (found in webhook URL)
-#   - WebhookToken: Discord webhook token (secret - keep secure!)
-#
-# URL Parameters:
-#   - format=markdown: Enable Discord embed format with markdown support
-#                      Required for rich formatting with headers, links, etc.
-#   - footer=yes: Show footer with text from app_id and icon from image_url_logo
-#   - footer=no: Hide footer entirely
-#
-# Additional optional parameters:
-#   - tts=yes: Enable text-to-speech
-#   - avatar=no: Disable avatar (uses default webhook avatar instead)
-#   - image=no: Disable inline images
-# ============================================================================
 urls:
-  # Example Discord webhook configuration
-  # Replace WEBHOOK_ID and WEBHOOK_TOKEN with your actual Discord webhook credentials
   - discord://BotName@WEBHOOK_ID/WEBHOOK_TOKEN?format=markdown&footer=yes:
     - tag: service-name
 
 # ============================================================================
-# Multiple Notification Targets (Optional)
+# Testing
 # ============================================================================
-# You can add multiple notification targets (Discord, Slack, email, etc.)
-# Uncomment and configure as needed:
+# Direct Apprise (no middleware):
+# curl -X POST http://localhost:8089/notify/service-name -H "Content-Type: application/json" -d '{"title":"Test","body":"Test message"}'
 #
-# urls:
-#   # Discord webhook
-#   - discord://BotName@WEBHOOK_ID/WEBHOOK_TOKEN?format=markdown&footer=yes:
-#     - tag: service-name
-#
-#   # Slack webhook
-#   - slack://TokenA/TokenB/TokenC:
-#     - tag: service-name
-#
-#   # Email via SMTP
-#   - mailto://user:password@smtp.example.com:
-#     - tag: service-name
-#
-#   # Multiple Discord channels with different tags
-#   - discord://Bot1@ID1/TOKEN1?format=markdown&footer=yes:
-#     - tag: critical
-#   - discord://Bot2@ID2/TOKEN2?format=markdown&footer=yes:
-#     - tag: info
-# ============================================================================
-
-# ============================================================================
-# Usage Examples
-# ============================================================================
-# Send notification via curl:
-#   curl -X POST http://localhost:8089/notify/service-name \
-#     --data-urlencode "title=Test Notification" \
-#     --data-urlencode "body=This is a test message" \
-#     -d tag=service-name
-#
-# Send notification with markdown formatting:
-#   curl -X POST http://localhost:8089/notify/service-name \
-#     --data-urlencode "title=:rocket: Deployment Complete" \
-#     --data-urlencode "body=**Status**: Success
-# - Version: 1.0.0
-# - Time: 10:30" \
-#     -d tag=service-name
-# ============================================================================
+# Via middleware (if applicable):
+# curl -X POST http://apprise-middleware:5000/webhook/service-name -H "Content-Type: application/json" -d '{"title":"Test","message":"Test message"}'
