@@ -62,6 +62,33 @@ Layer 5: Alerting → Apprise/n8n (Notify me)
 - Memory usage: 90%+
 - Temperature: 70°C+ (if available)
 
+**Webhook Integration**:
+
+Beszel alerts are routed through the Apprise Middleware for rich Discord notifications:
+
+1. **Setup Notification URL** (in Beszel Hub UI at http://10.10.2.2:8091):
+   - Go to **Settings** → **Notifications**
+   - Add notification URL (Shoutrrr format):
+     ```
+     generic://apprise-middleware:5000/webhook/beszel?template=json&disabletls=yes
+     ```
+     Note: `template=json` ensures JSON payload format, `disabletls=yes` forces HTTP (required for non-TLS middleware)
+   - Click **Test URL** to verify the connection
+
+2. **Configure Alert Thresholds**:
+   - On the main dashboard, click the **bell icon (🔔)**
+   - Set thresholds for each metric (CPU, memory, disk, etc.)
+   - Recommended: Disk 95%, CPU 80%, Memory 90%, Temperature 70°C
+   - Enable alerts per system in the systems table
+
+2. **How it works**:
+   - Beszel sends webhook: `{"title": "Alert name", "message": "Details"}`
+   - Middleware transforms to Apprise format
+   - All alerts are marked as 🔴 **critical** (red) since Beszel only sends alerts when thresholds are exceeded
+   - Apprise routes to Discord with rich formatting
+
+**See [middleware/README.md](apprise/middleware/README.md) for complete webhook documentation.**
+
 **Common operations:**
 ```bash
 # View logs
@@ -72,6 +99,11 @@ docker-compose restart beszel
 
 # Check metrics collection
 docker-compose logs beszel-agent
+
+# Test webhook
+curl -X POST http://apprise-middleware:5000/webhook/beszel \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Test Alert","message":"CPU above threshold"}'
 ```
 
 ### Uptime Kuma - Service Availability Monitoring
@@ -177,9 +209,9 @@ Run `services/monitoring/uptime-kuma/setup_monitors.py` to automatically create/
 
 **Current Integrations:**
 - **Watchtower**: Container update notifications via Discord (✅ Active)
-- **Uptime Kuma**: Service availability alerts (planned)
+- **Uptime Kuma**: Service availability alerts via Apprise Middleware (✅ Active)
+- **Beszel**: Resource threshold alerts via Apprise Middleware (✅ Active)
 - **Cronicle**: Scheduled job results (planned)
-- **Beszel**: Resource threshold alerts (planned)
 
 **Configuration:**
 - Notification URLs defined in `/config/apprise.yml`
@@ -199,12 +231,32 @@ curl -X POST http://localhost:8089/notify/apprise \
   -d '{"title":"Alert","body":"Message","tag":"monitoring"}'
 ```
 
+**Apprise Middleware**:
+
+The middleware service transforms monitoring webhooks into Apprise-compatible format:
+- **URL**: `http://apprise-middleware:5000`
+- **Endpoints**:
+  - `POST /webhook/uptime-kuma` - Uptime Kuma webhook receiver
+  - `POST /webhook/beszel` - Beszel webhook receiver
+  - `GET /health` - Health check
+- **Features**:
+  - Automatic severity detection (Beszel)
+  - Rich markdown formatting for Discord
+  - Emoji status indicators
+  - Comprehensive error handling and logging
+
 **See [apprise/README.md](apprise/README.md) for complete Apprise documentation including:**
 - Discord and Telegram setup guides
 - YAML configuration examples
 - Integration examples for Cronicle, Watchtower, Uptime Kuma
 - API endpoints and usage
 - Troubleshooting guide
+
+**See [apprise/middleware/README.md](apprise/middleware/README.md) for complete middleware documentation including:**
+- Webhook payload formats and transformations
+- Severity detection rules
+- Setup instructions for each monitoring service
+- Testing and troubleshooting guides
 
 ## Resources
 
