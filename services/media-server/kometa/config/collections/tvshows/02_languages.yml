@@ -39,39 +39,3 @@ collections:
     visible_home: false
     visible_shared: false
     visible_library: false
-
-
-  # #### Release
-  # Recently Released Episodes
-  # Useful for series we are following and watching week after week (not a lot)
-  # - show episodes released since last week and not watched
-  # - should show one episode per serie max
-  
-  # Recently Released Series
-  # - released this month vs sorted by release date
-  # - not been watched yet
-
-  # #### Year
-  # Pre-Streaming Shows: # Should not include sitcoms, anime
-  #   sonarr_taglist: tvshows-pre-streaming
-  #   collection_order: added.desc
-  #   sync_mode: sync
-  #   visible_home: true
-  #   visible_shared: true
-  #   visible_library: true
-
-  # ### Type
-  # Miniseries Shows:
-  #   plex_all: true
-  #   filters:
-  #     tmdb_type: miniseries
-  #     genre.not:
-  #       - "Documentary"
-  #       - "Biography"
-  #   collection_order: added.desc
-  #   sync_mode: sync
-  #   visible_home: true
-  #   visible_shared: true
-  #   visible_library: true
-  
-  # HBO Classics
