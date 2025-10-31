@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   profilarr:
-    image: santiagosayshey/profilarr
+    image: santiagosayshey/profilarr:beta
     container_name: profilarr
     networks:
       - main
@@ -10,6 +10,8 @@ services:
       - 6868:6868
     environment:
       - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
       - GIT_USER_NAME=${GIT_USER_NAME}
       - GIT_USER_EMAIL=${GIT_USER_EMAIL}
     volumes:
