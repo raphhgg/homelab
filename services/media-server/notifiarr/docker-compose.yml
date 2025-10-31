@@ -1,0 +1,23 @@
+services:
+  notifiarr:
+    image: golift/notifiarr
+    container_name: notifiarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    ports:
+      - 5454:5454
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/notifiarr:/config
+      - /var/run/utmp:/var/run/utmp
+      - /etc/machine-id:/etc/machine-id
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - main
+
+networks:
+  main:
+    external: true
