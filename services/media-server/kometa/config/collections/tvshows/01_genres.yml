@@ -49,7 +49,7 @@ templates:
       any:
         collection: <<tag>> Shows
       sort_by: added.desc
-      limit: 10
+      limit: 15
     label: <<collection_name>> Collection
     sort_title: +010_Recently_Added_In_<<tag>>_Shows
     sync_mode: sync
@@ -153,6 +153,10 @@ collections:
   Supernatural Shows:
     template: { name: Genre, tag: Supernatural-Mystery }
     summary: "Mysteries fueled by the unexplainable, from the otherworldly to the metaphysical."
+
+  Recently Added in Supernatural Shows:
+    template: { name: Recently Added In Genre, tag: Supernatural }
+    summary: "The 10 latest additions in Supernatural & Mystery Genre."
 
   True Crime Shows:
     template: { name: Genre, tag: True-Crime }
