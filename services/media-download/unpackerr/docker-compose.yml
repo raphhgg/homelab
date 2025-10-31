@@ -13,6 +13,8 @@ services:
       - UN_RADARR_0_URL=http://10.10.2.2:7878
       - UN_RADARR_0_API_KEY=${RADARR_API_KEY}
       - UN_LOG_FILE=/downloads/torrents/unpackerr.log
+      - UN_WEBHOOK_0_URL=https://notifiarr.com/api/v1/notification/unpackerr/9ad0041f-77fe-406d-9861-70e5125296c5
+      - UN_WEBHOOK_0_NAME=Notifiarr
     networks:
       - main
     volumes:
