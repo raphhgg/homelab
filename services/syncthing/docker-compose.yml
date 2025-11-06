@@ -17,6 +17,7 @@ services:
     volumes:
       - ${DOCKER_APPDATA_PATH}/syncthing/config:/config
       - ${DOCUMENTS_PATH}/obsidian:/syncthing/obsidian:rw
+      - $HOME/github:/syncthing/github:rw
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
