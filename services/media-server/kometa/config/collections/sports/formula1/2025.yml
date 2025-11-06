@@ -5,7 +5,8 @@ templates:
       type: season
       all:
         title: <<collection_name>>
-    collection_order: season.desc
+      sort_by: season.desc
+    collection_order: custom
     sort_title: +00_Season_<<collection_name>>
     sync_mode: sync
     visible_home: false
@@ -19,7 +20,8 @@ templates:
       all:
         title: <<show>>
         episode_unplayed: true
-    collection_order: season.desc
+      sort_by: season.asc
+    collection_order: custom
     sort_title: +01_Next_Season_Available_<<show>>
     sync_mode: sync
     visible_home: false
@@ -33,7 +35,8 @@ templates:
       all:
         title: <<show>>
         episode_unplayed: true
-    collection_order: season.asc
+      sort_by: season.desc
+    collection_order: custom
     sort_title: +02_Recently_Added_Seasons_<<show>>
     sync_mode: sync
     visible_home: false

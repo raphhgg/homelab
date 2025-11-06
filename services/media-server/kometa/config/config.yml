@@ -62,7 +62,7 @@ libraries:
       assets_for_all: false
       delete_collections:
         configured: false
-        managed: true
+        managed: false
     settings:
       asset_directory:
       - /data/assets/movies
@@ -192,7 +192,7 @@ libraries:
       assets_for_all: false
       delete_collections:
         configured: false
-        managed: true
+        managed: false
     settings:
       asset_directory:
       - /data/assets/tvshows
@@ -269,10 +269,83 @@ libraries:
       asset_directory:
       - /data/assets/sports
 
+    ### SPORTS LIBRARY
+  Sports Dev:
+    report_path: /data/missing/Sports_Dev_report.yml
+    collection_files:
+    - file: /config-repo/collections/sports/formula1/2025.yml
+    metadata_files:
+    # - file: /config-repo/metadata/formula1/2025.yml
+    - url: https://raw.githubusercontent.com/s0len/meta-manager-config/refs/heads/main/metadata-files/formula1-2025.yaml
+
+    # SPORTS OVERLAYS
+    remove_overlays: false
+    reapply_overlays: false
+    overlay_files:
+    - default: resolution
+    - default: audio_codec
+    - default: mediastinger
+    - default: streaming
+    - default: studio
+    - default: video_format
+
+    # SEASON OVERLAYS
+    - default: resolution
+      template_variables:
+        builder_level: season
+    - default: audio_codec
+      template_variables:
+        builder_level: season
+    - default: streaming
+      template_variables:
+        builder_level: season
+    - default: video_format
+      template_variables:
+        builder_level: season
+    - default: network
+      template_variables:
+        builder_level: season
+    - default: streaming
+      template_variables:
+        builder_level: season
+    - default: studio
+      template_variables:
+        builder_level: season
+
+
+    # EPISODE OVERLAYS
+    - default: resolution
+      template_variables:
+        builder_level: episode
+    - default: audio_codec
+      template_variables:
+        builder_level: episode
+    - default: video_format
+      template_variables:
+        builder_level: episode
+    - default: runtimes
+      template_variables:
+        builder_level: episode
+    - default: network
+      template_variables:
+        builder_level: episode
+    - default: streaming
+      template_variables:
+        builder_level: episode
+    - default: studio
+      template_variables:
+        builder_level: episode
+
+    operations:
+      assets_for_all: true
+    settings:
+      asset_directory:
+      - /data/assets/sports-dev
+
 playlist_files:
 - default: playlist
   template_variables:
-    libraries: Movies, TV Shows, Sports
+    libraries: Movies, TV Shows, Sports, Sports Dev
 
 settings:
   run_order:

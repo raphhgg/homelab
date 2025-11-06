@@ -2,7 +2,7 @@ templates:
   Franchise:
     letterboxd_list_details: <<list_url>>
     sync_mode: sync
-    sort_title: +060_<<tag>>_Letterboxd_Franchises_Lists
+    sort_title: +060_<<tag>>_Letterboxd_Franchise_Movies
     letterboxd_description: <<list_url>>
     collection_order: custom
     visible_home: false
@@ -19,3 +19,14 @@ collections:
     template:
       name: Franchise
       list_url: https://letterboxd.com/raphh11/list/franchise-scream/
+
+  Mission Impossible Movies:
+    plex_search:
+      all:
+        title: "Mission Impossible"
+    sort_title: +060_Mission_Impossible_Franchise_Movies
+    collection_order: year.asc
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+    

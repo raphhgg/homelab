@@ -5,6 +5,10 @@ templates:
     plex_search:
       any:
         decade: <<tag>>
+        label.isnot: 
+          - radarr Documentary-Music
+          - radarr Documentary-Sport
+          - radarr Documentary-Other
       sort_by: release.desc
     label: <<collection_name>> Collection
     sort_title: +030_<<tag>>_Movies

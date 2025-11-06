@@ -13,4 +13,22 @@ collections:
     visible_shared: false
     visible_library: false
 
+
+  4K HDR10+ or DV To Watch:
+    plex_search:
+      any:
+        hdr: true
+        dovi: true
+        resolution: 4K
+    filters:
+      filepath.regex: 'HDR10\+|HDR10P|DV|Dolby[ ._-]?Vision'
+      resolution: 4K
+    collection_order: added.asc
+    sort_title: +041_4K_HDR+_DV_Quality_Movies_To_Watch_Collection
+    sync_mode: sync
+    visible_home: true
+    visible_shared: false
+    visible_library: false
+
   # Low Quality (720p and under?)
+  # A24 Movies?
