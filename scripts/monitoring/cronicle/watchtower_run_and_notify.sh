@@ -158,6 +158,9 @@ get_changelog() {
         louislam/uptime-kuma*)
             echo "https://github.com/louislam/uptime-kuma/releases"
             ;;
+        s0len/Sports-Organizer*)
+            echo "https://github.com/s0len/Sports-Organizer/releases"
+            ;;
         *)
             echo ""
             ;;
