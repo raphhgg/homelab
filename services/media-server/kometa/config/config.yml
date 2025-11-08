@@ -15,7 +15,7 @@ libraries:
 
     # MOVIE OVERLAYS 
     remove_overlays: false
-    reapply_overlays: true
+    reapply_overlays: false
     overlay_files:
     - default: resolution
     - default: audio_codec
@@ -44,14 +44,7 @@ libraries:
     - default: streaming
     - default: studio
     - default: video_format
-    - default: languages
-      template_variables:
-        languages:
-        - en
-        - fr
-        use_subtitles: true
-        style: half
-        vertical_position: top3
+    
 
     # MOVIE OPERATIONS
     operations:
@@ -86,7 +79,6 @@ libraries:
     overlay_files:
     - default: resolution
     - default: audio_codec
-    - default: mediastinger
     - default: runtimes
       template_variables:
         builder_level: episode
@@ -111,14 +103,6 @@ libraries:
         horizontal_position: right
     - default: streaming
     - default: video_format
-    - default: languages
-      template_variables:
-        languages:
-        - en
-        - fr
-        use_subtitles: true
-        style: half
-        vertical_position: top3
 
     # SEASON OVERLAYS
     - default: resolution
@@ -127,20 +111,9 @@ libraries:
     - default: audio_codec
       template_variables:
         builder_level: season
-    - default: streaming
-      template_variables:
-        builder_level: season
     - default: video_format
       template_variables:
         builder_level: season
-    - default: languages
-      template_variables:
-        builder_level: season
-        languages:
-        - en
-        - fr
-        use_subtitles: true
-        style: half
 
     # EPISODE OVERLAYS
     - default: resolution
@@ -172,14 +145,6 @@ libraries:
     - default: runtimes
       template_variables:
         builder_level: episode
-    - default: languages
-      template_variables:
-        builder_level: episode
-        languages:
-        - en
-        - fr
-        use_subtitles: true
-        style: half
 
     # TV SHOWS OPERATIONS
     operations:
@@ -203,15 +168,15 @@ libraries:
     collection_files:
     - file: /config-repo/collections/sports/formula1/2025.yml
     metadata_files:
-    - file: /config-repo/metadata/formula1/2025.yml
+    - url: https://raw.githubusercontent.com/s0len/meta-manager-config/refs/heads/main/metadata-files/formula1-2025.yaml
+    # - file: /config-repo/metadata/formula1/2025.yml
 
     # SPORTS OVERLAYS
     remove_overlays: false
-    reapply_overlays: false
+    reapply_overlays: true
     overlay_files:
     - default: resolution
     - default: audio_codec
-    - default: mediastinger
     - default: streaming
     - default: studio
     - default: video_format
@@ -229,15 +194,6 @@ libraries:
     - default: video_format
       template_variables:
         builder_level: season
-    - default: network
-      template_variables:
-        builder_level: season
-    - default: streaming
-      template_variables:
-        builder_level: season
-    - default: studio
-      template_variables:
-        builder_level: season
 
 
     # EPISODE OVERLAYS
@@ -251,15 +207,6 @@ libraries:
       template_variables:
         builder_level: episode
     - default: runtimes
-      template_variables:
-        builder_level: episode
-    - default: network
-      template_variables:
-        builder_level: episode
-    - default: streaming
-      template_variables:
-        builder_level: episode
-    - default: studio
       template_variables:
         builder_level: episode
 

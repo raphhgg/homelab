@@ -32,9 +32,17 @@ collections:
     template: { name: Genre, tag: Horror }
     summary: "Films designed to evoke fear, tension, and dread through the supernatural, psychological, or visceral."
 
-  Recently Added In Horror:
+  Recently Added in Horror:
     template: { name: Recently Added In Genre, tag: Horror }
     summary: "The 25 latest additions in Horror Genre."
+
+  Drama Movies:
+    template: { name: Genre, tag: Drama }
+    summary: "Films that focus on realistic characters, emotional themes, and personal conflicts, exploring the complexities of human experience and relationships."
+
+  Recently Added in Drama:
+    template: { name: Recently Added In Genre, tag: Drama }
+    summary: "The 25 latest additions in Drama Genre."
 
   True Crime Movies:
     template: { name: Genre, tag: True-Crime }

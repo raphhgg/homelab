@@ -41,13 +41,13 @@ collections:
   2000s Movies:
     template: { name: Decade, tag: 2000 }
 
-  Recently Added In 2000s Movies:
+  Recently Added in 2000s Movies:
     template: { name: Recently Added In Decade, base_collection: 2000s Movies }
 
   90s Movies:
     template: { name: Decade, tag: 1990 }
 
-  Recently Added In 90s Movies:
+  Recently Added in 90s Movies:
     template: { name: Recently Added In Decade, base_collection: 90s Movies }
 
   80s Movies:

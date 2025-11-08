@@ -16,6 +16,8 @@ collections:
   # Genres
   Add Horror Label:
     template: { name: Radarr Tag, tag: Horror }
+  Add Drama Label:
+    template: { name: Radarr Tag, tag: Drama }
   Add True Crime Label:
     template: { name: Radarr Tag, tag: True-Crime }
   Add Live Music Label:
