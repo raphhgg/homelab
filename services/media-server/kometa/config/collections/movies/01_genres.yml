@@ -14,14 +14,14 @@ templates:
     visible_library: false
 
   # Visible in the Recommended sections
-  Recently Added In Genre:
+  Recently Added in Genre:
     smart_filter:
       any:
         collection: <<tag>> Movies
       sort_by: added.desc
       limit: 25
     label: <<collection_name>> Collection
-    sort_title: +012_Recently_Added_In_<<tag>>_Movies
+    sort_title: +012_Recently_Added_in_<<tag>>_Movies
     sync_mode: sync
     visible_home: true
     visible_shared: true
@@ -33,7 +33,7 @@ collections:
     summary: "Films designed to evoke fear, tension, and dread through the supernatural, psychological, or visceral."
 
   Recently Added in Horror:
-    template: { name: Recently Added In Genre, tag: Horror }
+    template: { name: Recently Added in Genre, tag: Horror }
     summary: "The 25 latest additions in Horror Genre."
 
   Drama Movies:
@@ -41,7 +41,7 @@ collections:
     summary: "Films that focus on realistic characters, emotional themes, and personal conflicts, exploring the complexities of human experience and relationships."
 
   Recently Added in Drama:
-    template: { name: Recently Added In Genre, tag: Drama }
+    template: { name: Recently Added in Genre, tag: Drama }
     summary: "The 25 latest additions in Drama Genre."
 
   True Crime Movies:

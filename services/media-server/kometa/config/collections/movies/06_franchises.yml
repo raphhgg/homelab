@@ -10,17 +10,17 @@ templates:
     visible_library: true
 
 collections:
-  The Conjuring Franchise Movies:
+  The Conjuring Franchise:
     template:
       name: Franchise
       list_url: https://letterboxd.com/raphh11/list/franchise-the-conjuring/
 
-  Scream Franchise Movies:
+  Scream Franchise:
     template:
       name: Franchise
       list_url: https://letterboxd.com/raphh11/list/franchise-scream/
 
-  Mission Impossible Movies:
+  Mission Impossible Franchise:
     plex_search:
       all:
         title: "Mission Impossible"
@@ -29,14 +29,3 @@ collections:
     visible_home: false
     visible_shared: false
     visible_library: true
-
-  A24 Movies:
-    plex_search:
-      all:
-        studio: "A24"
-    sort_title: +061_A24_Studio_Movies
-    collection_order: year.desc
-    visible_home: false
-    visible_shared: false
-    visible_library: true
-    

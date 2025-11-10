@@ -3,12 +3,14 @@ templates:
   # Only visible in the Library Tab
   Decade:
     plex_search:
-      any:
+      all:
         decade: <<tag>>
-        label.isnot: 
+        label.not: 
           - radarr Documentary-Music
-          - radarr Documentary-Sport
+          # - radarr Documentary-Sport
           - radarr Documentary-Other
+          - radarr Live-Music
+          - radarr True-Crime
       sort_by: release.desc
     label: <<collection_name>> Collection
     sort_title: +030_<<tag>>_Movies
@@ -18,14 +20,13 @@ templates:
     visible_library: false
 
   # Visible in the Recommended sections
-  Recently Added In Decade:
+  recently_added_in_decade:
     smart_filter:
       any:
         collection: <<base_collection>>
       sort_by: added.desc
-      limit: 25
     label: <<collection_name>> Collection
-    sort_title: +031_Recently_Added_In_<<base_collection>>
+    sort_title: +031_Recently_Added_in_<<base_collection>>
     sync_mode: sync
     visible_home: true
     visible_shared: true
@@ -42,13 +43,13 @@ collections:
     template: { name: Decade, tag: 2000 }
 
   Recently Added in 2000s Movies:
-    template: { name: Recently Added In Decade, base_collection: 2000s Movies }
+    template: { name: recently_added_in_decade, base_collection: 2000s Movies }
 
   90s Movies:
     template: { name: Decade, tag: 1990 }
 
   Recently Added in 90s Movies:
-    template: { name: Recently Added In Decade, base_collection: 90s Movies }
+    template: { name: recently_added_in_decade, base_collection: 90s Movies }
 
   80s Movies:
     template: { name: Decade, tag: 1980 }

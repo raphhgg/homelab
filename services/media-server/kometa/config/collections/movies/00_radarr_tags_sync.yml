@@ -1,4 +1,4 @@
-# Sonar Tag Template
+# Radarr Tag Template
 templates:
   Radarr Tag:
     radarr_taglist: <<tag>>
@@ -8,12 +8,6 @@ templates:
 
 # Add Radarr tags as Labels in Plex
 collections:
-  # Remove Radarr Labels:
-  #   plex_all: true
-  #   item_label.remove: ...
-  #   build_collection: false
-
-  # Genres
   Add Horror Label:
     template: { name: Radarr Tag, tag: Horror }
   Add Drama Label:

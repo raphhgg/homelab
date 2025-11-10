@@ -1,0 +1,40 @@
+templates:
+  letterboxd_ratings_list:
+    letterboxd_list: https://letterboxd.com/raphh11/films/rated/<<rated>>/
+    collection_order: random
+
+collections:
+  Favorites Movies:
+    template:
+      - name: letterboxd_ratings_list
+        rated: 5
+    sort_title: +080_Favorites_Movies_Letterboxd
+    summary: "All movies I rated 5 stars on Letterboxd. \nThe absolute best of the best — films that define my taste, move me every time, and never lose their magic. These are my personal classics, the ones I’ll always come back to."
+    sync_mode: sync
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+
+  Almost Favorites Movies:
+    template:
+      - name: letterboxd_ratings_list
+        rated: 4.5
+    collection_order: random
+    sort_title: +081_Almost_Favorites_Movies_Letterboxd
+    summary: "All movies I rated 4.5 stars on Letterboxd. \nExtraordinary films that come close to perfection. Beautifully made and memorable, and just a step below the all-time greats. These are the movies that almost made the Favorites list."
+    sync_mode: sync
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+
+  Great Movies:
+    template:
+      - name: letterboxd_ratings_list
+        rated: 4
+    collection_order: random
+    sort_title: +082_Great_Movies_Letterboxd
+    summary: "All movies I rated 4 stars on Letterboxd. \nConsistently excellent films that deliver every time. Smart, well-crafted, and very enjoyable — the kind of movies I’d recommend without hesitation."
+    sync_mode: sync
+    visible_home: false
+    visible_shared: false
+    visible_library: true

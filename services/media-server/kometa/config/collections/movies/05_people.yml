@@ -5,7 +5,7 @@ templates:
         director: <<director_name>>
     collection_order: release.desc
     label: <<collection_name>> Collection
-    sort_title: +050_<<director_name>>_Movies
+    sort_title: +050_Director_<<director_name>>_Movies
     sync_mode: sync
     visible_home: false
     visible_shared: false
@@ -17,14 +17,13 @@ templates:
         actor: <<actor_name>>
     collection_order: release.desc
     label: <<collection_name>> Collection
-    sort_title: +051_<<actor_name>>_Movies
+    sort_title: +051_Actor_<<actor_name>>_Movies
     sync_mode: sync
     visible_home: false
     visible_shared: false
     visible_library: false
 
 collections:
-  
   # Directors
   Quentin Tarantino's Movies:
     template: { name: Director, director_name: Quentin Tarantino }
@@ -55,7 +54,6 @@ collections:
   
   David Fincher's Movies:
     template: { name: Director, director_name: David Fincher }
-
 
   # Actors
   Leonardo DiCaprio's Movies:

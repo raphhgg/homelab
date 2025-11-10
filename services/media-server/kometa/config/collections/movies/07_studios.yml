@@ -1,0 +1,11 @@
+collections:
+  A24 Movies:
+    plex_search:
+      all:
+        studio: "A24"
+    sort_title: +070_A24_Studio_Movies
+    collection_order: year.desc
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+    
