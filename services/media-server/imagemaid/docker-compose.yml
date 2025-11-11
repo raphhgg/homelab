@@ -17,7 +17,7 @@ services:
       - OPTIMIZE_DB=True
       - PHOTO_TRANSCODER=True
     volumes:
-      - ${DOCKER_APPDATA_PATH}/kometa/config:/config
+      - ${DOCKER_APPDATA_PATH}/imagemaid/config:/config
       - ${DOCKER_APPDATA_PATH}/plex/config:/plex
     restart: always
     labels:
