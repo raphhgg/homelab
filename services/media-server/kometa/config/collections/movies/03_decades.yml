@@ -1,7 +1,10 @@
+external_templates:
+  - file: /config-repo/collections/templates.yml
+
 templates:
   # Used for Basic Decades Collection
   # Only visible in the Library Tab
-  Decade:
+  decade:
     plex_search:
       all:
         decade: <<tag>>
@@ -13,7 +16,7 @@ templates:
           - radarr True-Crime
       sort_by: release.desc
     label: <<collection_name>> Collection
-    sort_title: +030_<<tag>>_Movies
+    sort_title: +031_<<tag>>_Movies
     sync_mode: sync
     visible_home: false
     visible_shared: false
@@ -26,33 +29,36 @@ templates:
         collection: <<base_collection>>
       sort_by: added.desc
     label: <<collection_name>> Collection
-    sort_title: +031_Recently_Added_in_<<base_collection>>
+    sort_title: +032_Recently_Added_in_<<base_collection>>
     sync_mode: sync
     visible_home: true
     visible_shared: true
     visible_library: true
 
 collections:
+  Decade Collections:
+    template: { name: separator, section_number: "03" }
+
   2020s Movies:
-    template: { name: Decade, tag: 2020 }
+    template: { name: decade, tag: 2020 }
 
   2010s Movies:
-    template: { name: Decade, tag: 2010 }
+    template: { name: decade, tag: 2010 }
 
   2000s Movies:
-    template: { name: Decade, tag: 2000 }
+    template: { name: decade, tag: 2000 }
 
   Recently Added in 2000s Movies:
     template: { name: recently_added_in_decade, base_collection: 2000s Movies }
 
   90s Movies:
-    template: { name: Decade, tag: 1990 }
+    template: { name: decade, tag: 1990 }
 
   Recently Added in 90s Movies:
     template: { name: recently_added_in_decade, base_collection: 90s Movies }
 
   80s Movies:
-    template: { name: Decade, tag: 1980 }
+    template: { name: decade, tag: 1980 }
 
   70s and Before Movies:
     plex_search:
@@ -60,7 +66,7 @@ collections:
         release.before: 01/01/1980
       sort_by: release.desc
     label: 70s and Before Collection
-    sort_title: +030_70s_and_Before_Movies
+    sort_title: +033_70s_and_Before_Movies
     sync_mode: sync
     visible_home: false
     visible_shared: false

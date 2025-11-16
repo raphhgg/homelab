@@ -1,9 +1,15 @@
+external_templates:
+  - file: /config-repo/collections/templates.yml
+
 collections:
+  Studio Collections:
+    template: { name: separator, section_number: "08" }
+
   A24 Movies:
     plex_search:
       all:
         studio: "A24"
-    sort_title: +070_A24_Studio_Movies
+    sort_title: +081_A24_Studio_Movies
     collection_order: year.desc
     visible_home: false
     visible_shared: false

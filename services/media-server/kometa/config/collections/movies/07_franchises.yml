@@ -1,8 +1,11 @@
+external_templates:
+  - file: /config-repo/collections/templates.yml
+
 templates:
   Franchise:
     letterboxd_list_details: <<list_url>>
     sync_mode: sync
-    sort_title: +060_<<tag>>_Letterboxd_Franchise_Movies
+    sort_title: +071_<<tag>>_Letterboxd_Franchise_Movies
     letterboxd_description: <<list_url>>
     collection_order: custom
     visible_home: false
@@ -10,6 +13,9 @@ templates:
     visible_library: true
 
 collections:
+  Franchise Collections:
+    template: { name: separator, section_number: "07" }
+    
   The Conjuring Franchise:
     template:
       name: Franchise
@@ -24,7 +30,7 @@ collections:
     plex_search:
       all:
         title: "Mission Impossible"
-    sort_title: +060_Mission_Impossible_Franchise_Movies
+    sort_title: +071_Mission_Impossible_Franchise_Movies
     collection_order: year.asc
     visible_home: false
     visible_shared: false

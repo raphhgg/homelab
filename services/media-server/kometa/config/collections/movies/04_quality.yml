@@ -1,4 +1,10 @@
+external_templates:
+  - file: /config-repo/collections/templates.yml
+
 collections:
+  Quality Collections:
+    template: { name: separator, section_number: "04" }
+
   4K HDR10+ or DV Movies:
     plex_search:
       all:
@@ -9,7 +15,7 @@ collections:
     filters:
       filepath.regex: 'HDR10\+|HDR10P|DV|Dolby[ ._-]?Vision'
     collection_order: release.desc
-    sort_title: +040_4K_HDR+_DV_Quality_Movies_Collection
+    sort_title: +041_4K_HDR+_DV_Quality_Movies_Collection
     sync_mode: sync
     visible_home: false
     visible_shared: false
@@ -27,7 +33,7 @@ collections:
     filters:
       filepath.regex: 'HDR10\+|HDR10P|DV|Dolby[ ._-]?Vision'
     collection_order: added.desc
-    sort_title: +041_4K_HDR+_DV_Quality_Movies_To_Watch_Collection
+    sort_title: +042_4K_HDR+_DV_Quality_Movies_To_Watch_Collection
     sync_mode: sync
     visible_home: true
     visible_shared: false

@@ -1,16 +1,23 @@
+external_templates:
+  - file: /config-repo/collections/templates.yml
+
 templates:
-  Letterboxd:
+  letterboxd_bestof_list:
     letterboxd_list_details: <<list_url>>
     sync_mode: sync
-    sort_title: +090_<<tag>>_Best_Of_Year_Lists
+    sort_title: +101_Best_Of_Year_<<year>>_Lists
     visible_home: false
     visible_shared: true
     visible_library: true
 
 collections:
+  Best Of Year Collections:
+    template: { name: separator, section_number: "10" }
+
   Best 2024 Movies:
     template:
-      name: Letterboxd
+      name: letterboxd_bestof_list
+      year: 2024
       list_url: https://letterboxd.com/raphh11/list/best-of-2024/
     collection_order: custom
     summary: "Best Movies released in 2024, ranked."

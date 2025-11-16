@@ -12,6 +12,14 @@ collections:
     template: { name: Radarr Tag, tag: Horror }
   Add Drama Label:
     template: { name: Radarr Tag, tag: Drama }
+  Add Thriller Label:
+    template: { name: Radarr Tag, tag: Thriller }
+  Add Mystery Label:
+    template: { name: Radarr Tag, tag: Mystery }
+  Add Mafia Label:
+    template: { name: Radarr Tag, tag: Mafia }
+  Add Sci-Fi Label:
+    template: { name: Radarr Tag, tag: Sci-Fi }
   Add True Crime Label:
     template: { name: Radarr Tag, tag: True-Crime }
   Add Live Music Label:

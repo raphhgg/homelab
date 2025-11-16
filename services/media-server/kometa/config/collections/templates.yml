@@ -1,0 +1,5 @@
+templates:
+  separator:
+    blank_collection: true
+    sync_mode: sync
+    sort_title: +<<section_number>>0_<<collection_name>>_Separator

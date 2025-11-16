@@ -1,16 +1,26 @@
+external_templates:
+  - file: /config-repo/collections/templates.yml
+
 templates:
   letterboxd_ratings_list:
     letterboxd_list: https://letterboxd.com/raphh11/films/rated/<<rated>>/
+    item_user_rating: <<user_rating>>
     collection_order: random
+    build_collection: false
 
 collections:
+  Tier Collections:
+    template: { name: separator, section_number: "09" }
+
   Favorites Movies:
     template:
       - name: letterboxd_ratings_list
-        rated: 5
-    sort_title: +080_Favorites_Movies_Letterboxd
+        rated: 5.0
+        user_rating: 10
+    sort_title: +091_Favorites_Movies_Letterboxd
     summary: "All movies I rated 5 stars on Letterboxd. \nThe absolute best of the best — films that define my taste, move me every time, and never lose their magic. These are my personal classics, the ones I’ll always come back to."
     sync_mode: sync
+    build_collection: true
     visible_home: false
     visible_shared: false
     visible_library: true
@@ -19,10 +29,12 @@ collections:
     template:
       - name: letterboxd_ratings_list
         rated: 4.5
+        user_rating: 9
     collection_order: random
-    sort_title: +081_Almost_Favorites_Movies_Letterboxd
+    sort_title: +092_Almost_Favorites_Movies_Letterboxd
     summary: "All movies I rated 4.5 stars on Letterboxd. \nExtraordinary films that come close to perfection. Beautifully made and memorable, and just a step below the all-time greats. These are the movies that almost made the Favorites list."
     sync_mode: sync
+    build_collection: true
     visible_home: false
     visible_shared: false
     visible_library: true
@@ -30,11 +42,55 @@ collections:
   Great Movies:
     template:
       - name: letterboxd_ratings_list
-        rated: 4
+        rated: 4.0
+        user_rating: 8
     collection_order: random
-    sort_title: +082_Great_Movies_Letterboxd
+    sort_title: +093_Great_Movies_Letterboxd
     summary: "All movies I rated 4 stars on Letterboxd. \nConsistently excellent films that deliver every time. Smart, well-crafted, and very enjoyable — the kind of movies I’d recommend without hesitation."
     sync_mode: sync
+    build_collection: true
     visible_home: false
     visible_shared: false
     visible_library: true
+
+  3.5_Rated:
+    template:
+    - name: letterboxd_ratings_list
+      rated: 3.5
+      user_rating: 7
+  
+  3_Rated:
+    template:
+    - name: letterboxd_ratings_list
+      rated: 3.0
+      user_rating: 6
+  
+  2.5_Rated:
+    template:
+    - name: letterboxd_ratings_list
+      rated: 2.5
+      user_rating: 5
+  
+  2_Rated:
+    template:
+    - name: letterboxd_ratings_list
+      rated: 2.0
+      user_rating: 4
+  
+  1.5_Rated:
+    template:
+    - name: letterboxd_ratings_list
+      rated: 1.5
+      user_rating: 3
+
+  1_Rated:
+    template:
+    - name: letterboxd_ratings_list
+      rated: 1.0
+      user_rating: 2
+  
+  0.5_Rated:
+    template:
+    - name: letterboxd_ratings_list
+      rated: 0.5
+      user_rating: 1
