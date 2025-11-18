@@ -1,35 +1,27 @@
-# Radarr Tag Template
-templates:
-  Radarr Tag:
-    radarr_taglist: <<tag>>
-    item_label: radarr <<tag>>
-    sync_mode: sync
-    build_collection: false
+external_templates:
+  - file: /config-repo/collections/templates.yml
 
-# Add Radarr tags as Labels in Plex
 collections:
   Add Horror Label:
-    template: { name: Radarr Tag, tag: Horror }
+    template: { name: radarr_tag, tag: Horror }
   Add Drama Label:
-    template: { name: Radarr Tag, tag: Drama }
+    template: { name: radarr_tag, tag: Drama }
+  Add Comedy Label:
+    template: { name: radarr_tag, tag: Comedy }
   Add Thriller Label:
-    template: { name: Radarr Tag, tag: Thriller }
+    template: { name: radarr_tag, tag: Thriller }
   Add Mystery Label:
-    template: { name: Radarr Tag, tag: Mystery }
+    template: { name: radarr_tag, tag: Mystery }
   Add Mafia Label:
-    template: { name: Radarr Tag, tag: Mafia }
+    template: { name: radarr_tag, tag: Mafia }
   Add Sci-Fi Label:
-    template: { name: Radarr Tag, tag: Sci-Fi }
+    template: { name: radarr_tag, tag: Sci-Fi }
   Add True Crime Label:
-    template: { name: Radarr Tag, tag: True-Crime }
-  Add Live Music Label:
-    template: { name: Radarr Tag, tag: Live-Music }
+    template: { name: radarr_tag, tag: True-Crime }
   Add Documentary Label:
-    template: { name: Radarr Tag, tag: Documentary-Other }
+    template: { name: radarr_tag, tag: Documentary }
     plex_search:
       all:
         title: Europa
-  Add Documentary Music Label:
-    template: { name: Radarr Tag, tag: Documentary-Music }
   Add Documentary Sport Label:
-    template: { name: Radarr Tag, tag: Documentary-Sport }
+    template: { name: radarr_tag, tag: Documentary-Sport }

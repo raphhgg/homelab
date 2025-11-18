@@ -9,65 +9,68 @@ templates:
       all:
         decade: <<tag>>
         label.not: 
-          - radarr Documentary-Music
-          # - radarr Documentary-Sport
+          - radarr Documentary
           - radarr Documentary-Other
-          - radarr Live-Music
           - radarr True-Crime
       sort_by: release.desc
-    label: <<collection_name>> Collection
-    sort_title: +031_<<tag>>_Movies
+    label: <<collection_name>>
+    sort_title: +031_Decade_<<tag>>_Movies
     sync_mode: sync
     visible_home: false
     visible_shared: false
     visible_library: false
 
-  # Visible in the Recommended sections
-  recently_added_in_decade:
-    smart_filter:
+  released_before:
+    plex_search:
       any:
-        collection: <<base_collection>>
-      sort_by: added.desc
-    label: <<collection_name>> Collection
-    sort_title: +032_Recently_Added_in_<<base_collection>>
+        release.before: 01/01/<<tag>>
+      sort_by: release.desc
+    label: <<collection_name>>
+    sort_title: +031_Decade_+Released_Before_<<tag>>
     sync_mode: sync
-    visible_home: true
-    visible_shared: true
-    visible_library: true
+    visible_home: false
+    visible_shared: false
+    visible_library: false
 
 collections:
   Decade Collections:
     template: { name: separator, section_number: "03" }
 
-  2020s Movies:
+  2020s Collection:
     template: { name: decade, tag: 2020 }
 
-  2010s Movies:
+  2010s Collection:
     template: { name: decade, tag: 2010 }
 
-  2000s Movies:
+  Recently Added in 2010s Collection:
+    template:
+    - name: recently_added_in
+      section_number: "03"
+      key: Decade
+      value: 2010s
+
+  2000s Collection:
     template: { name: decade, tag: 2000 }
 
-  Recently Added in 2000s Movies:
-    template: { name: recently_added_in_decade, base_collection: 2000s Movies }
+  Recently Added in 2000s Collection:
+    template:
+    - name: recently_added_in
+      section_number: "03"
+      key: Decade
+      value: 2000s
 
-  90s Movies:
+  90s Collection:
     template: { name: decade, tag: 1990 }
 
-  Recently Added in 90s Movies:
-    template: { name: recently_added_in_decade, base_collection: 90s Movies }
+  Recently Added in 90s Collection:
+    template:
+    - name: recently_added_in
+      section_number: "03"
+      key: Decade
+      value: 90s
 
-  80s Movies:
+  80s Collection:
     template: { name: decade, tag: 1980 }
 
-  70s and Before Movies:
-    plex_search:
-      any:
-        release.before: 01/01/1980
-      sort_by: release.desc
-    label: 70s and Before Collection
-    sort_title: +033_70s_and_Before_Movies
-    sync_mode: sync
-    visible_home: false
-    visible_shared: false
-    visible_library: false
+  70s and Before Collection:
+    template: { name: released_before, tag: 1980 }

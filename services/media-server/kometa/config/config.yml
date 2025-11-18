@@ -9,26 +9,33 @@ libraries:
     - file: /config-repo/collections/movies/02_languages.yml
     - file: /config-repo/collections/movies/03_decades.yml
     - file: /config-repo/collections/movies/04_quality.yml
-    - file: /config-repo/collections/movies/05_people.yml
-    - file: /config-repo/collections/movies/06_franchises.yml
-    - file: /config-repo/collections/movies/07_studios.yml
-    - file: /config-repo/collections/movies/08_letterboxd_tiers.yml
-    - file: /config-repo/collections/movies/09_letterboxd_bestof_year.yml
+    - file: /config-repo/collections/movies/05_directors.yml
+    - file: /config-repo/collections/movies/06_actors.yml
+    - file: /config-repo/collections/movies/07_franchises.yml
+    - file: /config-repo/collections/movies/08_studios.yml
+    - file: /config-repo/collections/movies/09_letterboxd_tiers.yml
+    - file: /config-repo/collections/movies/10_letterboxd_bestof_year.yml
 
     # MOVIE OVERLAYS 
     remove_overlays: false
     reapply_overlays: false
     overlay_files:
     - default: resolution
-    - default: audio_codec
-    - default: mediastinger
     - default: runtimes
+      template_variables:
+        text: ""
+        vertical_align: bottom
+        vertical_offset: 30%
+        horizontal_align: right
+        back_width: 300
+        font_size: 40
     - default: ratings
       template_variables:
         rating1: user
-        rating1_image: rt_tomato
-        rating1_font: /config-repo/custom_fonts/Adlib.ttf
-        rating1_font_size: 63
+        rating1_image: star
+        rating1_font: /config-repo/custom_fonts/Impact.ttf
+        rating1_font_size: 70
+        rating1_style: '/'
 
         rating2: critic
         rating2_image: imdb
@@ -43,14 +50,21 @@ libraries:
 
         horizontal_position: right
     - default: network
+      template_variables:
+        vertical_align: top
+        horizontal_align: center
     - default: streaming
-    - default: studio
-    - default: video_format
-    
+      template_variables:
+        vertical_align: top
+        horizontal_align: center
+    # - default: studio
+    #   template_variables:
+    #     vertical_align: top
+    #     horizontal_align: center
+
 
     # MOVIE OPERATIONS
     operations:
-      mass_user_rating_update: mdb_tomatoes
       mass_critic_rating_update: imdb
       mass_audience_rating_update: mdb_letterboxd
       split_duplicates: false
@@ -60,7 +74,7 @@ libraries:
         managed: false
     settings:
       asset_directory:
-      - /data/assets/movies
+      - /data/assets
 
   ### TV SHOWS LIBRARY ###
   TV Shows:
@@ -80,11 +94,6 @@ libraries:
     reapply_overlays: false
     overlay_files:
     - default: resolution
-    - default: audio_codec
-    - default: runtimes
-      template_variables:
-        builder_level: episode
-      font: /config-repo/custom_fonts/Inter-Bold.ttf
     - default: ratings
       template_variables:
         rating1: user
@@ -104,24 +113,19 @@ libraries:
 
         horizontal_position: right
     - default: streaming
-    - default: video_format
+      template_variables:
+        vertical_align: top
+        horizontal_align: center
+
 
     # SEASON OVERLAYS
     - default: resolution
       template_variables:
         builder_level: season
-    - default: audio_codec
-      template_variables:
-        builder_level: season
-    - default: video_format
-      template_variables:
-        builder_level: season
+
 
     # EPISODE OVERLAYS
     - default: resolution
-      template_variables:
-        builder_level: episode
-    - default: audio_codec
       template_variables:
         builder_level: episode
     - default: ratings
@@ -130,23 +134,17 @@ libraries:
         rating1_image: imdb
         rating1_font: /config-repo/custom_fonts/Impact.ttf
         rating1_font_size: 70
-
-        rating2: audience
-        rating2_image: tmdb
-        rating2_font: /config-repo/custom_fonts/Avenir_95_Black.ttf
-        rating2_font_size: 70
-
+        rating1_addon_position: left
+        
+        vertical_align: bottom
         horizontal_position: right
-        builder_level: episode
-    - default: video_format
-      template_variables:
-        builder_level: episode
-    - default: episode_info
-      template_variables:
         builder_level: episode
     - default: runtimes
       template_variables:
         builder_level: episode
+        text: ""
+        horizontal_align: center
+        back_width: 300
 
     # TV SHOWS OPERATIONS
     operations:
@@ -154,7 +152,6 @@ libraries:
       mass_critic_rating_update: imdb
       mass_audience_rating_update: tmdb
       mass_episode_critic_rating_update: imdb
-      mass_episode_audience_rating_update: tmdb
       split_duplicates: false
       assets_for_all: false
       delete_collections:
@@ -162,7 +159,20 @@ libraries:
         managed: false
     settings:
       asset_directory:
-      - /data/assets/tvshows
+      - /data/assets
+
+  ### MUSIC LIBRARY ###
+  Music:
+    report_path: /data/missing/Movies_report.yml
+    collection_files:
+    - file: /config-repo/collections/music/00_radarr_tags_sync.yml
+    - file: /config-repo/collections/music/01_genres.yml
+
+    operations:
+      assets_for_all: true
+    settings:
+      asset_directory:
+      - /data/assets
 
   ### SPORTS LIBRARY
   Sports:
@@ -178,22 +188,9 @@ libraries:
     reapply_overlays: false
     overlay_files:
     - default: resolution
-    - default: audio_codec
-    - default: streaming
-    - default: studio
-    - default: video_format
 
     # SEASON OVERLAYS
     - default: resolution
-      template_variables:
-        builder_level: season
-    - default: audio_codec
-      template_variables:
-        builder_level: season
-    - default: streaming
-      template_variables:
-        builder_level: season
-    - default: video_format
       template_variables:
         builder_level: season
 
@@ -202,21 +199,18 @@ libraries:
     - default: resolution
       template_variables:
         builder_level: episode
-    - default: audio_codec
-      template_variables:
-        builder_level: episode
-    - default: video_format
-      template_variables:
-        builder_level: episode
     - default: runtimes
       template_variables:
         builder_level: episode
+        text: ""
+        horizontal_align: center
+        back_width: 300
 
     operations:
       assets_for_all: true
     settings:
       asset_directory:
-      - /data/assets/sports
+      - /data/assets
 
 
 playlist_files:

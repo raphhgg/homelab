@@ -1,102 +1,135 @@
 external_templates:
   - file: /config-repo/collections/templates.yml
 
-templates:
-  # Used for Basic Genre Collection - from Radarr's root folders (autotags)
-  # Only visible in the Library Tab
-  genre:
-    plex_search:
-      all:
-        label: Radarr <<tag>>
-    collection_order: year.desc
-    label: <<collection_name>> Collection
-    sort_title: +011_<<tag>>_Movies
-    sync_mode: sync
-    visible_home: false
-    visible_shared: false
-    visible_library: false
-
-  # Visible in the Recommended sections
-  recently_added_in_genre:
-    smart_filter:
-      any:
-        collection: <<tag>> Movies
-      sort_by: added.desc
-    label: <<collection_name>> Collection
-    sort_title: +012_Recently_Added_in_<<tag>>_Movies
-    sync_mode: sync
-    visible_home: true
-    visible_shared: true
-    visible_library: true
-
 collections:
   Genre Collections:
     template: { name: separator, section_number: "01" }
 
-  Horror Movies:
-    template: { name: genre, tag: Horror }
+  Horror Collection:
+    template:
+    - name: genre
+      section_number: "01"
+      key: Radarr
+      value: Horror
     summary: "Films designed to evoke fear, tension, and dread through the supernatural, psychological, or visceral."
 
   Recently Added in Horror:
-    template: { name: recently_added_in_genre, tag: Horror }
-    summary: "The latest additions in Horror Genre."
+    template:
+    - name: recently_added_in
+      section_number: "01"
+      key: Genre
+      value: Horror
 
-  Drama Movies:
-    template: { name: genre, tag: Drama }
+  Drama Collection:
+    template:
+    - name: genre
+      section_number: "01"
+      key: Radarr
+      value: Drama
     summary: "Films that focus on realistic characters, emotional themes, and personal conflicts, exploring the complexities of human experience and relationships."
 
   Recently Added in Drama:
-    template: { name: recently_added_in_genre, tag: Drama }
-    summary: "The latest additions in Drama Genre."
+    template:
+    - name: recently_added_in
+      section_number: "01"
+      key: Genre
+      value: Drama
+  
+  Comedy Collection:
+    template:
+    - name: genre
+      section_number: "01"
+      key: Radarr
+      value: Comedy
+    summary: "Films that use humor, wit, and playful situations to entertain, uplift, and make audiences laugh at life’s quirks and absurdities."
 
-  Thriller Movies:
-    template: { name: genre, tag: Thriller }
+  Recently Added in Comedy:
+    template:
+    - name: recently_added_in
+      section_number: "01"
+      key: Genre
+      value: Comedy
+
+  Thriller Collection:
+    template:
+    - name: genre
+      section_number: "01"
+      key: Radarr
+      value: Thriller
     summary: "Films that build suspense and excitement through high-stakes situations, twists, and psychological tension, keeping viewers on edge until the very end."
 
   Recently Added in Thriller:
-    template: { name: recently_added_in_genre, tag: Thriller }
-    summary: "The latest additions in Thriller Genre."
+    template:
+    - name: recently_added_in
+      section_number: "01"
+      key: Genre
+      value: Thriller
   
-  Mystery Movies:
-    template: { name: genre, tag: Mystery }
+  Mystery Collection:
+    template:
+    - name: genre
+      section_number: "01"
+      key: Radarr
+      value: Mystery
     summary: "Films centered on puzzles, secrets, or crimes, where clues unfold gradually as characters—and viewers—work to uncover the truth."
 
   Recently Added in Mystery:
-    template: { name: recently_added_in_genre, tag: Mystery }
-    summary: "The latest additions in Mystery Genre."
+    template:
+    - name: recently_added_in
+      section_number: "01"
+      key: Genre
+      value: Mystery
   
-  Mafia Movies:
-    template: { name: genre, tag: Mafia }
+  Mafia Collection:
+    template:
+    - name: genre
+      section_number: "01"
+      key: Radarr
+      value: Mafia
     summary: "Films that delve into the world of organized crime, following mob families, power struggles, and codes of loyalty—and the violent consequences when those codes are broken."
 
   Recently Added in Mafia:
-    template: { name: recently_added_in_genre, tag: Mafia }
-    summary: "The latest additions in Mafia Genre."
+    template:
+    - name: recently_added_in
+      section_number: "01"
+      key: Genre
+      value: Mafia
 
-  Sci-Fi Movies:
-    template: { name: genre, tag: Sci-Fi }
+  Sci-Fi Collection:
+    template:
+    - name: genre
+      section_number: "01"
+      key: Radarr
+      value: Sci-Fi
     summary: "Films that explore imaginative futures, advanced technology, space, or alternate realities, using scientific ideas to ask big ‘what if?’ questions about humanity and the universe."
 
   Recently Added in Sci-Fi:
-    template: { name: recently_added_in_genre, tag: Sci-Fi }
-    summary: "The latest additions in Sci-Fi Genre."
+    template:
+    - name: recently_added_in
+      section_number: "01"
+      key: Genre
+      value: Sci-Fi
 
-  True Crime Movies:
-    template: { name: genre, tag: True-Crime }
+  True Crime Collection:
+    template:
+    - name: genre
+      section_number: "01"
+      key: Radarr
+      value: True-Crime
     summary: "Documentaries based on real criminal cases and investigations"
 
-  Live Music Movies:
-    template: { name: genre, tag: Live-Music }
-    summary: "Concert films and performances capturing artists and bands playing live."
-
-  Documentary Movies:
-    template: { name: genre, tag: Documentary-Other }
+  Documentary Collection:
+    template:
+    - name: genre
+      section_number: "01"
+      key: Radarr
+      value: Documentary
     summary: "Nonfiction films exploring real events, people, and ideas with factual storytelling."
 
-  Music Documentary Movies:
-    template: { name: genre, tag: Documentary-Music }
-    summary: "Documentaries focused on musicians, music history, and cultural impact of sound."
-
-  Sport Documentary Movies:
-    template: { name: genre, tag: Documentary-Sport }
+  Sport Documentary Collection:
+    template:
+    - name: genre
+      section_number: "01"
+      key: Radarr
+      value: Documentary-Sport
     summary: "Documentaries that follow athletes, teams, and iconic sporting moments."

@@ -18,34 +18,34 @@ collections:
   Director Collections:
     template: { name: separator, section_number: "05" }
 
-  Quentin Tarantino's Movies:
+  Quentin Tarantino Collection:
     template: { name: director, director_name: Quentin Tarantino }
 
-  Christopher Nolan's Movies:
+  Christopher Nolan Collection:
     template: { name: director, director_name: Christopher Nolan }
 
-  Martin Scorsese's Movies:
+  Martin Scorsese Collection:
     template: { name: director, director_name: Martin Scorsese }
   
-  Brian De Palma's Movies:
+  Brian De Palma Collection:
     template: { name: director, director_name: Brian De Palma }
   
-  Ridley Scott's Movies:
+  Ridley Scott Collection:
     template: { name: director, director_name: Ridley Scott }
   
-  Paul Thomas Anderson's Movies:
+  Paul Thomas Anderson Collection:
     template: { name: director, director_name: Paul Thomas Anderson }
   
-  Denis Villeneuve's Movies:
+  Denis Villeneuve Collection:
     template: { name: director, director_name: Denis Villeneuve }
 
-  Stanley Kubrick's Movies:
+  Stanley Kubrick Collection:
     template: { name: director, director_name: Stanley Kubrick }
   
-  David Cronenberg's Movies:
+  David Cronenberg Collection:
     template: { name: director, director_name: David Cronenberg }
   
-  David Fincher's Movies:
+  David Fincher Collection:
     template: { name: director, director_name: David Fincher }
   
 

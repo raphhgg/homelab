@@ -16,17 +16,17 @@ collections:
   Franchise Collections:
     template: { name: separator, section_number: "07" }
     
-  The Conjuring Franchise:
+  The Conjuring Collection:
     template:
       name: Franchise
       list_url: https://letterboxd.com/raphh11/list/franchise-the-conjuring/
 
-  Scream Franchise:
+  Scream Collection:
     template:
       name: Franchise
       list_url: https://letterboxd.com/raphh11/list/franchise-scream/
 
-  Mission Impossible Franchise:
+  Mission Impossible Collection:
     plex_search:
       all:
         title: "Mission Impossible"

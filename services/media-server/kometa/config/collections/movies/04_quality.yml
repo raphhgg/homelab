@@ -1,42 +1,36 @@
 external_templates:
   - file: /config-repo/collections/templates.yml
 
-collections:
-  Quality Collections:
-    template: { name: separator, section_number: "04" }
-
-  4K HDR10+ or DV Movies:
+templates:
+  quality_4K_hdr10plus_dv:
+    optional:
+      - unplayed
     plex_search:
       all:
         any:
           hdr: true
           dovi: true
         resolution: 4K
+        unplayed: <<unplayed>>
     filters:
       filepath.regex: 'HDR10\+|HDR10P|DV|Dolby[ ._-]?Vision'
+    label: quality_4K_hdr10plus_dv
     collection_order: release.desc
-    sort_title: +041_4K_HDR+_DV_Quality_Movies_Collection
     sync_mode: sync
     visible_home: false
     visible_shared: false
     visible_library: false
 
+collections:
+  Quality Collections:
+    template: { name: separator, section_number: "04" }
 
-  4K HDR10+ or DV To Watch:
-    plex_search:
-      all:
-        any:
-          hdr: true
-          dovi: true
-        resolution: 4K
-        unplayed: true
-    filters:
-      filepath.regex: 'HDR10\+|HDR10P|DV|Dolby[ ._-]?Vision'
-    collection_order: added.desc
-    sort_title: +042_4K_HDR+_DV_Quality_Movies_To_Watch_Collection
-    sync_mode: sync
-    visible_home: true
-    visible_shared: false
-    visible_library: false
+  4K HDR10+ or DV Collection:
+    template: { name: quality_4K_hdr10plus_dv }
+    sort_title: +041_Quality_4K_HDR10+_DV_Collection
+
+  4K HDR10+ or DV Unplayed:
+    template: { name: quality_4K_hdr10plus_dv, unplayed: true }
+    sort_title: +042_Quality_4K_HDR10+_DV_To_Watch_Collection
 
   # Low Quality (720p and under?)

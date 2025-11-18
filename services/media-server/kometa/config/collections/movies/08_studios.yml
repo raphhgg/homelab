@@ -5,7 +5,7 @@ collections:
   Studio Collections:
     template: { name: separator, section_number: "08" }
 
-  A24 Movies:
+  A24 Collection:
     plex_search:
       all:
         studio: "A24"

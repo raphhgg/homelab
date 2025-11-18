@@ -5,46 +5,34 @@ templates:
   language:
     plex_all: true
     filters:
-      original_language: <<original_language>>
-      label.not: 
-          - radarr Documentary-Music
-    collection_order: year.desc
-    label: <<collection_name>> Collection
+      original_language: <<original_languages>>
+    label: <<collection_name>>
     sort_title: +021_Language_<<collection_name>>
     sync_mode: sync
     visible_home: false
     visible_shared: false
     visible_library: false
-
-  # not_language
+  
+  not_language:
+    plex_all: true
+    filters:
+      original_language.not: <<excluded_languages>>
+    label: <<collection_name>>
+    sort_title: +022_Not_Language_<<collection_name>>
+    sync_mode: sync
+    visible_home: false
+    visible_shared: false
+    visible_library: false
 
 collections:
   Language Collections:
     template: { name: separator, section_number: "02" }
 
-  Non-English Movies:
-    plex_all: true
-    filters:
-      original_language.not: en,ja,ko,th,fr # Remove languages already in specific collections
-    collection_order: year.desc
-    label: <<collection_name>> Collection
-    sort_title: +022_Language_Non-English_Movies
-    sync_mode: sync
-    visible_home: false
-    visible_shared: false
-    visible_library: false
-  
-  French Movies:
-    template: { name: language, original_language: fr }
-  
-  Asian Movies:
-    plex_all: true
-    filters:
-      original_language: ja,ko,th
-    collection_order: year.desc
-    label: <<collection_name>> Collection
-    sort_title: +023_Language_Asian_Movies
-    sync_mode: sync
-    visible_home: false
-    visible_shared: false
-    visible_library: false
+  French Collection:
+    template: { name: language, original_languages: "fr" }
+
+  Asian Collection:
+    template: { name: language, original_languages: "ja,ko,th" }
+
+  Non-English Collection:
+    template: { name: not_language, excluded_languages: "en,fr,ja,ko,th" }
