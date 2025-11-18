@@ -13,6 +13,9 @@ collections:
   #   item_label.remove: sonarr_anime
   #   build_collection: false
 
+  Add AV1 Label:
+    template: { name: Sonarr Tag, tag: av1 }
+    
   # Genres
   Add Favorite Label:
     template: { name: Sonarr Tag, tag: Favorite }

@@ -1,57 +1,54 @@
+external_templates:
+  - file: /config-repo/collections/templates.yml
+
 templates:
   # Used for Basic Genre Collection - from Sonarr's root folders (autotags)
   # Only visible in the Library Tab
-  Genre:
+  genre:
     plex_search:
       all:
         label: Sonarr <<tag>>
     collection_order: year.desc
     label: <<collection_name>> Collection
-    sort_title: +010_<<tag>>_Shows
+    sort_title: +011_<<tag>>_Shows
     sync_mode: sync
     visible_home: false
     visible_shared: false
     visible_library: false
 
   # Only used for Sitcom sub-category
-  Pre Streaming:
+  pre_streaming:
     smart_filter:
       all:
         collection: <<parent_collection_name>>
         release.before: 2014-01-01
       sort_by: year.desc
-    sort_title: +010_<<parent_collection_name>>_<<collection_name>>
+    sort_title: +011_<<parent_collection_name>>_<<collection_name>>
     visible_home: false
     visible_shared: false
     visible_library: false
   
   # Only used for Sitcom sub-category
-  Post Streaming:
+  post_streaming:
     smart_filter:
       all:
         collection: <<parent_collection_name>>
         release.after: 2014-01-01
       sort_by: year.desc
-    sort_title: +010_<<parent_collection_name>>_<<collection_name>>
+    sort_title: +011_<<parent_collection_name>>_<<collection_name>>
     visible_home: false
     visible_shared: false
     visible_library: false
 
-  # Not working
-  Separator:
-    smart_label: random
-    sync_mode: sync
-    imdb_id: tt0411008
-  
   # Visible in the Recommended sections
-  Recently Added In Genre:
+  recently_added_in_genre:
     smart_filter:
       any:
         collection: <<tag>> Shows
       sort_by: added.desc
       limit: 15
     label: <<collection_name>> Collection
-    sort_title: +010_Recently_Added_In_<<tag>>_Shows
+    sort_title: +012_Recently_Added_In_<<tag>>_Shows
     sync_mode: sync
     visible_home: true # weekly(wednesday)
     visible_shared: true # weekly(wednesday)
@@ -67,97 +64,95 @@ templates:
     #     audience_rating.gte: 7.0
     #     genre: action
 
-collections:    
-  # Genres: # Works but match 2 items
-  #   template: { name: Separator }
-  #   sort_title: +00_zz
-    # summary: Award collections up next.
-    # file_poster: config/posters/Award Collections.png
+collections:
+  Genre Collections:
+    template: { name: separator, section_number: "01" }
 
   Anime Shows:
-    template: { name: Genre, tag: Anime }
+    template: { name: genre, tag: Anime }
     summary: "Japanese animated series across all genres and styles."
 
   Cartoons Shows:
-    template: { name: Genre, tag: Cartoon }
+    template: { name: genre, tag: Cartoon }
     summary: "Western animated shows, from adult comedy to kids’ classics."
 
   Conspiracy & Espionage Shows:
-    template: { name: Genre, tag: Conspiracy-Espionage }
+    template: { name: genre, tag: Conspiracy-Espionage }
     summary: "Thrillers about spies, conspiracy, and shadowy global plots."
 
   Recently Added in Conspiracy & Espionage Shows:
-    template: { name: Recently Added In Genre, tag: Conspiracy & Espionage }
+    template: { name: recently_added_in_genre, tag: Conspiracy & Espionage }
     summary: "The 10 latest additions in Conspiracy & Espionage Genre."
 
   Crime & Mystery Shows:
-    template: { name: Genre, tag: Crime-Mystery }
+    template: { name: genre, tag: Crime-Mystery }
     summary: "Investigations into murders and crimes where solving the case drives the story."
 
   Recently Added in Crime & Mystery Shows:
-    template: { name: Recently Added In Genre, tag: Crime & Mystery }
+    template: { name: recently_added_in_genre, tag: Crime & Mystery }
     summary: "The 10 latest additions in Crime & Mystery Genre."
 
   Documentary Shows:
-    template: { name: Genre, tag: Documentary }
+    template: { name: genre, tag: Documentary }
     summary: "Non-fiction series exploring real people, events or ideas."
 
   Drama Shows:
-    template: { name: Genre, tag: Drama }
+    template: { name: genre, tag: Drama }
     summary: "Character-driven, serious storytelling often tackling moral or emotional dilemmas."
 
   Dramedy Shows:
-    template: { name: Genre, tag: Dramedy }
+    template: { name: genre, tag: Dramedy }
     summary: "Shows blending drama with humor, balancing tension and comedy."
 
   Horror Shows:
-    template: { name: Genre, tag: Horror }
+    template: { name: genre, tag: Horror }
     summary: "Supernatural or psychological tales designed to unsettle and scare."
 
   Organized Crime Shows:
-    template: { name: Genre, tag: Organized-Crime }
+    template: { name: genre, tag: Organized-Crime }
     summary: "Stories about the mafia, cartels, and criminal empires from the inside."
   
   Recently Added in Organized Crime Shows:
-    template: { name: Recently Added In Genre, tag: Organized Crime }
+    template: { name: recently_added_in_genre, tag: Organized Crime }
     summary: "The 10 latest additions in Organized Crime Genre."
 
   Reality-TV Shows:
-    template: { name: Genre, tag: Reality-TV }
+    template: { name: genre, tag: Reality-TV }
     summary: "Competition, lifestyle, or unscripted shows featuring real people."
 
   Sci-Fi Shows:
-    template: { name: Genre, tag: Sci-Fi }
+    template: { name: genre, tag: Sci-Fi }
     summary: "Futuristic, space-bound, or speculative worlds exploring science and technology."
 
   Sitcom Shows:
-    template: { name: Genre, tag: Sitcom }
+    template: { name: genre, tag: Sitcom }
     summary: "Half-hour comedies built around recurring characters and everyday situations."
   
   Classic Sitcom Shows:
-    template: { name: Pre Streaming, parent_collection_name: Sitcom Shows }
+    template: { name: pre_streaming
+, parent_collection_name: Sitcom Shows }
     summary: "Classic sitcoms from the pre-streaming era."
 
   Modern Sitcom Shows:
-    template: { name: Post Streaming, parent_collection_name: Sitcom Shows }
+    template: { name: post_streaming, parent_collection_name: Sitcom Shows }
     summary: "Modern sitcoms from the streaming era."
 
   Sports Shows:
-    template: { name: Genre, tag: Sports }
+    template: { name: genre, tag: Sports }
     summary: "Live competitions, game coverage, and documentaries exploring athletes, teams, and sporting culture."
 
   Superheroes Shows:
-    template: { name: Genre, tag: Superhero-Mystery }
+    template: { name: genre, tag: Superhero-Mystery }
     summary: "Gritty superhero stories with a strong investigative or noir element."
 
   Supernatural Shows:
-    template: { name: Genre, tag: Supernatural-Mystery }
+    template: { name: genre, tag: Supernatural-Mystery }
     summary: "Mysteries fueled by the unexplainable, from the otherworldly to the metaphysical."
 
   Recently Added in Supernatural Shows:
-    template: { name: Recently Added In Genre, tag: Supernatural }
+    template: { name: recently_added_in_genre, tag: Supernatural }
     summary: "The 10 latest additions in Supernatural & Mystery Genre."
 
   True Crime Shows:
-    template: { name: Genre, tag: True-Crime }
+    template: { name: genre, tag: True-Crime }
     summary: "Real-life cases of crime, murder, and justice, retold with documentary detail."

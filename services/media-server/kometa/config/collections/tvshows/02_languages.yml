@@ -1,31 +1,37 @@
+external_templates:
+  - file: /config-repo/collections/templates.yml
+
 templates:  
-  Language:
+  language:
     plex_all: true
     filters:
       original_language: <<original_language>>
     collection_order: year.desc
     label: <<collection_name>> Collection
-    sort_title: +020_<<tag>>_Shows
+    sort_title: +021_<<tag>>_Shows
     sync_mode: sync
     visible_home: false
     visible_shared: false
     visible_library: false
 
 collections:
+  Language Collections:
+    template: { name: separator, section_number: "02" }
+
   Non-English Shows:
     plex_all: true
     filters:
       original_language.not: en,ja,ko,fr # Remove languages already in specific collections
     collection_order: year.desc
     label: <<collection_name>> Collection
-    sort_title: +021_Non-English_Shows
+    sort_title: +022_Non-English_Shows
     sync_mode: sync
     visible_home: false
     visible_shared: false
     visible_library: false
   
   French Shows:
-    template: { name: Language, original_language: fr } 
+    template: { name: language, original_language: fr } 
   
   Asian Shows:
     plex_all: true
@@ -34,7 +40,7 @@ collections:
       collection.not: Anime Shows
     collection_order: year.desc
     label: <<collection_name>> Collection
-    sort_title: +020_Asian_Shows
+    sort_title: +023_Asian_Shows
     sync_mode: sync
     visible_home: false
     visible_shared: false

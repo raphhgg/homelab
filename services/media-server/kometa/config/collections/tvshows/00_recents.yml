@@ -1,0 +1,59 @@
+external_templates:
+  - file: /config-repo/collections/templates.yml
+  
+  # Custom "Recently Released / Recently Added" sections
+  # Visible everywhere (home, library, shared)
+collections:
+  Recent Collections:
+    template: { name: separator, section_number: "00" }
+
+  Recently Released Shows:
+    smart_filter:
+      all:
+        episode_year: 2025
+      sort_by: episode_release.desc
+    sort_title: +001_Recently_Released_Shows_Collection
+    summary: "A collection of the latest shows with episodes released in 2025, sorted by newest first."
+    sync_mode: sync
+    visible_home: true
+    visible_shared: true
+    visible_library: true
+
+  Recently Added Shows:
+    plex_all: true
+    collection_order: added.desc
+    sort_title: +002_Recently_Added_Shows_Collection
+    summary: "A collection of the latest shows added, sorted by newest first."
+    sync_mode: sync
+    visible_home: true
+    visible_shared: true
+    visible_library: true
+
+  Recently Released Unwatched Episodes:
+    plex_search:
+      all:
+        episode_air_date.after: 2025-01-01
+        episode_unplayed: true
+    collection_order: episode_release.desc
+    # builder_level: episode
+    sort_title: +003_Recently_Released_Episodes_Collection
+    summary: "Unwatched episodes from the latest shows released in 2025, sorted by newest first."
+    sync_mode: sync
+    visible_home: true
+    visible_shared: true
+    visible_library: true
+
+
+
+  # #### Release
+  # Recently Released Episodes
+  # Useful for series we are following and watching week after week (not a lot)
+  # - show episodes released since last week and not watched
+  # - should show one episode per serie max
+  
+
+
+
+
+
+

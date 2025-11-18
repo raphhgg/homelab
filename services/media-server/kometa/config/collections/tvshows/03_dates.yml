@@ -1,17 +1,21 @@
+external_templates:
+  - file: /config-repo/collections/templates.yml
+
 collections:
+  Date Collections:
+    template: { name: separator, section_number: "03" }
+
   Pre Streaming Shows:
     smart_filter:
       all:
         release.before: 2014-01-01
         collection.not: Anime Shows,Cartoons Shows
       sort_by: year.desc
-    sort_title: +030_Pre_Streaming_Collection
+    sort_title: +031_Pre_Streaming_Collection
     summary: "Shows released before the beginning of the streaming era."
     sync_mode: sync
     visible_home: false
     visible_shared: false
     visible_library: false
 
-
-  # Best 2025 Shows
   # Decades like movies?
