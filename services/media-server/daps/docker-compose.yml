@@ -1,0 +1,25 @@
+services:
+  daps:
+    image: drazzilb08/daps:latest
+    container_name: daps
+    hostname: daps
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    ports:
+      - 8002:8000
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/daps:/config:rw
+      - ${DOCKER_APPDATA_PATH}/daps/posters:/posters:rw
+      - ${DOCKER_APPDATA_PATH}/kometa/assets:/kometa:rw
+      - ${MEDIAS_PATH}:/data/medias
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - main
+
+networks:
+  main:
+    external: true
