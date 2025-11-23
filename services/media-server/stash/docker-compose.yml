@@ -1,0 +1,37 @@
+services:
+  stash:
+    image: stashapp/stash:latest
+    container_name: stash
+    restart: always
+    ports:
+      - "9999:9999"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - STASH_STASH=/data/
+      - STASH_GENERATED=/generated/
+      - STASH_METADATA=/metadata/
+      - STASH_CACHE=/cache/
+      - STASH_PORT=9999
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKER_APPDATA_PATH}/stash/config:/root/.stash
+      - /volume2/nsfw:/data
+      - ${DOCKER_APPDATA_PATH}/stash/metadata:/metadata
+      - ${DOCKER_APPDATA_PATH}/stash/cache:/cache
+      - ${DOCKER_APPDATA_PATH}/stash/blobs:/blobs
+      - ${DOCKER_APPDATA_PATH}/stash/generated:/generated
+    networks:
+      - main
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "10"
+        max-size: "2m"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  main:
+    external: true
