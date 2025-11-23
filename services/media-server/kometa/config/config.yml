@@ -20,47 +20,26 @@ libraries:
     remove_overlays: false
     reapply_overlays: false
     overlay_files:
-    - default: resolution
-    - default: runtimes
+    - file: /config-repo/custom_overlays/media_info.yml
       template_variables:
-        text: ""
+        use_gradient_top: true
+        use_gradient_bottom: true
+    - file: /config-repo/custom_overlays/audience_rating.yml
+      template_variables:
+        horizontal_offset: 75
+        vertical_offset: 55
+    - file: /config-repo/custom_overlays/letterboxd_rating.yml
+      template_variables:
+        horizontal_align: left
         vertical_align: bottom
-        vertical_offset: 30%
-        horizontal_align: right
-        back_width: 300
+        vertical_offset: 55
+    - file: /config-repo/custom_overlays/runtimes.yml
+      template_variables:
+        vertical_align: bottom
+        horizontal_align: center
+        back_width: 240
+        vertical_offset: 60
         font_size: 40
-    - default: ratings
-      template_variables:
-        rating1: user
-        rating1_image: star
-        rating1_font: /config-repo/custom_fonts/Impact.ttf
-        rating1_font_size: 70
-        rating1_style: '/'
-
-        rating2: critic
-        rating2_image: imdb
-        rating2_font: /config-repo/custom_fonts/Impact.ttf
-        rating2_font_size: 70
-
-        rating3: audience
-        rating3_image: letterboxd
-        rating3_font: /config-repo/custom_fonts/Impact.ttf
-        rating3_font_size: 70
-        rating3_style: ''
-
-        horizontal_position: right
-    - default: network
-      template_variables:
-        vertical_align: top
-        horizontal_align: center
-    - default: streaming
-      template_variables:
-        vertical_align: top
-        horizontal_align: center
-    # - default: studio
-    #   template_variables:
-    #     vertical_align: top
-    #     horizontal_align: center
 
 
     # MOVIE OPERATIONS
@@ -80,7 +59,7 @@ libraries:
   TV Shows:
     report_path: /data/missing/TV_Shows_report.yml
     collection_files:
-    - file: /config-repo/collections/tvshows/00_general.yml
+    - file: /config-repo/collections/tvshows/00_recents.yml
     - file: /config-repo/collections/tvshows/00_sonarr_tags_sync.yml
     - file: /config-repo/collections/tvshows/01_genres.yml
     - file: /config-repo/collections/tvshows/02_languages.yml
@@ -93,52 +72,37 @@ libraries:
     remove_overlays: false
     reapply_overlays: false
     overlay_files:
-    - default: resolution
-    - default: ratings
+    - file: /config-repo/custom_overlays/media_info.yml
       template_variables:
-        rating1: user
-        rating1_image: rt_tomato
-        rating1_font: /config-repo/custom_fonts/Adlib.ttf
-        rating1_font_size: 63
-
-        rating2: critic
-        rating2_image: imdb
-        rating2_font: /config-repo/custom_fonts/Impact.ttf
-        rating2_font_size: 70
-
-        rating3: audience
-        rating3_image: tmdb
-        rating3_font: /config-repo/custom_fonts/Avenir_95_Black.ttf
-        rating3_font_size: 70
-
-        horizontal_position: right
+        use_gradient_top: true
+        use_gradient_bottom: true
+        use_codec: false
+    - file: /config-repo/custom_overlays/audience_rating.yml
+      template_variables:
+        horizontal_offset: 75
+        vertical_offset: 55
     - default: streaming
       template_variables:
         vertical_align: top
         horizontal_align: center
+        vertical_offset: 115
+        back_width: 0
+        back_height: 0
 
 
     # SEASON OVERLAYS
-    - default: resolution
+    - file: /config-repo/custom_overlays/media_info.yml
       template_variables:
         builder_level: season
-
+        use_gradient_top: true
+        use_gradient_bottom: true
+        
 
     # EPISODE OVERLAYS
-    - default: resolution
+    - file: /config-repo/custom_overlays/media_info.yml
       template_variables:
         builder_level: episode
-    - default: ratings
-      template_variables:
-        rating1: critic
-        rating1_image: imdb
-        rating1_font: /config-repo/custom_fonts/Impact.ttf
-        rating1_font_size: 70
-        rating1_addon_position: left
-        
-        vertical_align: bottom
-        horizontal_position: right
-        builder_level: episode
+    - file: /config-repo/custom_overlays/episode_audience_rating.yml
     - default: runtimes
       template_variables:
         builder_level: episode
@@ -146,12 +110,13 @@ libraries:
         horizontal_align: center
         back_width: 300
 
+
     # TV SHOWS OPERATIONS
     operations:
-      mass_user_rating_update: mdb_tomatoes
-      mass_critic_rating_update: imdb
-      mass_audience_rating_update: tmdb
-      mass_episode_critic_rating_update: imdb
+      mass_user_rating_update: imdb
+      mass_critic_rating_update: tmdb
+      mass_audience_rating_update: imdb
+      mass_episode_audience_rating_update: plex_imdb
       split_duplicates: false
       assets_for_all: false
       delete_collections:
@@ -336,26 +301,12 @@ radarr:
   ignore_cache: false
 
   delete:
+
 tmdb:
   apikey: 773db029ad39c7e6639e984b6c0cab6b
   language: en
   cache_expiration: 60
   region:
-
-########## GENERATED BY TRAKTAUTH ##########
-# trakt:
-#   client_id: 5311188ef5bb148c30491749d1ae92819d72a01e120149c80b417ba6706ef35f
-#   client_secret: b433de478eb73a3f84102249f89c05cdc1c4bcdad5a0692dbf95ce9c2b15b4b4
-#   authorization:
-#     access_token: d869b4591e8e1800ef805e68fcebe7b54823ec45c7fab4f48514e68893836bb4
-#     token_type: Bearer
-#     expires_in: 86400
-#     refresh_token: 028bb5069f7cac82d76121365e7b177f0c3ea91579b6107296442f7b3cf4edc8
-#     scope: public
-#     created_at: 1751799641
-#   pin:
-#   force_refresh:
-############################################
 
 mdblist:
   apikey: y9hg0imkufiqeyu6j0tv9kxk2

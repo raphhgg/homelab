@@ -1,6 +1,6 @@
 services:
   kometa:
-    image: kometateam/kometa:latest
+    image: kometateam/kometa:nightly
     container_name: kometa
     # Keep idle + create symlinks to redirect runtime files to appdata
     entrypoint: ["/bin/sh", "-c", "ln -sf /data/logs /config-repo/logs && ln -sf /data/config.cache /config-repo/config.cache && ln -sf /data/UUID /config-repo/UUID && ln -sf /data/overlays /config-repo/overlays && tail -f /dev/null"]
