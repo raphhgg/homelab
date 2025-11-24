@@ -65,7 +65,9 @@ libraries:
     - file: /config-repo/collections/tvshows/02_languages.yml
     - file: /config-repo/collections/tvshows/03_dates.yml
     - file: /config-repo/collections/tvshows/04_quality.yml
-    - file: /config-repo/collections/tvshows/06_favorites.yml
+    - file: /config-repo/collections/tvshows/05_type.yml
+    - file: /config-repo/collections/tvshows/06_networks.yml
+    - file: /config-repo/collections/tvshows/07_favorites.yml
 
 
     # TV SHOWS OVERLAYS
@@ -178,10 +180,10 @@ libraries:
       - /data/assets
 
 
-playlist_files:
-- default: playlist
-  template_variables:
-    libraries: Movies, TV Shows, Sports
+# playlist_files:
+# - default: playlist
+#   template_variables:
+#     libraries: Movies, TV Shows, Sports
 
 settings:
   run_order:
@@ -201,7 +203,7 @@ settings:
   show_missing_season_assets: false
   show_missing_episode_assets: false
   show_asset_not_needed: true
-  sync_mode: append
+  sync_mode: sync
   minimum_items: 1
   default_collection_order: year.desc
   delete_below_minimum: true

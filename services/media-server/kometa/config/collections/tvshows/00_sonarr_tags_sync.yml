@@ -1,10 +1,6 @@
-# Sonar Tag Template
-templates:
-  Sonarr Tag:
-    sonarr_taglist: <<tag>>
-    item_label: sonarr <<tag>>
-    sync_mode: sync
-    build_collection: false
+external_templates:
+  - file: /config-repo/collections/templates/base_templates.yml
+  - file: /config-repo/collections/templates/recommended_templates.yml
 
 # Add Sonarr tags as Labels in Plex
 collections:
@@ -14,48 +10,48 @@ collections:
   #   build_collection: false
 
   Add AV1 Label:
-    template: { name: Sonarr Tag, tag: av1 }
-    
+    template: { name: sonarr_tag, tag: av1 }
+
   # Genres
   Add Favorite Label:
-    template: { name: Sonarr Tag, tag: Favorite }
+    template: { name: sonarr_tag, tag: Favorite }
   Add Anime Label:
-    template: { name: Sonarr Tag, tag: Anime }
+    template: { name: sonarr_tag, tag: Anime }
   Add Cartoon Label:
-    template: { name: Sonarr Tag, tag: Cartoon }
+    template: { name: sonarr_tag, tag: Cartoon }
   Add Conspiracy Espionage Label:
-    template: { name: Sonarr Tag, tag: Conspiracy-Espionage }
+    template: { name: sonarr_tag, tag: Conspiracy-Espionage }
   Add Documentary Label:
-    template: { name: Sonarr Tag, tag: Documentary }
+    template: { name: sonarr_tag, tag: Documentary }
   Add Drama Label:
-    template: { name: Sonarr Tag, tag: Drama }
+    template: { name: sonarr_tag, tag: Drama }
   Add Dramedy Label:
-    template: { name: Sonarr Tag, tag: Dramedy }
+    template: { name: sonarr_tag, tag: Dramedy }
   Add Horror Label:
-    template: { name: Sonarr Tag, tag: Horror }
+    template: { name: sonarr_tag, tag: Horror }
   Add Organized-Crime Label:
-    template: { name: Sonarr Tag, tag: Organized-Crime }
+    template: { name: sonarr_tag, tag: Organized-Crime }
   Add Reality-TV Label:
-    template: { name: Sonarr Tag, tag: Reality-TV }
+    template: { name: sonarr_tag, tag: Reality-TV }
   Add Sci-Fi Label:
-    template: { name: Sonarr Tag, tag: Sci-Fi }
+    template: { name: sonarr_tag, tag: Sci-Fi }
   Add Sitcom Label:
-    template: { name: Sonarr Tag, tag: Sitcom }
+    template: { name: sonarr_tag, tag: Sitcom }
   Add Sports Label:
-    template: { name: Sonarr Tag, tag: Sports }
+    template: { name: sonarr_tag, tag: Sports }
   Add Superhero-Mystery Label:
-    template: { name: Sonarr Tag, tag: Superhero-Mystery }
+    template: { name: sonarr_tag, tag: Superhero-Mystery }
   Add Supernatural-Mystery Label:
-    template: { name: Sonarr Tag, tag: Supernatural-Mystery }
+    template: { name: sonarr_tag, tag: Supernatural-Mystery }
   Add True-Crime Label:
-    template: { name: Sonarr Tag, tag: True-Crime }
+    template: { name: sonarr_tag, tag: True-Crime }
 
   # Languages
   # Add French Label:
-  #   template: { name: Sonarr Tag, tag: French }
+  #   template: { name: sonarr_tag, tag: French }
   # Add Korean Label:
-  #   template: { name: Sonarr Tag, tag: Korean }
+  #   template: { name: sonarr_tag, tag: Korean }
   # Add Japanase Label:
-  #   template: { name: Sonarr Tag, tag: Japanase }
+  #   template: { name: sonarr_tag, tag: Japanase }
   # Add Non-English Label:
-  #   template: { name: Sonarr Tag, tag: Non-English }
+  #   template: { name: sonarr_tag, tag: Non-English }

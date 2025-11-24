@@ -1,47 +1,27 @@
 external_templates:
-  - file: /config-repo/collections/templates.yml
-
-templates:  
-  language:
-    plex_all: true
-    filters:
-      original_language: <<original_language>>
-    collection_order: year.desc
-    label: <<collection_name>> Collection
-    sort_title: +021_<<tag>>_Shows
-    sync_mode: sync
-    visible_home: false
-    visible_shared: false
-    visible_library: false
+  - file: /config-repo/collections/templates/base_templates.yml
+  - file: /config-repo/collections/templates/recommended_templates.yml
 
 collections:
   Language Collections:
     template: { name: separator, section_number: "02" }
 
-  Non-English Shows:
-    plex_all: true
+  Non-English Collection:
+    template:
+      - name: language_exclude
+        excluded_languages: en,ja,ko,fr
+        section_number: "02"
+
+  French Collection:
+    template:
+      - name: language_include
+        languages: fr
+        section_number: "02"
+
+  Asian Collection:
+    template:
+      - name: language_include
+        languages: ja,ko
+        section_number: "02"
     filters:
-      original_language.not: en,ja,ko,fr # Remove languages already in specific collections
-    collection_order: year.desc
-    label: <<collection_name>> Collection
-    sort_title: +022_Non-English_Shows
-    sync_mode: sync
-    visible_home: false
-    visible_shared: false
-    visible_library: false
-  
-  French Shows:
-    template: { name: language, original_language: fr } 
-  
-  Asian Shows:
-    plex_all: true
-    filters:
-      original_language: ja,ko
-      collection.not: Anime Shows
-    collection_order: year.desc
-    label: <<collection_name>> Collection
-    sort_title: +023_Asian_Shows
-    sync_mode: sync
-    visible_home: false
-    visible_shared: false
-    visible_library: false
+      collection.not: Anime Collection  # Exclude anime (already in separate collection)

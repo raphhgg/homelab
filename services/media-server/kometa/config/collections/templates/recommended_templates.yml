@@ -1,0 +1,27 @@
+templates:
+  # Recently Added In Collection
+  # - key: Genre
+  # - value: Horror, Drame etc
+  # - section_number: "02"
+  recently_added_in:
+    smart_filter:
+      any:
+        collection: <<value>> Collection
+      sort_by: added.desc
+    label: <<collection_name>>
+    sort_title: +<<section_number>>2_Recently_Added_in_<<key>>_<<value>>
+    summary: "The latest additions in <<value>> <<key>>."
+    visible_home: true
+    visible_shared: true
+    visible_library: true
+
+  unwatched_recommendations_in:
+    smart_filter:
+      any:
+        collection: <<value>> Collection
+      sort_by: added.desc
+    label: <<collection_name>>
+    sort_title: +<<section_number>>3_Unwatched_Recommendations_In_<<key>>_<<value>>
+    visible_home: true
+    visible_shared: true
+    visible_library: true

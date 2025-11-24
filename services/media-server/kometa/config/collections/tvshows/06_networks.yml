@@ -1,0 +1,13 @@
+external_templates:
+  - file: /config-repo/collections/templates/base_templates.yml
+  - file: /config-repo/collections/templates/recommended_templates.yml
+
+collections:
+  Network Collections:
+    template: { name: separator, section_number: "06" }
+
+  HBO Collection:
+    template:
+      - name: network
+        network_name: HBO
+        section_number: "06"

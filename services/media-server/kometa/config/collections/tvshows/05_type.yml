@@ -1,15 +1,20 @@
-  # ### Type
-  # Miniseries Shows:
-  #   plex_all: true
-  #   filters:
-  #     tmdb_type: miniseries
-  #     genre.not:
-  #       - "Documentary"
-  #       - "Biography"
-  #   collection_order: added.desc
-  #   sync_mode: sync
-  #   visible_home: true
-  #   visible_shared: true
-  #   visible_library: true
-  
-  # HBO Classics
+external_templates:
+  - file: /config-repo/collections/templates/base_templates.yml
+  - file: /config-repo/collections/templates/recommended_templates.yml
+
+collections:
+  Type Collections:
+    template: { name: separator, section_number: "05" }
+
+  Miniseries Collection:
+    plex_all: true
+    filters:
+      tmdb_type: miniseries
+      genre.not:
+        - Documentary
+        - Biography
+    collection_order: added.desc
+    sort_title: +051_Miniseries_Shows
+    visible_home: true
+    visible_shared: true
+    visible_library: true

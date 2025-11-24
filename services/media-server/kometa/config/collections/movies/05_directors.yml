@@ -1,51 +1,77 @@
 external_templates:
-  - file: /config-repo/collections/templates.yml
-
-templates:
-  director:
-    plex_search:
-      all:
-        director: <<director_name>>
-    collection_order: release.desc
-    label: <<collection_name>> Collection
-    sort_title: +051_Director_<<director_name>>_Movies
-    sync_mode: sync
-    visible_home: false
-    visible_shared: false
-    visible_library: false
+  - file: /config-repo/collections/templates/base_templates.yml
+  - file: /config-repo/collections/templates/recommended_templates.yml
 
 collections:
   Director Collections:
     template: { name: separator, section_number: "05" }
 
   Quentin Tarantino Collection:
-    template: { name: director, director_name: Quentin Tarantino }
+    template:
+      - name: person
+        role: director
+        person_name: Quentin Tarantino
+        section_number: "05"
 
   Christopher Nolan Collection:
-    template: { name: director, director_name: Christopher Nolan }
+    template:
+      - name: person
+        role: director
+        person_name: Christopher Nolan
+        section_number: "05"
 
   Martin Scorsese Collection:
-    template: { name: director, director_name: Martin Scorsese }
-  
+    template:
+      - name: person
+        role: director
+        person_name: Martin Scorsese
+        section_number: "05"
+
   Brian De Palma Collection:
-    template: { name: director, director_name: Brian De Palma }
-  
+    template:
+      - name: person
+        role: director
+        person_name: Brian De Palma
+        section_number: "05"
+
   Ridley Scott Collection:
-    template: { name: director, director_name: Ridley Scott }
-  
+    template:
+      - name: person
+        role: director
+        person_name: Ridley Scott
+        section_number: "05"
+
   Paul Thomas Anderson Collection:
-    template: { name: director, director_name: Paul Thomas Anderson }
-  
+    template:
+      - name: person
+        role: director
+        person_name: Paul Thomas Anderson
+        section_number: "05"
+
   Denis Villeneuve Collection:
-    template: { name: director, director_name: Denis Villeneuve }
+    template:
+      - name: person
+        role: director
+        person_name: Denis Villeneuve
+        section_number: "05"
 
   Stanley Kubrick Collection:
-    template: { name: director, director_name: Stanley Kubrick }
-  
-  David Cronenberg Collection:
-    template: { name: director, director_name: David Cronenberg }
-  
-  David Fincher Collection:
-    template: { name: director, director_name: David Fincher }
-  
+    template:
+      - name: person
+        role: director
+        person_name: Stanley Kubrick
+        section_number: "05"
 
+  David Cronenberg Collection:
+    template:
+      - name: person
+        role: director
+        person_name: David Cronenberg
+        section_number: "05"
+
+  David Fincher Collection:
+    template:
+      - name: person
+        role: director
+        person_name: David Fincher
+        section_number: "05"

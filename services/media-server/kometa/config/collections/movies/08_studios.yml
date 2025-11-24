@@ -1,17 +1,28 @@
 external_templates:
-  - file: /config-repo/collections/templates.yml
+  - file: /config-repo/collections/templates/base_templates.yml
+  - file: /config-repo/collections/templates/recommended_templates.yml
+
+# Local template for dynamic collections (can't use external templates)
+templates:
+  studios:
+    plex_search:
+      all:
+        studio: <<value>>
+    collection_order: year.desc
+    sort_title: +081_<<key_name>>_Studio_Movies
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+
+dynamic_collections:
+  Studios:
+    type: custom
+    data:
+      A24: A24
+      Netflix: Netflix
+    title_format: <<key_name>> Collection
+    template: studios
 
 collections:
   Studio Collections:
     template: { name: separator, section_number: "08" }
-
-  A24 Collection:
-    plex_search:
-      all:
-        studio: "A24"
-    sort_title: +081_A24_Studio_Movies
-    collection_order: year.desc
-    visible_home: false
-    visible_shared: false
-    visible_library: true
-    

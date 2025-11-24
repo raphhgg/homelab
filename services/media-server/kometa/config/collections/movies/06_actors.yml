@@ -1,36 +1,42 @@
 external_templates:
-  - file: /config-repo/collections/templates.yml
-
-templates:
-  actor:
-    plex_search:
-      all:
-        actor: <<actor_name>>
-    collection_order: release.desc
-    label: <<collection_name>> Collection
-    sort_title: +061_Actor_<<actor_name>>_Movies
-    sync_mode: sync
-    visible_home: false
-    visible_shared: false
-    visible_library: false
+  - file: /config-repo/collections/templates/base_templates.yml
+  - file: /config-repo/collections/templates/recommended_templates.yml
 
 collections:
   Actor Collections:
     template: { name: separator, section_number: "06" }
 
   Leonardo DiCaprio Collection:
-    template: { name: actor, actor_name: Leonardo DiCaprio }
+    template:
+      - name: person
+        role: actor
+        person_name: Leonardo DiCaprio
+        section_number: "06"
 
   Tom Cruise Collection:
-    template: { name: actor, actor_name: Tom Cruise }
-  
+    template:
+      - name: person
+        role: actor
+        person_name: Tom Cruise
+        section_number: "06"
+
   Brad Pitt Collection:
-    template: { name: actor, actor_name: Brad Pitt }
+    template:
+      - name: person
+        role: actor
+        person_name: Brad Pitt
+        section_number: "06"
 
   Christian Bale Collection:
-    template: { name: actor, actor_name: Christian Bale }
-  
-  Nicolas Cage Collection:
-    template: { name: actor, actor_name: Nicolas Cage }
-  
+    template:
+      - name: person
+        role: actor
+        person_name: Christian Bale
+        section_number: "06"
 
+  Nicolas Cage Collection:
+    template:
+      - name: person
+        role: actor
+        person_name: Nicolas Cage
+        section_number: "06"

@@ -1,5 +1,6 @@
 external_templates:
-  - file: /config-repo/collections/templates.yml
+  - file: /config-repo/collections/templates/base_templates.yml
+  - file: /config-repo/collections/templates/recommended_templates.yml
   
   # Custom "Recently Released / Recently Added" sections
   # Visible everywhere (home, library, shared)

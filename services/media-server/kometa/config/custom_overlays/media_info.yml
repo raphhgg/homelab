@@ -25,10 +25,6 @@ external_templates:
           - resolution_only.exists: true
             type: codec
             value: false
-      suppress_overlays:
-        conditions:
-          - type: codec
-            value: []
       vertical_align:
         conditions:
           - type: resolution

@@ -1,36 +1,21 @@
 external_templates:
-  - file: /config-repo/collections/templates.yml
-
-templates:
-  quality_4K_hdr10plus_dv:
-    optional:
-      - unplayed
-    plex_search:
-      all:
-        any:
-          hdr: true
-          dovi: true
-        resolution: 4K
-        unplayed: <<unplayed>>
-    filters:
-      filepath.regex: 'HDR10\+|HDR10P|DV|Dolby[ ._-]?Vision'
-    label: quality_4K_hdr10plus_dv
-    collection_order: release.desc
-    sync_mode: sync
-    visible_home: false
-    visible_shared: false
-    visible_library: false
+  - file: /config-repo/collections/templates/base_templates.yml
+  - file: /config-repo/collections/templates/recommended_templates.yml
 
 collections:
   Quality Collections:
     template: { name: separator, section_number: "04" }
 
   4K HDR10+ or DV Collection:
-    template: { name: quality_4K_hdr10plus_dv }
-    sort_title: +041_Quality_4K_HDR10+_DV_Collection
+    template:
+      - name: quality_4k_hdrplus_dv
+        section_number: "04"
 
   4K HDR10+ or DV Unplayed:
-    template: { name: quality_4K_hdr10plus_dv, unplayed: true }
+    template:
+      - name: quality_4k_hdrplus_dv
+        section_number: "04"
+        unplayed: true
     sort_title: +042_Quality_4K_HDR10+_DV_To_Watch_Collection
 
   # Low Quality (720p and under?)

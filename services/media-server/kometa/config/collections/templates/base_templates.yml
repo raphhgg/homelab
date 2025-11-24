@@ -1,0 +1,141 @@
+templates:
+  # Used to map radarr tags to plex labels
+  # - tag: the name of the tag in radarr
+  radarr_tag:
+    radarr_taglist: <<tag>>
+    item_label: radarr <<tag>>
+    build_collection: false
+
+  # Used to map sonarr tags to plex labels
+  # - tag: the name of the tag in sonarr
+  sonarr_tag:
+    sonarr_taglist: <<tag>>
+    item_label: sonarr <<tag>>
+    build_collection: false
+
+  # Used to separate collections in the Collections tab
+  # - section_number: "02"
+  separator:
+    blank_collection: true
+    sort_title: +<<section_number>>0_<<collection_name>>_Separator
+
+  # Genre
+  # - key: Radarr, Sonarr
+  # - value: Horror, Drama etc
+  # - section_number: "02"
+  genre:
+    plex_search:
+      all:
+        label: <<key>> <<value>>
+    collection_order: year.desc
+    label: <<collection_name>>
+    sort_title: +<<section_number>>1_Genre_<<value>>_Collection
+    visible_home: false
+    visible_shared: false
+    visible_library: false
+
+  # Language filter - include specific languages
+  # - languages: language code(s) (e.g., "fr" or "ja,ko,th")
+  # - section_number: "02"
+  language_include:
+    plex_all: true
+    filters:
+      original_language: <<languages>>
+    collection_order: year.desc
+    label: <<collection_name>>
+    sort_title: +<<section_number>>1_Language_<<collection_name>>_Collection
+    visible_home: false
+    visible_shared: false
+    visible_library: false
+
+  # Language filter - exclude specific languages
+  # - excluded_languages: language code(s) to exclude (e.g., "en" or "en,fr,ja,ko")
+  # - section_number: "02"
+  language_exclude:
+    plex_all: true
+    filters:
+      original_language.not: <<excluded_languages>>
+    collection_order: year.desc
+    label: <<collection_name>>
+    sort_title: +<<section_number>>2_Not_Language_<<collection_name>>_Collection
+    visible_home: false
+    visible_shared: false
+    visible_library: false
+
+  # 4K HDR10+ or Dolby Vision quality filter
+  # - section_number: "04"
+  # - unplayed: optional, set to true to filter unwatched only
+  # - collection_order: optional, defaults to release.desc
+  quality_4k_hdrplus_dv:
+    optional:
+      - unplayed
+      - collection_order
+    default:
+      collection_order: release.desc
+    plex_search:
+      all:
+        any:
+          hdr: true
+          dovi: true
+        resolution: 4K
+        unplayed: <<unplayed>>
+    filters:
+      filepath.regex: 'HDR10\+|HDR10P|DV|Dolby[ ._-]?Vision'
+    label: quality_4K_hdr10plus_dv
+    collection_order: <<collection_order>>
+    sort_title: +<<section_number>>1_Quality_4K_HDR+_DV_Collection
+    visible_home: false
+    visible_shared: false
+    visible_library: false
+
+  # Person collection (director, actor, writer, producer, etc.)
+  # - role: person role field (director, actor, writer, producer)
+  # - person_name: name of the person
+  # - section_number: "05", "06", etc.
+  person:
+    conditionals:
+      role_label:
+        conditions:
+          - role: director
+            value: Director
+          - role: actor
+            value: Actor
+          - role: writer
+            value: Writer
+          - role: producer
+            value: Producer
+    plex_search:
+      all:
+        <<role>>: <<person_name>>
+    collection_order: release.desc
+    label: <<collection_name>>
+    sort_title: +<<section_number>>1_<<role_label>>_<<person_name>>_Movies
+    visible_home: false
+    visible_shared: false
+    visible_library: false
+
+  # Studio collection
+  # - studio_name: name of the studio (e.g., "A24", "Pixar")
+  # - section_number: "08"
+  studio:
+    plex_search:
+      all:
+        studio: <<studio_name>>
+    collection_order: year.desc
+    sort_title: +<<section_number>>1_<<studio_name>>_Studio_Movies
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+
+  # Network collection (for TV shows)
+  # - network_name: name of the network (e.g., "HBO", "Netflix", "BBC")
+  # - section_number: "06"
+  network:
+    plex_search:
+      all:
+        network: <<network_name>>
+    collection_order: year.desc
+    sort_title: +<<section_number>>1_<<network_name>>_Network_Shows
+    visible_home: false
+    visible_shared: false
+    visible_library: true
