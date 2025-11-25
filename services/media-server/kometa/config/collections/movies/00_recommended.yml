@@ -1,0 +1,26 @@
+external_templates:
+  - file: /config-repo/collections/templates/base_templates.yml
+  - file: /config-repo/collections/templates/recommended_movies.yml
+
+collections:
+  Recent Collections:
+    template: { name: separator, section_number: "00" }
+
+  Recently Released Movies:
+    template:
+      - name: recently_released_movies
+        date_after: 2025-01-01
+        unplayed: true
+        section_number: "000"
+
+  Recently Added Movies:
+    template:
+      - name: recently_added_movies
+        date_after: 2025-01-01
+        unplayed: true
+        section_number: "001"
+
+  Movies Recommendations:
+    template:
+      - name: recommendations_new_movies
+        section_number: "002"
