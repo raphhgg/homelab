@@ -6,12 +6,12 @@ collections:
   Tier Collections:
     template: { name: separator, section_number: "07" }
 
-  Favorites Shows:
+  Favorites Collection:
     plex_search:
       all:
         label: Sonarr Favorite
     collection_order: random
-    label: <<collection_name>> Collection
+    label: <<collection_name>>
     summary: "My All Time Favorites TV Shows."
     sort_title: +071_Favorites_Shows
     visible_home: true

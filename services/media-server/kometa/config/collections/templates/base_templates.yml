@@ -37,10 +37,14 @@ templates:
   # Language filter - include specific languages
   # - languages: language code(s) (e.g., "fr" or "ja,ko,th")
   # - section_number: "02"
+  # - exclude_collection: optional collection name to exclude (e.g., "Anime Collection")
   language_include:
+    optional:
+      - exclude_collection
     plex_all: true
     filters:
       original_language: <<languages>>
+      collection.not: <<exclude_collection>>
     collection_order: year.desc
     label: <<collection_name>>
     sort_title: +<<section_number>>1_Language_<<collection_name>>_Collection

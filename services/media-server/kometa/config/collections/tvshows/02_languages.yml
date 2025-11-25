@@ -23,5 +23,4 @@ collections:
       - name: language_include
         languages: ja,ko
         section_number: "02"
-    filters:
-      collection.not: Anime Collection  # Exclude anime (already in separate collection)
+        exclude_collection: Anime Collection  # Exclude anime (already in separate collection)
