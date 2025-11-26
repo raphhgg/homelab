@@ -1,8 +1,6 @@
 external_templates:
   - file: /config-repo/collections/templates/base_templates.yml
-  - file: /config-repo/collections/templates/recommended_templates.yml
 
-# Local template for dynamic collections (can't use external templates)
 templates:
   studios:
     plex_search:

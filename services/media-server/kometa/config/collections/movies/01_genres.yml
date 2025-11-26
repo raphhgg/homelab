@@ -1,6 +1,6 @@
 external_templates:
   - file: /config-repo/collections/templates/base_templates.yml
-  - file: /config-repo/collections/templates/recommended_templates.yml
+  - file: /config-repo/collections/templates/recommended_movies.yml
 
 collections:
   Genre Collections:
@@ -16,10 +16,11 @@ collections:
 
   Recently Added in Horror:
     template:
-    - name: recently_added_in
+    - name: recently_added_in_collection_movies
       section_number: "01"
       key: Genre
       value: Horror
+      unplayed: true
 
   Drama Collection:
     template:
@@ -31,10 +32,11 @@ collections:
 
   Recently Added in Drama:
     template:
-    - name: recently_added_in
+    - name: recently_added_in_collection_movies
       section_number: "01"
       key: Genre
       value: Drama
+      unplayed: true
   
   Comedy Collection:
     template:
@@ -46,10 +48,11 @@ collections:
 
   Recently Added in Comedy:
     template:
-    - name: recently_added_in
+    - name: recently_added_in_collection_movies
       section_number: "01"
       key: Genre
       value: Comedy
+      unplayed: true
 
   Thriller Collection:
     template:
@@ -61,10 +64,11 @@ collections:
 
   Recently Added in Thriller:
     template:
-    - name: recently_added_in
+    - name: recently_added_in_collection_movies
       section_number: "01"
       key: Genre
       value: Thriller
+      unplayed: true
   
   Mystery Collection:
     template:
@@ -76,10 +80,11 @@ collections:
 
   Recently Added in Mystery:
     template:
-    - name: recently_added_in
+    - name: recently_added_in_collection_movies
       section_number: "01"
       key: Genre
       value: Mystery
+      unplayed: true
   
   Mafia Collection:
     template:
@@ -91,10 +96,11 @@ collections:
 
   Recently Added in Mafia:
     template:
-    - name: recently_added_in
+    - name: recently_added_in_collection_movies
       section_number: "01"
       key: Genre
       value: Mafia
+      unplayed: true
 
   Sci-Fi Collection:
     template:
@@ -106,10 +112,11 @@ collections:
 
   Recently Added in Sci-Fi:
     template:
-    - name: recently_added_in
+    - name: recently_added_in_collection_movies
       section_number: "01"
       key: Genre
       value: Sci-Fi
+      unplayed: true
 
   True Crime Collection:
     template:

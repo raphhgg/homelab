@@ -4,6 +4,7 @@ libraries:
   Movies:
     report_path: /data/missing/Movies_report.yml
     collection_files:
+    - file: /config-repo/collections/movies/00_recommended.yml
     - file: /config-repo/collections/movies/00_radarr_tags_sync.yml
     - file: /config-repo/collections/movies/01_genres.yml
     - file: /config-repo/collections/movies/02_languages.yml
@@ -59,7 +60,7 @@ libraries:
   TV Shows:
     report_path: /data/missing/TV_Shows_report.yml
     collection_files:
-    - file: /config-repo/collections/tvshows/00_recents.yml
+    - file: /config-repo/collections/tvshows/00_recommended.yml
     - file: /config-repo/collections/tvshows/00_sonarr_tags_sync.yml
     - file: /config-repo/collections/tvshows/01_genres.yml
     - file: /config-repo/collections/tvshows/02_languages.yml
@@ -96,14 +97,16 @@ libraries:
     - file: /config-repo/custom_overlays/media_info.yml
       template_variables:
         builder_level: season
-        use_gradient_top: true
-        use_gradient_bottom: true
+        use_gradient_top: false
+        use_gradient_bottom: false
         
 
     # EPISODE OVERLAYS
     - file: /config-repo/custom_overlays/media_info.yml
       template_variables:
         builder_level: episode
+        use_gradient_top: false
+        use_gradient_bottom: false
     - file: /config-repo/custom_overlays/episode_audience_rating.yml
     - default: runtimes
       template_variables:

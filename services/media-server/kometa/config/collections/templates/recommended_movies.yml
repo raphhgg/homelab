@@ -1,7 +1,5 @@
 templates:
-
   # Recently Released Movies
-  # Movies released after a specific date
   # - date_after: Date to filter from (format: YYYY-MM-DD or MM/DD/YYYY) (required)
   # - unplayed: true/false (optional, filters for unwatched content)
   # - section_number: For sort_title ordering (default: "00")
@@ -30,7 +28,6 @@ templates:
     sync_mode: sync
 
   # Recently Added Movies
-  # Movies added to the library after a specific date
   # - date_after: Date to filter from (format: YYYY-MM-DD or MM/DD/YYYY) (required)
   # - unplayed: true/false (optional, filters for unwatched content)
   # - section_number: For sort_title ordering (default: "00")
@@ -57,6 +54,34 @@ templates:
     visible_shared: true
     visible_library: true
     sync_mode: sync
+
+  # Recently Added In Collection (Movies)
+  # - key: Genre
+  # - value: Horror, Drama, etc.
+  # - unplayed: true/false (optional, filters for unwatched content)
+  # - section_number: For sort_title ordering (default: "02")
+  recently_added_in_collection_movies:
+    optional:
+      - unplayed
+    default:
+      section_number: "02"
+    conditionals:
+      collection_name_suffix:
+        conditions:
+          - unplayed: true
+            value: " (Unwatched)"
+        default: ""
+    smart_filter:
+      all:
+        collection: <<value>> Collection
+        unplayed: <<unplayed>>
+      sort_by: added.desc
+    label: <<collection_name>>
+    sort_title: +<<section_number>>2_Recently_Added_in_<<key>>_<<value>>
+    summary: "The latest additions<<collection_name_suffix>> in <<value>> <<key>>."
+    visible_home: false
+    visible_shared: true
+    visible_library: true
 
   # Recommendations - New Movies
   # Movies that haven't been watched yet

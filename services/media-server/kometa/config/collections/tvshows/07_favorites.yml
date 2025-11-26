@@ -1,12 +1,11 @@
 external_templates:
   - file: /config-repo/collections/templates/base_templates.yml
-  - file: /config-repo/collections/templates/recommended_templates.yml
 
 collections:
   Tier Collections:
     template: { name: separator, section_number: "07" }
 
-  Favorites Collection:
+  Favorites Shows:
     plex_search:
       all:
         label: Sonarr Favorite

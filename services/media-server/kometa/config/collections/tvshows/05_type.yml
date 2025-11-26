@@ -1,6 +1,5 @@
 external_templates:
   - file: /config-repo/collections/templates/base_templates.yml
-  - file: /config-repo/collections/templates/recommended_templates.yml
 
 collections:
   Type Collections:
@@ -15,6 +14,6 @@ collections:
         - Biography
     collection_order: added.desc
     sort_title: +051_Miniseries_Shows
-    visible_home: true
+    visible_home: false
     visible_shared: true
     visible_library: true

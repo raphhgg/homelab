@@ -1,6 +1,5 @@
 external_templates:
   - file: /config-repo/collections/templates/base_templates.yml
-  - file: /config-repo/collections/templates/recommended_templates.yml
 
 templates:
   # Used for Basic Decades Collection
@@ -45,30 +44,33 @@ collections:
 
   Recently Added in 2010s Collection:
     template:
-    - name: recently_added_in
+    - name: recently_added_in_collection_movies
       section_number: "03"
       key: Decade
       value: 2010s
+      unplayed: true
 
   2000s Collection:
     template: { name: decade, tag: 2000 }
 
   Recently Added in 2000s Collection:
     template:
-    - name: recently_added_in
+    - name: recently_added_in_collection_movies
       section_number: "03"
       key: Decade
       value: 2000s
+      unplayed: true
 
   90s Collection:
     template: { name: decade, tag: 1990 }
 
   Recently Added in 90s Collection:
     template:
-    - name: recently_added_in
+    - name: recently_added_in_collection_movies
       section_number: "03"
       key: Decade
       value: 90s
+      unplayed: true
 
   80s Collection:
     template: { name: decade, tag: 1980 }

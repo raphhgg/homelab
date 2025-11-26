@@ -105,6 +105,35 @@ templates:
   # Recommendations - New Shows
   # Shows that haven't been started yet (no episodes watched)
   # - section_number: For sort_title ordering (default: "00")
+  # Recently Added In Collection (TV Shows)
+  # TV shows recently added within a specific collection
+  # - key: Genre
+  # - value: Horror, Drama, etc.
+  # - unplayed: true/false (optional, filters for unwatched shows)
+  # - section_number: For sort_title ordering (default: "02")
+  recently_added_in_collection_shows:
+    optional:
+      - unplayed
+    default:
+      section_number: "02"
+    conditionals:
+      collection_name_suffix:
+        conditions:
+          - unplayed: true
+            value: " (Unwatched)"
+        default: ""
+    plex_search:
+      all:
+        collection: <<value>> Collection
+        episode_unplayed: <<unplayed>>
+    collection_order: added.desc
+    label: <<collection_name>>
+    sort_title: +<<section_number>>2_Recently_Added_in_<<key>>_<<value>>
+    summary: "The latest additions<<collection_name_suffix>> in <<value>> <<key>>."
+    visible_home: false
+    visible_shared: true
+    visible_library: true
+
   recommendations_new_shows:
     default:
       section_number: "00"
