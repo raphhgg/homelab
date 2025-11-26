@@ -242,10 +242,64 @@ done
 body+=$'\n'
 body+="_Updates may include base image patches, dependencies, or new releases._"
 
-# Send using EXACT format from your working command
-curl -X POST "$APPRISE_URL" \
-  --data-urlencode "title=$title" \
-  --data-urlencode "body=$body" \
-  -d tag=watchtower
+# Function to check if Apprise is ready
+wait_for_apprise() {
+    local max_wait=30
+    local wait_interval=2
+    local elapsed=0
 
-echo "✓ Sent notification for $count update(s)"
+    echo "Checking if Apprise is ready..."
+    while [[ $elapsed -lt $max_wait ]]; do
+        # Try to reach Apprise (any response means it's up)
+        if curl -s -o /dev/null -w "%{http_code}" "http://apprise:8000/" 2>/dev/null | grep -qE "^[0-9]{3}$"; then
+            echo "✓ Apprise is ready (after ${elapsed}s)"
+            return 0
+        fi
+        sleep $wait_interval
+        elapsed=$((elapsed + wait_interval))
+        echo "  Waiting for Apprise... (${elapsed}s/${max_wait}s)"
+    done
+
+    echo "⚠ Apprise not ready after ${max_wait}s, will try to send anyway"
+    return 1
+}
+
+# Function to send notification with retry logic
+send_notification() {
+    local max_retries=3
+    local retry_delay=5
+
+    for attempt in $(seq 1 $max_retries); do
+        echo "Sending notification (attempt $attempt/$max_retries)..."
+
+        if curl -X POST "$APPRISE_URL" \
+             --data-urlencode "title=$title" \
+             --data-urlencode "body=$body" \
+             -d tag=watchtower 2>&1; then
+            echo "✓ Notification sent successfully"
+            return 0
+        fi
+
+        if [[ $attempt -lt $max_retries ]]; then
+            echo "⚠ Notification failed, retrying in ${retry_delay}s..."
+            sleep $retry_delay
+            retry_delay=$((retry_delay * 2))  # Exponential backoff
+        fi
+    done
+
+    echo "✗ Failed to send notification after $max_retries attempts"
+    return 1
+}
+
+# Wait for Apprise to be ready, then send notification
+wait_for_apprise
+
+if send_notification; then
+    echo "✓ Sent notification for $count update(s)"
+else
+    echo "⚠ WARNING: Notification failed, but container updates were successful"
+    # Don't fail the job just because notification failed
+fi
+
+# Always exit successfully if we got this far (updates succeeded)
+exit 0
