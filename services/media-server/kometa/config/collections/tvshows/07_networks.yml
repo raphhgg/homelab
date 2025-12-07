@@ -3,10 +3,10 @@ external_templates:
 
 collections:
   Network Collections:
-    template: { name: separator, section_number: "06" }
+    template: { name: separator, section_number: "07" }
 
   HBO Collection:
     template:
       - name: network
         network_name: HBO
-        section_number: "06"
+        section_number: "07"

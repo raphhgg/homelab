@@ -64,15 +64,18 @@ libraries:
   TV Shows:
     report_path: /data/missing/TV_Shows_report.yml
     collection_files:
-    - file: /config-repo/collections/tvshows/00_recommended.yml
     - file: /config-repo/collections/tvshows/00_sonarr_tags_sync.yml
-    - file: /config-repo/collections/tvshows/01_genres.yml
-    - file: /config-repo/collections/tvshows/02_languages.yml
-    - file: /config-repo/collections/tvshows/03_dates.yml
-    - file: /config-repo/collections/tvshows/04_quality.yml
-    - file: /config-repo/collections/tvshows/05_type.yml
-    - file: /config-repo/collections/tvshows/06_networks.yml
-    - file: /config-repo/collections/tvshows/07_favorites.yml
+    - file: /config-repo/collections/tvshows/01_favorites.yml
+    - file: /config-repo/collections/tvshows/02_genres.yml
+    - file: /config-repo/collections/tvshows/03_languages.yml
+    - file: /config-repo/collections/tvshows/04_dates.yml
+    - file: /config-repo/collections/tvshows/05_quality.yml
+    - file: /config-repo/collections/tvshows/06_type.yml
+    - file: /config-repo/collections/tvshows/07_networks.yml
+    - file: /config-repo/collections/tvshows/z10_recently_added_released.yml
+    - file: /config-repo/collections/tvshows/z11_continue_watching.yml
+    - file: /config-repo/collections/tvshows/z12_start_new.yml
+    - file: /config-repo/collections/tvshows/z13_recently_added_in_genre.yml
 
 
     # TV SHOWS OVERLAYS

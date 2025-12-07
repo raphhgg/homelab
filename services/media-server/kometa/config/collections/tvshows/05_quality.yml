@@ -3,12 +3,12 @@ external_templates:
 
 collections:
   Quality Collections:
-    template: { name: separator, section_number: "04" }
+    template: { name: separator, section_number: "05" }
 
   4K HDR10+ or DV Collection:
     template:
       - name: quality_4k_hdrplus_dv
-        section_number: "04"
+        section_number: "05"
         collection_order: episode_release.desc
 
   # Low Quality (720p and under?)

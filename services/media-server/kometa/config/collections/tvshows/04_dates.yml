@@ -3,7 +3,7 @@ external_templates:
 
 collections:
   Date Collections:
-    template: { name: separator, section_number: "03" }
+    template: { name: separator, section_number: "04" }
 
   Pre Streaming Shows:
     smart_filter:
@@ -11,7 +11,7 @@ collections:
         release.before: 2014-01-01
         collection.not: Anime Collection,Cartoons Collection
       sort_by: year.desc
-    sort_title: +031_Pre_Streaming_Collection
+    sort_title: +041_Pre_Streaming_Collection
     summary: "Shows released before the beginning of the streaming era."
     sync_mode: sync
     visible_home: false

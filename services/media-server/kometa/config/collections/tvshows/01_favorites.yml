@@ -2,8 +2,8 @@ external_templates:
   - file: /config-repo/collections/templates/base_templates.yml
 
 collections:
-  Tier Collections:
-    template: { name: separator, section_number: "07" }
+  Favorite Collections:
+    template: { name: separator, section_number: "01" }
 
   Favorites Shows:
     plex_search:
@@ -12,7 +12,7 @@ collections:
     collection_order: random
     label: <<collection_name>>
     summary: "My All Time Favorites TV Shows."
-    sort_title: +071_Favorites_Shows
+    sort_title: +011_Favorites_Shows
     visible_home: true
     visible_shared: true
     visible_library: true

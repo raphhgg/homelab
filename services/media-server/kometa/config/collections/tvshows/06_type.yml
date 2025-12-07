@@ -3,7 +3,7 @@ external_templates:
 
 collections:
   Type Collections:
-    template: { name: separator, section_number: "05" }
+    template: { name: separator, section_number: "06" }
 
   Miniseries Collection:
     plex_all: true
@@ -13,7 +13,7 @@ collections:
         - Documentary
         - Biography
     collection_order: added.desc
-    sort_title: +051_Miniseries_Shows
+    sort_title: +061_Miniseries_Shows
     visible_home: false
     visible_shared: true
     visible_library: true

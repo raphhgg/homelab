@@ -10,7 +10,7 @@ templates:
         collection: <<parent_collection_name>>
         release.before: 2014-01-01
       sort_by: year.desc
-    sort_title: +011_<<parent_collection_name>>_<<collection_name>>
+    sort_title: +021_<<parent_collection_name>>_<<collection_name>>
     visible_home: false
     visible_shared: false
     visible_library: false
@@ -22,19 +22,19 @@ templates:
         collection: <<parent_collection_name>>
         release.after: 2014-01-01
       sort_by: year.desc
-    sort_title: +011_<<parent_collection_name>>_<<collection_name>>
+    sort_title: +021_<<parent_collection_name>>_<<collection_name>>
     visible_home: false
     visible_shared: false
     visible_library: false
 
 collections:
   Genre Collections:
-    template: { name: separator, section_number: "01" }
+    template: { name: separator, section_number: "02" }
 
   Anime Collection:
     template:
       - name: genre
-        section_number: "01"
+        section_number: "02"
         key: Sonarr
         value: Anime
     summary: "Japanese animated series across all genres and styles."
@@ -42,7 +42,7 @@ collections:
   Cartoons Collection:
     template:
       - name: genre
-        section_number: "01"
+        section_number: "02"
         key: Sonarr
         value: Cartoon
     summary: "Western animated shows, from adult comedy to kids' classics."
@@ -50,41 +50,23 @@ collections:
   Conspiracy & Espionage Collection:
     template:
       - name: genre
-        section_number: "01"
+        section_number: "02"
         key: Sonarr
         value: Conspiracy-Espionage
     summary: "Thrillers about spies, conspiracy, and shadowy global plots."
 
-  Recently Added in Conspiracy & Espionage:
-    template:
-      - name: recently_added_in_collection_shows
-        section_number: "01"
-        key: Genre
-        value: Conspiracy & Espionage
-        unplayed: true
-    summary: "The latest additions in Conspiracy & Espionage Genre."
-
   Crime & Mystery Collection:
     template:
       - name: genre
-        section_number: "01"
+        section_number: "02"
         key: Sonarr
         value: Crime-Mystery
     summary: "Investigations into murders and crimes where solving the case drives the story."
 
-  Recently Added in Crime & Mystery:
-    template:
-      - name: recently_added_in_collection_shows
-        section_number: "01"
-        key: Genre
-        value: Crime & Mystery
-        unplayed: true
-    summary: "The latest additions in Crime & Mystery Genre."
-
   Documentary Collection:
     template:
       - name: genre
-        section_number: "01"
+        section_number: "02"
         key: Sonarr
         value: Documentary
     summary: "Non-fiction series exploring real people, events or ideas."
@@ -92,7 +74,7 @@ collections:
   Drama Collection:
     template:
       - name: genre
-        section_number: "01"
+        section_number: "02"
         key: Sonarr
         value: Drama
     summary: "Character-driven, serious storytelling often tackling moral or emotional dilemmas."
@@ -100,7 +82,7 @@ collections:
   Dramedy Collection:
     template:
       - name: genre
-        section_number: "01"
+        section_number: "02"
         key: Sonarr
         value: Dramedy
     summary: "Shows blending drama with humor, balancing tension and comedy."
@@ -108,7 +90,7 @@ collections:
   Horror Collection:
     template:
       - name: genre
-        section_number: "01"
+        section_number: "02"
         key: Sonarr
         value: Horror
     summary: "Supernatural or psychological tales designed to unsettle and scare."
@@ -116,24 +98,15 @@ collections:
   Organized Crime Collection:
     template:
       - name: genre
-        section_number: "01"
+        section_number: "02"
         key: Sonarr
         value: Organized-Crime
     summary: "Stories about the mafia, cartels, and criminal empires from the inside."
 
-  Recently Added in Organized Crime:
-    template:
-      - name: recently_added_in_collection_shows
-        section_number: "01"
-        key: Genre
-        value: Organized Crime
-        unplayed: true
-    summary: "The latest additions in Organized Crime Genre."
-
   Reality-TV Collection:
     template:
       - name: genre
-        section_number: "01"
+        section_number: "02"
         key: Sonarr
         value: Reality-TV
     summary: "Competition, lifestyle, or unscripted shows featuring real people."
@@ -141,7 +114,7 @@ collections:
   Sci-Fi Collection:
     template:
       - name: genre
-        section_number: "01"
+        section_number: "02"
         key: Sonarr
         value: Sci-Fi
     summary: "Futuristic, space-bound, or speculative worlds exploring science and technology."
@@ -149,7 +122,7 @@ collections:
   Sitcom Collection:
     template:
       - name: genre
-        section_number: "01"
+        section_number: "02"
         key: Sonarr
         value: Sitcom
     summary: "Half-hour comedies built around recurring characters and everyday situations."
@@ -169,7 +142,7 @@ collections:
   Sports Collection:
     template:
       - name: genre
-        section_number: "01"
+        section_number: "02"
         key: Sonarr
         value: Sports
     summary: "Live competitions, game coverage, and documentaries exploring athletes, teams, and sporting culture."
@@ -177,7 +150,7 @@ collections:
   Superheroes Collection:
     template:
       - name: genre
-        section_number: "01"
+        section_number: "02"
         key: Sonarr
         value: Superhero-Mystery
     summary: "Gritty superhero stories with a strong investigative or noir element."
@@ -185,24 +158,15 @@ collections:
   Supernatural Collection:
     template:
       - name: genre
-        section_number: "01"
+        section_number: "02"
         key: Sonarr
         value: Supernatural-Mystery
     summary: "Mysteries fueled by the unexplainable, from the otherworldly to the metaphysical."
 
-  Recently Added in Supernatural:
-    template:
-      - name: recently_added_in_collection_shows
-        section_number: "01"
-        key: Genre
-        value: Supernatural
-        unplayed: true
-    summary: "The latest additions in Supernatural & Mystery Genre."
-
   True Crime Collection:
     template:
       - name: genre
-        section_number: "01"
+        section_number: "02"
         key: Sonarr
         value: True-Crime
     summary: "Real-life cases of crime, murder, and justice, retold with documentary detail."

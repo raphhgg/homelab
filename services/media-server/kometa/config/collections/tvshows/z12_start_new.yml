@@ -1,0 +1,12 @@
+external_templates:
+  - file: /config-repo/collections/templates/base_templates.yml
+  - file: /config-repo/collections/templates/recommended_tvshows.yml
+
+collections:
+  Start New:
+    template: { name: separator, section_number: "z12" }
+
+  Start New Shows:
+    template:
+      - name: recommendations_new_shows
+        section_number: "z121"

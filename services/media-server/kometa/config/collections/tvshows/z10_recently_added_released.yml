@@ -3,42 +3,25 @@ external_templates:
   - file: /config-repo/collections/templates/recommended_tvshows.yml
 
 collections:
-  Recent Collections:
-    template: { name: separator, section_number: "00" }
+  Recent Shows:
+    template: { name: separator, section_number: "z10" }
 
   Recently Released Shows:
     template:
       - name: recently_released_shows
         date_after: 2025-01-01
         unplayed: true
-        section_number: "000"
+        section_number: "z100"
 
   Recently Added Shows:
     template:
       - name: recently_added_shows
         date_after: 2025-01-01
         unplayed: true
-        section_number: "001"
+        section_number: "z101"
 
   Recently Watched Shows:
     template:
       - name: recently_watched_shows
         date_after: 2025-01-01
-        section_number: "004"
-
-  Continue Shows:
-    template:
-      - name: continue_watching_shows
-        section_number: "002"
-
-  Start New Shows:
-    template:
-      - name: recommendations_new_shows
-        section_number: "003"
-
-
-
-
-
-
-
+        section_number: "z102"
