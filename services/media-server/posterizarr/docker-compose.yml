@@ -1,0 +1,26 @@
+services:
+  posterizarr:
+    image: ghcr.io/fscorrupt/posterizarr:latest
+    container_name: posterizarr
+    hostname: posterizarr
+    user: ${PUID}:${PGID}
+    environment:
+      - TZ=${TZ}
+      - TERM=xterm
+      - RUN_TIME=disabled
+    ports:
+      - 8001:8000
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/posterizarr:/config:rw
+      - ${DOCKER_APPDATA_PATH}/kometa/assets:/assets:rw
+      - ${DOCKER_APPDATA_PATH}/posterizarr/assetsbackup:/assetsbackup:rw
+      - ${DOCKER_APPDATA_PATH}/posterizarr/manualassets:/manualassets:rw
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - main
+
+networks:
+  main:
+    external: true
