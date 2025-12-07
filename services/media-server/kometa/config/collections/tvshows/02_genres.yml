@@ -2,31 +2,6 @@ external_templates:
   - file: /config-repo/collections/templates/base_templates.yml
   - file: /config-repo/collections/templates/recommended_tvshows.yml
 
-templates:
-  # Only used for Sitcom sub-category
-  pre_streaming:
-    smart_filter:
-      all:
-        collection: <<parent_collection_name>>
-        release.before: 2014-01-01
-      sort_by: year.desc
-    sort_title: +021_<<parent_collection_name>>_<<collection_name>>
-    visible_home: false
-    visible_shared: false
-    visible_library: false
-
-  # Only used for Sitcom sub-category
-  post_streaming:
-    smart_filter:
-      all:
-        collection: <<parent_collection_name>>
-        release.after: 2014-01-01
-      sort_by: year.desc
-    sort_title: +021_<<parent_collection_name>>_<<collection_name>>
-    visible_home: false
-    visible_shared: false
-    visible_library: false
-
 collections:
   Genre Collections:
     template: { name: separator, section_number: "02" }
@@ -119,25 +94,27 @@ collections:
         value: Sci-Fi
     summary: "Futuristic, space-bound, or speculative worlds exploring science and technology."
 
-  Sitcom Collection:
+  Classic Sitcom Collection:
     template:
       - name: genre
         section_number: "02"
         key: Sonarr
         value: Sitcom
-    summary: "Half-hour comedies built around recurring characters and everyday situations."
-
-  Classic Sitcom Collection:
-    template:
-      - name: pre_streaming
-        parent_collection_name: Sitcom Collection
-    summary: "Classic sitcoms from the pre-streaming era."
+    filters:
+      release.before: 2014-01-01
+    sort_title: +021_Sitcom_Classic_Collection
+    summary: "Classic sitcoms from the pre-streaming era (before 2014)."
 
   Modern Sitcom Collection:
     template:
-      - name: post_streaming
-        parent_collection_name: Sitcom Collection
-    summary: "Modern sitcoms from the streaming era."
+      - name: genre
+        section_number: "02"
+        key: Sonarr
+        value: Sitcom
+    filters:
+      release.after: 2014-01-01
+    sort_title: +021_Sitcom_Modern_Collection
+    summary: "Modern sitcoms from the streaming era (2014 onwards)."
 
   Sports Collection:
     template:
