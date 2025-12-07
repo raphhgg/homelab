@@ -3,23 +3,23 @@ external_templates:
 
 collections:
   Franchise Collections:
-    template: { name: separator, section_number: "07" }
+    template: { name: separator, section_number: "08" }
     
   The Conjuring Collection:
     template:
       name: letterboxd_list
       list_url: https://letterboxd.com/raphh11/list/franchise-the-conjuring/
       category: Franchise
-      section_number: "07"
+      section_number: "08"
 
   Scream Collection:
     template:
       name: franchise
       title_search: "Scream"
-      section_number: "07"
+      section_number: "08"
 
   Mission Impossible Collection:
     template:
       name: franchise
       title_search: "Mission Impossible"
-      section_number: "07"
+      section_number: "08"

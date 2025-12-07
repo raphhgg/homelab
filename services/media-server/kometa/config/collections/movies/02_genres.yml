@@ -4,12 +4,12 @@ external_templates:
 
 collections:
   Genre Collections:
-    template: { name: separator, section_number: "01" }
+    template: { name: separator, section_number: "02" }
 
   Horror Collection:
     template:
     - name: genre
-      section_number: "01"
+      section_number: "02"
       key: Radarr
       value: Horror
     summary: "Films designed to evoke fear, tension, and dread through the supernatural, psychological, or visceral."
@@ -17,7 +17,7 @@ collections:
   Drama Collection:
     template:
     - name: genre
-      section_number: "01"
+      section_number: "02"
       key: Radarr
       value: Drama
     summary: "Films that focus on realistic characters, emotional themes, and personal conflicts, exploring the complexities of human experience and relationships."
@@ -25,7 +25,7 @@ collections:
   Comedy Collection:
     template:
     - name: genre
-      section_number: "01"
+      section_number: "02"
       key: Radarr
       value: Comedy
     summary: "Films that use humor, wit, and playful situations to entertain, uplift, and make audiences laugh at life’s quirks and absurdities."
@@ -33,7 +33,7 @@ collections:
   Thriller Collection:
     template:
     - name: genre
-      section_number: "01"
+      section_number: "02"
       key: Radarr
       value: Thriller
     summary: "Films that build suspense and excitement through high-stakes situations, twists, and psychological tension, keeping viewers on edge until the very end."
@@ -41,7 +41,7 @@ collections:
   Mystery Collection:
     template:
     - name: genre
-      section_number: "01"
+      section_number: "02"
       key: Radarr
       value: Mystery
     summary: "Films centered on puzzles, secrets, or crimes, where clues unfold gradually as characters—and viewers—work to uncover the truth."
@@ -49,7 +49,7 @@ collections:
   Mafia Collection:
     template:
     - name: genre
-      section_number: "01"
+      section_number: "02"
       key: Radarr
       value: Mafia
     summary: "Films that delve into the world of organized crime, following mob families, power struggles, and codes of loyalty—and the violent consequences when those codes are broken."
@@ -57,7 +57,7 @@ collections:
   Sci-Fi Collection:
     template:
     - name: genre
-      section_number: "01"
+      section_number: "02"
       key: Radarr
       value: Sci-Fi
     summary: "Films that explore imaginative futures, advanced technology, space, or alternate realities, using scientific ideas to ask big ‘what if?’ questions about humanity and the universe."
@@ -65,7 +65,7 @@ collections:
   True Crime Collection:
     template:
     - name: genre
-      section_number: "01"
+      section_number: "02"
       key: Radarr
       value: True-Crime
     summary: "Documentaries based on real criminal cases and investigations"
@@ -73,7 +73,7 @@ collections:
   Documentary Collection:
     template:
     - name: genre
-      section_number: "01"
+      section_number: "02"
       key: Radarr
       value: Documentary
     summary: "Nonfiction films exploring real events, people, and ideas with factual storytelling."
@@ -81,7 +81,7 @@ collections:
   Sport Documentary Collection:
     template:
     - name: genre
-      section_number: "01"
+      section_number: "02"
       key: Radarr
       value: Documentary-Sport
     summary: "Documentaries that follow athletes, teams, and iconic sporting moments."

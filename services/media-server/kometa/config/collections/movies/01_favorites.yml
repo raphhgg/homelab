@@ -12,40 +12,38 @@ templates:
     visible_library: false
 
 collections:
-  Tier Collections:
-    template: { name: separator, section_number: "09" }
+  Favorite Collections:
+    template: { name: separator, section_number: "01" }
 
-  # 5 Stars Movies
-  # Move to the top
-  Favorites Movies:
+  5 Stars Collection:
     template:
     - name: letterboxd_ratings
       letterboxd_rating: "5.0"
       plex_user_rating: "10"
     build_collection: true
-    sort_title: +091_Favorites_Movies_Letterboxd
+    sort_title: +011_Favorites_Movies_Letterboxd
     summary: "All movies I rated 5 stars on Letterboxd. The absolute best of the best — films that define my taste, move me every time, and never lose their magic. These are my personal classics, the ones I'll always come back to."
     visible_library: true
     visible_home: true
 
-  Almost Favorites Movies:
+  4.5 Stars Collection:
     template:
     - name: letterboxd_ratings
       letterboxd_rating: "4.5"
       plex_user_rating: "9"
     build_collection: true
-    sort_title: +092_Almost_Favorites_Movies_Letterboxd
+    sort_title: +012_Almost_Favorites_Movies_Letterboxd
     summary: "All movies I rated 4.5 stars on Letterboxd. Extraordinary films that come close to perfection. Beautifully made and memorable, and just a step below the all-time greats. These are the movies that almost made the Favorites list."
     visible_library: true
     visible_home: true
 
-  Great Movies:
+  4 Stars Collection:
     template:
     - name: letterboxd_ratings
       letterboxd_rating: "4.0"
       plex_user_rating: "8"
     build_collection: true
-    sort_title: +093_Great_Movies_Letterboxd
+    sort_title: +013_Great_Movies_Letterboxd
     summary: "All movies I rated 4 stars on Letterboxd. \nConsistently excellent films that deliver every time. Smart, well-crafted, and very enjoyable — the kind of movies I'd recommend without hesitation."
     visible_library: true
     visible_home: true

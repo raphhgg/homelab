@@ -15,7 +15,7 @@ templates:
           - radarr True-Crime
       sort_by: release.desc
     label: <<collection_name>>
-    sort_title: +031_Decade_<<tag>>_Movies
+    sort_title: +041_Decade_<<tag>>_Movies
     sync_mode: sync
     visible_home: false
     visible_shared: false
@@ -27,7 +27,7 @@ templates:
         release.before: 01/01/<<tag>>
       sort_by: release.desc
     label: <<collection_name>>
-    sort_title: +031_Decade_+Released_Before_<<tag>>
+    sort_title: +041_Decade_+Released_Before_<<tag>>
     sync_mode: sync
     visible_home: false
     visible_shared: false
@@ -35,7 +35,7 @@ templates:
 
 collections:
   Decade Collections:
-    template: { name: separator, section_number: "03" }
+    template: { name: separator, section_number: "04" }
 
   2020s Collection:
     template: { name: decade, tag: 2020 }

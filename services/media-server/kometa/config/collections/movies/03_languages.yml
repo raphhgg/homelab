@@ -3,22 +3,22 @@ external_templates:
 
 collections:
   Language Collections:
-    template: { name: separator, section_number: "02" }
+    template: { name: separator, section_number: "03" }
 
   French Collection:
     template:
       - name: language_include
         languages: fr
-        section_number: "02"
+        section_number: "03"
 
   Asian Collection:
     template:
       - name: language_include
         languages: ja,ko,th
-        section_number: "02"
+        section_number: "03"
 
   Non-English Collection:
     template:
       - name: language_exclude
         excluded_languages: en,fr,ja,ko,th
-        section_number: "02"
+        section_number: "03"

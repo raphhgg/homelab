@@ -3,18 +3,18 @@ external_templates:
 
 collections:
   Quality Collections:
-    template: { name: separator, section_number: "04" }
+    template: { name: separator, section_number: "05" }
 
   4K HDR10+ or DV Collection:
     template:
       - name: quality_4k_hdrplus_dv
-        section_number: "04"
+        section_number: "05"
 
   4K HDR10+ or DV Unplayed:
     template:
       - name: quality_4k_hdrplus_dv
-        section_number: "04"
+        section_number: "05"
         unplayed: true
-    sort_title: +042_Quality_4K_HDR10+_DV_To_Watch_Collection
+    sort_title: +052_Quality_4K_HDR10+_DV_To_Watch_Collection
 
   # Low Quality (720p and under?)

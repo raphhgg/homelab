@@ -4,12 +4,12 @@ external_templates:
 
 collections:
   Recently Added In Decades Collections:
-    template: { name: separator, section_number: "z2" }
+    template: { name: separator, section_number: "z13" }
 
   Recently Added in 2010s Collection:
     template:
     - name: recently_added_in_collection_movies
-      section_number: "z21"
+      section_number: "z131"
       key: Decade
       value: 2010s
       unplayed: true
@@ -17,7 +17,7 @@ collections:
   Recently Added in 2000s Collection:
     template:
     - name: recently_added_in_collection_movies
-      section_number: "z21"
+      section_number: "z131"
       key: Decade
       value: 2000s
       unplayed: true
@@ -25,7 +25,7 @@ collections:
   Recently Added in 90s Collection:
     template:
     - name: recently_added_in_collection_movies
-      section_number: "z21"
+      section_number: "z131"
       key: Decade
       value: 90s
       unplayed: true

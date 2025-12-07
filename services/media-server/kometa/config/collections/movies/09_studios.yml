@@ -7,7 +7,7 @@ templates:
       all:
         studio: <<value>>
       sort_by: year.desc
-    sort_title: +081_<<key_name>>_Studio_Movies
+    sort_title: +091_<<key_name>>_Studio_Movies
     visible_home: false
     visible_shared: false
     visible_library: true
@@ -23,4 +23,4 @@ dynamic_collections:
 
 collections:
   Studio Collections:
-    template: { name: separator, section_number: "08" }
+    template: { name: separator, section_number: "09" }
