@@ -74,3 +74,10 @@ collections:
         role: director
         person_name: David Fincher
         section_number: "05"
+  
+  Darren Aronofsky Collection:
+    template:
+      - name: person
+        role: director
+        person_name: Darren Aronofsky
+        section_number: "05"

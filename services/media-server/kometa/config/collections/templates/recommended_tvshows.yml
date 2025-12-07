@@ -16,13 +16,12 @@ templates:
           - unplayed: true
             value: " (Unwatched)"
         default: ""
-    plex_search:
+    smart_filter:
       all:
         episode_air_date.after: <<date_after>>
         episode_unplayed: <<unplayed>>
-    filters:
-      collection.not: <<exclude_collection>>
-    collection_order: episode_release.desc
+        collection.not: <<exclude_collection>>
+      sort_by: episode_release.desc
     label: <<collection_name>>
     summary: Recently Released Shows<<collection_name_suffix>> released after <<date_after>>.
     sort_title: +<<section_number>>_Recently_Released_Shows
@@ -48,13 +47,12 @@ templates:
           - unplayed: true
             value: " (Unwatched)"
         default: ""
-    plex_search:
+    smart_filter:
       all:
         added.after: <<date_after>>
         episode_unplayed: <<unplayed>>
-    filters:
-      collection.not: <<exclude_collection>>
-    collection_order: added.desc
+        collection.not: <<exclude_collection>>
+      sort_by: added.desc
     label: <<collection_name>>
     summary: Recently Added Shows<<collection_name_suffix>> after <<date_after>>.
     sort_title: +<<section_number>>_Recently_Added_Shows
@@ -84,18 +82,24 @@ templates:
     sync_mode: sync
 
   # Continue Watching Shows
-  # Shows that have been started (at least some episodes watched)
-  # The episode_progress: true filter automatically excludes fully watched shows (100%)
+  # Shows with some episodes watched but not all (partially completed seasons/shows)
+  # Uses smart_filter with nested logic to detect:
+  # - Shows with episodes in progress (partially watched), OR
+  # - Shows with both watched and unwatched episodes
   # - section_number: For sort_title ordering (default: "00")
   continue_watching_shows:
     default:
       section_number: "00"
     smart_filter:
-      all:
-        episode_progress: true
+      any:
+        any:
+          episode_progress: true
+        all:
+          episode_unplayed: false
+          unplayed_episodes: true
       sort_by: viewed.desc
     label: <<collection_name>>
-    summary: Shows you've started watching (excluding fully watched shows).
+    summary: Shows you've started watching but haven't finished.
     sort_title: +<<section_number>>_Continue_Watching_Shows
     visible_home: false
     visible_shared: false
@@ -122,11 +126,11 @@ templates:
           - unplayed: true
             value: " (Unwatched)"
         default: ""
-    plex_search:
+    smart_filter:
       all:
         collection: <<value>> Collection
         episode_unplayed: <<unplayed>>
-    collection_order: added.desc
+      sort_by: added.desc
     label: <<collection_name>>
     sort_title: +<<section_number>>2_Recently_Added_in_<<key>>_<<value>>
     summary: "The latest additions<<collection_name_suffix>> in <<value>> <<key>>."
@@ -139,7 +143,11 @@ templates:
       section_number: "00"
     smart_filter:
       all:
+        plays.lt: 1
+        last_played.before: 01/01/2000
+        episode_unplayed: true
         unplayed_episodes: true
+        episode_progress: false
       sort_by: random
     label: <<collection_name>>
     summary: Shows you haven't started watching yet.

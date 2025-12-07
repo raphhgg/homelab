@@ -1,0 +1,63 @@
+external_templates:
+  - file: /config-repo/collections/templates/base_templates.yml
+  - file: /config-repo/collections/templates/recommended_movies.yml
+
+collections:
+  Recently Added In Genre Collections:
+    template: { name: separator, section_number: "z1" }
+
+  Recently Added in Horror:
+    template:
+    - name: recently_added_in_collection_movies
+      section_number: "z11"
+      key: Genre
+      value: Horror
+      unplayed: true
+
+  Recently Added in Drama:
+    template:
+    - name: recently_added_in_collection_movies
+      section_number: "z11"
+      key: Genre
+      value: Drama
+      unplayed: true
+  
+  Recently Added in Comedy:
+    template:
+    - name: recently_added_in_collection_movies
+      section_number: "z11"
+      key: Genre
+      value: Comedy
+      unplayed: true
+  
+  Recently Added in Thriller:
+    template:
+    - name: recently_added_in_collection_movies
+      section_number: "z11"
+      key: Genre
+      value: Thriller
+      unplayed: true
+
+  Recently Added in Mystery:
+    template:
+    - name: recently_added_in_collection_movies
+      section_number: "z11"
+      key: Genre
+      value: Mystery
+      unplayed: true
+  
+  Recently Added in Mafia:
+    template:
+    - name: recently_added_in_collection_movies
+      section_number: "z11"
+      key: Genre
+      value: Mafia
+      unplayed: true
+  
+  Recently Added in Sci-Fi:
+    template:
+    - name: recently_added_in_collection_movies
+      section_number: "z11"
+      key: Genre
+      value: Sci-Fi
+      unplayed: true

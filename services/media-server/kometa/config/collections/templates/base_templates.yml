@@ -108,38 +108,54 @@ templates:
             value: Writer
           - role: producer
             value: Producer
-    plex_search:
+    smart_filter:
       all:
         <<role>>: <<person_name>>
-    collection_order: release.desc
+      sort_by: release.desc
     label: <<collection_name>>
     sort_title: +<<section_number>>1_<<role_label>>_<<person_name>>_Movies
     visible_home: false
     visible_shared: false
     visible_library: false
 
-  # Studio collection
-  # - studio_name: name of the studio (e.g., "A24", "Pixar")
-  # - section_number: "08"
-  studio:
-    plex_search:
-      all:
-        studio: <<studio_name>>
-    collection_order: year.desc
-    sort_title: +<<section_number>>1_<<studio_name>>_Studio_Movies
-    visible_home: false
-    visible_shared: false
-    visible_library: true
 
   # Network collection (for TV shows)
   # - network_name: name of the network (e.g., "HBO", "Netflix", "BBC")
   # - section_number: "06"
   network:
-    plex_search:
+    smart_filter:
       all:
         network: <<network_name>>
-    collection_order: year.desc
+      sort_by: year.desc
     sort_title: +<<section_number>>1_<<network_name>>_Network_Shows
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+
+  # Franchise collection (for movie series/franchises)
+  # - title_search: search string to match movie titles (e.g., "Mission Impossible")
+  # - section_number: "07"
+  # - sort_order: optional, defaults to year.asc (chronological order for franchises)
+  franchise:
+    optional:
+      - sort_order
+    default:
+      sort_order: year.asc
+    smart_filter:
+      all:
+        title: <<title_search>>
+      sort_by: <<sort_order>>
+    sort_title: +<<section_number>>1_Franchise_<<collection_name>>
+    visible_home: false
+    visible_shared: false
+    visible_library: true
+
+  letterboxd_list:
+    letterboxd_list_details: <<list_url>>
+    sync_mode: sync
+    sort_title: +<<section_number>>1_<<category>>_<<collection_name>>
+    letterboxd_description: <<list_url>>
+    collection_order: custom
     visible_home: false
     visible_shared: false
     visible_library: true

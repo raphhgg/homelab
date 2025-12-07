@@ -14,6 +14,14 @@ collections:
   Best Of Year Collections:
     template: { name: separator, section_number: "10" }
 
+  Best 2025 Movies:
+    template:
+      name: letterboxd_bestof_list
+      year: 2025
+      list_url: https://letterboxd.com/raphh11/list/best-of-2025/
+    collection_order: custom
+    summary: "Best Movies released in 2025, ranked."
+
   Best 2024 Movies:
     template:
       name: letterboxd_bestof_list
@@ -21,6 +29,7 @@ collections:
       list_url: https://letterboxd.com/raphh11/list/best-of-2024/
     collection_order: custom
     summary: "Best Movies released in 2024, ranked."
+
 
 
   # Best released in 2025

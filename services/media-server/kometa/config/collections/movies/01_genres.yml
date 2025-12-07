@@ -14,14 +14,6 @@ collections:
       value: Horror
     summary: "Films designed to evoke fear, tension, and dread through the supernatural, psychological, or visceral."
 
-  Recently Added in Horror:
-    template:
-    - name: recently_added_in_collection_movies
-      section_number: "01"
-      key: Genre
-      value: Horror
-      unplayed: true
-
   Drama Collection:
     template:
     - name: genre
@@ -29,14 +21,6 @@ collections:
       key: Radarr
       value: Drama
     summary: "Films that focus on realistic characters, emotional themes, and personal conflicts, exploring the complexities of human experience and relationships."
-
-  Recently Added in Drama:
-    template:
-    - name: recently_added_in_collection_movies
-      section_number: "01"
-      key: Genre
-      value: Drama
-      unplayed: true
   
   Comedy Collection:
     template:
@@ -46,14 +30,6 @@ collections:
       value: Comedy
     summary: "Films that use humor, wit, and playful situations to entertain, uplift, and make audiences laugh at life’s quirks and absurdities."
 
-  Recently Added in Comedy:
-    template:
-    - name: recently_added_in_collection_movies
-      section_number: "01"
-      key: Genre
-      value: Comedy
-      unplayed: true
-
   Thriller Collection:
     template:
     - name: genre
@@ -61,14 +37,6 @@ collections:
       key: Radarr
       value: Thriller
     summary: "Films that build suspense and excitement through high-stakes situations, twists, and psychological tension, keeping viewers on edge until the very end."
-
-  Recently Added in Thriller:
-    template:
-    - name: recently_added_in_collection_movies
-      section_number: "01"
-      key: Genre
-      value: Thriller
-      unplayed: true
   
   Mystery Collection:
     template:
@@ -77,14 +45,6 @@ collections:
       key: Radarr
       value: Mystery
     summary: "Films centered on puzzles, secrets, or crimes, where clues unfold gradually as characters—and viewers—work to uncover the truth."
-
-  Recently Added in Mystery:
-    template:
-    - name: recently_added_in_collection_movies
-      section_number: "01"
-      key: Genre
-      value: Mystery
-      unplayed: true
   
   Mafia Collection:
     template:
@@ -94,14 +54,6 @@ collections:
       value: Mafia
     summary: "Films that delve into the world of organized crime, following mob families, power struggles, and codes of loyalty—and the violent consequences when those codes are broken."
 
-  Recently Added in Mafia:
-    template:
-    - name: recently_added_in_collection_movies
-      section_number: "01"
-      key: Genre
-      value: Mafia
-      unplayed: true
-
   Sci-Fi Collection:
     template:
     - name: genre
@@ -109,14 +61,6 @@ collections:
       key: Radarr
       value: Sci-Fi
     summary: "Films that explore imaginative futures, advanced technology, space, or alternate realities, using scientific ideas to ask big ‘what if?’ questions about humanity and the universe."
-
-  Recently Added in Sci-Fi:
-    template:
-    - name: recently_added_in_collection_movies
-      section_number: "01"
-      key: Genre
-      value: Sci-Fi
-      unplayed: true
 
   True Crime Collection:
     template:

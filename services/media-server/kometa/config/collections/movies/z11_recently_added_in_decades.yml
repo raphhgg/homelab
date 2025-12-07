@@ -1,0 +1,31 @@
+external_templates:
+  - file: /config-repo/collections/templates/base_templates.yml
+  - file: /config-repo/collections/templates/recommended_movies.yml
+
+collections:
+  Recently Added In Decades Collections:
+    template: { name: separator, section_number: "z2" }
+
+  Recently Added in 2010s Collection:
+    template:
+    - name: recently_added_in_collection_movies
+      section_number: "z21"
+      key: Decade
+      value: 2010s
+      unplayed: true
+
+  Recently Added in 2000s Collection:
+    template:
+    - name: recently_added_in_collection_movies
+      section_number: "z21"
+      key: Decade
+      value: 2000s
+      unplayed: true
+
+  Recently Added in 90s Collection:
+    template:
+    - name: recently_added_in_collection_movies
+      section_number: "z21"
+      key: Decade
+      value: 90s
+      unplayed: true

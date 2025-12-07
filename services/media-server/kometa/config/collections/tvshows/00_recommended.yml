@@ -23,7 +23,7 @@ collections:
   Recently Watched Shows:
     template:
       - name: recently_watched_shows
-        date_after: 2025-09-01
+        date_after: 2025-01-01
         section_number: "004"
 
   Continue Shows:
@@ -31,7 +31,7 @@ collections:
       - name: continue_watching_shows
         section_number: "002"
 
-  Shows Recommendations:
+  Start New Shows:
     template:
       - name: recommendations_new_shows
         section_number: "003"

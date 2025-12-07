@@ -77,7 +77,7 @@ templates:
         unplayed: <<unplayed>>
       sort_by: added.desc
     label: <<collection_name>>
-    sort_title: +<<section_number>>2_Recently_Added_in_<<key>>_<<value>>
+    sort_title: +<<section_number>>_Recently_Added_in_<<key>>_<<value>>
     summary: "The latest additions<<collection_name_suffix>> in <<value>> <<key>>."
     visible_home: false
     visible_shared: true

@@ -1,37 +1,25 @@
 external_templates:
   - file: /config-repo/collections/templates/base_templates.yml
 
-templates:
-  Franchise:
-    letterboxd_list_details: <<list_url>>
-    sync_mode: sync
-    sort_title: +071_<<tag>>_Letterboxd_Franchise_Movies
-    letterboxd_description: <<list_url>>
-    collection_order: custom
-    visible_home: false
-    visible_shared: false
-    visible_library: true
-
 collections:
   Franchise Collections:
     template: { name: separator, section_number: "07" }
     
   The Conjuring Collection:
     template:
-      name: Franchise
+      name: letterboxd_list
       list_url: https://letterboxd.com/raphh11/list/franchise-the-conjuring/
+      category: Franchise
+      section_number: "07"
 
   Scream Collection:
     template:
-      name: Franchise
-      list_url: https://letterboxd.com/raphh11/list/franchise-scream/
+      name: franchise
+      title_search: "Scream"
+      section_number: "07"
 
   Mission Impossible Collection:
-    plex_search:
-      all:
-        title: "Mission Impossible"
-    sort_title: +071_Mission_Impossible_Franchise_Movies
-    collection_order: year.asc
-    visible_home: false
-    visible_shared: false
-    visible_library: true
+    template:
+      name: franchise
+      title_search: "Mission Impossible"
+      section_number: "07"

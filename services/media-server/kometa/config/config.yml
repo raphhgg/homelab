@@ -16,6 +16,8 @@ libraries:
     - file: /config-repo/collections/movies/08_studios.yml
     - file: /config-repo/collections/movies/09_letterboxd_tiers.yml
     - file: /config-repo/collections/movies/10_letterboxd_bestof_year.yml
+    - file: /config-repo/collections/movies/z10_recently_added_in_genre.yml
+    - file: /config-repo/collections/movies/z11_recently_added_in_decades.yml
 
     # MOVIE OVERLAYS 
     remove_overlays: false
@@ -55,6 +57,7 @@ libraries:
     settings:
       asset_directory:
       - /data/assets
+
 
   ### TV SHOWS LIBRARY ###
   TV Shows:
@@ -99,7 +102,7 @@ libraries:
         builder_level: season
         use_gradient_top: false
         use_gradient_bottom: false
-        
+
 
     # EPISODE OVERLAYS
     - file: /config-repo/custom_overlays/media_info.yml
@@ -111,7 +114,7 @@ libraries:
     - default: runtimes
       template_variables:
         builder_level: episode
-        text: ""
+        text: ''
         horizontal_align: center
         back_width: 300
 
@@ -130,6 +133,7 @@ libraries:
     settings:
       asset_directory:
       - /data/assets
+
 
   ### MUSIC LIBRARY ###
   Music:
@@ -172,7 +176,7 @@ libraries:
     - default: runtimes
       template_variables:
         builder_level: episode
-        text: ""
+        text: ''
         horizontal_align: center
         back_width: 300
 
@@ -234,6 +238,15 @@ settings:
   overlay_artwork_quality: 75
   show_unfiltered: false
 
+webhooks:
+  error: https://discord.com/api/webhooks/1443293496604627007/AaPHL5p1bytnO5GKrb-ladb8VQdCyJqVJ18qUJVATQoqjrcAiZZPjX6ztXxruBJ38CAc
+  run_start: https://discord.com/api/webhooks/1443293496604627007/AaPHL5p1bytnO5GKrb-ladb8VQdCyJqVJ18qUJVATQoqjrcAiZZPjX6ztXxruBJ38CAc
+  run_end: https://discord.com/api/webhooks/1443293496604627007/AaPHL5p1bytnO5GKrb-ladb8VQdCyJqVJ18qUJVATQoqjrcAiZZPjX6ztXxruBJ38CAc
+  changes: https://discord.com/api/webhooks/1443293496604627007/AaPHL5p1bytnO5GKrb-ladb8VQdCyJqVJ18qUJVATQoqjrcAiZZPjX6ztXxruBJ38CAc
+
+
+  version:
+  delete:
 plex:
   url: http://10.10.2.2:32400
   token: 23DyfRJ6SjpxwHMYkN5K
@@ -266,7 +279,7 @@ sonarr:
   monitor: none
 
   # Quality profile for new shows.
-  quality_profile: 2160p Quality (Season Pack Only)
+  quality_profile: 2160p Quality
   # Language profile for new shows.
   language_profile: English
   # Series type when adding new shows.
@@ -304,7 +317,6 @@ radarr:
   radarr_path:
   plex_path:
   ignore_cache: false
-
   delete:
 
 tmdb:

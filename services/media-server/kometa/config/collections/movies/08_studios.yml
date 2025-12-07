@@ -3,10 +3,10 @@ external_templates:
 
 templates:
   studios:
-    plex_search:
+    smart_filter:
       all:
         studio: <<value>>
-    collection_order: year.desc
+      sort_by: year.desc
     sort_title: +081_<<key_name>>_Studio_Movies
     visible_home: false
     visible_shared: false

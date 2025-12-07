@@ -15,6 +15,8 @@ collections:
   Tier Collections:
     template: { name: separator, section_number: "09" }
 
+  # 5 Stars Movies
+  # Move to the top
   Favorites Movies:
     template:
     - name: letterboxd_ratings
