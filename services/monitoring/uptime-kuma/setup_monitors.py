@@ -68,6 +68,16 @@ MONITOR_GROUPS = {
             "critical": True,
             "description": "GitHub Actions runner",
         },
+        {
+            "name": "gluetun",
+            "type": MonitorType.HTTP,
+            "url": "http://10.10.2.2:8888",
+            "interval": 60,
+            "retryInterval": 30,
+            "maxretries": 2,
+            "critical": True,
+            "description": "VPN gateway (Gluetun)",
+        },
     ],
     "monitoring": [
         {

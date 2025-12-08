@@ -2,55 +2,21 @@ services:
   qbittorrent:
     container_name: qbittorrent
     image: ghcr.io/hotio/qbittorrent:release-5.1.3
-    ports:
-      - 8080:8080
+    network_mode: "container:gluetun"
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - UMASK=${UMASK}
       - TZ=${TZ}
-      - VPN_ENABLED=true
-      - VPN_CONF=wg0-fix
-      - VPN_PROVIDER=pia
-      - VPN_LAN_NETWORK=10.10.2.0/24
-      - VPN_LAN_LEAK_ENABLED=false #
-      - VPN_EXPOSE_PORTS_ON_LAN #
-      - VPN_AUTO_PORT_FORWARD=true #
-      - VPN_KEEP_LOCAL_DNS=true #
-      - VPN_FIREWALL_TYPE=auto #
-      - VPN_HEALTHCHECK_ENABLED=true #
-      - VPN_PIA_USER=${VPN_PIA_USER}
-      - VPN_PIA_PASS=${VPN_PIA_PASS}
-      - VPN_PIA_PREFERRED_REGION=${VPN_PIA_PREFERRED_REGION} #Switzerland #,Romania,Iceland,Panama
-      - VPN_PIA_DIP_TOKEN=no #
-      - VPN_PIA_PORT_FORWARD_PERSIST=false #
-      - PRIVOXY_ENABLED=false #
-      - UNBOUND_ENABLED=false #
+      - WEBUI_PORTS=8081/tcp,8081/udp
       - TP_HOTIO=true
       - TP_THEME=catppuccin-mocha
       - S6_LOGGING=1
-      # - TP_THEME=organizr
-    dns:
-      - 1.1.1.1
-      - 1.0.0.1
     volumes:
       - ${DOCKER_APPDATA_PATH}/qbittorrent:/config:rw
       - ${DOWNLOAD_PATH}/torrents:/downloads/torrents:rw
       - ${MEDIAS_PATH}:/data/medias:rw
       - ${DOCKER_APPDATA_PATH}/themepark/98-themepark-qbittorrent:/etc/cont-init.d/98-themepark:rw
-    cap_add:
-      - NET_ADMIN
-    sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1
-      - net.ipv6.conf.all.disable_ipv6=1
-    devices:
-      - /dev/net/tun:/dev/net/tun
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
-    networks:
-      - main
-
-networks:
-  main:
-    external: true
