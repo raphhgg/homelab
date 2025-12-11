@@ -9,10 +9,8 @@ services:
       - KOMETA_DEBUG=true
       - KOMETA_CONFIG=/config/config.yml
     volumes:
-      # Config from dedicated git repo in appdata
-      - ${DOCKER_APPDATA_PATH}/kometa/config:/config:rw
-      # Runtime data from appdata (logs, overlays, assets, cache)
-      - ${DOCKER_APPDATA_PATH}/kometa:/data:rw
+      # Entire appdata directory as /config (git repo with runtime files gitignored)
+      - ${DOCKER_APPDATA_PATH}/kometa:/config:rw
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
