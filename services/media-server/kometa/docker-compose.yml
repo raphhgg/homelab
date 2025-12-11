@@ -7,9 +7,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
       - KOMETA_DEBUG=true
-      - KOMETA_CONFIG=/config/config.yml
     volumes:
-      # Entire appdata directory as /config (git repo with runtime files gitignored)
       - ${DOCKER_APPDATA_PATH}/kometa:/config:rw
     restart: always
     labels:
