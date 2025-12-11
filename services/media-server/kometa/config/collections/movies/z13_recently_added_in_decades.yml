@@ -2,30 +2,58 @@ external_templates:
   - file: /config-repo/collections/templates/base_templates.yml
   - file: /config-repo/collections/templates/recommended_movies.yml
 
+templates:
+  # Template for recently added in decade collections
+  recently_added_in_decade_template:
+    smart_filter:
+      all:
+        decade: <<value>>
+        label.not:
+          - radarr Documentary
+          - radarr Documentary-Other
+          - radarr True-Crime
+        unplayed: true
+      sort_by: added.desc
+    label: <<collection_name>>
+    sort_title: +z131_Recently_Added_in_Decade_<<value>>
+    visible_home: false
+    visible_shared: true
+    visible_library: true
+    sync_mode: sync
+
+  # Template for recently added before a specific year
+  recently_added_before:
+    smart_filter:
+      all:
+        release.before: <<tag>>-01-01
+        unplayed: true
+      sort_by: added.desc
+    label: <<collection_name>>
+    sort_title: +z130_Recently_Added_Before_<<tag>>
+    visible_home: false
+    visible_shared: true
+    visible_library: true
+    sync_mode: sync
+
+dynamic_collections:
+  Recently Added in Decades:
+    type: decade
+    exclude:
+      - 1970
+      - 1960
+      - 1950
+      - 1940
+      - 1930
+      - 1920
+      - 1910
+      - 1900
+    title_format: Recently Added in <<key_name>> Collection
+    template: recently_added_in_decade_template
+    sync: true
+
 collections:
   Recently Added In Decades Collections:
     template: { name: separator, section_number: "z13" }
 
-  Recently Added in 2010s Collection:
-    template:
-    - name: recently_added_in_collection_movies
-      section_number: "z131"
-      key: Decade
-      value: 2010s
-      unplayed: true
-
-  Recently Added in 2000s Collection:
-    template:
-    - name: recently_added_in_collection_movies
-      section_number: "z131"
-      key: Decade
-      value: 2000s
-      unplayed: true
-
-  Recently Added in 90s Collection:
-    template:
-    - name: recently_added_in_collection_movies
-      section_number: "z131"
-      key: Decade
-      value: 90s
-      unplayed: true
+  Recently Added in 1970s and Before Collection:
+    template: { name: recently_added_before, tag: 1980 }

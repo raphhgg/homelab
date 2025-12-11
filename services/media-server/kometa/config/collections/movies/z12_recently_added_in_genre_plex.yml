@@ -1,0 +1,83 @@
+external_templates:
+  - file: /config-repo/collections/templates/base_templates.yml
+  - file: /config-repo/collections/templates/recommended_movies.yml
+
+templates:
+  # Recently Added in Genre (using Plex native genres)
+  # Uses Plex's native genre metadata instead of collections
+  # For dynamic collections: <<value>> contains the genre name
+  recently_added_in_plex_genre:
+    smart_filter:
+      all:
+        genre: <<value>>
+        genre.not:
+          - Anime
+          - Documentary
+        unplayed: true
+      sort_by: added.desc
+    label: <<collection_name>>
+    sort_title: +z121_Recently_Added_in_Plex_Genre_<<value>>
+    summary: "The latest unwatched additions in <<value>> genre."
+    visible_home: false
+    visible_shared: true
+    visible_library: true
+    sync_mode: sync
+  
+  recently_added_comedy:
+    smart_filter:
+      all:
+        genre: Comedy
+        genre.not:
+          - Drama
+          - War
+          - Thriller
+          - Documentary
+          - Horror
+        unplayed: true
+      sort_by: added.desc
+    label: <<collection_name>>
+    sort_title: +z121_Recently_Added_in_Comedy_Genre
+    summary: "The latest unwatched additions in Comedy genre."
+    visible_home: false
+    visible_shared: true
+    visible_library: true
+    sync_mode: sync
+
+collections:
+  Recently Added In Plex Genre Collections:
+    template: { name: separator, section_number: "z12" }
+
+dynamic_collections:
+  Recently Added in Plex Genres:
+    type: genre
+    include:
+      - Action
+      # - Adventure
+      # - Animation
+      # - Biography
+      - Comedy
+      - Crime
+      # - Documentary
+      - Drama
+      # - Family
+      - Fantasy
+      # - History
+      - Horror
+      # - Music
+      # - Musical
+      - Mystery
+      - Romance
+      - Science Fiction
+      # - Sport
+      # - Suspense
+      - Thriller
+      # - War
+      # - Western
+    title_format: Recently Added in <<key_name>>
+    template: recently_added_in_plex_genre
+    sync: true
+
+    # Musical, Music
+    # True Crime = Documentary + tmdb keyword ?
+    # Anime
+    # Animation

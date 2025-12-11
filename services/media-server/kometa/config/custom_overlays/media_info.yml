@@ -4,6 +4,7 @@ external_templates:
     default:
       vertical_offset: 50
       horizontal_align: left
+      use_resolution: true
     conditionals:
       file:
         conditions:
@@ -15,6 +16,8 @@ external_templates:
             value: /config-repo/custom_overlays/images/media_info/codec/Plus_small.png
           - type: codec
             value: /config-repo/custom_overlays/images/media_info/codec/<<key>>.png
+          - key: 2K
+            value: /config-repo/custom_overlays/images/media_info/resolution/1080P.png
           - type: resolution
             value: /config-repo/custom_overlays/images/media_info/resolution/<<key>>.png
       final_use:
@@ -85,6 +88,8 @@ templates:
         conditions:
           - key: 1080P
             value: 1080p
+          - key: 2K
+            value: 2k
           - key: Ultra-HD
             value: 4k
     optional:
@@ -95,7 +100,7 @@ templates:
       - <<use_<<type>>>>
     ignore_blank_results: true
     plex_search:
-      all:
+      any:
         resolution: <<resolution>>
 
   backdrop:
@@ -149,6 +154,9 @@ overlays:
 
   HD:
     variables: { key: 1080P, weight: 490, type: resolution }
+    template: [ name: standard, name: resolution_info ]
+  2K:
+    variables: { key: 2K, weight: 491, type: resolution }
     template: [ name: standard, name: resolution_info ]
   4K:
     variables: { key: Ultra-HD, weight: 500, type: resolution }

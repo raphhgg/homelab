@@ -17,7 +17,7 @@ libraries:
     - file: /config-repo/collections/movies/10_letterboxd_bestof_year.yml
     - file: /config-repo/collections/movies/z10_recently_added_released.yml
     - file: /config-repo/collections/movies/z11_recommended.yml
-    - file: /config-repo/collections/movies/z12_recently_added_in_genre.yml
+    - file: /config-repo/collections/movies/z12_recently_added_in_genre_plex.yml
     - file: /config-repo/collections/movies/z13_recently_added_in_decades.yml
 
     # MOVIE OVERLAYS 
