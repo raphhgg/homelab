@@ -2,17 +2,15 @@ services:
   kometa:
     image: kometateam/kometa:nightly
     container_name: kometa
-    # Keep idle + create symlinks to redirect runtime files to appdata
-    entrypoint: ["/bin/sh", "-c", "ln -sf /data/logs /config-repo/logs && ln -sf /data/config.cache /config-repo/config.cache && ln -sf /data/UUID /config-repo/UUID && ln -sf /data/overlays /config-repo/overlays && tail -f /dev/null"]
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
       - KOMETA_DEBUG=true
-      - KOMETA_CONFIG=/config-repo/config.yml
+      - KOMETA_CONFIG=/config/config.yml
     volumes:
-      # Config from git repo (configuration files only)
-      - ./config:/config-repo:rw
+      # Config from dedicated git repo in appdata
+      - ${DOCKER_APPDATA_PATH}/kometa/config:/config:rw
       # Runtime data from appdata (logs, overlays, assets, cache)
       - ${DOCKER_APPDATA_PATH}/kometa:/data:rw
     restart: always

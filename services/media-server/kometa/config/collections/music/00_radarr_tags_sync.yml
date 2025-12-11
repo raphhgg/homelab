@@ -1,9 +1,0 @@
-external_templates:
-  - file: /config-repo/collections/templates/base_templates.yml
-  - file: /config-repo/collections/templates/recommended_templates.yml
-
-collections:
-  Add Live Music Label:
-    template: { name: radarr_tag, tag: Concert }
-  Add Documentary Music Label:
-    template: { name: radarr_tag, tag: Documentary-Music }

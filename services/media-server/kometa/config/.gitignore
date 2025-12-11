@@ -1,9 +1,0 @@
-# Runtime files - symlinked to appdata, NOT version controlled
-logs
-config.cache
-UUID
-overlays
-
-# Backup files
-*.original
-*.backup

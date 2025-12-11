@@ -2,71 +2,110 @@
 
 Automated Plex library management for collections, metadata, overlays, and more.
 
-## Architecture: Dual-Volume Version Control
+## Configuration Repository
 
-Kometa uses a unique dual-volume setup to separate version-controlled configuration from runtime artifacts.
+Kometa configuration is maintained in a **dedicated git repository** separate from the homelab infrastructure:
+
+**Repository**: [github.com/raaphhh/kometa-config](https://github.com/raaphhh/kometa-config) (private)
+
+**Location**: `/volume2/docker/appdata/kometa/config/`
+
+This separation keeps infrastructure configuration (docker-compose) in the homelab repo while application configuration (YAML files, fonts, overlays) lives in its own versioned repository.
+
+## Architecture
 
 ### Directory Structure
 
 ```
-services/media-servers/_plex/kometa/
-├── docker-compose.yml
-└── config/                          # VERSION CONTROLLED
-    ├── config.yml                   # Main configuration
-    ├── collections/                 # Collection definitions
-    │   ├── movies/
-    │   └── tvshows/
-    ├── custom_fonts/                # Custom fonts for overlays
-    ├── .gitignore                   # Ignores symlinks and backups
-    └── [symlinks - created at runtime, NOT tracked]
-        ├── logs -> /data/logs
-        ├── config.cache -> /data/config.cache
-        ├── UUID -> /data/UUID
-        └── overlays -> /data/overlays
+/volume2/docker/appdata/kometa/
+├── config/                          # DEDICATED GIT REPO
+│   ├── .git/                       # Git repository
+│   ├── config.yml                  # Main configuration
+│   ├── collections/                # Collection definitions
+│   │   ├── movies/
+│   │   └── tvshows/
+│   ├── custom_fonts/               # Custom fonts for overlays
+│   ├── custom_overlays/            # Overlay configurations
+│   ├── metadata/                   # Metadata files
+│   └── .gitignore                  # Ignores runtime artifacts
+├── logs/                           # Runtime - NOT in git
+├── overlays/                       # Runtime - NOT in git
+├── assets/                         # Runtime - NOT in git
+├── missing/                        # Runtime - NOT in git
+├── config.cache                    # Runtime - NOT in git
+└── UUID                            # Runtime - NOT in git
 ```
 
 ### Volume Mounts
 
 ```yaml
 volumes:
-  - ./config:/config-repo:rw        # Config from git repo
-  - ${DOCKER_APPDATA_PATH}/kometa:/data:rw  # Runtime data
+  - ${DOCKER_APPDATA_PATH}/kometa/config:/config:rw  # Config from dedicated repo
+  - ${DOCKER_APPDATA_PATH}/kometa:/data:rw           # Runtime data
 environment:
-  - KOMETA_CONFIG=/config-repo/config.yml
+  - KOMETA_CONFIG=/config/config.yml
 ```
 
 ### Runtime Files (in appdata, NOT git)
 
-- `/data/logs/` - Log files (~200MB)
-- `/data/overlays/` - Generated overlay images (~3GB)
-- `/data/assets/` - Custom posters/artwork (~26MB)
-- `/data/config.cache` - Runtime cache (~54MB)
+- `/data/logs/` - Log files (~16MB)
+- `/data/overlays/` - Generated overlay images (~2.8GB)
+- `/data/assets/` - Custom posters/artwork (~609MB)
+- `/data/config.cache` - Runtime cache (~65MB)
 - `/data/UUID` - Instance identifier
-- `/data/missing/` - Generated reports
+- `/data/missing/` - Generated reports (~1.3MB)
 
 ### Path Convention in config.yml
 
-- **Configuration files**: `/config-repo/collections/...`, `/config-repo/custom_fonts/...`
+- **Configuration files**: `/config/collections/...`, `/config/custom_fonts/...`
 - **Runtime files**: `/data/assets/...`, `/data/missing/...`, `/data/overlays/...`
-
-### Symlinks
-
-Container entrypoint automatically creates symlinks on startup to redirect Kometa's runtime files to appdata:
-
-```bash
-ln -sf /data/logs /config-repo/logs
-ln -sf /data/config.cache /config-repo/config.cache
-ln -sf /data/UUID /config-repo/UUID
-ln -sf /data/overlays /config-repo/overlays
-```
 
 ### Why This Approach
 
-- ✅ Only ~600KB of pure configuration in git repo
-- ✅ ~3.5GB of runtime artifacts stay in appdata
-- ✅ Clean separation for backups and version control
-- ✅ Container fully reproducible from git repo
-- ✅ Scheduled execution via Cronicle (external scheduling)
+- ✅ Clean separation: Infrastructure (docker-compose) vs application config (Kometa YAML)
+- ✅ Focused git history: Kometa config changes tracked separately from homelab changes
+- ✅ Easier maintenance: Config changes don't clutter homelab repo
+- ✅ Better portability: Config repo can be cloned independently
+- ✅ Standard Docker practice: Config in appdata with dedicated version control
+
+## Managing Configuration
+
+### Making Configuration Changes
+
+Configuration files are in a separate git repository:
+
+```bash
+# Navigate to config directory
+cd /volume2/docker/appdata/kometa/config
+
+# Make changes to YAML files
+vim collections/movies/some-collection.yml
+
+# Commit and push
+git add .
+git commit -m "Update movie collections"
+git push origin main
+```
+
+### Updating Docker Infrastructure
+
+Infrastructure changes (docker-compose.yml, .env) are managed in the homelab repo:
+
+```bash
+# Navigate to homelab repo
+cd /volume2/docker/compose/services/media-server/kometa
+
+# Make changes
+vim docker-compose.yml
+
+# Commit to homelab repo
+git add .
+git commit -m "[kometa] update docker configuration"
+git push origin main
+
+# Apply changes
+docker-compose up -d
+```
 
 ### Scheduled Execution
 
