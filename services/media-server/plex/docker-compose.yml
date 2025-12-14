@@ -22,7 +22,7 @@ services:
     volumes:
       - ${DOCKER_APPDATA_PATH}/plex/config:/config
       - /dev/shm:/transcode
-      - ${MEDIAS_PATH:-/volume1/data/medias}:/data/medias
+      - ${MEDIAS_PATH:-/volume3/data/medias}:/data/medias
     ports:
       - 32400:32400
     devices:

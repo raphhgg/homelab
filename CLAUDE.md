@@ -52,8 +52,8 @@ Services use individual `.env` files in each service directory (**not** a shared
 - `PUID=1000`, `PGID=1000`: User/group permissions
 - `TZ=Europe/Brussels`: Timezone
 - `DOCKER_APPDATA_PATH=/volume2/docker/appdata`: Base path for application data/config
-- `MEDIAS_PATH=/volume1/medias`: Base path for media files
-- `DOWNLOAD_PATH=/volume1/downloads`: Base path for downloads
+- `MEDIAS_PATH=/volume3/data/medias`: Base path for media files
+- `DOWNLOAD_PATH=/volume2/downloads`: Base path for downloads
 - `DOCKER_HOST=tcp://docker-proxy:2375`: Docker Socket Proxy endpoint (for services needing Docker API access)
 - Service-specific variables (VPN credentials, API tokens, etc.)
 

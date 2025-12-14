@@ -15,6 +15,6 @@ services:
       - ${DOWNLOAD_PATH}/usenet/incomplete:/data/usenet/incomplete:rw
       - ${MEDIAS_PATH}:/data/medias
       - ${DOCKER_APPDATA_PATH}/themepark/98-themepark-sabnzbd:/etc/cont-init.d/98-themepark:rw
-    restart: always
+    restart: unless-stopped
     labels:
       - "com.centurylinklabs.watchtower.enable=true"

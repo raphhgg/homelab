@@ -27,15 +27,15 @@ services:
     volumes:
       # Monitor only main volumes - accurate filesystem-level usage
       # For directory-level usage (docker, downloads, movies, etc.), use Cronicle scripts
-      - /volume1:/extra-filesystems/cachedev_1__Volume1:ro
+      - /volume3:/extra-filesystems/cachedev_1__Volume3:ro
       - /volume2:/extra-filesystems/cachedev_0__Volume2:ro
     environment:
       - PORT=45876
       - KEY=${BESZEL_AGENT_KEY}
       - DOCKER_HOST=${DOCKER_HOST}
-      # Set main filesystem to Volume1 using the container mount point
+      # Set main filesystem to Volume3 using the container mount point
       # Beszel will use this for the main "Disk Usage" panel
-      - FILESYSTEM=/extra-filesystems/cachedev_1__Volume1
+      - FILESYSTEM=/extra-filesystems/cachedev_1__Volume3
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
