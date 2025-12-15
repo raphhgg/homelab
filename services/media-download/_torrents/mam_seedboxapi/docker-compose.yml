@@ -3,7 +3,7 @@ services:
     image: myanonamouse/seedboxapi
     container_name: mam_seedboxapi
     user: ${PUID}:${PGID}
-    network_mode: "container:qbittorrent"
+    network_mode: "container:qbit-main"
     volumes:
       - ${DOCKER_APPDATA_PATH}/mam_seedboxapi:/config
     environment:
