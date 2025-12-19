@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  upload-assistant:
+    image: ghcr.io/audionut/upload-assistant:web-ui
+    container_name: upload-assistant
+    user: ${PUID}:${PGID}
+    environment:
+      - TZ=${TZ}
+      - TORRENT_STORAGE_DIR=/torrents
+      - DATA_DIR=/data/medias
+    ports:
+      - 8086:5000
+    networks:
+      - main
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/upload-assistant/config.py:/Upload-Assistant/data/config.py:ro
+      - ${MEDIAS_PATH}/downloads/torrents/complete:/torrent_storage_dir:ro
+      - ${MEDIAS_PATH}:/data/medias:ro
+      - ${DOCKER_APPDATA_PATH}/qbit-main/data/BT_backup:/BT_backup:ro
+      - ${DOCKER_APPDATA_PATH}/upload-assistant/tmp:/Upload-Assistant/tmp
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    command: tail -f /dev/null
+
+networks:
+  main:
+    external: true
