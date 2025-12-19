@@ -28,7 +28,8 @@ services:
       - VPN_PORT_FORWARDING_PROVIDER=private internet access
       - SERVER_NAMES=zurich406
       # Auto-update qBittorrent with forwarded port (only qbit-main now, qbit-cross moved to gluetun-cross)
-      - VPN_PORT_FORWARDING_UP_COMMAND=/bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{PORT}},\"current_network_interface\":\"{{VPN_INTERFACE}}\",\"random_port\":false,\"upnp\":false}" http://127.0.0.1:8081/api/v2/app/setPreferences 2>&1'
+      # Wait for qBittorrent to be ready (can take 2+ minutes on first start), then configure the forwarded port
+      - VPN_PORT_FORWARDING_UP_COMMAND=/bin/sh -c 'sleep 20 && for i in $(seq 1 60); do if wget -qO- http://127.0.0.1:8081/api/v2/app/version >/dev/null 2>&1; then wget -O- --post-data "json={\"listen_port\":{{PORT}},\"current_network_interface\":\"{{VPN_INTERFACE}}\",\"random_port\":false,\"upnp\":false}" http://127.0.0.1:8081/api/v2/app/setPreferences 2>&1 && exit 0; fi; sleep 5; done; exit 1'
       - VPN_PORT_FORWARDING_DOWN_COMMAND=/bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":0,\"current_network_interface\":\"lo\"}" http://127.0.0.1:8081/api/v2/app/setPreferences 2>&1'
     dns:
       - 1.1.1.1
