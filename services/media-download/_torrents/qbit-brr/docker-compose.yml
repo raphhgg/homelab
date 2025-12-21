@@ -12,6 +12,7 @@ services:
       - TP_HOTIO=true
       - TP_THEME=catppuccin-mocha
       - S6_LOGGING=1
+      - LIBTORRENT=v2
     volumes:
       - ${DOCKER_APPDATA_PATH}/qbit-brr:/config:rw
       - ${DOWNLOAD_PATH}/torrents:/downloads/torrents:rw
