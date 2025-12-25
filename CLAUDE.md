@@ -12,30 +12,31 @@ This is a homelab infrastructure repository that manages Docker-based services o
 
 Services are organized in the `services/` directory with the following categories:
 
-- **media-download/**: Download and acquisition services
-  - `_arrs/`: Media management (Sonarr, Radarr, Prowlarr, Bazarr, etc.)
-  - `_torrents/`: Torrent-related services (qBittorrent, qbit_manage, cross-seed, autobrr, unpackerr)
-  - Other: Jellyseerr, SABnzbd, TheLounge
+- **arrs/**: Media management applications (Sonarr, Radarr, Prowlarr, Bazarr, Profilarr, Calibre)
+
+- **torrents/**: Torrent-related services
+  - qBittorrent instances (qbit-main, qbit-brr, qbit-cross)
+  - Torrent automation (autobrr, cross-seed, qbit_manage)
+  - Tools (unpackerr, upload-assistant, qui, mam_seedboxapi, thelounge)
 
 - **media-server/**: Media streaming and management
   - Plex and related services: Plex, Kometa, ImageMaid, Plex-Auto-Languages, Plex-Trakt-Sync
-  - Other: Tautulli, Trailarr
+  - Other: Tautulli, Trailarr, Jellyseerr
 
 - **infrastructure/**: Core infrastructure services
   - Cronicle (job scheduler)
   - GitHub Actions runner (self-hosted)
   - Cloudflare DDNS
   - Docker Socket Proxy
+  - VPN gateways (gluetun, gluetun-brr, gluetun-cross)
 
 - **monitoring/**: Monitoring and management tools (Apprise, Beszel, Dozzle, Uptime-kuma, Watchtower)
+
+- **sabnzbd/**: Usenet download client (standalone service)
 
 - **syncthing/**: File synchronization
 
 - **smart-home/**: Smart home services
-
-### Folder Naming Convention
-
-Folders prefixed with `_` (underscore) are **parent categories** that group related services together (e.g., `_arrs`, `_torrents`). These are organizational folders, not individual services.
 
 ## Docker Compose Architecture
 

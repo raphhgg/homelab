@@ -1,22 +1,29 @@
 services:
-  qbit-brr:
-    container_name: qbit-brr
+  qbit-main:
+    container_name: qbit-main
     image: ghcr.io/hotio/qbittorrent:release-5.1.3
-    network_mode: "container:gluetun-brr"
+    network_mode: "container:gluetun"
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - UMASK=${UMASK}
       - TZ=${TZ}
-      - WEBUI_PORTS=8085/tcp,8085/udp
+      - WEBUI_PORTS=8081/tcp,8081/udp
       - TP_HOTIO=true
       - TP_THEME=catppuccin-mocha
       - S6_LOGGING=1
       - LIBTORRENT=v2
     volumes:
-      - ${DOCKER_APPDATA_PATH}/qbit-brr:/config:rw
+      - ${DOCKER_APPDATA_PATH}/qbit-main:/config:rw
       - ${DOWNLOAD_PATH}/torrents:/downloads/torrents:rw
+      - ${MEDIAS_PATH}:/data/medias:rw
       - ${DOCKER_APPDATA_PATH}/themepark/98-themepark-qbittorrent:/etc/cont-init.d/98-themepark:rw
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 1G
     labels:
       - "com.centurylinklabs.watchtower.enable=true"

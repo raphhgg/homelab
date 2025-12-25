@@ -17,6 +17,12 @@ services:
       - ${MEDIAS_PATH}:/data/medias:rw
     command: daemon
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 512M
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 

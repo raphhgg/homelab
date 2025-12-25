@@ -201,8 +201,17 @@ MONITOR_GROUPS = {
             "maxretries": 2,
             "description": "Plex automation",
         },
+        {
+            "name": "jellyseerr",
+            "type": MonitorType.HTTP,
+            "url": "http://10.10.2.2:5055/api/v1/status",
+            "interval": 120,
+            "retryInterval": 30,
+            "maxretries": 2,
+            "description": "Request management",
+        },
     ],
-    "media-arrs": [
+    "arrs": [
         {
             "name": "sonarr",
             "type": MonitorType.HTTP,
@@ -252,7 +261,7 @@ MONITOR_GROUPS = {
             "description": "Profile sync",
         },
     ],
-    "media-downloads": [
+    "torrents": [
         {
             "name": "qbittorrent",
             "type": MonitorType.HTTP,
@@ -310,22 +319,13 @@ MONITOR_GROUPS = {
             "description": "Archive extraction",
         },
         {
-            "name": "sabnzbd",
+            "name": "upload-assistant",
             "type": MonitorType.HTTP,
-            "url": "http://10.10.2.2:8090/api?mode=version",
+            "url": "http://10.10.2.2:8086",
             "interval": 120,
             "retryInterval": 30,
             "maxretries": 2,
-            "description": "Usenet client",
-        },
-        {
-            "name": "jellyseerr",
-            "type": MonitorType.HTTP,
-            "url": "http://10.10.2.2:5055/api/v1/status",
-            "interval": 120,
-            "retryInterval": 30,
-            "maxretries": 2,
-            "description": "Request management",
+            "description": "Torrent uploader web UI",
         },
         {
             "name": "thelounge",
@@ -335,6 +335,17 @@ MONITOR_GROUPS = {
             "retryInterval": 30,
             "maxretries": 2,
             "description": "IRC client",
+        },
+    ],
+    "downloads": [
+        {
+            "name": "sabnzbd",
+            "type": MonitorType.HTTP,
+            "url": "http://10.10.2.2:8090/api?mode=version",
+            "interval": 120,
+            "retryInterval": 30,
+            "maxretries": 2,
+            "description": "Usenet client",
         },
     ],
     "syncthing": [
