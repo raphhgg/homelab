@@ -2,20 +2,20 @@ services:
   imagemaid:
     image: kometateam/imagemaid
     container_name: imagemaid
-    # Override entrypoint to keep container running idle
-    # ImageMaid will be triggered externally via Cronicle
-    entrypoint: ["/bin/sh", "-c", "tail -f /dev/null"]
+    # Scheduled to run daily at 04:00 (after Kometa night cycle completes at ~03:00)
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
       - PLEX_URL=${PLEX_URL}
       - PLEX_TOKEN=${PLEX_TOKEN}
+      - SCHEDULE=04:00|daily
       - MODE=remove
       - EMPTY_TRASH=True
       - CLEAN_BUNDLES=True
       - OPTIMIZE_DB=True
       - PHOTO_TRANSCODER=True
+      - DISCORD=${DISCORD_WEBHOOK_URL}
     volumes:
       - ${DOCKER_APPDATA_PATH}/imagemaid/config:/config
       - ${DOCKER_APPDATA_PATH}/plex/config:/plex
