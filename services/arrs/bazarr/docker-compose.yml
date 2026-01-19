@@ -14,7 +14,7 @@ services:
     volumes:
       - ${DOCKER_APPDATA_PATH}/bazarr:/config
       - ${MEDIAS_PATH:-/volume3/data/medias}:/data/medias
-    restart: always
+    restart: unless-stopped
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     networks:
