@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   watchtower:
-    image: containrrr/watchtower:latest
+    image: nickfedor/watchtower
     container_name: watchtower
     networks:
       - main
@@ -13,15 +13,21 @@ services:
       - TZ=${TZ}
       - DOCKER_HOST=${DOCKER_HOST}
 
-      # HTTP API MODE - Manual trigger via Cronicle or API calls
+      # SCHEDULED MODE - Runs daily at 05:00 (after ImageMaid completes at 04:00)
+      - WATCHTOWER_SCHEDULE=0 0 5 * * *
+
+      # Discord notifications via Shoutrrr
+      - WATCHTOWER_NOTIFICATION_URL=discord://${WATCHTOWER_DISCORD_TOKEN}@${WATCHTOWER_DISCORD_WEBHOOK_ID}
+
+      # Report mode - send single summary notification instead of per-container
+      - WATCHTOWER_NOTIFICATION_REPORT=true
+
+      # HTTP API MODE - Manual trigger via API calls (optional, alongside schedule)
       - WATCHTOWER_HTTP_API_UPDATE=true
       - WATCHTOWER_HTTP_API_TOKEN=${WATCHTOWER_HTTP_API_TOKEN}
 
-      # Allow periodic checks alongside HTTP API (for manual --run-once checks)
+      # Allow periodic checks alongside HTTP API
       - WATCHTOWER_HTTP_API_PERIODIC_POLLS=true
-
-      # NO BUILT-IN SCHEDULE - All scheduling managed by Cronicle
-      # Cronicle will trigger via --run-once checks or HTTP API calls
 
       # Whitelist mode: only check/update containers with enable=true label
       - WATCHTOWER_LABEL_ENABLE=true
