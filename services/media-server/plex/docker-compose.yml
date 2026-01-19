@@ -5,7 +5,9 @@ services:
     image: ghcr.io/hotio/plex
     container_name: plex
     network_mode: host
-    mem_limit: 4g
+    mem_limit: 8g
+    mem_reservation: 2g
+    memswap_limit: 10g
     cpu_shares: 1024
     environment:
       - PUID=${PUID}
