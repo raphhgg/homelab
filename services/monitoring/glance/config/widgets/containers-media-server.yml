@@ -1,0 +1,31 @@
+- type: docker-containers
+  title: Media Server
+  sock-path: ${DOCKER_HOST}
+  running-only: true
+  hide-by-default: true
+  containers:
+    kometa:
+      name: Kometa
+      description: Plex metadata manager
+      icon: di:kometa
+      hide: false
+    imagemaid:
+      name: ImageMaid
+      description: Plex image cleanup
+      icon: di:imagemaid
+      hide: false
+    plex-auto-languages:
+      name: Plex-Auto-Languages
+      description: Automatic audio/subtitle selection
+      icon: di:plex-auto-languages
+      hide: false
+    lettarrboxd:
+      name: Lettarrboxd
+      description: Letterboxd integration
+      icon: di:letterboxd
+      hide: false
+    lettarrboxd-new-releases:
+      name: Lettarrboxd New Releases
+      description: Letterboxd new releases
+      icon: di:letterboxd
+      hide: false

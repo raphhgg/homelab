@@ -1,0 +1,16 @@
+- type: docker-containers
+  title: Notifications
+  sock-path: ${DOCKER_HOST}
+  running-only: true
+  hide-by-default: true
+  containers:
+    apprise:
+      name: Apprise
+      description: Notification service
+      icon: di:apprise
+      hide: false
+    apprise-middleware:
+      name: Apprise Middleware
+      description: Webhook transformer
+      icon: di:apprise
+      hide: false

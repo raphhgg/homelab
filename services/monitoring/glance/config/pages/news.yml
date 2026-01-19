@@ -1,0 +1,22 @@
+- name: News/Feeds
+  columns:
+    - size: full
+      widgets:
+        - type: hacker-news
+          limit: 15
+          collapse-after: 5
+          sort-by: top
+
+        - type: reddit
+          subreddit: selfhosted
+          style: vertical-list
+          limit: 10
+          collapse-after: 5
+          sort-by: hot
+
+        - type: reddit
+          subreddit: homelab
+          style: vertical-list
+          limit: 10
+          collapse-after: 5
+          sort-by: hot

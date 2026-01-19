@@ -1,0 +1,16 @@
+- type: server-stats
+  title: Server Stats
+  servers:
+    - type: local
+      name: ds423plus
+      hide-swap: false
+      # cpu-temp-sensor: true
+      # core-temp-sensor: coretemp_core_0
+      hide-mountpoints-by-default: true
+      mountpoints:
+        "/mnt/volume3":
+          hide: false
+          name: hdd
+        "/mnt/volume2":
+          hide: false
+          name: nvme

@@ -1,0 +1,29 @@
+# F1 Track Map Widget (Enhanced with local API)
+# Displays SVG track map for the upcoming race
+# Uses: f1-api container (skyallinott/f1_api)
+
+- type: custom-api
+  title: Track Map
+  cache: 1d
+  url: http://f1-api:4463/f1/next_race/
+  template: |
+    {{ $races := .JSON.Array "race" }}
+    {{ if eq (len $races) 0 }}
+    <div class="flex flex-column gap-10">
+      <p class="color-highlight">No upcoming race</p>
+      <p class="size-h6">Track map unavailable during off-season.</p>
+    </div>
+    {{ else }}
+    <div class="flex flex-column gap-10">
+      {{ $session := index $races 0 }}
+      <p class="color-highlight">{{ $session.String "circuit.circuitName" }}</p>
+      <p class="size-h6">{{ $session.String "circuit.city" }}, {{ $session.String "circuit.country" }}</p>
+      <div style="margin-block: 0.5rem;">
+        <img
+          src="http://f1-api:4463/f1/next_map/"
+          onerror="this.style.display='none'"
+          style="max-width: 100%; height: auto; border-radius: 8px;"
+        />
+      </div>
+    </div>
+    {{ end }}

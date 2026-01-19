@@ -1,0 +1,35 @@
+# F1 Drivers Championship Widget (Enhanced with local API)
+# Uses: f1-api container (skyallinott/f1_api)
+
+- type: custom-api
+  title: Drivers Standings
+  cache: 5m
+  url: http://f1-api:4463/f1/drivers_standings/
+  template: |
+    <ul class="list collapsible-container" data-collapse-after="5">
+      {{ range $i, $v := .JSON.Array "drivers" }}
+      <li class="flex items-center {{ if eq $i 0 }}color-primary{{ else if eq $i 1 }}color-highlight{{ end }}">
+        <div class="grow min-width-0">
+          <span>{{ .String "position" }}. {{ .String "surname" }} <img src="https://flagcdn.com/w20/{{ .String "flag" }}.png"
+                 alt=""
+                 style="width: 20px; height: 14px; object-fit: cover; vertical-align: middle"
+                 class="inline-block rounded-sm" /> </span>
+          {{ $id := .String "teamId" }}
+            <span class="size-h6">
+              ( {{- if eq $id "red_bull" -}}Red Bull
+              {{- else if eq $id "aston_martin" -}}Aston Martin
+              {{- else if eq $id "mercedes" -}}Mercedes
+              {{- else if eq $id "ferrari" -}}Ferrari
+              {{- else if eq $id "mclaren" -}}McLaren
+              {{- else if eq $id "williams" -}}Williams
+              {{- else if eq $id "alpine" -}}Alpine
+              {{- else if eq $id "haas" -}}Haas
+              {{- else if eq $id "rb" -}}RB
+              {{- else if eq $id "sauber" -}}Sauber
+              {{- else -}}{{ $id }}{{- end -}})
+            </span>
+        </div>
+        <span class="shrink-0 text-right">{{ .String "points" }}</span>
+      </li>
+      {{ end }}
+    </ul>

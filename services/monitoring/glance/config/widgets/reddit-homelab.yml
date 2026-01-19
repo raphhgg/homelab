@@ -1,0 +1,25 @@
+- type: group
+  title: Reddit - Homelab
+  widgets:
+    - type: reddit
+      subreddit: homelab
+      style: vertical-list
+      show-flairs: true
+      show-thumbnails: true
+      limit: 10
+      collapse-after: 5
+      sort_by: new
+    - type: reddit
+      subreddit: selfhosted
+      style: vertical-list
+      show-flairs: true
+      show-thumbnails: true
+      limit: 10
+      collapse-after: 5
+    - type: reddit
+      subreddit: homelabsales
+      style: vertical-list
+      show-flairs: true
+      show-thumbnails: true
+      limit: 10
+      collapse-after: 5

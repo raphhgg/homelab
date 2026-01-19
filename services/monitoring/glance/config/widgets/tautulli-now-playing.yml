@@ -1,0 +1,93 @@
+- type: custom-api
+  title: Now Playing
+  cache: 15s
+  url: http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=get_activity
+  options:
+    collapse: 5
+    server-id: ${PLEX_SERVER_ID}
+    tautulli-base: http://${TAUTULLI_IP}:${TAUTULLI_PORT}
+    tautulli-key: ${TAUTULLI_API_KEY}
+  template: |
+    {{ $sessions := .JSON.Array "response.data.sessions" }}
+    {{ $collapse := .Options.IntOr "collapse" 5 }}
+    {{ $serverID := .Options.StringOr "server-id" "" }}
+    {{ $tautulliBase := .Options.StringOr "tautulli-base" "" }}
+    {{ $tautulliKey := .Options.StringOr "tautulli-key" "" }}
+
+    {{ if eq (len $sessions) 0 }}
+      <div class="color-subdue text-center" style="padding: 1rem;">
+        No one is watching anything right now.
+      </div>
+    {{ else }}
+      <ul class="list collapsible-container" data-collapse-after="{{ $collapse }}">
+        {{ range $session := $sessions }}
+          {{ $type := $session.String "media_type" }}
+          {{ $isEpisode := eq $type "episode" }}
+          {{ $isMovie := eq $type "movie" }}
+          {{ $thumb := "" }}
+          {{ $title := "" }}
+          {{ $subtitle := "" }}
+
+          {{ if $isEpisode }}
+            {{ $title = $session.String "grandparent_title" }}
+            {{ $subtitle = printf "S%02dE%02d - %s" ($session.Int "parent_media_index") ($session.Int "media_index") ($session.String "title") }}
+            {{ $thumb = $session.String "grandparent_thumb" }}
+          {{ else }}
+            {{ $title = $session.String "title" }}
+            {{ $thumb = $session.String "thumb" }}
+          {{ end }}
+
+          {{ $duration := $session.Int "duration" }}
+          {{ $offset := $session.Int "view_offset" }}
+          {{ $remaining := div (sub $duration $offset) 1000 }}
+          {{ $now := now }}
+          {{ $endTime := $now.Add (duration (printf "%ds" $remaining)) | formatTime "15:04" }}
+          {{ $ratingKey := $session.String "rating_key" }}
+          {{ $state := $session.String "state" }}
+          {{ $stateIcon := "▶" }}
+          {{ if eq $state "paused" }}
+            {{ $stateIcon = "❚❚" }}
+          {{ else if eq $state "buffering" }}
+            {{ $stateIcon = "⟳" }}
+          {{ end }}
+
+          <li class="flex items-center gap-2" style="padding: 0.5rem 0; border-bottom: 1px solid var(--color-border);">
+            <a href="https://app.plex.tv/desktop#!/server/{{ $serverID }}/details?key=%2Flibrary%2Fmetadata%2F{{ $ratingKey }}"
+              target="_blank" title="{{ $session.String "summary" }}">
+              <img src="{{ $tautulliBase }}/api/v2?apikey={{ $tautulliKey }}&cmd=pms_image_proxy&img={{ $thumb }}"
+                alt="thumb"
+                style="width: 50px; margin-right: 1rem; min-width: 50px; border-radius: 4px;"
+                class="object-cover" />
+            </a>
+
+            <div class="min-width-0 grow">
+              <div class="color-highlight"
+                style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
+                title="{{ $title }}">
+                {{ $title }}
+              </div>
+
+              {{ if $isEpisode }}
+                <div class="color-subdue" style="font-size: 0.9em;" title="{{ $session.String "title" }}">
+                  S{{ $session.Int "parent_media_index" }}&thinsp;·&thinsp;E{{ $session.Int "media_index" }}
+                </div>
+              {{ else if $isMovie }}
+                <div class="color-subdue" style="font-size: 0.9em;">
+                  {{ $session.Int "year" }}
+                </div>
+              {{ end }}
+
+              <div class="color-primary" style="font-size: 0.85em;">
+                <span title="{{ $session.String "player" }}">
+                  {{ $session.String "friendly_name" }}
+                </span> ·
+                <span title="Ends at {{ $endTime }}">
+                  {{ $session.String "progress_percent" }}%
+                </span>
+                <span style="margin-left: 0.25rem;">{{ $stateIcon }}</span>
+              </div>
+            </div>
+          </li>
+        {{ end }}
+      </ul>
+    {{ end }}

@@ -1,0 +1,17 @@
+- type: docker-containers
+  title: Tools
+  sock-path: ${DOCKER_HOST}
+  running-only: true
+  hide-by-default: true
+  containers:
+    autopulse:
+      name: Autopulse
+      description: Media processing automation
+      icon: di:autopulse
+      hide: false
+    stash:
+      name: Stash
+      description: Media organizer
+      url: http://10.10.2.2:9999
+      icon: di:stash
+      hide: false

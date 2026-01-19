@@ -1,0 +1,16 @@
+- type: docker-containers
+  title: Monitoring
+  sock-path: ${DOCKER_HOST}
+  running-only: true
+  hide-by-default: true
+  containers:
+    beszel-agent:
+      name: Beszel Agent
+      description: Beszel monitoring agent
+      icon: di:beszel
+      hide: false
+    watchtower:
+      name: Watchtower
+      description: Container auto-updater
+      icon: di:watchtower
+      hide: false

@@ -1,0 +1,266 @@
+- type: docker-containers
+  title: Docker Containers
+  hide-by-default: false
+  sock-path: ${DOCKER_HOST}
+  containers:
+    # Media Server
+    plex:
+      name: Plex
+      description: Media streaming server
+      url: http://10.10.2.2:32400/web
+      icon: si:plex
+      category: media-server
+    tautulli:
+      name: Tautulli
+      description: Plex monitoring and statistics
+      url: http://10.10.2.2:8181
+      icon: si:tautulli
+      category: media-server
+    kometa:
+      name: Kometa
+      description: Plex metadata manager
+      icon: si:plex
+      category: media-server
+    imagemaid:
+      name: ImageMaid
+      description: Plex image cleanup
+      icon: si:plex
+      category: media-server
+    plex-auto-languages:
+      name: Plex-Auto-Languages
+      description: Automatic audio/subtitle selection
+      icon: si:plex
+      category: media-server
+
+    # Arrs
+    radarr:
+      name: Radarr
+      description: Movie management
+      url: http://10.10.2.2:7878
+      icon: si:radarr
+      category: arrs
+    sonarr:
+      name: Sonarr
+      description: TV show management
+      url: http://10.10.2.2:8988
+      icon: si:sonarr
+      category: arrs
+    prowlarr:
+      name: Prowlarr
+      description: Indexer manager
+      url: http://10.10.2.2:9696
+      icon: si:prowlarr
+      category: arrs
+    bazarr:
+      name: Bazarr
+      description: Subtitle management
+      url: http://10.10.2.2:6767
+      icon: si:bazarr
+      category: arrs
+    profilarr:
+      name: Profilarr
+      description: Profile sync for Arrs
+      url: http://10.10.2.2:6868
+      icon: si:sonarr
+      category: arrs
+    jellyseerr:
+      name: Jellyseerr
+      description: Media request management
+      url: http://10.10.2.2:5055
+      icon: si:jellyseerr
+      category: arrs
+
+    # Torrents
+    qbit-main:
+      name: qbit-main
+      description: Primary torrent client
+      url: http://10.10.2.2:8080
+      icon: si:qbittorrent
+      category: torrents
+    qbit-cross:
+      name: qbit-cross
+      description: Cross-seed torrent client
+      url: http://10.10.2.2:8084
+      icon: si:qbittorrent
+      category: torrents
+    qbit-brr:
+      name: qbit-brr
+      description: Autobrr torrent client
+      url: http://10.10.2.2:8085
+      icon: si:qbittorrent
+      category: torrents
+    autobrr:
+      name: Autobrr
+      description: Torrent automation
+      url: http://10.10.2.2:7474
+      icon: si:qbittorrent
+      category: torrents
+    cross-seed:
+      name: Cross-Seed
+      description: Cross-seeding automation
+      icon: si:qbittorrent
+      category: torrents
+    qui:
+      name: QUI
+      description: qBittorrent unified interface
+      url: http://10.10.2.2:7476
+      icon: si:qbittorrent
+      category: torrents
+
+    # Tools
+    upload-assistant:
+      name: Upload Assistant
+      description: Torrent upload helper
+      url: http://10.10.2.2:8086
+      icon: si:cloudflarepages
+      category: tools
+    daps:
+      name: DAPS
+      description: Poster automation
+      url: http://10.10.2.2:8002
+      icon: si:plex
+      category: tools
+    daps-ui:
+      name: DAPS UI
+      description: DAPS web interface
+      url: http://10.10.2.2:8001
+      icon: si:plex
+      category: tools
+    autopulse:
+      name: Autopulse
+      description: Media processing automation
+      icon: si:plex
+      category: tools
+    stash:
+      name: Stash
+      description: Media organizer
+      url: http://10.10.2.2:9999
+      icon: si:plex
+      category: tools
+    calibre-web-dl:
+      name: Calibre Web
+      description: E-book management
+      icon: si:calibreweb
+      category: tools
+
+    # Monitoring
+    beszel:
+      name: Beszel
+      description: Server monitoring dashboard
+      url: http://10.10.2.2:8091
+      icon: si:prometheus
+      category: monitoring
+    beszel-agent:
+      name: Beszel Agent
+      description: Beszel monitoring agent
+      icon: si:prometheus
+      category: monitoring
+    dozzle:
+      name: Dozzle
+      description: Docker log viewer
+      url: http://10.10.2.2:8088
+      icon: si:docker
+      category: monitoring
+    uptime-kuma:
+      name: Uptime Kuma
+      description: Uptime monitoring
+      url: http://10.10.2.2:3001
+      icon: si:uptimekuma
+      category: monitoring
+    glance:
+      name: Glance
+      description: Dashboard
+      url: http://10.10.2.2:8070
+      icon: si:glance
+      category: monitoring
+    speedtest-tracker:
+      name: Speedtest Tracker
+      description: Internet speed monitoring
+      url: http://10.10.2.2:8076
+      icon: si:speedtest
+      category: monitoring
+    watchtower:
+      name: Watchtower
+      description: Container auto-updater
+      icon: si:docker
+      category: monitoring
+
+    # Notifications
+    apprise:
+      name: Apprise
+      description: Notification service
+      icon: si:gotify
+      category: notifications
+    apprise-middleware:
+      name: Apprise Middleware
+      description: Webhook transformer
+      icon: si:gotify
+      category: notifications
+    notifiarr:
+      name: Notifiarr
+      description: Notification aggregator
+      icon: si:discord
+      category: notifications
+
+    # Infrastructure
+    docker-proxy:
+      name: Docker Proxy
+      description: Docker socket proxy
+      icon: si:docker
+      category: infrastructure
+    portainer:
+      name: Portainer
+      description: Docker management UI
+      url: http://10.10.2.2:9000
+      icon: si:portainer
+      category: infrastructure
+    cronicle:
+      name: Cronicle
+      description: Job scheduler
+      url: http://10.10.2.2:3012
+      icon: si:clockify
+      category: infrastructure
+    cloudflare-ddns:
+      name: Cloudflare DDNS
+      description: Dynamic DNS updater
+      icon: si:cloudflare
+      category: infrastructure
+    github-actions-runner:
+      name: GitHub Runner
+      description: Self-hosted Actions runner
+      icon: si:githubactions
+      category: infrastructure
+
+    # Smart Home
+    home-assistant:
+      name: Home Assistant
+      description: Smart home automation
+      url: http://10.10.2.2:8123
+      icon: si:homeassistant
+      category: smart-home
+
+    # Sync
+    syncthing:
+      name: Syncthing
+      description: File synchronization
+      url: http://10.10.2.2:8384
+      icon: si:syncthing
+      category: sync
+    thelounge:
+      name: The Lounge
+      description: IRC client
+      url: http://10.10.2.2:9001
+      icon: si:thelounge
+      category: sync
+
+    # Letterboxd
+    lettarrboxd:
+      name: Lettarrboxd
+      description: Letterboxd integration
+      icon: si:letterboxd
+      category: letterboxd
+    lettarrboxd-new-releases:
+      name: Lettarrboxd Releases
+      description: Letterboxd new releases
+      icon: si:letterboxd
+      category: letterboxd

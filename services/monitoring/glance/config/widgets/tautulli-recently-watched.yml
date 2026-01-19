@@ -1,0 +1,142 @@
+- type: custom-api
+  title: Recently Watched
+  cache: 5m
+  url: http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=get_home_stats&stat_id=last_watched
+  options:
+    size: "large"
+    collapse: 5
+    server-id: "${PLEX_SERVER_ID}"
+    tautulli-base: "http://${TAUTULLI_IP}:${TAUTULLI_PORT}"
+    tautulli-key: "${TAUTULLI_API_KEY}"
+  template: |
+    {{ $isLarge := eq (.Options.StringOr "size" "large") "large" }}
+    {{ $serverID := .Options.StringOr "server-id" "" }}
+    {{ $tautulliBase := .Options.StringOr "tautulli-base" "" }}
+    {{ $tautulliKey := .Options.StringOr "tautulli-key" "" }}
+    {{ $uniqueID := "recently_watched" }}
+    {{ $collapse := .Options.IntOr "collapse" 5 }}
+
+    {{ if $isLarge }}
+      {{ $rows := .JSON.Array "response.data.rows" }}
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <!-- Left scroll arrow -->
+        <div id="scrollLeft-{{ $uniqueID }}" title="Scroll left"
+          onclick='document.getElementById("scrollContainer-{{ $uniqueID }}").scrollBy({ left: -150, behavior: "smooth" })'
+          style="flex: 0 0 2.5rem; height: 100px; display: flex; align-items: center; justify-content: center; background: var(--color-surface); cursor: pointer;">
+          <span class="color-primary" style="font-size: 1.5rem; opacity: 0.7;">&#9664;</span>
+        </div>
+
+        <!-- Scrollable content -->
+        <div id="scrollContainer-{{ $uniqueID }}"
+          style="display: flex; overflow-x: auto; gap: 1rem; padding-block: 0.5rem; scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none;">
+          {{ range $i, $v := $rows }}
+            {{ $mediaType := $v.String "media_type" }}
+            {{ $isEpisode := eq $mediaType "episode" }}
+            {{ $titleHover := "" }}
+              {{ if $isEpisode }}
+                {{ $titleHover = $v.String "grandchild_title" }}
+              {{ else }}
+                {{ $titleHover = $v.String "title" }}
+              {{ end }}
+            {{ $ratingKey := $v.String "rating_key" }}
+            {{ $thumb := $v.String "thumb" }}
+
+            <a href="https://app.plex.tv/desktop#!/server/{{ $serverID }}/details?key=%2Flibrary%2Fmetadata%2F{{ $ratingKey }}"
+              target="_blank"
+              style="min-width: 120px; max-width: 120px; text-align: center; text-decoration: none;">
+
+              <div style="border-radius: 6px; overflow: hidden;">
+                <img src="{{ $tautulliBase }}/api/v2?apikey={{ $tautulliKey }}&cmd=pms_image_proxy&img={{ $thumb }}"
+                  alt="thumb"
+                  title="{{ $titleHover }}"
+                  style="width: 100%; height: auto; display: block;" />
+              </div>
+
+              <!-- Media info -->
+              {{ if $isEpisode }}
+                <div class="color-highlight" title="{{ $v.String "grandparent_title" }}"
+                  style="margin-top: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                  {{ $v.String "grandparent_title" }}
+                </div>
+                <div class="color-highlight" title="{{ $titleHover }}"
+                  style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                  S{{ $v.Int "parent_media_index" }}·E{{ $v.Int "media_index" }}
+                </div>
+              {{ else }}
+                <div class="color-highlight" title="{{ $v.String "title" }}"
+                  style="margin-top: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                  {{ $v.String "title" }}
+                </div>
+                <div class="color-highlight"
+                  style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                  {{ $v.Int "year" }}
+                </div>
+              {{ end }}
+
+              <div class="color-primary" style="font-size: 0.9em;">
+                <span title="{{ $v.String "player" }}">{{ $v.String "friendly_name" }}</span><br>
+                <span {{ parseRelativeTime "unix" ($v.String "last_watch") }}></span> ago
+              </div>
+            </a>
+          {{ end }}
+        </div>
+
+        <!-- Right scroll arrow -->
+        <div id="scrollRight-{{ $uniqueID }}" title="Scroll right"
+          onclick='document.getElementById("scrollContainer-{{ $uniqueID }}").scrollBy({ left: 150, behavior: "smooth" })'
+          style="flex: 0 0 2.5rem; height: 100px; display: flex; align-items: center; justify-content: center; background: var(--color-surface); cursor: pointer;">
+          <span class="color-primary" style="font-size: 1.5rem; opacity: 0.7;">&#9654;</span>
+        </div>
+      </div>
+
+    {{ else }}
+      <!-- Compact list version -->
+      <ul class="list collapsible-container" data-collapse-after="{{ $collapse }}">
+        {{ range $i, $v := .JSON.Array "response.data.rows" }}
+          {{ $mediaType := $v.String "media_type" }}
+          {{ $isEpisode := eq $mediaType "episode" }}
+          {{ $titleHover := "" }}
+            {{ if $isEpisode }}
+              {{ $titleHover = $v.String "grandchild_title" }}
+            {{ else }}
+              {{ $titleHover = $v.String "title" }}
+            {{ end }}
+          {{ $ratingKey := $v.String "rating_key" }}
+          {{ $thumb := $v.String "thumb" }}
+
+          <li class="flex items-center gap-2" style="padding: 0.5rem 0; border-bottom: 1px solid var(--color-border);">
+            <img src="{{ $tautulliBase }}/api/v2?apikey={{ $tautulliKey }}&cmd=pms_image_proxy&img={{ $thumb }}"
+              alt="thumb"
+              class="rounded w-10 h-10 object-cover"
+              style="width: 50px; margin-right: 1.5rem;" />
+            <div class="min-width-0 grow">
+              {{ if $isEpisode }}
+                <div class="color-highlight" title="{{ $v.String "grandparent_title" }}"
+                  style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                  {{ $v.String "grandparent_title" }}
+                </div>
+                <div class="color-highlight" title="{{ $titleHover }}">
+                  S{{ $v.Int "parent_media_index" }}·E{{ $v.Int "media_index" }}
+                </div>
+              {{ else }}
+                <div class="color-highlight" title="{{ $v.String "title" }}"
+                  style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                  {{ $v.String "title" }}
+                </div>
+                <div class="color-highlight"
+                  style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                  {{ $v.Int "year" }}
+                </div>
+              {{ end }}
+              <div class="color-primary">
+                <span title="{{ $v.String "player" }}">{{ $v.String "friendly_name" }}</span> •
+                <span {{ parseRelativeTime "unix" ($v.String "last_watch") }}></span> ago
+              </div>
+            </div>
+            <a href="https://app.plex.tv/desktop#!/server/{{ $serverID }}/details?key=%2Flibrary%2Fmetadata%2F{{ $ratingKey }}"
+              target="_blank"
+              class="color-primary">&#9654;</a>
+          </li>
+        {{ end }}
+      </ul>
+    {{ end }}

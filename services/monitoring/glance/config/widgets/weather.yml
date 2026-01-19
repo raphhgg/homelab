@@ -1,0 +1,4 @@
+- type: weather
+  location: Brussels, Belgium
+  units: metric
+  hour-format: 24h

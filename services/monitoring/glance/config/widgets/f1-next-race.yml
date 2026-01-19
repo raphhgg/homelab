@@ -1,0 +1,60 @@
+# F1 Next Race Widget (Enhanced with local API)
+# Uses: f1-api container (skyallinott/f1_api)
+
+- type: custom-api
+  title: Next Race
+  cache: 5m
+  url: http://f1-api:4463/f1/next_race/
+  template: |
+    {{ $races := .JSON.Array "race" }}
+    {{ if eq (len $races) 0 }}
+    <div class="flex flex-column gap-10">
+      <p class="color-highlight">No upcoming race scheduled</p>
+      <p class="size-h6">The F1 season is currently on break. Check back closer to the next season.</p>
+    </div>
+    {{ else }}
+    <div class="flex flex-column gap-10">
+      {{ $session := index $races 0 }}
+      <p class="size-h5">
+        {{ .JSON.String "season" }}, Round {{ .JSON.String "round" }}
+      </p>
+
+      <div class="margin-block-4">
+        <p class="color-highlight">{{ $session.String "raceName" }}</p>
+        <p class="color-primary">
+          <span>
+            {{ .JSON.String "next_event.session" }}
+          </span>
+          {{ $datetime := .JSON.String "next_event.datetime" }}
+          <span
+            class="color-highlight"
+            {{ parseRelativeTime "rfc3339" $datetime }}
+          ></span>
+        </p>
+        <p class="size-h5">
+          {{ .JSON.String "next_event.date" }} @ {{ .JSON.String "next_event.time" }}
+        </p>
+
+        <div style="margin-block: 1rem;">
+          <img
+            src="http://f1-api:4463/f1/next_map/"
+            onerror="this.style.display='none'"
+            style="max-width: 100%; height: auto; border-radius: 8px;"
+          />
+        </div>
+
+        <p class="color-highlight">
+          Circuit Details
+        </p>
+        <p class="size-h6">
+          Name: {{ $session.String "circuit.circuitName" }}
+        </p>
+        <p class="size-h6">
+          Lap Record: {{ $session.String "circuit.lapRecord" }}, {{ $session.String "circuit.fastestLapDriverName" }} ({{ $session.String "circuit.fastestLapYear"}})
+        </p>
+        <p class="size-h6">
+          Length: {{ $session.String "laps" }} laps @ {{ $session.String "circuit.circuitLengthKm" }} KMs
+        </p>
+      </div>
+    </div>
+    {{ end }}

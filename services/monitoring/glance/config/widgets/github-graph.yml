@@ -1,0 +1,11 @@
+- type: extension
+  url: http://glance-github-graph:8080/graph/raaphhh
+  allow-potentially-dangerous-html: true
+  parameters:
+    background-color: "#1e1e2e"
+    primary-color: "#89b4fa"
+    svg-height: 150
+    show-months: true
+    show-weekdays: true
+    font-size: 9
+    transition-hue: true

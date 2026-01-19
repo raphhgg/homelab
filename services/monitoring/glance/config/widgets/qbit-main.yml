@@ -1,0 +1,50 @@
+- type: custom-api
+  title: qbit-main
+  cache: 10s
+  options:
+    view: "basic"
+  subrequests:
+    transfer:
+      url: http://${QBITTORRENT_MAIN_IP}/api/v2/transfer/info
+    active:
+      url: http://${QBITTORRENT_MAIN_IP}/api/v2/torrents/info
+      parameters:
+        filter: active
+  template: |
+    {{ $transfer := .Subrequest "transfer" }}
+    {{ $active := .Subrequest "active" }}
+
+    {{ if and (eq $transfer.Response.StatusCode 200) (eq $active.Response.StatusCode 200) }}
+
+      <!-- Basic View -->
+      <div class="flex justify-between text-center">
+        <div>
+          {{ $dlSpeed := $transfer.JSON.Float "dl_info_speed" }}
+          {{ if lt $dlSpeed 1048576.0 }}
+            <div class="color-highlight size-h3">{{ printf "%.0f KiB/s" (div $dlSpeed 1024.0) }}</div>
+          {{ else }}
+            <div class="color-highlight size-h3">{{ printf "%.1f MiB/s" (div $dlSpeed 1048576.0) }}</div>
+          {{ end }}
+          <div class="size-h6">DOWNLOADING</div>
+        </div>
+        <div>
+          {{ $ulSpeed := $transfer.JSON.Float "up_info_speed" }}
+          {{ if lt $ulSpeed 1048576.0 }}
+            <div class="color-highlight size-h3">{{ printf "%.0f KiB/s" (div $ulSpeed 1024.0) }}</div>
+          {{ else }}
+            <div class="color-highlight size-h3">{{ printf "%.1f MiB/s" (div $ulSpeed 1048576.0) }}</div>
+          {{ end }}
+          <div class="size-h6">UPLOADING</div>
+        </div>
+        <div>
+          <div class="color-highlight size-h3">{{ len ($active.JSON.Array "") }}</div>
+          <div class="size-h6">ACTIVE</div>
+        </div>
+      </div>
+
+    {{ else }}
+      <div class="color-negative text-center">
+        <p>Error fetching qBittorrent data.</p>
+        <p class="size-sm">Check URL and authentication bypass settings.</p>
+      </div>
+    {{ end }}

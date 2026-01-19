@@ -1,0 +1,12 @@
+- type: markets
+  markets:
+    # - symbol: SPY
+    #   name: S&P 500
+    - symbol: BTC-USD
+      name: Bitcoin
+      chart-link: https://www.tradingview.com/chart/?symbol=INDEX:BTCUSD
+    # - symbol: NVDA
+    #   name: NVIDIA
+    # - symbol: AAPL
+    #   symbol-link: https://www.google.com/search?tbm=nws&q=apple
+    #   name: Apple

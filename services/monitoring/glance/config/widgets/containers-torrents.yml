@@ -1,0 +1,29 @@
+- type: docker-containers
+  title: Torrents
+  sock-path: ${DOCKER_HOST}
+  running-only: true
+  hide-by-default: true
+  containers:
+    qbit-main:
+      name: qbit-main
+      description: Primary torrent client
+      url: http://10.10.2.2:8080
+      icon: di:qbittorrent
+      hide: false
+    qbit-cross:
+      name: qbit-cross
+      description: Cross-seed torrent client
+      url: http://10.10.2.2:8084
+      icon: di:qbittorrent
+      hide: false
+    qbit-brr:
+      name: qbit-brr
+      description: Autobrr torrent client
+      url: http://10.10.2.2:8085
+      icon: di:qbittorrent
+      hide: false
+    cross-seed:
+      name: cross-seed
+      description: Cross-seeding automation
+      icon: di:cross-seed
+      hide: false

@@ -1,0 +1,52 @@
+services:
+  glance:
+    container_name: glance
+    image: glanceapp/glance
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./config:/app/config
+      - /volume2:/mnt/volume2:ro
+      - /volume3:/mnt/volume3:ro
+    ports:
+      - 8070:8080
+    networks:
+      - main
+      - socket_proxy
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  f1-api:
+    container_name: f1-api
+    image: skyallinott/f1_api:latest
+    restart: always
+    environment:
+      - TIMEZONE=Europe/Brussels
+      - TRACK_COLOUR=#e10600
+      - EVENT_DETAIL=main
+    ports:
+      - 4463:4463
+    networks:
+      - main
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  glance-github-graph:
+    container_name: glance-github-graph
+    image: haumea/glance-github-graph:latest
+    restart: always
+    environment:
+      - CACHE_ENABLED=true
+      - CACHE_TYPE=memory
+      - CACHE_DURATION_SECS=3600
+    networks:
+      - main
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  main:
+    external: true
+  socket_proxy:
+    external: true

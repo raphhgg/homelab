@@ -1,0 +1,16 @@
+- type: custom-api
+  title: Last Race Results
+  cache: 1d
+  url: https://f1api.dev/api/current/last/race
+  template: |
+    <div class="flex flex-column gap-10">
+      <p class="size-h5">{{ .JSON.String "races.raceName" }}</p>
+      <ul class="list collapsible-container" data-collapse-after="5">
+        {{ range $i, $v := .JSON.Array "races.results" }}
+        <li class="flex items-center {{ if eq $i 0 }}color-primary{{ else if eq $i 1 }}color-highlight{{ end }}">
+          <span class="grow min-width-0">{{ .String "position" }}. {{ .String "driver.shortName" }}</span>
+          <span class="shrink-0 text-right">{{ .String "time" }}</span>
+        </li>
+        {{ end }}
+      </ul>
+    </div>

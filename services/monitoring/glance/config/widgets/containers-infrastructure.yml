@@ -1,0 +1,27 @@
+- type: docker-containers
+  title: Infrastructure
+  sock-path: ${DOCKER_HOST}
+  running-only: true
+  hide-by-default: true
+  containers:
+    docker-proxy:
+      name: Docker Proxy
+      description: Docker socket proxy
+      icon: di:docker
+      hide: false
+    portainer:
+      name: Portainer
+      description: Docker management UI
+      url: http://10.10.2.2:9000
+      icon: di:portainer
+      hide: false
+    cloudflare-ddns:
+      name: Cloudflare DDNS
+      description: Dynamic DNS updater
+      icon: di:cloudflare
+      hide: false
+    github-actions-runner:
+      name: GitHub Runner
+      description: Self-hosted Actions runner
+      icon: di:github
+      hide: false
