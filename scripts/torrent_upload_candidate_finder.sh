@@ -19,6 +19,10 @@ mkdir -p "$OUTPUT_DIR"
 # Generate timestamp for file naming
 TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 
+# Caches for API responses
+declare -A TMDB_CACHE
+declare -A ATH_SLOTS_CACHE
+
 echo -e "${CYAN}╔════════════════════════════════════════════════════════════╗${NC}"
 echo -e "${CYAN}║            Torrent Upload Candidate Finder                 ║${NC}"
 echo -e "${CYAN}╚════════════════════════════════════════════════════════════╝${NC}"
@@ -134,6 +138,179 @@ get_tracker_abbr() {
         *"FileList"*) echo "FL" ;;
         *) echo "" ;;
     esac
+}
+
+# ============================================================================
+# ATH Slot System Functions
+# ============================================================================
+
+# Parse resolution from torrent name
+get_resolution() {
+    local name="$1"
+    if [[ "$name" =~ 2160p|4K|UHD ]]; then
+        echo "2160p"
+    elif [[ "$name" =~ 1080p ]]; then
+        echo "1080p"
+    elif [[ "$name" =~ 720p ]]; then
+        echo "720p"
+    else
+        echo "unknown"
+    fi
+}
+
+# Parse codec from torrent name
+get_codec() {
+    local name="$1"
+    if [[ "$name" =~ [xXhH]\.?265|HEVC ]]; then
+        echo "H.265"
+    elif [[ "$name" =~ [xXhH]\.?264 ]]; then
+        echo "H.264"
+    elif [[ "$name" =~ AV1 ]]; then
+        echo "AV1"
+    else
+        echo "unknown"
+    fi
+}
+
+# Parse HDR type from torrent name
+get_hdr_type() {
+    local name="$1"
+    local hdr_type=""
+
+    # Check for Dolby Vision
+    if [[ "$name" =~ DV|DoVi|Dolby\.?Vision ]]; then
+        hdr_type="DV"
+    fi
+
+    # Check for HDR variants
+    if [[ "$name" =~ HDR10\+ ]]; then
+        hdr_type="${hdr_type}+HDR10+"
+    elif [[ "$name" =~ HDR10 ]]; then
+        hdr_type="${hdr_type}+HDR10"
+    elif [[ "$name" =~ HDR ]]; then
+        hdr_type="${hdr_type}+HDR"
+    fi
+
+    # Check for SDR
+    if [[ "$name" =~ SDR ]]; then
+        hdr_type="SDR"
+    fi
+
+    # Clean up leading + and handle DV+HDR combinations
+    hdr_type="${hdr_type#+}"
+
+    if [[ -z "$hdr_type" ]]; then
+        echo "unknown"
+    else
+        echo "$hdr_type"
+    fi
+}
+
+# Parse source type from torrent name
+get_source_type() {
+    local name="$1"
+
+    if [[ "$name" =~ REMUX|Remux ]]; then
+        echo "REMUX"
+    elif [[ "$name" =~ WEB-DL|WEBDL|WEB\.DL ]]; then
+        echo "WEB-DL"
+    elif [[ "$name" =~ WEBRip|WEB-Rip ]]; then
+        echo "WEBDL"  # ATH treats WEBRip same as WEB-DL for slot purposes
+    elif [[ "$name" =~ BluRay|Blu-ray|UHD\.BluRay ]]; then
+        echo "ENCODE"
+    else
+        echo "unknown"
+    fi
+}
+
+# Classify torrent into ATH slot category
+classify_ath_slot() {
+    local name="$1"
+    local resolution=$(get_resolution "$name")
+    local codec=$(get_codec "$name")
+    local hdr=$(get_hdr_type "$name")
+    local source=$(get_source_type "$name")
+
+    # Build slot identifier (using : as separator to avoid conflict with | field delimiter)
+    local slot="${resolution}:${source}:${codec}:${hdr}"
+    echo "$slot"
+}
+
+# Check if torrent has ambiguous classification
+is_ambiguous_classification() {
+    local slot="$1"
+    if [[ "$slot" =~ unknown ]]; then
+        echo "true"
+    else
+        echo "false"
+    fi
+}
+
+# ============================================================================
+# TMDB and Aither API Functions
+# ============================================================================
+
+# API Keys
+TMDB_API_KEY="773db029ad39c7e6639e984b6c0cab6b"
+AITHER_API_KEY="3gNJnbif3QCzY3dOgB1IycBMSh16NnuNh0Pq9T9advKal8RC0H9Dgcg2IdqkvuS1PMILcRrh4tUrxjTKAUTH9CdOEUZcRz8U1jup"
+
+# API URLs
+TMDB_API_URL="https://api.themoviedb.org/3"
+AITHER_API_URL="https://aither.cc/api/torrents/filter"
+
+# Extract movie title and year from torrent name
+extract_movie_info() {
+    local name="$1"
+
+    # Common pattern: Movie.Title.YEAR.resolution...
+    if [[ "$name" =~ ^(.+)\.(19[0-9]{2}|20[0-9]{2})\. ]]; then
+        local title="${BASH_REMATCH[1]}"
+        local year="${BASH_REMATCH[2]}"
+
+        # Clean up title (replace dots/underscores with spaces)
+        title="${title//[\._]/ }"
+
+        echo "${title}|${year}"
+    else
+        echo "unknown|unknown"
+    fi
+}
+
+# Query TMDB API for movie ID
+get_tmdb_id() {
+    local title="$1"
+    local year="$2"
+
+    # URL encode the title
+    local encoded_title=$(echo "$title" | sed 's/ /%20/g')
+
+    # Query TMDB API
+    local response=$(curl -s "${TMDB_API_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${encoded_title}&year=${year}" 2>/dev/null)
+
+    # Extract first result's ID
+    local tmdb_id=$(echo "$response" | jq -r '.results[0].id // empty' 2>/dev/null)
+
+    if [ -n "$tmdb_id" ]; then
+        echo "$tmdb_id"
+    else
+        echo "unknown"
+    fi
+}
+
+# Query Aither API for existing torrents
+# Returns: slot classifications of existing torrents for the movie/show
+query_aither_existing_slots() {
+    local tmdb_id="$1"
+    local category_id="$2"  # 1=movie, 2=tv
+
+    # Query API for all torrents matching this TMDB ID
+    local response=$(curl -s "${AITHER_API_URL}?api_token=${AITHER_API_KEY}&tmdbId=${tmdb_id}&categories[]=${category_id}" 2>/dev/null)
+
+    # Parse response and extract slot classifications from torrent names
+    echo "$response" | jq -r '.data[].attributes.name' 2>/dev/null | while read -r torrent_name; do
+        [ -z "$torrent_name" ] && continue
+        classify_ath_slot "$torrent_name"
+    done
 }
 
 # Query for each tracker separately to get organized results
@@ -724,7 +901,7 @@ if [ ${#SELECTED_NAMES[@]} -gt 1 ]; then
                 TRACKER_MOVIES_ONLY=true
             fi
 
-            # Filter movies - exclude multi-tracker releases and source tracker matches
+            # Filter movies - exclude multi-tracker releases, source tracker matches, and ATH slot conflicts
             > "$FILTERED_MOVIES"
             if [ -f "${OUTPUT_FILE}.movies" ]; then
                 while IFS='|' read -r torrent_name size date original_tracker; do
@@ -738,14 +915,57 @@ if [ ${#SELECTED_NAMES[@]} -gt 1 ]; then
                         continue
                     fi
 
-                    # Exclude multi-tracker releases
-                    if ! grep -Fxq "$torrent_name" "$OUTPUT_DIR/multi_names_movies.tmp" 2>/dev/null; then
-                        echo "$torrent_name|$size|$date" >> "$FILTERED_MOVIES"
+                    # ATH-specific slot validation
+                    if [ "$TRACKER_ABBR" = "ATH" ]; then
+                        # Classify this torrent's slot
+                        slot=$(classify_ath_slot "$torrent_name")
+                        is_ambiguous=$(is_ambiguous_classification "$slot")
+
+                        # Extract movie info for TMDB lookup
+                        movie_info=$(extract_movie_info "$torrent_name")
+                        movie_title=$(echo "$movie_info" | cut -d'|' -f1)
+                        movie_year=$(echo "$movie_info" | cut -d'|' -f2)
+
+                        # Get TMDB ID (cached)
+                        cache_key="${movie_title}_${movie_year}"
+                        if [ -z "${TMDB_CACHE[$cache_key]}" ]; then
+                            TMDB_CACHE[$cache_key]=$(get_tmdb_id "$movie_title" "$movie_year")
+                        fi
+                        tmdb_id="${TMDB_CACHE[$cache_key]}"
+
+                        # Query Aither for existing slots (cached)
+                        skip_due_to_slot=false
+                        if [ -n "$tmdb_id" ] && [ "$tmdb_id" != "unknown" ]; then
+                            if [ -z "${ATH_SLOTS_CACHE[$tmdb_id]}" ]; then
+                                ATH_SLOTS_CACHE[$tmdb_id]=$(query_aither_existing_slots "$tmdb_id" "1")
+                            fi
+                            existing_slots="${ATH_SLOTS_CACHE[$tmdb_id]}"
+
+                            # Check if slot is occupied
+                            if echo "$existing_slots" | grep -Fxq "$slot"; then
+                                skip_due_to_slot=true
+                            fi
+                        fi
+
+                        # Skip if slot occupied
+                        if [ "$skip_due_to_slot" = "true" ]; then
+                            continue
+                        fi
+
+                        # Add to filtered list (with slot info for display)
+                        if ! grep -Fxq "$torrent_name" "$OUTPUT_DIR/multi_names_movies.tmp" 2>/dev/null; then
+                            echo "$torrent_name|$size|$date|$slot|$is_ambiguous" >> "$FILTERED_MOVIES"
+                        fi
+                    else
+                        # Other trackers: original format, no slot validation
+                        if ! grep -Fxq "$torrent_name" "$OUTPUT_DIR/multi_names_movies.tmp" 2>/dev/null; then
+                            echo "$torrent_name|$size|$date" >> "$FILTERED_MOVIES"
+                        fi
                     fi
                 done < "${OUTPUT_FILE}.movies"
             fi
 
-            # Filter TV shows - exclude multi-tracker releases and source tracker matches (if tracker supports TV)
+            # Filter TV shows - exclude multi-tracker releases, source tracker matches, and ATH slot conflicts (if tracker supports TV)
             > "$FILTERED_TV"
             if [ "$TRACKER_MOVIES_ONLY" = false ] && [ -f "${OUTPUT_FILE}.tvshows" ]; then
                 while IFS='|' read -r torrent_name size date original_tracker; do
@@ -759,9 +979,53 @@ if [ ${#SELECTED_NAMES[@]} -gt 1 ]; then
                         continue
                     fi
 
-                    # Exclude multi-tracker releases
-                    if ! grep -Fxq "$torrent_name" "$OUTPUT_DIR/multi_names_tv.tmp" 2>/dev/null; then
-                        echo "$torrent_name|$size|$date" >> "$FILTERED_TV"
+                    # ATH-specific slot validation for TV shows
+                    if [ "$TRACKER_ABBR" = "ATH" ]; then
+                        # Classify this torrent's slot
+                        slot=$(classify_ath_slot "$torrent_name")
+                        is_ambiguous=$(is_ambiguous_classification "$slot")
+
+                        # Extract show info for TMDB lookup (simplified - same as movies for now)
+                        show_info=$(extract_movie_info "$torrent_name")
+                        show_title=$(echo "$show_info" | cut -d'|' -f1)
+                        show_year=$(echo "$show_info" | cut -d'|' -f2)
+
+                        # Get TMDB ID (cached) - Note: using category 2 for TV
+                        cache_key="${show_title}_${show_year}_tv"
+                        if [ -z "${TMDB_CACHE[$cache_key]}" ]; then
+                            TMDB_CACHE[$cache_key]=$(get_tmdb_id "$show_title" "$show_year")
+                        fi
+                        tmdb_id="${TMDB_CACHE[$cache_key]}"
+
+                        # Query Aither for existing slots (cached, category 2 for TV)
+                        skip_due_to_slot=false
+                        if [ -n "$tmdb_id" ] && [ "$tmdb_id" != "unknown" ]; then
+                            cache_tv_key="${tmdb_id}_tv"
+                            if [ -z "${ATH_SLOTS_CACHE[$cache_tv_key]}" ]; then
+                                ATH_SLOTS_CACHE[$cache_tv_key]=$(query_aither_existing_slots "$tmdb_id" "2")
+                            fi
+                            existing_slots="${ATH_SLOTS_CACHE[$cache_tv_key]}"
+
+                            # Check if slot is occupied
+                            if echo "$existing_slots" | grep -Fxq "$slot"; then
+                                skip_due_to_slot=true
+                            fi
+                        fi
+
+                        # Skip if slot occupied
+                        if [ "$skip_due_to_slot" = "true" ]; then
+                            continue
+                        fi
+
+                        # Add to filtered list (with slot info for display)
+                        if ! grep -Fxq "$torrent_name" "$OUTPUT_DIR/multi_names_tv.tmp" 2>/dev/null; then
+                            echo "$torrent_name|$size|$date|$slot|$is_ambiguous" >> "$FILTERED_TV"
+                        fi
+                    else
+                        # Other trackers: original format, no slot validation
+                        if ! grep -Fxq "$torrent_name" "$OUTPUT_DIR/multi_names_tv.tmp" 2>/dev/null; then
+                            echo "$torrent_name|$size|$date" >> "$FILTERED_TV"
+                        fi
                     fi
                 done < "${OUTPUT_FILE}.tvshows"
             fi
@@ -790,10 +1054,16 @@ if [ ${#SELECTED_NAMES[@]} -gt 1 ]; then
                 # Display Movies section
                 if [ "$FILTERED_MOVIES_COUNT" -gt 0 ]; then
                     echo -e "${CYAN}Movies (${FILTERED_MOVIES_COUNT})${NC}"
+
+                    # For ATH, show slot system notice
+                    if [ "$TRACKER_ABBR" = "ATH" ]; then
+                        echo -e "${YELLOW}  ℹ ATH Slot System: Slots validated automatically${NC}"
+                        echo -e "${YELLOW}  ⚠ Slots with 'unknown' attributes need manual review${NC}"
+                    fi
                     echo ""
 
                     # Sort by size and display
-                    sort -t'|' -k2 -rn "$FILTERED_MOVIES" | awk -F'|' '
+                    sort -t'|' -k2 -rn "$FILTERED_MOVIES" | awk -F'|' -v tracker="$TRACKER_ABBR" '
                     function format_size(bytes) {
                         if (bytes >= 1099511627776) return sprintf("%.2f TB", bytes/1099511627776)
                         if (bytes >= 1073741824) return sprintf("%.2f GB", bytes/1073741824)
@@ -801,19 +1071,51 @@ if [ ${#SELECTED_NAMES[@]} -gt 1 ]; then
                         if (bytes >= 1024) return sprintf("%.2f KB", bytes/1024)
                         return sprintf("%d B", bytes)
                     }
-                    BEGIN {
-                        num = 1
+
+                    function format_slot(slot, is_ambiguous) {
+                        # Parse slot: resolution:source:codec:hdr (using : separator)
+                        split(slot, parts, ":")
+                        res = parts[1]
+                        source = parts[2]
+                        codec = parts[3]
+                        hdr = parts[4]
+
+                        # Build readable slot description
+                        slot_desc = res " " source " " codec
+                        if (hdr != "unknown" && hdr != "") {
+                            slot_desc = slot_desc " " hdr
+                        }
+
+                        # Add warning marker if ambiguous
+                        if (is_ambiguous == "true") {
+                            slot_desc = slot_desc " ⚠"
+                        }
+
+                        return slot_desc
                     }
+
+                    BEGIN { num = 1 }
                     {
                         name = $1
                         size = $2
 
                         # Truncate long names
                         display_name = name
-                        if (length(name) > 90) display_name = substr(name, 1, 87) "..."
+                        if (length(name) > 75) display_name = substr(name, 1, 72) "..."
 
-                        # Format with size
-                        printf "  %3d) %-92s %10s\n", num, display_name, format_size(size)
+                        # Format output based on tracker
+                        if (tracker == "ATH") {
+                            # ATH format includes slot info (5 fields total)
+                            slot = $4
+                            is_ambiguous = $5
+                            slot_info = format_slot(slot, is_ambiguous)
+
+                            printf "  %3d) %-77s %10s\n", num, display_name, format_size(size)
+                            printf "       Slot: %s\n", slot_info
+                        } else {
+                            # Other trackers: original format (3 fields)
+                            printf "  %3d) %-92s %10s\n", num, display_name, format_size(size)
+                        }
                         num++
                     }
                     '
@@ -826,7 +1128,7 @@ if [ ${#SELECTED_NAMES[@]} -gt 1 ]; then
                     echo ""
 
                     # Sort by size and display
-                    sort -t'|' -k2 -rn "$FILTERED_TV" | awk -F'|' '
+                    sort -t'|' -k2 -rn "$FILTERED_TV" | awk -F'|' -v tracker="$TRACKER_ABBR" '
                     function format_size(bytes) {
                         if (bytes >= 1099511627776) return sprintf("%.2f TB", bytes/1099511627776)
                         if (bytes >= 1073741824) return sprintf("%.2f GB", bytes/1073741824)
@@ -834,19 +1136,51 @@ if [ ${#SELECTED_NAMES[@]} -gt 1 ]; then
                         if (bytes >= 1024) return sprintf("%.2f KB", bytes/1024)
                         return sprintf("%d B", bytes)
                     }
-                    BEGIN {
-                        num = 1
+
+                    function format_slot(slot, is_ambiguous) {
+                        # Parse slot: resolution:source:codec:hdr (using : separator)
+                        split(slot, parts, ":")
+                        res = parts[1]
+                        source = parts[2]
+                        codec = parts[3]
+                        hdr = parts[4]
+
+                        # Build readable slot description
+                        slot_desc = res " " source " " codec
+                        if (hdr != "unknown" && hdr != "") {
+                            slot_desc = slot_desc " " hdr
+                        }
+
+                        # Add warning marker if ambiguous
+                        if (is_ambiguous == "true") {
+                            slot_desc = slot_desc " ⚠"
+                        }
+
+                        return slot_desc
                     }
+
+                    BEGIN { num = 1 }
                     {
                         name = $1
                         size = $2
 
                         # Truncate long names
                         display_name = name
-                        if (length(name) > 90) display_name = substr(name, 1, 87) "..."
+                        if (length(name) > 75) display_name = substr(name, 1, 72) "..."
 
-                        # Format with size
-                        printf "  %3d) %-92s %10s\n", num, display_name, format_size(size)
+                        # Format output based on tracker
+                        if (tracker == "ATH") {
+                            # ATH format includes slot info (5 fields total)
+                            slot = $4
+                            is_ambiguous = $5
+                            slot_info = format_slot(slot, is_ambiguous)
+
+                            printf "  %3d) %-77s %10s\n", num, display_name, format_size(size)
+                            printf "       Slot: %s\n", slot_info
+                        } else {
+                            # Other trackers: original format (3 fields)
+                            printf "  %3d) %-92s %10s\n", num, display_name, format_size(size)
+                        }
                         num++
                     }
                     '
@@ -867,7 +1201,129 @@ if [ ${#SELECTED_NAMES[@]} -gt 1 ]; then
 
         # Cleanup
         rm -f "$TEMP_ANALYSIS" "$TEMP_MOVIES" "$TEMP_TV" "$OUTPUT_DIR/multi_names_movies.tmp" "$OUTPUT_DIR/multi_names_tv.tmp"
+else
+    # Single tracker selected - display all results for that tracker
+    TRACKER_NAME="${SELECTED_NAMES[0]}"
+    OUTPUT_FILE="$OUTPUT_DIR/${TIMESTAMP}_${TRACKER_NAME// /_}.txt"
+
+    # Get tracker abbreviation
+    TRACKER_ABBR=""
+    case "$TRACKER_NAME" in
+        "Aither (API)") TRACKER_ABBR="ATH" ;;
+        "Anthelion (API)") TRACKER_ABBR="ANT" ;;
+        "Blutopia (API)") TRACKER_ABBR="BLU" ;;
+        "Nebulance") TRACKER_ABBR="NBL" ;;
+    esac
+
+    # Check if this tracker is movies-only
+    TRACKER_MOVIES_ONLY=false
+    if [[ "$TRACKER_NAME" == "Anthelion"* ]]; then
+        TRACKER_MOVIES_ONLY=true
     fi
+
+    echo ""
+    echo -e "${GREEN}╔══════════════════════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${GREEN}║ ${YELLOW}${TRACKER_NAME}${GREEN} - All missing torrents${NC}"
+    echo -e "${GREEN}╚══════════════════════════════════════════════════════════════════════════════╝${NC}"
+    echo ""
+    echo -e "${CYAN}Upload command: ${YELLOW}--trackers ${TRACKER_ABBR}${NC}"
+    echo ""
+
+    # Display movies
+    if [ -f "${OUTPUT_FILE}.movies" ]; then
+        MOVIE_COUNT=$(wc -l < "${OUTPUT_FILE}.movies" 2>/dev/null || echo 0)
+        if [ $MOVIE_COUNT -gt 0 ]; then
+            echo -e "${CYAN}Movies (${MOVIE_COUNT})${NC}"
+
+            # For ATH, show slot system notice
+            if [ "$TRACKER_ABBR" = "ATH" ]; then
+                echo -e "${YELLOW}  ℹ ATH Slot System: Slots validated automatically${NC}"
+                echo -e "${YELLOW}  ⚠ Slots with 'unknown' attributes need manual review${NC}"
+            fi
+            echo ""
+
+            # Format and display (simpler version for single tracker - no slot validation needed here)
+            awk -F'|' '
+                function format_size(bytes) {
+                    if (bytes >= 1099511627776)
+                        return sprintf("%.2f TB", bytes / 1099511627776)
+                    else if (bytes >= 1073741824)
+                        return sprintf("%.2f GB", bytes / 1073741824)
+                    else if (bytes >= 1048576)
+                        return sprintf("%.2f MB", bytes / 1048576)
+                    else if (bytes >= 1024)
+                        return sprintf("%.2f KB", bytes / 1024)
+                    else
+                        return sprintf("%d B", bytes)
+                }
+                {
+                    name = $1
+                    size = $2
+
+                    # Truncate long names
+                    display_name = name
+                    if (length(display_name) > 77) {
+                        display_name = substr(display_name, 1, 74) "..."
+                    }
+
+                    printf "  %3d) %-77s %10s\n", NR, display_name, format_size(size)
+                }
+            ' "${OUTPUT_FILE}.movies"
+            echo ""
+            echo -e "${BLUE}Full list saved to: ${OUTPUT_DIR}/${TIMESTAMP}_${TRACKER_ABBR}_movies.txt${NC}"
+            echo ""
+        fi
+    fi
+
+    # Display TV shows (if tracker supports them)
+    if [ "$TRACKER_MOVIES_ONLY" = false ] && [ -f "${OUTPUT_FILE}.tvshows" ]; then
+        TV_COUNT=$(wc -l < "${OUTPUT_FILE}.tvshows" 2>/dev/null || echo 0)
+        if [ $TV_COUNT -gt 0 ]; then
+            echo -e "${CYAN}TV Shows (${TV_COUNT})${NC}"
+
+            # For ATH, show slot system notice
+            if [ "$TRACKER_ABBR" = "ATH" ]; then
+                echo -e "${YELLOW}  ℹ ATH Slot System: Slots validated automatically${NC}"
+                echo -e "${YELLOW}  ⚠ Slots with 'unknown' attributes need manual review${NC}"
+            fi
+            echo ""
+
+            # Format and display
+            awk -F'|' '
+                function format_size(bytes) {
+                    if (bytes >= 1099511627776)
+                        return sprintf("%.2f TB", bytes / 1099511627776)
+                    else if (bytes >= 1073741824)
+                        return sprintf("%.2f GB", bytes / 1073741824)
+                    else if (bytes >= 1048576)
+                        return sprintf("%.2f MB", bytes / 1048576)
+                    else if (bytes >= 1024)
+                        return sprintf("%.2f KB", bytes / 1024)
+                    else
+                        return sprintf("%d B", bytes)
+                }
+                {
+                    name = $1
+                    size = $2
+
+                    # Truncate long names
+                    display_name = name
+                    if (length(display_name) > 77) {
+                        display_name = substr(display_name, 1, 74) "..."
+                    }
+
+                    printf "  %3d) %-77s %10s\n", NR, display_name, format_size(size)
+                }
+            ' "${OUTPUT_FILE}.tvshows"
+            echo ""
+            echo -e "${BLUE}Full list saved to: ${OUTPUT_DIR}/${TIMESTAMP}_${TRACKER_ABBR}_tv.txt${NC}"
+            echo ""
+        fi
+    fi
+
+    echo -e "${GREEN}────────────────────────────────────────────────────────────────────────────────${NC}"
+    echo ""
+fi
 
 echo -e "${CYAN}Next steps:${NC}"
 echo -e "  ${BLUE}1.${NC} Browse to Upload-Assistant: ${GREEN}http://10.10.2.2:8086${NC}"

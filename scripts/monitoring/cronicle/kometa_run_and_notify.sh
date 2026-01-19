@@ -13,15 +13,26 @@
 set -euo pipefail
 
 # Configuration
-JOB_TYPE="${1:-collections}" # operations, metadata, collections, overlays
+JOB_TYPE="${1:-collections}" # operations, metadata, collections, overlays-tv, overlays-movies
+LIBRARY="${2:-Movies|TV Shows}" # Default to both libraries, can be overridden
 LOG_FILE="/tmp/kometa-${JOB_TYPE}-$(date +%Y%m%d-%H%M%S).log"
-APPRISE_URL="http://10.10.2.2:8089/notify/kometa"
+APPRISE_URL="http://apprise:8000/notify/kometa"
 
 # Validate job type and map to Kometa flag
 case "$JOB_TYPE" in
   metadata)
     FLAG="--metadata-only"
     JOB_NAME="Metadata Update"
+    ;;
+  overlays-tv)
+    FLAG="--overlays-only"
+    JOB_NAME="TV Shows Overlays Update"
+    LIBRARY="TV Shows"
+    ;;
+  overlays-movies)
+    FLAG="--overlays-only"
+    JOB_NAME="Movies Overlays Update"
+    LIBRARY="Movies"
     ;;
   overlays)
     FLAG="--overlays-only"
@@ -41,7 +52,7 @@ case "$JOB_TYPE" in
     ;;
   *)
     echo "ERROR: Invalid job type: $JOB_TYPE"
-    echo "Valid types: metadata, overlays, collections, operations, playlists"
+    echo "Valid types: metadata, overlays-tv, overlays-movies, overlays, collections, operations, playlists"
     exit 1
     ;;
 esac
@@ -56,7 +67,7 @@ echo ""
 # Run Kometa and capture output
 START_TIME=$(date +%s)
 set +e  # Don't exit on error, we want to capture the exit code
-docker exec kometa python -u kometa.py --run $FLAG 2>&1 | tee "$LOG_FILE"
+docker exec -u 1026:100 kometa python -u kometa.py --run-libraries "$LIBRARY" $FLAG 2>&1 | tee "$LOG_FILE"
 EXIT_CODE=${PIPESTATUS[0]}
 set -e
 END_TIME=$(date +%s)
