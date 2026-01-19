@@ -20,6 +20,30 @@ services:
     networks:
       - main
 
+  daps-ui:
+    image: monster117/daps-ui:nightly
+    container_name: daps-ui
+    hostname: daps-ui
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - APP_MODE=WEB
+      - UMASK=${UMASK}
+    ports:
+      - 8001:8000
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/daps-ui:/config:rw
+      - ${DOCKER_APPDATA_PATH}/daps/posters:/posters:rw
+      - ${DOCKER_APPDATA_PATH}/kometa/assets:/assets:rw
+      - ${DOCKER_APPDATA_PATH}/kometa/assets/tmp:/config/original_posters
+
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - main
+
 networks:
   main:
     external: true
