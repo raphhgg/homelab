@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  scrutiny:
+    image: ghcr.io/analogj/scrutiny:master-omnibus
+    container_name: scrutiny
+    cap_add:
+      - SYS_RAWIO
+      - SYS_ADMIN  # Required for NVMe drives
+    networks:
+      - main
+    ports:
+      - 8092:8080
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/scrutiny/config:/opt/scrutiny/config
+      - ${DOCKER_APPDATA_PATH}/scrutiny/influxdb:/opt/scrutiny/influxdb
+      - /run/udev:/run/udev:ro
+    devices:
+      - /dev/sata1:/dev/sata1
+      - /dev/sata2:/dev/sata2
+      - /dev/nvme0n1:/dev/nvme0n1
+    environment:
+      - TZ=${TZ}
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  main:
+    external: true
