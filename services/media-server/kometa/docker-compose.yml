@@ -2,14 +2,21 @@ services:
   kometa:
     image: kometateam/kometa:nightly
     container_name: kometa
+    user: "${PUID}:${PGID}"
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
       - KOMETA_DEBUG=true
+      - KOMETA_TIMES=03:00|07:00|15:00|19:00
     volumes:
       - ${DOCKER_APPDATA_PATH}/kometa:/config:rw
     restart: always
+    deploy:
+      resources:
+        reservations:
+          memory: 512M
+          cpus: "0.5"
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     networks:
