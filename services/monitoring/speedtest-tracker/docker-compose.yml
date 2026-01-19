@@ -1,0 +1,25 @@
+services:
+  speedtest-tracker:
+    container_name: speedtest-tracker
+    image: lscr.io/linuxserver/speedtest-tracker:latest
+    restart: always
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - APP_TIMEZONE=${TZ}
+      - APP_KEY=${APP_KEY}
+      - DB_CONNECTION=sqlite
+      - SPEEDTEST_SCHEDULE=${SPEEDTEST_SCHEDULE}
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/speedtest-tracker:/config
+    ports:
+      - 8076:80
+    networks:
+      - main
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  main:
+    external: true
