@@ -1,0 +1,94 @@
+# - type: split-column
+#   widgets:
+#     $include: ../widgets/weather.yml
+#     $include: ../widgets/weather-7days.yml 
+$include: ../../widgets/reddit-home.yml
+$include: ../../widgets/search.yml
+# Media Server & Tools (tabbed)
+- type: group
+  widgets:
+    - type: monitor
+      title: media server
+      cache: 1m
+      sites:
+        - title: plex
+          url: http://10.10.2.2:32400/web/index.html
+          icon: /assets/icons/plex.svg
+        - title: radarr
+          url: http://10.10.2.2:7878
+          icon: /assets/icons/radarr.svg
+        - title: sonarr
+          url: http://10.10.2.2:8988
+          icon: /assets/icons/sonarr.svg
+        - title: qui
+          url: http://10.10.2.2:7476/instances/1
+          icon: /assets/icons/qui.png
+        - title: daps-ui
+          url: http://10.10.2.2:8001/poster-renamer
+          icon: mdi:image-edit
+        - title: profilarr
+          url: http://10.10.2.2:6868
+          icon: /assets/icons/profilarr.svg
+    - type: monitor
+      title: tools
+      cache: 1m
+      sites:
+        - title: prowlarr
+          url: http://10.10.2.2:9696
+          icon: /assets/icons/prowlarr.svg
+        - title: jellyseerr
+          url: http://10.10.2.2:5055
+          icon: /assets/icons/jellyseerr.svg
+        - title: autobrr
+          url: http://10.10.2.2:7474
+          icon: /assets/icons/autobrr.svg
+        - title: upload-assistant
+          url: http://10.10.2.2:8086
+          icon: mdi:cloud-upload
+        - title: daps
+          url: http://10.10.2.2:8002/
+          icon: mdi:image-multiple
+        - title: stash
+          url: http://10.10.2.2:9999
+          icon: /assets/icons/stash.svg
+    # Other
+    - type: monitor
+      title: Other
+      cache: 1m
+      sites:
+        - title: dsm
+          url: https://10.10.2.2:5001
+          icon: /assets/icons/synology-dsm.svg
+          allow-insecure: true
+          alt-status-codes:
+            - 403
+        - title: home assistant
+          url: http://10.10.2.2:8123
+          icon: /assets/icons/home-assistant.svg
+        - title: syncthing
+          url: http://10.10.2.2:8384
+          icon: /assets/icons/syncthing.svg
+        - title: the lounge
+          url: http://10.10.2.2:9001
+          icon: /assets/icons/thelounge.svg
+        - title: scrutiny
+          url: http://10.10.2.2:8092/web/dashboard
+          icon: /assets/icons/scrutiny.svg
+
+# Monitoring 
+- type: monitor
+  title: Monitoring
+  cache: 1m
+  sites:
+    - title: tautulli
+      url: http://10.10.2.2:8181
+      icon: /assets/icons/tautulli.svg
+    - title: beszel
+      url: http://10.10.2.2:8091
+      icon: /assets/icons/beszel.svg
+    - title: dozzle
+      url: http://10.10.2.2:8088
+      icon: /assets/icons/dozzle.svg
+      
+# Github Graph
+# $include: ../../widgets/github-graph.yml

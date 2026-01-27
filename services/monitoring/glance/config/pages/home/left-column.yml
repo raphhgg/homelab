@@ -1,0 +1,7 @@
+# $include: ../widgets/calendar.yml
+# $include: ../widgets/unifi.yml
+$include: ../../widgets/speedtest.yml
+$include: ../../widgets/qbittorrent.yml
+$include: ../../widgets/server-stats.yml
+# $include: ../../widgets/beszel-stats.yml
+$include: ../../widgets/drive-health.yml
