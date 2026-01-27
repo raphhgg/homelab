@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    networks:
+      - main
+    ports:
+      - 8087:8080
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/open-webui:/app/backend/data
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL}
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  main:
+    external: true
