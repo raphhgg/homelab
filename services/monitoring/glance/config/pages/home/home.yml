@@ -1,0 +1,11 @@
+- name: Home
+  columns:
+    - size: small
+      widgets:
+        $include: ../home/left-column.yml
+    - size: full
+      widgets:
+        $include: ../home/center-column.yml
+    - size: small
+      widgets:
+        $include: ../home/right-column.yml

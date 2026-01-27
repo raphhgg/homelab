@@ -1,0 +1,67 @@
+- type: custom-api
+  title: CPU Usage
+  cache: 30s
+  options:
+    base-url: ${BESZEL_URL}
+    api-key: ${BESZEL_TOKEN}
+    collapse-after: 14
+  template: |
+    {{ $baseURL := .Options.StringOr "base-url" "" }}
+    {{ $apiKey := .Options.StringOr "api-key" "" }}
+    {{ $collapseAfter := .Options.IntOr "collapse-after" 10 }}
+
+    {{ if or (eq $baseURL "") (eq $apiKey "") }}
+      <p class="color-negative">base-url and api-key options are required.</p>
+    {{ else }}
+      {{ $token := concat "Bearer " $apiKey }}
+      {{ $systemsResponse := newRequest (print $baseURL "/api/collections/systems/records")
+          | withHeader "Authorization" $token
+          | getResponse }}
+      {{ $systems := $systemsResponse.JSON.Array "items" }}
+
+      {{ if eq (len $systems) 0 }}
+        <p class="color-negative">No systems found.</p>
+      {{ else }}
+        {{ $system := index $systems 0 }}
+        {{ $systemId := $system.String "id" }}
+        {{ $containerStatsResponse := newRequest (print $baseURL "/api/collections/container_stats/records")
+            | withHeader "Authorization" $token
+            | withParameter "sort" "-created"
+            | withParameter "page" "1"
+            | withParameter "perPage" "1"
+            | withParameter "filter" (print "system='" $systemId "'")
+            | getResponse }}
+        {{ $containerRecords := $containerStatsResponse.JSON.Array "items" }}
+
+        {{ if eq (len $containerRecords) 0 }}
+          <p class="color-subdue">No container stats available.</p>
+        {{ else }}
+          {{ $latestRecord := index $containerRecords 0 }}
+          {{ $containers := $latestRecord.Array "stats" }}
+          {{ $totalCount := len $containers }}
+
+          {{ if eq $totalCount 0 }}
+            <p class="color-subdue">No containers running.</p>
+          {{ else }}
+            {{ $sortedContainers := sortByFloat "c" "desc" $containers }}
+
+            <ul class="list list-gap-10 collapsible-container" data-collapse-after="{{ $collapseAfter }}">
+              {{ range $container := $sortedContainers }}
+                {{ $name := $container.String "n" }}
+                {{ $cpu := $container.Float "c" }}
+                {{ $mem := $container.Float "m" }}
+                <li class="flex items-center gap-10" data-popover-type="html">
+                  <div data-popover-html>
+                    <div class="flex"><div class="size-h5">CPU</div><div class="value-separator"></div><div class="color-highlight">{{ printf "%.2f" $cpu }}%</div></div>
+                    <div class="flex margin-top-3"><div class="size-h5">Memory</div><div class="value-separator"></div><div class="color-highlight">{{ printf "%.1f" $mem }} MB</div></div>
+                  </div>
+                  <img style="width: 1.5rem; height: 1.5rem; border-radius: 4px;" src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/{{ $name }}.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/docker.svg';" alt="">
+                  <div class="size-title-dynamic color-highlight text-truncate grow">{{ $name }}</div>
+                  <div class="shrink-0">{{ printf "%.1f" $cpu }}%</div>
+                </li>
+              {{ end }}
+            </ul>
+          {{ end }}
+        {{ end }}
+      {{ end }}
+    {{ end }}

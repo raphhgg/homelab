@@ -1,0 +1,26 @@
+- type: group
+  title: Reddit - Home
+  define: &reddit-home
+    type: reddit
+    style: vertical-list
+    show-flairs: true
+    show-thumbnails: true
+    limit: 10
+    collapse-after: 6
+    sort-by: hot
+  widgets:
+    - subreddit: homelab
+      <<: *reddit-home
+    - subreddit: selfhosted
+      <<: *reddit-home
+    - subreddit: DataHoarder
+      <<: *reddit-home
+    - subreddit: Piracy
+      <<: *reddit-home
+    - subreddit: homelabsales
+      <<: *reddit-home
+    - subreddit: brussels
+      <<: *reddit-home
+    # - subreddit: belgium
+    #   <<: *reddit-home
+    #   sort_by: new

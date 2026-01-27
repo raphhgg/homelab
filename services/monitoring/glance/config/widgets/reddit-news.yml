@@ -1,0 +1,24 @@
+- type: group
+  title: Reddit - News
+  define: &reddit-news
+      type: reddit
+      style: vertical-list
+      show-flairs: true
+      show-thumbnails: true
+      limit: 10
+      collapse-after: 5
+      # sort-by: new
+  widgets:
+    - subreddit: brussels
+      <<: *reddit-homelab
+    - subreddit: ClaudeAI
+      <<: *reddit-homelab
+    - subreddit: homelabsales
+      <<: *reddit-homelab
+    - subreddit: DataHoarder
+      <<: *reddit-homelab
+    - subreddit: Piracy
+      <<: *reddit-homelab
+
+
+      # ai, apple, claude, tech etc
