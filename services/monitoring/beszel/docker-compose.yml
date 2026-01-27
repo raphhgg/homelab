@@ -19,8 +19,9 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
 
   beszel-agent:
-    image: henrygd/beszel-agent:latest
+    image: henrygd/beszel-agent:alpine
     container_name: beszel-agent
+    privileged: true
     networks:
       - main
       - socket_proxy
@@ -33,9 +34,19 @@ services:
       - PORT=45876
       - KEY=${BESZEL_AGENT_KEY}
       - DOCKER_HOST=${DOCKER_HOST}
-      # Set main filesystem to Volume3 using the container mount point
-      # Beszel will use this for the main "Disk Usage" panel
+      # Filesystem for Disk Usage panel
       - FILESYSTEM=/extra-filesystems/cachedev_1__Volume3
+      # Map the I/O stats to the physical disk to fix "Device not found in diskstats"
+      - DISK=/dev/sata1 
+      # Explicitly define SMART devices with types for NAS controllers
+      - SMART_DEVICES=/dev/sata1:sat,/dev/sata2:sat,/dev/nvme0n1:nvme
+    devices:
+      - /dev/sata1:/dev/sata1
+      - /dev/sata2:/dev/sata2
+      - /dev/nvme0n1:/dev/nvme0
+    cap_add:
+      - SYS_RAWIO 
+      - SYS_ADMIN
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"

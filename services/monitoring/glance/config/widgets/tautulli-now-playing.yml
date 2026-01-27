@@ -19,6 +19,22 @@
         No one is watching anything right now.
       </div>
     {{ else }}
+      <style>
+        .tautulli-progress-container {
+          height: 0.4rem;
+          border: 1px solid var(--color-text-base);
+          border-radius: var(--border-radius);
+          overflow: hidden;
+          margin-top: 0.4rem;
+        }
+        .tautulli-progress-bar {
+          height: 100%;
+          background: var(--color-primary);
+          border-radius: 3px;
+          transition: width 1s linear;
+        }
+        @keyframes tautulli-progress-animation { to { width: 100%; } }
+      </style>
       <ul class="list collapsible-container" data-collapse-after="{{ $collapse }}">
         {{ range $session := $sessions }}
           {{ $type := $session.String "media_type" }}
@@ -40,6 +56,10 @@
           {{ $duration := $session.Int "duration" }}
           {{ $offset := $session.Int "view_offset" }}
           {{ $remaining := div (sub $duration $offset) 1000 }}
+          {{ $progress := 0 }}
+          {{ if gt $duration 0 }}
+            {{ $progress = mul 100 (div (toFloat $offset) (toFloat $duration)) | toInt }}
+          {{ end }}
           {{ $now := now }}
           {{ $endTime := $now.Add (duration (printf "%ds" $remaining)) | formatTime "15:04" }}
           {{ $ratingKey := $session.String "rating_key" }}
@@ -82,9 +102,15 @@
                   {{ $session.String "friendly_name" }}
                 </span> ·
                 <span title="Ends at {{ $endTime }}">
-                  {{ $session.String "progress_percent" }}%
+                  {{ div $remaining 60 }}m left
                 </span>
                 <span style="margin-left: 0.25rem;">{{ $stateIcon }}</span>
+              </div>
+
+              <div class="tautulli-progress-container">
+                <div class="tautulli-progress-bar"
+                  style="width: {{ $progress }}%; animation: tautulli-progress-animation {{ $remaining }}s linear forwards;">
+                </div>
               </div>
             </div>
           </li>

@@ -1,5 +1,5 @@
 - type: custom-api
-  title: Weather 7 Days
+  title: Weather - 7 Days
   body-type: string
   cache: 1h
   options:
@@ -43,13 +43,29 @@
     {{ $latitude := $req1.JSON.String "results.0.latitude" }}
     {{ $longitude := $req1.JSON.String "results.0.longitude" }}
 
+    {{/* Calculate Monday and Sunday of the current week */}}
+    {{ $now := now }}
+    {{ $dayName := $now.Format "Monday" }}
+    {{ $daysFromMonday := 0 }}
+    {{ if eq $dayName "Tuesday" }}{{ $daysFromMonday = 1 }}
+    {{ else if eq $dayName "Wednesday" }}{{ $daysFromMonday = 2 }}
+    {{ else if eq $dayName "Thursday" }}{{ $daysFromMonday = 3 }}
+    {{ else if eq $dayName "Friday" }}{{ $daysFromMonday = 4 }}
+    {{ else if eq $dayName "Saturday" }}{{ $daysFromMonday = 5 }}
+    {{ else if eq $dayName "Sunday" }}{{ $daysFromMonday = 6 }}
+    {{ end }}
+    {{ $monday := $now.AddDate 0 0 (mul $daysFromMonday -1) }}
+    {{ $sunday := $monday.AddDate 0 0 6 }}
+    {{ $startDate := $monday.Format "2006-01-02" }}
+    {{ $endDate := $sunday.Format "2006-01-02" }}
+
     {{/* Request 2: get daily weather forecast based on latitude and longitude */}}
-    {{ $url2 := printf "https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&temperature_unit=%s&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=America/New_York" $latitude $longitude $temp_unit}}
+    {{ $url2 := printf "https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&temperature_unit=%s&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto&start_date=%s&end_date=%s" $latitude $longitude $temp_unit $startDate $endDate}}
     {{ $req2 := newRequest $url2 | getResponse }}
 
     <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
 
-      {{/* Show abbreivated day of week */}}
+      {{/* Show abbreviated day of week - always Mon to Sun */}}
       {{ $dates := $req2.JSON.Array "daily.time" }}
       <div style="position: relative; width: 100%; height: 25px;">
         {{ range $index, $date := $dates }}
@@ -146,72 +162,45 @@
     {{ $maxTemps := $req2.JSON.Array "daily.temperature_2m_max" }}
     {{ $minTemps := $req2.JSON.Array "daily.temperature_2m_min" }}
 
-    {{/* get overall max and min temp over week's range */}}
-    {{/* to determine vertical scale */}}
+    {{/* Fixed height temperature bars */}}
     <div style="display: flex; justify-content: flex-start; align-items: center;">
-
-      {{ $max_max := 0 }}
-      {{ range $maxTemps }}
-          {{ if gt (.Int "") $max_max }}
-            {{ $max_max = (.Int "") }}
-          {{ end }}
-      {{ end }}
-      {{ $min_min := 999 }}
-      {{ range $minTemps }}
-          {{ if lt (.Int "") $min_min }}
-            {{ $min_min = (.Int "") }}
-          {{ end }}
-      {{ end }}
-
-      {{/* add a small buffer */}}
-      {{ $max_max = add $max_max 1 }}
-      {{ $min_min = sub $min_min 1 }}
-
-      {{/* outer div to contain the temp chart */}}
-      <div style="position: relative; width: 100%; height: 75px;">
-        {{/* get relative % heights for each daily max and min */}}
-        {{ $temp_range := sub $max_max $min_min }}
-
+      <div style="position: relative; width: 100%; height: 35px;">
         {{ range $index, $thisHigh := $maxTemps }}
             {{ $thisLow := index $minTemps $index }}
             {{ $thisHigh = $thisHigh.Float "" }}
             {{ $thisLow = $thisLow.Float "" }}
 
-            {{ $thisHighPct := sub 1 (div (sub $max_max $thisHigh) $temp_range) }}
-            {{ $thisLowPct := div (sub $thisLow $min_min) $temp_range }}
+            {{/* Calculate average temp for gradient coloring */}}
+            {{ $avgTemp := div (add $thisHigh $thisLow) 2 }}
 
-            {{/* define color gradient per. values between $temp_red and $temp_yellow are shown as a color gradient from $color_red to $color_yellow */}}
-            {{/* for colors partially in range, can represent as negative percent */}}
-            {{ $thisTempRange := sub $thisHigh $thisLow }}
-            {{ $red_pos := mul 100 (div (sub $thisHigh $temp_red) $thisTempRange) | toInt }}
-            {{ $yel_pos := mul 100 (div (sub $thisHigh $temp_yellow) $thisTempRange) | toInt }}
-            {{ $blu_pos := mul 100 (div (sub $thisHigh $temp_blue) $thisTempRange) | toInt }}
-            {{ $whi_pos := mul 100 (div (sub $thisHigh $temp_white) $thisTempRange) | toInt }}
-            {{ $gradient_string := printf "%s %d%%, %s %d%%, %s %d%%, %s %d%%" $color_red $red_pos $color_yellow $yel_pos $color_blue $blu_pos $color_white $whi_pos }}
+            {{/* Determine background color based on average temperature - works for all seasons */}}
+            {{ $bg_color := "rgba(100, 140, 180, 0.5)" }}
+            {{ if gt $avgTemp 30.0 }}
+              {{ $bg_color = "rgba(160, 70, 60, 0.5)" }}
+            {{ else if gt $avgTemp 25.0 }}
+              {{ $bg_color = "rgba(180, 90, 70, 0.5)" }}
+            {{ else if gt $avgTemp 20.0 }}
+              {{ $bg_color = "rgba(180, 120, 70, 0.5)" }}
+            {{ else if gt $avgTemp 15.0 }}
+              {{ $bg_color = "rgba(180, 150, 80, 0.5)" }}
+            {{ else if gt $avgTemp 10.0 }}
+              {{ $bg_color = "rgba(100, 140, 100, 0.5)" }}
+            {{ else if gt $avgTemp 5.0 }}
+              {{ $bg_color = "rgba(100, 140, 100, 0.5)" }}
+            {{ else if gt $avgTemp 0.0 }}
+              {{ $bg_color = "rgba(100, 140, 180, 0.5)" }}
+            {{ else }}
+              {{ $bg_color = "rgba(130, 100, 160, 0.5)" }}
+            {{ end }}
 
-            {{/* output daily div */}}
-            <div style="left: {{ mul $index 14 | add 3 }}%; bottom: {{ mul $thisLowPct 100 | toInt }}%;
-              height: {{ mul (sub $thisHighPct $thisLowPct) 100 | toInt }}%; position: absolute;
-              background:linear-gradient({{ $gradient_string | safeCSS }}); width: 10%; text-align: center; border-radius: 10px;">
-
-              {{/* Based on rectangle height & position, print high and low temperatures either inside or outside the rectangle. */}}
-              {{ $top_pos := -2 }}
-              {{ $bot_pos := -2 }}
-              {{ $pos_thresh := 0.20 }}
-              {{ if lt (div $thisTempRange $temp_range) $pos_thresh }}
-                {{ $top_pos = -17 }}
-                {{ $bot_pos = -19 }}
-              {{ else if and (lt (div $thisTempRange $temp_range) (mul $pos_thresh 2)) (lt (sub 1 $thisHighPct) $thisLowPct) }}
-                {{ $bot_pos = -19 }}
-              {{ else if and (lt (div $thisTempRange $temp_range) (mul $pos_thresh 2)) (gt (sub 1 $thisHighPct) $thisLowPct) }}
-                {{ $top_pos = -17 }}
-              {{ end }}
-                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: {{ $overlay_color | safeCSS }}; z-index: 1;  border-radius: 10px;">
-                  <p style='color: #F0F0F0; position: absolute; top: {{ $top_pos }}px; left: 0px; right: 0px'>{{ $thisHigh | toInt }}</p>
-                  <p style='color: #F0F0F0; position: absolute; bottom: {{ $bot_pos }}px; left: 0px; right:0px'>{{ $thisLow | toInt }}</p>
-                </div>
-              </div>
+            {{/* output daily div - fixed height */}}
+            <div style="left: {{ mul $index 14 | add 3 }}%; bottom: 0;
+              height: 100%; position: absolute;
+              background: {{ $bg_color | safeCSS }}; width: 10%; text-align: center; border-radius: 10px;
+              display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <p style='color: #F0F0F0; margin: 0; line-height: 1.2;'>{{ $thisHigh | toInt }}</p>
+              <p style='color: #F0F0F0; margin: 0; line-height: 1.2;'>{{ $thisLow | toInt }}</p>
+            </div>
         {{ end }}
-
       </div>
     </div>

@@ -8,11 +8,11 @@
       name: Syncthing
       description: File synchronization
       url: http://10.10.2.2:8384
-      icon: di:syncthing
+      icon: /assets/icons/syncthing.svg
       hide: false
     thelounge:
       name: The Lounge
       description: IRC client
       url: http://10.10.2.2:9001
-      icon: di:thelounge
+      icon: /assets/icons/thelounge.svg
       hide: false

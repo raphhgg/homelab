@@ -8,5 +8,5 @@
       name: Home Assistant
       description: Smart home automation
       url: http://10.10.2.2:8123
-      icon: di:home-assistant
+      icon: /assets/icons/home-assistant.svg
       hide: false

@@ -4,8 +4,6 @@
     - type: local
       name: ds423plus
       hide-swap: false
-      # cpu-temp-sensor: true
-      # core-temp-sensor: coretemp_core_0
       hide-mountpoints-by-default: true
       mountpoints:
         "/mnt/volume3":
@@ -14,3 +12,7 @@
         "/mnt/volume2":
           hide: false
           name: nvme
+    - type: remote
+      name: ubuntu-server
+      url: http://10.10.1.111:27973
+      token: et6SyJ6wDdP2kFLMEs4eHW5AGFO7HmJd

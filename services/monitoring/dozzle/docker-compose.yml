@@ -15,7 +15,6 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
-
 networks:
   main:
     external: true

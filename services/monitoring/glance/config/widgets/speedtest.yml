@@ -34,7 +34,7 @@
         {{ end }}
         </div>
         {{ end }}
-        <div class="color-highlight size-h3">{{ .JSON.Float "data.download_bits" | mul 0.000001 | printf "%.1f" }}</div>
+        <div class="color-highlight size-h3">{{ .JSON.Float "data.download_bits" | mul 0.000001 | printf "%.1f" }} MiB/s</div>
         <div class="size-h6">DOWNLOAD</div>
     </div>
     <div>
@@ -53,7 +53,7 @@
         {{ end }}
         </div>
         {{ end }}
-        <div class="color-highlight size-h3">{{ .JSON.Float "data.upload_bits" | mul 0.000001 | printf "%.1f" }}</div>
+        <div class="color-highlight size-h3">{{ .JSON.Float "data.upload_bits" | mul 0.000001 | printf "%.1f" }} MiB/s</div>
         <div class="size-h6">UPLOAD</div>
     </div>
     <div>

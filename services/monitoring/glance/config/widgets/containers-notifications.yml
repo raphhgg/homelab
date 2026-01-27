@@ -7,10 +7,10 @@
     apprise:
       name: Apprise
       description: Notification service
-      icon: di:apprise
+      icon: /assets/icons/apprise.png
       hide: false
     apprise-middleware:
       name: Apprise Middleware
       description: Webhook transformer
-      icon: di:apprise
+      icon: /assets/icons/apprise.png
       hide: false

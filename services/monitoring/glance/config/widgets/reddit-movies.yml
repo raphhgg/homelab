@@ -1,17 +1,23 @@
 - type: group
   title: Reddit - Movies & TV
+  define: &reddit-movies
+      type: reddit
+      style: vertical-list
+      show-flairs: true
+      show-thumbnails: true
+      limit: 10
+      collapse-after: 8
+      # sort-by: new
   widgets:
-    - type: reddit
-      subreddit: MovieSuggestions
-      style: vertical-list
-      show-flairs: true
-      show-thumbnails: true
-      limit: 10
-      collapse-after: 4
-    - type: reddit
-      subreddit: televisionsuggestions
-      style: vertical-list
-      show-flairs: true
-      show-thumbnails: true
-      limit: 10
-      collapse-after: 4
+    - subreddit: MovieSuggestions
+      <<: *reddit-movies
+    - subreddit: televisionsuggestions
+      <<: *reddit-movies
+    - subreddit: Letterboxd
+      <<: *reddit-movies
+    - subreddit: LetterboxdTopFour
+      <<: *reddit-movies
+    - subreddit: MovieRecommendations
+      <<: *reddit-movies
+    - subreddit: Cinephiles
+      <<: *reddit-movies

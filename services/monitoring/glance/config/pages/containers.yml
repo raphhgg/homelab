@@ -2,18 +2,20 @@
   columns:
     - size: small
       widgets:
-        $include: ../widgets/containers-infrastructure.yml
-        $include: ../widgets/containers-monitoring.yml
-        $include: ../widgets/containers-media-server.yml
+        - $include: ../widgets/containers-media-server.yml
 
     - size: full
       widgets:
-        $include: ../widgets/containers-torrents.yml
-        $include: ../widgets/containers-tools.yml
-        
+        - $include: ../widgets/search.yml
+        - type: split-column
+          widgets:
+            - $include: ../widgets/beszel-containers-cpu.yml
+            - $include: ../widgets/beszel-containers-ram.yml
+       
+
 
     - size: small
       widgets:
-        $include: ../widgets/containers-notifications.yml
-        $include: ../widgets/uptime-kuma.yml
-
+        - $include: ../widgets/containers-infrastructure.yml
+        - $include: ../widgets/containers-monitoring.yml
+        

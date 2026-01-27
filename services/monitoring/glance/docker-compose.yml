@@ -7,6 +7,7 @@ services:
       - .env
     volumes:
       - ./config:/app/config
+      - ./config/assets:/app/assets
       - /volume2:/mnt/volume2:ro
       - /volume3:/mnt/volume3:ro
     ports:
@@ -22,24 +23,11 @@ services:
     image: skyallinott/f1_api:latest
     restart: always
     environment:
-      - TIMEZONE=Europe/Brussels
+      - TIMEZONE=${TZ}
       - TRACK_COLOUR=#e10600
       - EVENT_DETAIL=main
     ports:
       - 4463:4463
-    networks:
-      - main
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-
-  glance-github-graph:
-    container_name: glance-github-graph
-    image: haumea/glance-github-graph:latest
-    restart: always
-    environment:
-      - CACHE_ENABLED=true
-      - CACHE_TYPE=memory
-      - CACHE_DURATION_SECS=3600
     networks:
       - main
     labels:

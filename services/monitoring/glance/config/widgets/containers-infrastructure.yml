@@ -7,21 +7,15 @@
     docker-proxy:
       name: Docker Proxy
       description: Docker socket proxy
-      icon: di:docker
-      hide: false
-    portainer:
-      name: Portainer
-      description: Docker management UI
-      url: http://10.10.2.2:9000
-      icon: di:portainer
+      icon: /assets/icons/docker.svg
       hide: false
     cloudflare-ddns:
       name: Cloudflare DDNS
       description: Dynamic DNS updater
-      icon: di:cloudflare
+      icon: /assets/icons/cloudflare.svg
       hide: false
     github-actions-runner:
       name: GitHub Runner
       description: Self-hosted Actions runner
-      icon: di:github
+      icon: /assets/icons/github-white.svg
       hide: false

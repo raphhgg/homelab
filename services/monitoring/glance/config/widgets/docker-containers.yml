@@ -8,28 +8,28 @@
       name: Plex
       description: Media streaming server
       url: http://10.10.2.2:32400/web
-      icon: si:plex
+      icon: /assets/icons/plex.svg
       category: media-server
     tautulli:
       name: Tautulli
       description: Plex monitoring and statistics
       url: http://10.10.2.2:8181
-      icon: si:tautulli
+      icon: /assets/icons/tautulli.svg
       category: media-server
     kometa:
       name: Kometa
       description: Plex metadata manager
-      icon: si:plex
+      icon: /assets/icons/kometa.png
       category: media-server
     imagemaid:
       name: ImageMaid
       description: Plex image cleanup
-      icon: si:plex
+      icon: /assets/icons/image-maid.png
       category: media-server
     plex-auto-languages:
       name: Plex-Auto-Languages
       description: Automatic audio/subtitle selection
-      icon: si:plex
+      icon: /assets/icons/plex.svg
       category: media-server
 
     # Arrs
@@ -37,37 +37,37 @@
       name: Radarr
       description: Movie management
       url: http://10.10.2.2:7878
-      icon: si:radarr
+      icon: /assets/icons/radarr.svg
       category: arrs
     sonarr:
       name: Sonarr
       description: TV show management
       url: http://10.10.2.2:8988
-      icon: si:sonarr
+      icon: /assets/icons/sonarr.svg
       category: arrs
     prowlarr:
       name: Prowlarr
       description: Indexer manager
       url: http://10.10.2.2:9696
-      icon: si:prowlarr
+      icon: /assets/icons/prowlarr.svg
       category: arrs
     bazarr:
       name: Bazarr
       description: Subtitle management
       url: http://10.10.2.2:6767
-      icon: si:bazarr
+      icon: /assets/icons/bazarr.svg
       category: arrs
     profilarr:
       name: Profilarr
       description: Profile sync for Arrs
       url: http://10.10.2.2:6868
-      icon: si:sonarr
+      icon: /assets/icons/sonarr.svg
       category: arrs
     jellyseerr:
       name: Jellyseerr
       description: Media request management
       url: http://10.10.2.2:5055
-      icon: si:jellyseerr
+      icon: /assets/icons/jellyseerr.svg
       category: arrs
 
     # Torrents
@@ -75,36 +75,36 @@
       name: qbit-main
       description: Primary torrent client
       url: http://10.10.2.2:8080
-      icon: si:qbittorrent
+      icon: /assets/icons/qbittorrent.svg
       category: torrents
     qbit-cross:
       name: qbit-cross
       description: Cross-seed torrent client
       url: http://10.10.2.2:8084
-      icon: si:qbittorrent
+      icon: /assets/icons/qbittorrent.svg
       category: torrents
     qbit-brr:
       name: qbit-brr
       description: Autobrr torrent client
       url: http://10.10.2.2:8085
-      icon: si:qbittorrent
+      icon: /assets/icons/qbittorrent.svg
       category: torrents
     autobrr:
       name: Autobrr
       description: Torrent automation
       url: http://10.10.2.2:7474
-      icon: si:qbittorrent
+      icon: /assets/icons/autobrr.svg
       category: torrents
     cross-seed:
       name: Cross-Seed
       description: Cross-seeding automation
-      icon: si:qbittorrent
+      icon: /assets/icons/cross-seed.png
       category: torrents
     qui:
       name: QUI
       description: qBittorrent unified interface
       url: http://10.10.2.2:7476
-      icon: si:qbittorrent
+      icon: /assets/icons/qui.png
       category: torrents
 
     # Tools
@@ -112,35 +112,35 @@
       name: Upload Assistant
       description: Torrent upload helper
       url: http://10.10.2.2:8086
-      icon: si:cloudflarepages
+      icon: /assets/icons/github.svg
       category: tools
     daps:
       name: DAPS
       description: Poster automation
       url: http://10.10.2.2:8002
-      icon: si:plex
+      icon: /assets/icons/github.svg
       category: tools
     daps-ui:
       name: DAPS UI
       description: DAPS web interface
       url: http://10.10.2.2:8001
-      icon: si:plex
+      icon: /assets/icons/github.svg
       category: tools
     autopulse:
       name: Autopulse
       description: Media processing automation
-      icon: si:plex
+      icon: /assets/icons/github.svg
       category: tools
     stash:
       name: Stash
       description: Media organizer
       url: http://10.10.2.2:9999
-      icon: si:plex
+      icon: /assets/icons/stash.svg
       category: tools
     calibre-web-dl:
       name: Calibre Web
       description: E-book management
-      icon: si:calibreweb
+      icon: /assets/icons/calibre.svg
       category: tools
 
     # Monitoring
@@ -148,87 +148,87 @@
       name: Beszel
       description: Server monitoring dashboard
       url: http://10.10.2.2:8091
-      icon: si:prometheus
+      icon: /assets/icons/beszel.svg
       category: monitoring
     beszel-agent:
       name: Beszel Agent
       description: Beszel monitoring agent
-      icon: si:prometheus
+      icon: /assets/icons/beszel.svg
       category: monitoring
     dozzle:
       name: Dozzle
       description: Docker log viewer
       url: http://10.10.2.2:8088
-      icon: si:docker
+      icon: /assets/icons/docker.svg
       category: monitoring
     uptime-kuma:
       name: Uptime Kuma
       description: Uptime monitoring
       url: http://10.10.2.2:3001
-      icon: si:uptimekuma
+      icon: /assets/icons/uptime-kuma.svg
       category: monitoring
     glance:
       name: Glance
       description: Dashboard
       url: http://10.10.2.2:8070
-      icon: si:glance
+      icon: /assets/icons/glance.svg
       category: monitoring
     speedtest-tracker:
       name: Speedtest Tracker
       description: Internet speed monitoring
       url: http://10.10.2.2:8076
-      icon: si:speedtest
+      icon: /assets/icons/speedtest.svg
       category: monitoring
     watchtower:
       name: Watchtower
       description: Container auto-updater
-      icon: si:docker
+      icon: /assets/icons/docker.svg
       category: monitoring
 
     # Notifications
     apprise:
       name: Apprise
       description: Notification service
-      icon: si:gotify
+      icon: /assets/icons/gotify.svg
       category: notifications
     apprise-middleware:
       name: Apprise Middleware
       description: Webhook transformer
-      icon: si:gotify
+      icon: /assets/icons/gotify.svg
       category: notifications
     notifiarr:
       name: Notifiarr
       description: Notification aggregator
-      icon: si:discord
+      icon: /assets/icons/discord.svg
       category: notifications
 
     # Infrastructure
     docker-proxy:
       name: Docker Proxy
       description: Docker socket proxy
-      icon: si:docker
+      icon: /assets/icons/docker.svg
       category: infrastructure
     portainer:
       name: Portainer
       description: Docker management UI
       url: http://10.10.2.2:9000
-      icon: si:portainer
+      icon: /assets/icons/portainer.svg
       category: infrastructure
     cronicle:
       name: Cronicle
       description: Job scheduler
       url: http://10.10.2.2:3012
-      icon: si:clockify
+      icon: /assets/icons/cronicle.svg
       category: infrastructure
     cloudflare-ddns:
       name: Cloudflare DDNS
       description: Dynamic DNS updater
-      icon: si:cloudflare
+      icon: /assets/icons/cloudflare.svg
       category: infrastructure
     github-actions-runner:
       name: GitHub Runner
       description: Self-hosted Actions runner
-      icon: si:githubactions
+      icon: /assets/icons/github.svg
       category: infrastructure
 
     # Smart Home
@@ -236,7 +236,7 @@
       name: Home Assistant
       description: Smart home automation
       url: http://10.10.2.2:8123
-      icon: si:homeassistant
+      icon: /assets/icons/home-assistant.svg
       category: smart-home
 
     # Sync
@@ -244,23 +244,23 @@
       name: Syncthing
       description: File synchronization
       url: http://10.10.2.2:8384
-      icon: si:syncthing
+      icon: /assets/icons/syncthing.svg
       category: sync
     thelounge:
       name: The Lounge
       description: IRC client
       url: http://10.10.2.2:9001
-      icon: si:thelounge
+      icon: /assets/icons/thelounge.svg
       category: sync
 
     # Letterboxd
     lettarrboxd:
       name: Lettarrboxd
       description: Letterboxd integration
-      icon: si:letterboxd
+      icon: /assets/icons/letterboxd.svg
       category: letterboxd
     lettarrboxd-new-releases:
       name: Lettarrboxd Releases
       description: Letterboxd new releases
-      icon: si:letterboxd
+      icon: /assets/icons/letterboxd.svg
       category: letterboxd

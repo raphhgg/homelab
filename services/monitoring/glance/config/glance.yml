@@ -1,24 +1,28 @@
+server:
+  assets-path: /app/assets
+
 auth:
-  secret-key: ${AUTH_SECRET_KEY} 
+  secret-key: ${AUTH_SECRET_KEY}
   users:
     admin:
       password: ${AUTH_ADMIN_PASSWORD}
 
 theme:
+  # default - neon pink
+  background-color: 240 27 11
+  contrast-multiplier: 1.5
+  primary-color: 321 100 71
+  positive-color: 165 78 51
+  negative-color: 360 100 71
+
   presets:
-    neon-pink:
-      background-color: 240 27 11
-      contrast-multiplier: 1.5
-      primary-color: 321 100 71
-      positive-color: 165 78 51
-      negative-color: 360 100 71
-    catppuccin-macchiato:
+    default-light: # catppuccin-macchiato
       background-color: 232 23 18
       contrast-multiplier: 1.2
       primary-color: 220 83 75
       positive-color: 105 48 72
       negative-color: 351 74 73
-    catppuccin-mocha:
+    default-dark: # catppuccin-mocha
       background-color: 240 21 15
       contrast-multiplier: 1.2
       primary-color: 217 92 83
@@ -26,8 +30,9 @@ theme:
       negative-color: 347 70 65
 
 pages:
-$include: pages/home.yml
+$include: pages/home/home.yml
 $include: pages/medias.yml
+$include: pages/trackers.yml
 $include: pages/containers.yml
 # containers (monitoring)
 # movies 

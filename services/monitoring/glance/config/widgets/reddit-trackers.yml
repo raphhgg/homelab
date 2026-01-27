@@ -1,17 +1,15 @@
 - type: group
   title: Reddit - Trackers
+  define: &reddit-trackers
+      type: reddit
+      style: vertical-list
+      show-flairs: true
+      show-thumbnails: true
+      limit: 8
+      collapse-after: 5
+      sort_by: new
   widgets:
-    - type: reddit
-      subreddit: trackers
-      style: vertical-list
-      show-flairs: true
-      show-thumbnails: true
-      limit: 5
-      collapse-after: 3
-    - type: reddit
-      subreddit: OpenSignups
-      style: vertical-list
-      show-flairs: true
-      show-thumbnails: true
-      limit: 5
-      collapse-after: 3
+    - subreddit: trackers
+      <<: *reddit-trackers
+    - subreddit: OpenSignups
+      <<: *reddit-trackers

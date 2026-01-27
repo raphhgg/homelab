@@ -8,35 +8,35 @@
       name: Radarr
       description: Movie management
       url: http://10.10.2.2:7878
-      icon: di:radarr
+      icon: /assets/icons/radarr.svg
       hide: false
     sonarr:
       name: Sonarr
       description: TV show management
       url: http://10.10.2.2:8988
-      icon: di:sonarr
+      icon: /assets/icons/sonarr.svg
       hide: false
     prowlarr:
       name: Prowlarr
       description: Indexer manager
       url: http://10.10.2.2:9696
-      icon: di:prowlarr
+      icon: /assets/icons/prowlarr.svg
       hide: false
     bazarr:
       name: Bazarr
       description: Subtitle management
       url: http://10.10.2.2:6767
-      icon: di:bazarr
+      icon: /assets/icons/bazarr.svg
       hide: false
     profilarr:
       name: Profilarr
       description: Profile sync for Arrs
       url: http://10.10.2.2:6868
-      icon: di:profilarr
+      icon: /assets/icons/profilarr.svg
       hide: false
     jellyseerr:
       name: Jellyseerr
       description: Media request management
       url: http://10.10.2.2:5055
-      icon: di:jellyseerr
+      icon: /assets/icons/jellyseerr.svg
       hide: false

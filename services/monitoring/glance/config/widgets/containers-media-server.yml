@@ -4,28 +4,30 @@
   running-only: true
   hide-by-default: true
   containers:
+    plex:
+      name: Plex
+      description: Media Server
+      icon: /assets/icons/plex.svg
+      hide: false
     kometa:
       name: Kometa
       description: Plex metadata manager
-      icon: di:kometa
+      icon: /assets/icons/kometa.png
       hide: false
     imagemaid:
       name: ImageMaid
       description: Plex image cleanup
-      icon: di:imagemaid
+      icon: /assets/icons/image-maid.png
       hide: false
     plex-auto-languages:
       name: Plex-Auto-Languages
       description: Automatic audio/subtitle selection
-      icon: di:plex-auto-languages
+      icon: /assets/icons/plex.svg
       hide: false
-    lettarrboxd:
-      name: Lettarrboxd
-      description: Letterboxd integration
-      icon: di:letterboxd
-      hide: false
-    lettarrboxd-new-releases:
-      name: Lettarrboxd New Releases
-      description: Letterboxd new releases
-      icon: di:letterboxd
-      hide: false
+
+    # autopulse
+    # daps / daps-ui
+    # jellyseer
+    # stash
+    # tautulli
+      
