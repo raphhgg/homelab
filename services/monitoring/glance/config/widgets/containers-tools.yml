@@ -7,11 +7,10 @@
     autopulse:
       name: Autopulse
       description: Media processing automation
-      icon: /assets/icons/github.svg
+      icon: /assets/icons/github-white.svg
       hide: false
-    stash:
-      name: Stash
-      description: Media organizer
-      url: http://10.10.2.2:9999
-      icon: /assets/icons/stash.svg
+    cross-seed:
+      name: Cross-Seed
+      description: Download once, seed everywhere
+      icon: /assets/icons/png/cross-seed.png
       hide: false

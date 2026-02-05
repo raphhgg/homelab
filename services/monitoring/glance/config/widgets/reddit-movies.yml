@@ -5,7 +5,7 @@
       style: vertical-list
       show-flairs: true
       show-thumbnails: true
-      limit: 10
+      limit: 20
       collapse-after: 8
       # sort-by: new
   widgets:

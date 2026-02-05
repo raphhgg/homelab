@@ -1,0 +1,27 @@
+- type: group
+  widgets:
+  - $include: ../../widgets/bookmarks-media-server.yml
+  - type: bookmarks
+    title: Tools
+    groups:
+      - title: Title
+        color: 200 70 50
+        links:
+          - title: Prowlarr
+            url: http://10.10.2.2:9696
+            icon: /assets/icons/prowlarr.svg
+          - title: Jellyseerr
+            url: http://10.10.2.2:5055
+            icon: /assets/icons/jellyseerr.svg
+          - title: Autobrr
+            url: http://10.10.2.2:7474
+            icon: /assets/icons/autobrr.svg
+          - title: Upload Assistant
+            url: http://10.10.2.2:8086
+            icon: mdi:cloud-upload
+          - title: Daps
+            url: http://10.10.2.2:8002/
+            icon: mdi:image-multiple
+          - title: stash
+            url: http://10.10.2.2:9999
+            icon: /assets/icons/stash.svg

@@ -4,33 +4,8 @@
   running-only: true
   hide-by-default: true
   containers:
-    beszel-agent:
-      name: Beszel Agent
-      description: Beszel monitoring agent
-      icon: /assets/icons/beszel.svg
-      hide: false
     watchtower:
       name: Watchtower
       description: Container auto-updater
       icon: /assets/icons/watchtower.svg
-      hide: false
-    netronome:
-      name: Netronome
-      description: Network performance testing
-      icon: /assets/icons/png/netronome.png
-      hide: false
-    scrutiny:
-      name: Scrutiny
-      description: Hard drives S.M.A.R.T tests monitoring
-      icon: /assets/icons/scrutiny.svg
-      hide: false
-    speedtest-tracker:
-      name: Speedtest Tracker
-      description: Internet connection monitoring
-      icon: /assets/icons/speedtest.svg
-      hide: false
-    uptime-kuma:
-      name: Uptime Kuma
-      description: Self hosting monitoring tool
-      icon: /assets/icons/uptime-kuma.svg
       hide: false

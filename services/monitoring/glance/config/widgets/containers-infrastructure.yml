@@ -11,11 +11,16 @@
       hide: false
     cloudflare-ddns:
       name: Cloudflare DDNS
-      description: Dynamic DNS updater
+      description: Dynamic DDNS updater
       icon: /assets/icons/cloudflare.svg
       hide: false
     github-actions-runner:
       name: GitHub Runner
       description: Self-hosted Actions runner
       icon: /assets/icons/github-white.svg
+      hide: false
+    watchtower:
+      name: Watchtower
+      description: Container auto-updater
+      icon: /assets/icons/watchtower.svg
       hide: false

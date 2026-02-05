@@ -1,0 +1,94 @@
+- name: Homelab
+  slug: news-homelab
+  # head-widgets:
+  #   - type: rss
+  #     hide-header: true
+  #     title: News 1
+  #     style: horizontal-cards # detailed-list
+  #     feeds:
+  #       # - url: https://xcancel.com/bcherny/rss
+  #       #   title: "@bcherny"
+  #       # - url: https://moxie.foxbusiness.com/google-publisher/markets.xml
+  #       #   title: Fox Business
+  #       - url: https://moxie.foxbusiness.com/google-publisher/technology.xml
+  #         title: Fox Business
+  # width: wide
+  columns:
+    - size: full
+      widgets:
+        - type: split-column
+          max-columns: 2
+          widgets:
+          - $include: ../widgets/reddit-news-homelab.yml
+          # - $include: ../widgets/reddit-news-ai.yml
+          - $include: ../widgets/reddit-news-tech.yml
+          # - type: reddit
+          #   subreddit: brussels
+          #   style: vertical-list
+          #   limit: 10
+          #   collapse-after: 5
+          #   sort-by: hot    
+          # - type: rss
+          #   title: Twitter
+          #   style: detailed-list #horizontal-cards # detailed-list
+          #   feeds:
+          #     - url: https://rsshub.pseudoyu.com/twitter/user/bcherny
+          #       title: "@bcherny"
+
+        - type: videos
+          # collapse-after: 10 # vertical-list
+          # collapse-after-rows: 2 # grid-cards
+          style: grid-cards # vertical-list # horizontal-cards # 
+          channels:
+            # Homelab / Self-hosted
+            - UCv6J_jJa8GJqFwQNgNrMuww # ServeTheHome
+            - UC4w1YQAJMWOz4qtxinq55LQ # Level1Techs
+            - UC9x0AN7BWHpCDHSm9NiJFJQ # NetworkChuck
+            - UCh66aXZ_hqiT7au6Nwb8p3Q # KTZ Systems
+            - UCgdTVe88YVSrOZ9qKumhULQ # Hardware Heaven
+            - UC9evhW4JB_UdXSLeZGy8lGw # Raid Owl
+            - UCOk-gHyjcWZNj3Br4oxwh0A # Techno Tim
+            - UCHkYOD-3fZbuGhwsADBd9ZQ # Lawrence Systems
+            - UCjSEJkpGbcZhvo0lr-44X_w # TechHut
+            - UCrxcWtpd1IGHG9RbD_9380A # VirtulizationHowto
+            - UCUUTdohVElFLSP4NBnlPEwA # Jim's Garage
+            - UC1733iBvNpXIscZk4QnfYBw # Wundertech
+            - UCIxQ54On7bLJKcmgnyWOejQ # NetBird
+
+            # AI Hardware / Coding
+            - UCajiMK_CY9icRhLepS8_3ug # Alex Ziskind
+            - UC_x36zCEGilGpB1m-V4gmjg # IndyDevDan
+            - UCrDwWp7EBBv4NwvScIpBDOA # Anthropic
+            - UCq_MHfMX5FBBB3bqnJPAEzA # Ray Fernando
+
+            # Dev / Tech / General
+            - UC8ENHE5xdFSwx71u3fDH5Xw # ThePrimeagen
+            - UCUyeluBRhGPCW4rPe_UvBZQ # TimePrimeTime
+            - UCt9LqtRJMvMyZQlAALeX42A # TheStandupPod
+            - UChIs72whgZI9w6d6FhwGGHA # GamersNexus
+            - UCXuqSBlHAE6Xw-yeJA0Tunw # LinusTechTips
+
+            # Dev / Linux
+            - UCUkM9uMpWatT7gVWShgtKFw # DHH
+            - UCYeiozh-4QwuC1sjgCmB92w # Devops Toolbox
+            - UCWQaM7SpSECp9FELz-cHzuQ # Dreams of Code    
+            - UCo71RUe6DX4w-Vd47rFLXPg # typecraft  
+
+
+          playlists:
+            - PL2Fq-K0QdOQiJpufsnhEd1z3xOv2JMHuk # The Standup
+          
+        
+
+
+        
+            # - url: https://moxie.foxbusiness.com/google-publisher/markets.xml
+            #   title: Fox Business
+            # - url: https://moxie.foxbusiness.com/google-publisher/technology.xml
+            #   title: Fox Business
+
+
+
+
+
+          

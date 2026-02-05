@@ -1,14 +1,9 @@
 - type: docker-containers
-  title: Media Server
+  title: Utils
   sock-path: ${DOCKER_HOST}
   running-only: true
   hide-by-default: true
   containers:
-    plex:
-      name: Plex
-      description: Media Server
-      icon: /assets/icons/plex.svg
-      hide: false
     kometa:
       name: Kometa
       description: Plex metadata manager
@@ -24,10 +19,16 @@
       description: Automatic audio/subtitle selection
       icon: /assets/icons/plex.svg
       hide: false
+    autopulse:
+      name: Autopulse
+      description: Media processing automation
+      icon: /assets/icons/github-white.svg
+      hide: false
+    cross-seed:
+      name: Cross-Seed
+      description: Download once, seed everywhere
+      icon: /assets/icons/png/cross-seed.png
+      hide: false
 
     # autopulse
-    # daps / daps-ui
-    # jellyseer
-    # stash
-    # tautulli
       

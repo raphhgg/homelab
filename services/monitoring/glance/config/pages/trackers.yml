@@ -10,6 +10,13 @@
             - type: bookmarks
               title: Tiers
               groups:
+                - title: Top Tier
+                  color: 320 80 60
+                  hide-arrow: true
+                  links:
+                    - title: Orpheus
+                      url: https://orpheus.network/
+                      icon: https://orpheus.network/favicon.ico
                 - title: Mid Tier
                   color: 250 80 60
                   hide-arrow: true
@@ -69,6 +76,9 @@
                     - title: AvistaZ
                       url: https://avistaz.to
                       icon: https://www.google.com/s2/favicons?domain=avistaz.to&sz=64
+                    - title: Cathode-Ray.Tube
+                      url: https://www.cathode-ray.tube/index.php
+                      icon: https://www.cathode-ray.tube/favicon.ico
                     - title: Oldtoons
                       url: https://oldtoons.world
                       icon: https://oldtoons.world/favicon.ico

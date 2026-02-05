@@ -1,0 +1,7 @@
+- type: monitor
+  title: AI
+  cache: 1m
+  sites:
+    - title: OpenWebUI
+      url: http://10.10.2.2:8087
+      icon: /assets/icons/open-webui-light.svg

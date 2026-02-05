@@ -3,8 +3,8 @@
   cache: 5m
   url: http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=get_recently_added&count=10
   options:
-    size: "large"
-    collapse: 5
+    size: "small"
+    collapse: 8
     server-id: "${PLEX_SERVER_ID}"
     tautulli-base: "http://${TAUTULLI_IP}:${TAUTULLI_PORT}"
     tautulli-key: "${TAUTULLI_API_KEY}"
@@ -125,18 +125,18 @@
             <img src="{{ $tautulliBase }}/api/v2?apikey={{ $tautulliKey }}&cmd=pms_image_proxy&img={{ $img }}"
               alt="thumb" style="width: 50px; margin-right: 1.5rem;" class="rounded w-10 h-10 object-cover" />
             <div class="min-width-0 grow">
-              <div class="color-highlight" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" title="{{ $title }}">
+              <div class="color-primary" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" title="{{ $title }}">
                 {{ $title }}
               </div>
-              <div class="color-highlight" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+              <div class="color-primary" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                 {{ $sub }}
               </div>
-              <div class="color-primary">
+              <div class="color-secondary">
                 <span {{ parseRelativeTime "unix" $lastWatch }}></span> ago
               </div>
             </div>
             <a href="https://app.plex.tv/desktop#!/server/{{ $serverID }}/details?key=%2Flibrary%2Fmetadata%2F{{ $ratingKey }}" target="_blank"
-              class="color-primary">&#9654;</a>
+              class="color-hightlight">&#9654;</a>
           </li>
         {{ end }}
       </ul>

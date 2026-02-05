@@ -1,11 +1,11 @@
 - type: custom-api
-  title: Upcoming Movies
+  title: Recently Added Movies
   title-url: ${RADARR_URL}
-  cache: 6h
+  cache: 1s
   options:
     service: radarr
-    type: upcoming
-    size: medium
+    type: recent
+    size: small
     collapse-after: 3
     show-grabbed: false
     interval: 60
@@ -457,7 +457,7 @@
   cache: 6h
   options:
     service: sonarr
-    type: upcoming
+    type: recent
     size: medium
     collapse-after: 5
     show-grabbed: false

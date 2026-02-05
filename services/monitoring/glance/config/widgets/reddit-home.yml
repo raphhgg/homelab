@@ -21,6 +21,10 @@
       <<: *reddit-home
     - subreddit: brussels
       <<: *reddit-home
+    - subreddit: ClaudeAI
+      <<: *reddit-home
+    - subreddit: ClaudeCode
+      <<: *reddit-home
     # - subreddit: belgium
     #   <<: *reddit-home
     #   sort_by: new

@@ -1,0 +1,8 @@
+- type: split-column
+  max-columns: 3
+  # width: slim
+  widgets:
+    - $include: ../../widgets/bookmarks-home.yml
+    # - $include: ../../widgets/bookmarks-media-server.yml
+    # - $include: ../../widgets/bookmarks-media-server.yml
+    # - $include: ../../widgets/bookmarks-media-server.yml

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    :root {
+      /* Fallback colors in case the dashboard variables aren't loaded */
+      --fallback-primary: #3498db; 
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      text-align: center;
+      background: transparent !important;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      /* Using the dashboard's primary color variable */
+      border: 2px solid var(--primary, var(--fallback-primary));
+      margin-bottom: 1em;
+    }
+
+    p {
+      font-size: 1.4em;
+      /* Using the dashboard's primary color variable */
+      color: var(--color-primary, var(--fallback-primary));
+      margin: 0;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <img src="/assets/avatar.png" alt="Avatar" />
+  <p id="greeting">Welcome back, Raph</p>
+
+  <script>
+    const hour = new Date().getHours();
+    const gElem = document.getElementById('greeting');
+    let msg = "Welcome";
+
+    if (hour < 12) msg = "Good morning";
+    else if (hour < 18) msg = "Good afternoon";
+    else msg = "Good evening";
+
+    gElem.innerHTML = `${msg}, Raph<br/>How can I help you today?`;
+  </script>
+</body>
+</html>

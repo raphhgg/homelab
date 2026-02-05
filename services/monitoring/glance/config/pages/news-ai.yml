@@ -1,0 +1,50 @@
+- name: News
+  # head-widgets:
+  #   - type: rss
+  #     hide-header: true
+  #     title: News 1
+  #     style: horizontal-cards # detailed-list
+  #     feeds:
+  #       # - url: https://xcancel.com/bcherny/rss
+  #       #   title: "@bcherny"
+  #       # - url: https://moxie.foxbusiness.com/google-publisher/markets.xml
+  #       #   title: Fox Business
+  #       - url: https://moxie.foxbusiness.com/google-publisher/technology.xml
+  #         title: Fox Business
+  # width: wide
+  columns:
+    - size: full
+      widgets:
+        - type: split-column
+          max-columns: 2
+          widgets:
+          - $include: ../widgets/reddit-news-homelab.yml
+          # - $include: ../widgets/reddit-news-ai.yml
+          - $include: ../widgets/reddit-news-tech.yml
+          # - type: reddit
+          #   subreddit: brussels
+          #   style: vertical-list
+          #   limit: 10
+          #   collapse-after: 5
+          #   sort-by: hot    
+          # - type: rss
+          #   title: Twitter
+          #   style: detailed-list #horizontal-cards # detailed-list
+          #   feeds:
+          #     - url: https://rsshub.pseudoyu.com/twitter/user/bcherny
+          #       title: "@bcherny"      
+          
+        
+
+
+        
+            # - url: https://moxie.foxbusiness.com/google-publisher/markets.xml
+            #   title: Fox Business
+            # - url: https://moxie.foxbusiness.com/google-publisher/technology.xml
+            #   title: Fox Business
+
+
+
+
+
+          

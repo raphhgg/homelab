@@ -1,0 +1,24 @@
+- type: html
+  title: Welcome
+  source: |
+    <div style="text-align: center; padding: 5em;">
+      <img src="/assets/avatar.png" alt="Avatar" style="width: 100px; height: 100px; border-radius: 50%; border: 2px solid primary; margin: auto; margin-bottom: 1em;" />
+      <p id="greeting" style="font-size: 1.4em; color: primary;">
+        Welcome back, Raph!<br/>How can I help you today?
+      </p>
+      <script>
+        const hour = new Date().getHours();
+        const gElem = document.getElementById('greeting');
+        let msg = "Welcome";
+
+        if (hour < 12) msg = "Good morning";
+        else if (hour < 18) msg = "Good afternoon";
+        else msg = "Good evening";
+
+        gElem.innerHTML = `${msg}, Raph!<br/>How can I help you today?`;
+      </script>
+    </div>
+
+# - type: iframe
+#   source: /assets/welcome-header.html
+#   height: 300

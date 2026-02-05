@@ -1,5 +1,6 @@
 - type: custom-api
-  title: Weather - 7 Days
+  # title: Weather - 7 Days
+  hide-header: true
   body-type: string
   cache: 1h
   options:

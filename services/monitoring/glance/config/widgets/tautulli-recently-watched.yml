@@ -3,7 +3,7 @@
   cache: 5m
   url: http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=get_home_stats&stat_id=last_watched
   options:
-    size: "large"
+    size: "small"
     collapse: 5
     server-id: "${PLEX_SERVER_ID}"
     tautulli-base: "http://${TAUTULLI_IP}:${TAUTULLI_PORT}"
@@ -111,31 +111,31 @@
               style="width: 50px; margin-right: 1.5rem;" />
             <div class="min-width-0 grow">
               {{ if $isEpisode }}
-                <div class="color-highlight" title="{{ $v.String "grandparent_title" }}"
+                <div class="color-primary" title="{{ $v.String "grandparent_title" }}"
                   style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                   {{ $v.String "grandparent_title" }}
                 </div>
-                <div class="color-highlight" title="{{ $titleHover }}">
+                <div class="color-primary" title="{{ $titleHover }}">
                   S{{ $v.Int "parent_media_index" }}·E{{ $v.Int "media_index" }}
                 </div>
               {{ else }}
-                <div class="color-highlight" title="{{ $v.String "title" }}"
+                <div class="color-primary" title="{{ $v.String "title" }}"
                   style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                   {{ $v.String "title" }}
                 </div>
-                <div class="color-highlight"
+                <div class="color-primary"
                   style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                   {{ $v.Int "year" }}
                 </div>
               {{ end }}
-              <div class="color-primary">
+              <div class="color-secondary">
                 <span title="{{ $v.String "player" }}">{{ $v.String "friendly_name" }}</span> •
                 <span {{ parseRelativeTime "unix" ($v.String "last_watch") }}></span> ago
               </div>
             </div>
             <a href="https://app.plex.tv/desktop#!/server/{{ $serverID }}/details?key=%2Flibrary%2Fmetadata%2F{{ $ratingKey }}"
               target="_blank"
-              class="color-primary">&#9654;</a>
+              class="color-secondary">&#9654;</a>
           </li>
         {{ end }}
       </ul>

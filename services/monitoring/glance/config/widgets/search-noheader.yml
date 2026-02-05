@@ -1,0 +1,12 @@
+- type: search
+  hide-header: true
+  search-engine: google
+  new-tab: true
+  autofocus: true
+  bangs:
+  - title: YouTube
+    shortcut: "!yt"
+    url: https://www.youtube.com/results?search_query={QUERY}
+  - title: Letterboxd
+    shortcut: "!lt"
+    url: https://letterboxd.com/search/{QUERY}/?adult

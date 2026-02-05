@@ -1,0 +1,32 @@
+- name: Monitoring
+  columns:
+    - size: small
+      widgets:
+        - $include: ../widgets/unifi.yml
+        - $include: ../widgets/server-stats.yml
+        - $include: ../widgets/drive-health.yml
+
+    - size: full
+      widgets:
+        - $include: ../widgets/search.yml
+        # - $include: ../widgets/server-stats.yml
+        # - type: split-column
+        #   widgets:
+        #     - $include: ../widgets/beszel-containers-cpu.yml
+        #     - $include: ../widgets/beszel-containers-ram.yml
+        - $include: ../widgets/monitors-media-server.yml
+        - $include: ../widgets/monitors-tools.yml
+        - $include: ../widgets/monitors-monitoring.yml
+        # - $include: ../widgets/monitors-others.yml
+
+        # - type: iframe
+        #   source: http://10.10.2.2:7575/ # http://10.10.2.2:8091/system/9o7zk9q8y5r9d0t
+        #   height: 800
+        
+       
+    - size: small
+      widgets:
+        - $include: ../widgets/containers-infrastructure.yml
+        # - $include: ../widgets/containers-notifications.yml
+        - $include: ../widgets/containers-media-server-utils.yml
+        

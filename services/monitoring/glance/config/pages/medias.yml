@@ -1,16 +1,53 @@
 - name: Medias
+  # width: wide
   columns:
+    - size: small
+      widgets:
+        - type: group
+          widgets:
+          - type: to-do
+            title: Evening
+            id: movies-evening
+          - type: to-do
+            title: PM
+            id: movies-pm
+          - type: to-do
+            title: Re-watch
+            id: rewatch
+        - type: group
+          widgets:
+          - type: to-do
+            title: TV Shows
+            id: tvshows
+          - type: to-do
+            title: Re-Watch
+            id: test4
+        - $include: ../widgets/tautulli-recently-added.yml
+        - $include: ../widgets/tautulli-recently-watched.yml
+
+
+        
     # Center Column - Reddit + qBittorrent + Tautulli
     - size: full
       widgets:
         # $include: ../widgets/reddit-trackers.yml
-        $include: ../widgets/reddit-movies.yml
-        $include: ../widgets/tautulli-recently-added.yml
-        $include: ../widgets/tautulli-recently-watched.yml
+        - $include: ../widgets/reddit-movies.yml
+        # Letterboxd RSS Feed with horizontal-cards-2 style
+        - type: rss
+          title: Letterboxd Diary
+          style: horizontal-cards
+          thumbnail-height: 30
+          feeds:
+            - url: https://letterboxd.com/raphh11/rss
+              title: My Movie Diary
+          limit: 50
+          collapse-after: 5
+        
 
     # Right Column - arr Releases + Prowlarr
     - size: small
       widgets:
         $include: ../widgets/tautulli-now-playing.yml
-        $include: ../widgets/arr-releases.yml
+        $include: ../widgets/arr-radarr-upcoming-movies.yml
+        $include: ../widgets/arr-sonarr-upcoming-movies.yml
         # $include: ../widgets/prowlarr.yml

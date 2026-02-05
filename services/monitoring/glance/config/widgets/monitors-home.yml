@@ -1,0 +1,85 @@
+- type: group
+  widgets:
+    - type: monitor
+      title: Media Server
+      cache: 1m
+      sites:
+        - title: Plex
+          url: http://10.10.2.2:32400/web/index.html
+          icon: /assets/icons/plex.svg
+        - title: Radarr
+          url: http://10.10.2.2:7878
+          icon: /assets/icons/radarr.svg
+        - title: Sonarr
+          url: http://10.10.2.2:8988
+          icon: /assets/icons/sonarr.svg
+        - title: Tautulli
+          url: http://10.10.2.2:8181
+          icon: /assets/icons/tautulli.svg
+        - title: Qui
+          url: http://10.10.2.2:7476/instances/1
+          icon: /assets/icons/qui.png
+        - title: Daps-UI
+          url: http://10.10.2.2:8001/poster-renamer
+          icon: mdi:image-edit
+    - type: monitor
+      title: Tools
+      cache: 1m
+      sites:
+        - title: Prowlarr
+          url: http://10.10.2.2:9696
+          icon: /assets/icons/prowlarr.svg
+        - title: Profilarr
+          url: http://10.10.2.2:6868
+          icon: /assets/icons/profilarr.svg
+        - title: Jellyseerr
+          url: http://10.10.2.2:5055
+          icon: /assets/icons/jellyseerr.svg
+        - title: Autobrr
+          url: http://10.10.2.2:7474
+          icon: /assets/icons/autobrr.svg
+        - title: Upload Assistant
+          url: http://10.10.2.2:8086
+          icon: mdi:cloud-upload
+        - title: Daps
+          url: http://10.10.2.2:8002/
+          icon: mdi:image-multiple
+        # - title: Stash
+        #   url: http://10.10.2.2:9999
+        #   icon: /assets/icons/stash.svg
+
+- type: group
+  widgets:
+  - type: monitor
+    title: Monitoring
+    cache: 1m
+    sites:
+      - title: Netronome
+        url: http://10.10.2.2:7575
+        icon: /assets/icons/png/netronome.png
+      - title: Beszel
+        url: http://10.10.2.2:8091
+        icon: /assets/icons/beszel.svg
+      - title: Gotify
+        url: http://10.10.2.2:8093
+        icon: /assets/icons/gotify.svg
+      # - title: Dozzle
+      #   url: http://10.10.2.2:8088
+      #   icon: /assets/icons/dozzle.svg
+  - type: monitor
+    title: Others
+    cache: 1m
+    sites:
+      - title: DSM
+        url: https://10.10.2.2:5001
+        icon: /assets/icons/synology-dsm.svg
+        allow-insecure: true
+        alt-status-codes:
+          - 403
+      - title: Home Assistant
+        url: http://10.10.2.2:8123
+        icon: /assets/icons/home-assistant.svg
+      - title: Syncthing
+        url: http://10.10.2.2:8384
+        icon: /assets/icons/syncthing.svg
+  # - $include: ../widgets/monitors-ai.yml

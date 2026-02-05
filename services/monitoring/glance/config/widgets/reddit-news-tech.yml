@@ -1,0 +1,17 @@
+- type: group
+  title: Tech
+  define: &reddit-home
+    type: reddit
+    style: vertical-list
+    show-flairs: true
+    show-thumbnails: true
+    limit: 10
+    collapse-after: 6
+    sort-by: hot
+  widgets:
+    - subreddit: brussels
+      <<: *reddit-home
+    # - subreddit: apple
+    #   <<: *reddit-home
+    # - subreddit: brussels
+    #   <<: *reddit-home
