@@ -30,6 +30,7 @@ services:
       - TZ=${TZ}
       - APP_MODE=WEB
       - UMASK=${UMASK}
+      - BORDER_SIZE=50
     ports:
       - 8001:8000
     volumes:
@@ -37,6 +38,7 @@ services:
       - ${DOCKER_APPDATA_PATH}/daps/posters:/posters:rw
       - ${DOCKER_APPDATA_PATH}/kometa/assets:/assets:rw
       - ${DOCKER_APPDATA_PATH}/kometa/assets/tmp:/config/original_posters
+      - ${DOCKER_APPDATA_PATH}/daps-ui/border_replacerr.py:/code/DapsEX/border_replacerr.py:ro
 
     restart: always
     labels:
