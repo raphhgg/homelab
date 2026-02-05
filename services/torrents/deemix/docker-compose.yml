@@ -1,0 +1,23 @@
+services:
+  deemix:
+    image: ghcr.io/bambanah/deemix:latest
+    container_name: deemix
+    networks:
+      - main
+    ports:
+      - 6595:6595
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/deemix:/config
+      - ${DOWNLOAD_PATH}/music:/downloads
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK_SET=${UMASK}
+      - DEEMIX_SINGLE_USER=true
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  main:
+    external: true

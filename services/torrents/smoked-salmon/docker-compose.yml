@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  smoked-salmon:
+    image: ghcr.io/smokin-salmon/smoked-salmon:latest
+    container_name: smoked-salmon
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=${UMASK}
+      - TZ=${TZ}
+    ports:
+      - 55110:55110
+    networks:
+      - main
+    volumes:
+      # Mount parent music directory to allow hardlinks between subdirectories
+      - ${DOWNLOAD_PATH}/music:/app/music
+      # Configuration directory
+      - ${DOCKER_APPDATA_PATH}/smoked-salmon/config:/root/.config/smoked-salmon
+      # Database directory
+      - ${DOCKER_APPDATA_PATH}/smoked-salmon/data:/root/.local/share/smoked-salmon
+      # Generated .torrent files
+      - ${DOCKER_APPDATA_PATH}/smoked-salmon/torrents:/app/.torrents
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    command: web
+
+networks:
+  main:
+    external: true

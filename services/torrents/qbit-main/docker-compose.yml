@@ -36,6 +36,7 @@ services:
     volumes:
       - ${DOCKER_APPDATA_PATH}/qbit-main:/config:rw
       - ${DOWNLOAD_PATH}/torrents:/downloads/torrents:rw
+      - ${DOWNLOAD_PATH}/music:/downloads/music:rw
       - ${MEDIAS_PATH}:/data/medias:rw
       - ${DOCKER_APPDATA_PATH}/themepark/98-themepark-qbittorrent:/etc/cont-init.d/98-themepark:rw
     cap_add:
