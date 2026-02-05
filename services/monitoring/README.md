@@ -9,7 +9,7 @@ Layer 1: Availability → Uptime Kuma (Is it alive?)
 Layer 2: Performance → Beszel (How is it performing?)
 Layer 3: Logs → Dozzle (What happened?)
 Layer 4: Updates → Watchtower (Is it up to date?)
-Layer 5: Alerting → Apprise/n8n (Notify me)
+Layer 5: Alerting → Gotify + Discord (Notify me)
 ```
 
 ## When to use what
@@ -62,32 +62,24 @@ Layer 5: Alerting → Apprise/n8n (Notify me)
 - Memory usage: 90%+
 - Temperature: 70°C+ (if available)
 
-**Webhook Integration**:
+**Notification Integration**:
 
-Beszel alerts are routed through the Apprise Middleware for rich Discord notifications:
+Beszel alerts are sent directly to Gotify and Discord using Shoutrrr URLs:
 
-1. **Setup Notification URL** (in Beszel Hub UI at http://10.10.2.2:8091):
+1. **Setup Notification URLs** (in Beszel Hub UI at http://10.10.2.2:8091):
    - Go to **Settings** → **Notifications**
-   - Add notification URL (Shoutrrr format):
+   - Add notification URLs (Shoutrrr format):
      ```
-     generic://apprise-middleware:5000/webhook/beszel?template=json&disabletls=yes
+     gotify://gotify:80/MONITORING_TOKEN?priority=8
+     discord://WEBHOOK_ID/WEBHOOK_TOKEN
      ```
-     Note: `template=json` ensures JSON payload format, `disabletls=yes` forces HTTP (required for non-TLS middleware)
-   - Click **Test URL** to verify the connection
+   - Click **Test URL** to verify each connection
 
 2. **Configure Alert Thresholds**:
    - On the main dashboard, click the **bell icon (🔔)**
    - Set thresholds for each metric (CPU, memory, disk, etc.)
    - Recommended: Disk 95%, CPU 80%, Memory 90%, Temperature 70°C
    - Enable alerts per system in the systems table
-
-2. **How it works**:
-   - Beszel sends webhook: `{"title": "Alert name", "message": "Details"}`
-   - Middleware transforms to Apprise format
-   - All alerts are marked as 🔴 **critical** (red) since Beszel only sends alerts when thresholds are exceeded
-   - Apprise routes to Discord with rich formatting
-
-**See [middleware/README.md](apprise/middleware/README.md) for complete webhook documentation.**
 
 **Common operations:**
 ```bash
@@ -99,11 +91,6 @@ docker-compose restart beszel
 
 # Check metrics collection
 docker-compose logs beszel-agent
-
-# Test webhook
-curl -X POST http://apprise-middleware:5000/webhook/beszel \
-  -H "Content-Type: application/json" \
-  -d '{"title":"Test Alert","message":"CPU above threshold"}'
 ```
 
 ### Uptime Kuma - Service Availability Monitoring
@@ -193,70 +180,58 @@ Run `services/monitoring/uptime-kuma/setup_monitors.py` to automatically create/
 - Environment variables and configuration
 - Common operations and troubleshooting
 
-### Apprise - Centralized Notification Hub
+### Gotify - Push Notification Server
 
-**Location**: `services/monitoring/apprise/`
-**Port**: 8089
-**Access**: `http://ds423plus:8089` or `http://10.10.2.2:8089`
+**Location**: `services/monitoring/gotify/`
+**Port**: 8093
+**Access**: `http://ds423plus:8093` or `http://10.10.2.2:8093`
 
-**Purpose**: Unified notification system for sending alerts to Discord, Telegram, and 90+ other platforms
+**Purpose**: Self-hosted push notification server for mobile and desktop alerts
 
 **What it does:**
-- Centralizes all notification channels (Discord, Telegram, email, etc.)
-- Provides single API for all homelab notifications
-- Supports tagging for routing notifications to specific services
-- Stateful mode with YAML configuration
+- Provides native mobile app notifications (Android, iOS via iGotify)
+- Web UI for viewing all notifications
+- Simple REST API for sending messages
+- Application-based organization with separate tokens
 
 **Current Integrations:**
-- **Watchtower**: Container update notifications via Discord (✅ Active)
-- **Uptime Kuma**: Service availability alerts via Apprise Middleware (✅ Active)
-- **Beszel**: Resource threshold alerts via Apprise Middleware (✅ Active)
-- **Cronicle**: Scheduled job results (planned)
+- **Uptime Kuma**: Service availability alerts (native Gotify support)
+- **Beszel**: Resource threshold alerts (via Shoutrrr)
+- **Watchtower**: Container update notifications (via Shoutrrr)
+- **Sonarr/Radarr**: Media download notifications (native support)
+- **Kometa**: Media library updates (native support)
 
-**Configuration:**
-- Notification URLs defined in `/config/apprise.yml`
-- Supports Discord webhooks and Telegram bots
-- Tag-based routing (watchtower, cronicle, monitoring, critical)
+**Applications (category-based):**
+
+| Application | Services | Priority |
+|-------------|----------|----------|
+| `monitoring` | Uptime Kuma, Beszel, Watchtower | 8 (high) |
+| `arrs` | Sonarr, Radarr, Prowlarr, Bazarr | 5 (normal) |
+| `media-server` | Plex, Tautulli, Jellyseerr, Kometa | 5 (normal) |
+| `torrents` | qBittorrent, Autobrr, Cross-seed | 5 (normal) |
+| `infrastructure` | Cloudflare DDNS, VPNs, Cronicle | 7 (elevated) |
+| `system` | Synology DSM, manual alerts | 9 (critical) |
 
 **API Usage:**
 ```bash
-# From containers (use internal port 8000)
-curl -X POST http://apprise:8000/notify/apprise \
-  -H "Content-Type: application/json" \
-  -d '{"title":"Alert","body":"Message","tag":"monitoring"}'
+# Send notification
+curl "http://gotify:80/message?token=APP_TOKEN" \
+  -F "title=Alert" \
+  -F "message=Something happened" \
+  -F "priority=5"
 
-# From host (use external port 8089)
-curl -X POST http://localhost:8089/notify/apprise \
+# With JSON
+curl -X POST "http://gotify:80/message" \
+  -H "X-Gotify-Key: APP_TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"title":"Alert","body":"Message","tag":"monitoring"}'
+  -d '{"title": "Alert", "message": "Details", "priority": 5}'
 ```
 
-**Apprise Middleware**:
-
-The middleware service transforms monitoring webhooks into Apprise-compatible format:
-- **URL**: `http://apprise-middleware:5000`
-- **Endpoints**:
-  - `POST /webhook/uptime-kuma` - Uptime Kuma webhook receiver
-  - `POST /webhook/beszel` - Beszel webhook receiver
-  - `GET /health` - Health check
-- **Features**:
-  - Automatic severity detection (Beszel)
-  - Rich markdown formatting for Discord
-  - Emoji status indicators
-  - Comprehensive error handling and logging
-
-**See [apprise/README.md](apprise/README.md) for complete Apprise documentation including:**
-- Discord and Telegram setup guides
-- YAML configuration examples
-- Integration examples for Cronicle, Watchtower, Uptime Kuma
-- API endpoints and usage
-- Troubleshooting guide
-
-**See [apprise/middleware/README.md](apprise/middleware/README.md) for complete middleware documentation including:**
-- Webhook payload formats and transformations
-- Severity detection rules
-- Setup instructions for each monitoring service
-- Testing and troubleshooting guides
+**See [gotify/README.md](gotify/README.md) for complete documentation including:**
+- Application setup and token management
+- Service integration guides
+- Mobile app setup (Android/iOS)
+- API reference
 
 ## Resources
 
@@ -264,4 +239,4 @@ The middleware service transforms monitoring webhooks into Apprise-compatible fo
 - **Uptime Kuma**: [Official Documentation](https://github.com/louislam/uptime-kuma)
 - **Dozzle**: [Official Documentation](https://dozzle.dev/)
 - **Watchtower**: [Official Documentation](https://containrrr.dev/watchtower/)
-- **Apprise**: [Official Documentation](https://github.com/caronc/apprise) | [API Documentation](https://github.com/caronc/apprise)
+- **Gotify**: [Official Documentation](https://gotify.net/docs/) | [GitHub](https://github.com/gotify/server)

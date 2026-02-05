@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  gotify:
+    image: gotify/server
+    container_name: gotify
+    networks:
+      - main
+    ports:
+      - 8093:80
+    environment:
+      - TZ=${TZ}
+      - GOTIFY_DEFAULTUSER_NAME=${GOTIFY_DEFAULT_USER}
+      - GOTIFY_DEFAULTUSER_PASS=${GOTIFY_DEFAULT_PASS}
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/gotify/data:/app/data
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  # igotify:
+  #   image: ghcr.io/androidseb25/igotify-notification-assist
+  #   container_name: igotify
+  #   networks:
+  #     - main
+  #   ports:
+  #     - 8094:8080
+  #   environment:
+  #     - TZ=${TZ}
+  #     # Required for Local Instance mode (no public iGotify URL)
+  #     # Leave empty if using External Instance mode (both Gotify & iGotify public)
+  #     - GOTIFY_URLS=${GOTIFY_PUBLIC_URL:-}
+  #     - GOTIFY_CLIENT_TOKENS=${GOTIFY_CLIENT_TOKEN:-}
+  #     - SECNTFY_TOKENS=${SECNTFY_TOKEN:-}
+  #     - ENABLE_CONSOLE_LOG=true
+  #     - ENABLE_SCALAR_UI=true
+  #   volumes:
+  #     - ${DOCKER_APPDATA_PATH}/igotify:/app/data
+  #   restart: always
+  #   depends_on:
+  #     - gotify
+  #   labels:
+  #     - "com.centurylinklabs.watchtower.enable=true"
+
+  pushtify:
+    container_name: pushtify
+    image: ghcr.io/sebw/pushtify
+    networks:
+      - main
+    environment:
+      # Replace with your Gotify URL (without https://)
+      - GOTIFY_HOST=gotify:80
+      
+      # Your Gotify Client Token (Create a new "Client" in Gotify)
+      - GOTIFY_TOKEN=${GOTIFY_CLIENT_TOKEN}
+      
+      # Your Pushover User Key (From your Pushover dashboard)
+      - PUSHOVER_USERKEY=${PUSHOVER_USERKEY}
+      
+      # Protocol: use 'https' (default) or 'http' if running locally/no-ssl
+      - GOTIFY_PROTOCOL=http
+    restart: always
+    depends_on:
+      - gotify
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    
+
+networks:
+  main:
+    external: true

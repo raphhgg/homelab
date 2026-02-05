@@ -16,8 +16,8 @@ services:
       # SCHEDULED MODE - Runs daily at 05:00 (after ImageMaid completes at 04:00)
       - WATCHTOWER_SCHEDULE=0 0 5 * * *
 
-      # Discord notifications via Shoutrrr
-      - WATCHTOWER_NOTIFICATION_URL=discord://${WATCHTOWER_DISCORD_TOKEN}@${WATCHTOWER_DISCORD_WEBHOOK_ID}
+      # Notifications via Shoutrrr (Discord + Gotify)
+      - WATCHTOWER_NOTIFICATION_URL=discord://${WATCHTOWER_DISCORD_TOKEN}@${WATCHTOWER_DISCORD_WEBHOOK_ID} gotify://gotify/${GOTIFY_WATCHTOWER_TOKEN}?priority=5&disabletls=yes
 
       # Report mode - send single summary notification instead of per-container
       - WATCHTOWER_NOTIFICATION_REPORT=true
