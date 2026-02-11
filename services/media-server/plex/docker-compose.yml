@@ -5,10 +5,10 @@ services:
     image: ghcr.io/hotio/plex
     container_name: plex
     network_mode: host
-    mem_limit: 8g
-    mem_reservation: 2g
-    memswap_limit: 10g
-    cpu_shares: 1024
+    # mem_limit: 8g
+    # mem_reservation: 2g
+    # memswap_limit: 10g
+    # cpu_shares: 1024
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -18,12 +18,12 @@ services:
       - PLEX_ADVERTISE_URL=${PLEX_ADVERTISE_URL}
       - PLEX_NO_AUTH_NETWORKS=${PLEX_NO_AUTH_NETWORKS}
       - PLEX_BETA_INSTALL=false
-      - PLEX_PURGE_CODECS=false
+      - PLEX_PURGE_CODECS=true
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:32400/web
     volumes:
       - ${DOCKER_APPDATA_PATH}/plex/config:/config
-      - /dev/shm:/transcode
+      - ${DOCKER_APPDATA_PATH}/plex/transcode:/transcode
       - ${MEDIAS_PATH:-/volume3/data/medias}:/data/medias
     ports:
       - 32400:32400
