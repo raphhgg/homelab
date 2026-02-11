@@ -44,27 +44,57 @@ services:
 
   pushtify:
     container_name: pushtify
-    image: ghcr.io/sebw/pushtify
+    build: ./pushtify
     networks:
       - main
     environment:
-      # Replace with your Gotify URL (without https://)
+      # Gotify connection
       - GOTIFY_HOST=gotify:80
-      
-      # Your Gotify Client Token (Create a new "Client" in Gotify)
-      - GOTIFY_TOKEN=${GOTIFY_CLIENT_TOKEN}
-      
-      # Your Pushover User Key (From your Pushover dashboard)
-      - PUSHOVER_USERKEY=${PUSHOVER_USERKEY}
-      
-      # Protocol: use 'https' (default) or 'http' if running locally/no-ssl
       - GOTIFY_PROTOCOL=http
+      - GOTIFY_TOKEN=${GOTIFY_CLIENT_TOKEN}
+
+      # Gotify API access (for fetching app icons)
+      - GOTIFY_API_USER=${GOTIFY_DEFAULT_USER}
+      - GOTIFY_API_PASS=${GOTIFY_DEFAULT_PASS}
+
+      # Pushover
+      - PUSHOVER_USERKEY=${PUSHOVER_USERKEY}
+      - PUSHOVER_DEFAULT_TOKEN=${PUSHOVER_DEFAULT_TOKEN:-}
+
+      # Per-app Pushover tokens (Gotify app name → Pushover app token)
+      - UPTIME_KUMA_PUSHOVER_TOKEN=${UPTIME_KUMA_PUSHOVER_TOKEN:-}
+      - BESZEL_PUSHOVER_TOKEN=${BESZEL_PUSHOVER_TOKEN:-}
+      - WATCHTOWER_PUSHOVER_TOKEN=${WATCHTOWER_PUSHOVER_TOKEN:-}
+      - NETRONOME_PUSHOVER_TOKEN=${NETRONOME_PUSHOVER_TOKEN:-}
+      - SONARR_PUSHOVER_TOKEN=${SONARR_PUSHOVER_TOKEN:-}
+      - RADARR_PUSHOVER_TOKEN=${RADARR_PUSHOVER_TOKEN:-}
+      - PROWLARR_PUSHOVER_TOKEN=${PROWLARR_PUSHOVER_TOKEN:-}
+      - BAZARR_PUSHOVER_TOKEN=${BAZARR_PUSHOVER_TOKEN:-}
+      - TAUTULLI_PUSHOVER_TOKEN=${TAUTULLI_PUSHOVER_TOKEN:-}
+      - JELLYSEERR_PUSHOVER_TOKEN=${JELLYSEERR_PUSHOVER_TOKEN:-}
+      - KOMETA_PUSHOVER_TOKEN=${KOMETA_PUSHOVER_TOKEN:-}
+      - PLEX_PUSHOVER_TOKEN=${PLEX_PUSHOVER_TOKEN:-}
+      - AUTOBRR_PUSHOVER_TOKEN=${AUTOBRR_PUSHOVER_TOKEN:-}
+      - QBITTORRENT_PUSHOVER_TOKEN=${QBITTORRENT_PUSHOVER_TOKEN:-}
+      - SYNOLOGY_PUSHOVER_TOKEN=${SYNOLOGY_PUSHOVER_TOKEN:-}
+      - SCRUTINY_PUSHOVER_TOKEN=${SCRUTINY_PUSHOVER_TOKEN:-}
     restart: always
     depends_on:
       - gotify
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-    
+
+  gotify-middleware:
+    container_name: gotify-middleware
+    build: ./middleware
+    networks:
+      - main
+    environment:
+      - GOTIFY_URL=http://gotify:80
+      - SONARR_GOTIFY_TOKEN=${SONARR_GOTIFY_TOKEN}
+      - RADARR_GOTIFY_TOKEN=${RADARR_GOTIFY_TOKEN}
+      - AUTOBRR_GOTIFY_TOKEN=${AUTOBRR_GOTIFY_TOKEN}
+    restart: always
+    depends_on:
+      - gotify
 
 networks:
   main:
