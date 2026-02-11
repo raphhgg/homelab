@@ -1,5 +1,5 @@
 #!/bin/bash
-# Bash completion for salmon-upload script
+# Bash completion for salmon upload scripts
 
 _salmon_complete() {
     local cur prev opts
@@ -14,10 +14,10 @@ _salmon_complete() {
             # Use default file/directory completion for absolute paths
             COMPREPLY=( $(compgen -d -- "$cur") )
         else
-            # Complete with directories in Deemix folder
-            local deemix_path="/volume2/downloads/music/Deemix"
-            if [ -d "$deemix_path" ]; then
-                local dirs=$(cd "$deemix_path" 2>/dev/null && compgen -d -- "$cur")
+            # Complete with directories in tmp folder
+            local tmp_path="/volume2/downloads/music/tmp"
+            if [ -d "$tmp_path" ]; then
+                local dirs=$(cd "$tmp_path" 2>/dev/null && compgen -d -- "$cur")
                 COMPREPLY=( $(compgen -W "$dirs" -- "$cur") )
             fi
         fi
@@ -26,5 +26,6 @@ _salmon_complete() {
     return 0
 }
 
-# Register completion function
+# Register completion function for both scripts
 complete -o filenames -o nospace -F _salmon_complete salmon
+complete -o filenames -o nospace -F _salmon_complete salmon-auto

@@ -123,7 +123,9 @@ main() {
     PERM_FIX_PID=$!
 
     # Run the upload command
-    docker exec -it "$CONTAINER_NAME" .venv/bin/salmon up "$container_path" -s "$SOURCE"
+    # -n: auto-rename files/folders based on metadata
+    # yes_all config handles auto-confirm and transcode selection
+    docker exec -it "$CONTAINER_NAME" .venv/bin/salmon up "$container_path" -s "$SOURCE" -n
     UPLOAD_EXIT_CODE=$?
 
     # Stop background permission fixer
