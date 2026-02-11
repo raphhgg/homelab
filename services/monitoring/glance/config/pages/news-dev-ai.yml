@@ -1,0 +1,17 @@
+- name: Dev & AI
+  slug: news-dev-ai
+  columns:
+    - size: full
+      widgets:
+        - type: split-column
+          max-columns: 2
+          widgets:
+          - $include: ../widgets/reddit-news-ai.yml
+          - $include: ../widgets/youtube-dev-ai.yml
+          
+
+
+
+
+
+          

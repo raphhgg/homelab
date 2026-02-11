@@ -1,0 +1,27 @@
+- type: videos
+  # collapse-after: 10 # vertical-list
+  collapse-after-rows: 10 # grid-cards
+  style: grid-cards # vertical-list # horizontal-cards # 
+  channels:
+    # AI Hardware / Coding
+    - UCajiMK_CY9icRhLepS8_3ug # Alex Ziskind
+    - UC_x36zCEGilGpB1m-V4gmjg # IndyDevDan
+    # - UCrDwWp7EBBv4NwvScIpBDOA # Anthropic
+    - UCq_MHfMX5FBBB3bqnJPAEzA # Ray Fernando
+
+    # Dev / Tech / General
+    - UC8ENHE5xdFSwx71u3fDH5Xw # ThePrimeagen
+    - UCUyeluBRhGPCW4rPe_UvBZQ # TimePrimeTime
+    - UCt9LqtRJMvMyZQlAALeX42A # TheStandupPod
+    - UChIs72whgZI9w6d6FhwGGHA # GamersNexus
+    - UCXuqSBlHAE6Xw-yeJA0Tunw # LinusTechTips
+
+    # Dev / Linux
+    - UCUkM9uMpWatT7gVWShgtKFw # DHH
+    - UCYeiozh-4QwuC1sjgCmB92w # Devops Toolbox
+    - UCWQaM7SpSECp9FELz-cHzuQ # Dreams of Code    
+    - UCo71RUe6DX4w-Vd47rFLXPg # typecraft  
+
+
+  playlists:
+    - PL2Fq-K0QdOQiJpufsnhEd1z3xOv2JMHuk # The Standup

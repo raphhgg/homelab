@@ -1,17 +1,16 @@
 - type: group
-  title: Tech
+  title: Local News
   define: &reddit-home
     type: reddit
     style: vertical-list
     show-flairs: true
     show-thumbnails: true
-    limit: 10
-    collapse-after: 6
-    sort-by: hot
+    limit: 15
+    collapse-after: 10
   widgets:
     - subreddit: brussels
       <<: *reddit-home
-    # - subreddit: apple
-    #   <<: *reddit-home
-    # - subreddit: brussels
-    #   <<: *reddit-home
+      sort-by: hot
+    - subreddit: belgium
+      <<: *reddit-home
+      sort-by: new

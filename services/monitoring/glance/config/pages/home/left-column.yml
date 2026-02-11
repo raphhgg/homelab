@@ -1,5 +1,3 @@
-# $include: ../widgets/calendar.yml
-# $include: ../widgets/unifi.yml
 - $include: ../../widgets/speedtest.yml
 - $include: ../../widgets/qbittorrent.yml
 - $include: ../../widgets/server-stats.yml
@@ -11,13 +9,3 @@
   - type: to-do
     title: Todo 2
     id: todo2
-- type: group
-  widgets:
-  - type: to-do
-    title: Todo 3
-    id: todo3
-  - type: to-do
-    title: Todo 4
-    id: todo4
-# $include: ../../widgets/beszel-stats.yml
-# $include: ../../widgets/drive-health.yml

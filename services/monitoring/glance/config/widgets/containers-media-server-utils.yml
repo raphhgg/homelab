@@ -29,6 +29,20 @@
       description: Download once, seed everywhere
       icon: /assets/icons/png/cross-seed.png
       hide: false
-
-    # autopulse
+    lettarrboxd:
+      name: Lettarrboxd
+      icon: /assets/icons/letterboxd-light.svg
+      hide: false
+    lettarboxd-new-releases:
+      name: Lettarrboxd New Releases
+      icon: /assets/icons/letterboxd-light.svg
+      hide: false
+    # lettarrboxd:
+    #   # name: Lettarrboxd
+    #   # description: Sync Letterboxd watchlist to radarr
+    #   icon: /assets/icons/letterboxd-light.svg
+    #   hide: false
+    # lettarrboxd-new-release:
+    #   icon: /assets/icons/letterboxd-light.svg
+    #   hide: false
       

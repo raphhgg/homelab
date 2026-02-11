@@ -36,4 +36,5 @@ pages:
 - $include: pages/monitoring.yml
 - $include: pages/news.yml
 - $include: pages/news-homelab.yml
+- $include: pages/news-dev-ai.yml
 

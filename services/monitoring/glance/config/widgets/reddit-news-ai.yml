@@ -5,30 +5,20 @@
     style: vertical-list
     show-flairs: true
     show-thumbnails: true
-    limit: 20
-    collapse-after: 13
+    limit: 25
+    collapse-after: 20
     sort-by: hot
   widgets:
     - subreddit: ClaudeAI
       <<: *reddit-home
     - subreddit: ClaudeCode
       <<: *reddit-home
-    - subreddit: ollama
-      <<: *reddit-home
     - subreddit: LocalLLaMA
+      <<: *reddit-home
+    - subreddit: ollama
       <<: *reddit-home
     - subreddit: LocalLLM
       <<: *reddit-home
-    - type: rss
-      title: X/AI
-      style: detailed-list #horizontal-cards # detailed-list
-      # single-line-titles: true
-      collapse-after: 5
-      feeds:
-        - url: https://rsshub.pseudoyu.com/twitter/user/bcherny
-          title: "@bcherny"
-        # - url: https://rsshub.pseudoyu.com/twitter/user/steipete
-        #   title: "@steipete"
-    # - subreddit: belgium
-    #   <<: *reddit-home
-    #   sort_by: new
+    - subreddit: unsloth
+      <<: *reddit-home
+    - $include: twitter-ai.yml

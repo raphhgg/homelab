@@ -1,0 +1,23 @@
+- type: videos
+  # collapse-after: 10 # vertical-list
+  collapse-after-rows: 10 # grid-cards
+  style: grid-cards # vertical-list # horizontal-cards # 
+  channels:
+    # Homelab / Self-hosted
+    - UCv6J_jJa8GJqFwQNgNrMuww # ServeTheHome
+    - UC4w1YQAJMWOz4qtxinq55LQ # Level1Techs
+    - UC9x0AN7BWHpCDHSm9NiJFJQ # NetworkChuck
+    - UCh66aXZ_hqiT7au6Nwb8p3Q # KTZ Systems
+    - UCgdTVe88YVSrOZ9qKumhULQ # Hardware Heaven
+    - UC9evhW4JB_UdXSLeZGy8lGw # Raid Owl
+    - UCOk-gHyjcWZNj3Br4oxwh0A # Techno Tim
+    - UCHkYOD-3fZbuGhwsADBd9ZQ # Lawrence Systems
+    - UCjSEJkpGbcZhvo0lr-44X_w # TechHut
+    - UCrxcWtpd1IGHG9RbD_9380A # VirtulizationHowto
+    - UCUUTdohVElFLSP4NBnlPEwA # Jim's Garage
+    - UC1733iBvNpXIscZk4QnfYBw # Wundertech
+    - UCIxQ54On7bLJKcmgnyWOejQ # NetBird
+    - UCUUTdohVElFLSP4NBnlPEwA # Jim's Garage
+
+  playlists:
+    # 

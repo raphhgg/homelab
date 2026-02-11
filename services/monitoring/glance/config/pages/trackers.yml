@@ -76,6 +76,9 @@
                     - title: AvistaZ
                       url: https://avistaz.to
                       icon: https://www.google.com/s2/favicons?domain=avistaz.to&sz=64
+                    - title: Secret Cinema
+                      url: https://secret-cinema.pw/
+                      icon: https://secret-cinema.pw/favicon.ico
                     - title: Cathode-Ray.Tube
                       url: https://www.cathode-ray.tube/index.php
                       icon: https://www.cathode-ray.tube/favicon.ico
@@ -142,7 +145,7 @@
             - type: bookmarks
               title: Invite
               groups:
-                - title: Invite Forums
+                - title: Official
                   color: 120 70 50
                   hide-arrow: true
                   links:
@@ -155,7 +158,10 @@
                     - title: My Anonamouse
                       url: https://www.myanonamouse.net/f/b/77
                       icon: https://www.myanonamouse.net/favicon.ico
-                - title: Other
+                    - title: Blutopia
+                      url: https://blutopia.cc/forums/45
+                      icon: https://blutopia.cc/favicon.ico
+                - title: Unofficial
                   colors: 280 70 60
                   hide-arrow: true
                   links:
@@ -165,6 +171,9 @@
                     - title: OpenSignups
                       url: https://www.myanonamouse.net/f/t/59546/p/25
                       icon: https://www.myanonamouse.net/favicon.ico
+                    - title: Unofficial
+                      url: https://blutopia.cc/forums/46
+                      icon: https://blutopia.cc/favicon.ico
                   
         # Bookmarks
         - type: group
@@ -185,19 +194,19 @@
                     - title: Trackers Reviews
                       url: https://www.reddit.com/r/trackers/comments/1mw2wqt/review_of_every_tracker_im_on/
                       icon: https://reddit.com/favicon.ico
-                - title: Other
-                  colors: 200 70 50
-                  hide-arrow: true
-                  links:
-                    - title: Profile
-                      url: https://aither.cc/users/raphh
-                      icon: https://aither.cc/favicon.ico
-                    - title: Requirements
-                      url: https://aither.cc/stats/groups/requirements
-                      icon: https://aither.cc/favicon.ico 
-                    - title: interviewfor.red
-                      url: https://interviewfor.red/
-                      icon: https://redacted.sh/favicon.ico
+                # - title: Other
+                #   colors: 200 70 50
+                #   hide-arrow: true
+                #   links:
+                #     - title: Profile
+                #       url: https://aither.cc/users/raphh
+                #       icon: https://aither.cc/favicon.ico
+                #     - title: Requirements
+                #       url: https://aither.cc/stats/groups/requirements
+                #       icon: https://aither.cc/favicon.ico 
+                #     - title: interviewfor.red
+                #       url: https://interviewfor.red/
+                #       icon: https://redacted.sh/favicon.ico
         
     # Center Column - Reddit + qBittorrent + Tautulli
     - size: full

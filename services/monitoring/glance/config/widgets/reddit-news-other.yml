@@ -1,0 +1,14 @@
+- type: group
+  title: Forumla 1
+  define: &reddit-home
+    type: reddit
+    style: vertical-list
+    show-flairs: true
+    show-thumbnails: true
+    limit: 15
+    collapse-after: 10
+  widgets:
+    - subreddit: formula1
+      <<: *reddit-home
+      sort-by: hot
+    - $include: ../widgets/twitter-f1.yml

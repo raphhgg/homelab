@@ -1,0 +1,10 @@
+- type: rss
+  title: X/Formula1
+  style: detailed-list #horizontal-cards # detailed-list
+    # single-line-titles: true
+  collapse-after: 15
+  feeds:
+    - url: http://rsshub:1200/twitter/user/F1
+      title: "@F1"
+    - url: http://rsshub:1200/twitter/user/SkySportsF1
+      title: "@SkySportsF1"
