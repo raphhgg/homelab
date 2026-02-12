@@ -1,306 +1,154 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Instructions for AI agents working with this homelab Docker Compose repository on a Synology NAS.
 
 ## Repository Overview
 
-This is a homelab infrastructure repository that manages Docker-based services on a Synology NAS using docker-compose. The repository contains 34+ services organized into categories.
+Homelab infrastructure managing Docker services organized in `services/` by category. Each service has its own directory with `docker-compose.yml`, `.env.example`, and `.env`.
 
-## Repository Structure
+## Standard Values
 
-### Service Organization
+These are the **actual values** used across all services. Use them when creating `.env` files:
 
-Services are organized in the `services/` directory with the following categories:
+| Variable               | Value                    |
+|------------------------|--------------------------|
+| `PUID`                 | `1026`                   |
+| `PGID`                 | `100`                    |
+| `TZ`                   | `Europe/Brussels`        |
+| `DOCKER_APPDATA_PATH`  | `/volume2/docker/appdata`|
+| `MEDIAS_PATH`          | `/volume3/data/medias`   |
+| `DOWNLOAD_PATH`        | `/volume2/downloads`     |
+| `DOCKER_HOST`          | `tcp://172.26.0.22:2375` |
 
-- **arrs/**: Media management applications (Sonarr, Radarr, Prowlarr, Bazarr, Profilarr, Calibre)
+## Service Conventions
 
-- **torrents/**: Torrent-related services
-  - qBittorrent instances (qbit-main, qbit-brr, qbit-cross)
-  - Torrent automation (autobrr, cross-seed, qbit_manage)
-  - Tools (unpackerr, upload-assistant, qui, mam_seedboxapi, thelounge)
+### Directory Structure
 
-- **media-server/**: Media streaming and management
-  - Plex and related services: Plex, Kometa, ImageMaid, Plex-Auto-Languages, Plex-Trakt-Sync
-  - Other: Tautulli, Trailarr, Jellyseerr
+Each service lives in `services/<category>/<service-name>/` with:
+- `docker-compose.yml` — service definition
+- `.env.example` — template (committed to git)
+- `.env` — actual values (gitignored, created from `.env.example`)
 
-- **infrastructure/**: Core infrastructure services
-  - Cronicle (job scheduler)
-  - GitHub Actions runner (self-hosted)
-  - Cloudflare DDNS
-  - Docker Socket Proxy
-  - VPN gateways (gluetun, gluetun-brr, gluetun-cross)
+### docker-compose.yml Patterns
 
-- **monitoring/**: Monitoring and management tools (Apprise, Beszel, Dozzle, Uptime-kuma, Watchtower)
+- Use `docker compose` (v2 CLI), **never** `docker-compose` (v1)
+- Set `restart: always` for all production services
+- Use `ghcr.io/hotio/*` images where available for media services
+- Always declare networks as `external: true`
 
-- **sabnzbd/**: Usenet download client (standalone service)
+### .env Files
 
-- **syncthing/**: File synchronization
+**`.env.example`** (committed to git) uses placeholder format:
+- Standard shared vars: `VARNAME=VARNAME` (e.g., `PUID=PUID`, `TZ=TZ`)
+- Service-specific secrets: descriptive placeholder (e.g., `API_TOKEN=your_api_token_here`)
 
-- **smart-home/**: Smart home services
+**`.env`** (gitignored) uses **actual values** from the Standard Values table above, plus real secrets.
 
-## Docker Compose Architecture
+### Docker Socket Proxy (CRITICAL)
 
-### Standard Service Structure
+**NEVER mount `/var/run/docker.sock` directly into a service container.** Always use the docker-socket-proxy:
 
-Each service directory contains:
-- `docker-compose.yml`: Service definition
-- `.env.example`: Template for required environment variables
-- `.env`: Actual environment values (gitignored, created from `.env.example`)
+1. Add the `socket_proxy` network to the service
+2. Set `DOCKER_HOST=${DOCKER_HOST}` as environment variable (resolves to `tcp://172.26.0.22:2375`)
+3. Do NOT use container name (`docker-proxy`) — always use the IP address
 
-### Common Environment Variables
+Reference: `services/infrastructure/docker-socket-proxy/docker-compose.yml`
 
-Services use individual `.env` files in each service directory (**not** a shared root `.env`). Common variables across services:
-- `PUID=1000`, `PGID=1000`: User/group permissions
-- `TZ=Europe/Brussels`: Timezone
-- `DOCKER_APPDATA_PATH=/volume2/docker/appdata`: Base path for application data/config
-- `MEDIAS_PATH=/volume3/data/medias`: Base path for media files
-- `DOWNLOAD_PATH=/volume2/downloads`: Base path for downloads
-- `DOCKER_HOST=tcp://docker-proxy:2375`: Docker Socket Proxy endpoint (for services needing Docker API access)
-- Service-specific variables (VPN credentials, API tokens, etc.)
+Example (from uptime-kuma):
+```yaml
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:2
+    container_name: uptime-kuma
+    networks:
+      - main
+      - socket_proxy
+    environment:
+      - DOCKER_HOST=${DOCKER_HOST}
+    # NO docker.sock volume mount!
 
-**Note**: Each service's `.env` file is created from its `.env.example` template. Values are either filled in directly or reference the same standard values listed above.
+networks:
+  main:
+    external: true
+  socket_proxy:
+    external: true
+```
 
-### Network Architecture
+**Do NOT modify the docker-socket-proxy configuration** without asking the user first — it's shared infrastructure.
 
-- Most services use an external network called `main`
-- Infrastructure services may use `socket_proxy` network
-- Some services use `network_mode: host` (e.g., Plex)
+### Networks
 
-### Volume Patterns
+- `main` — used by most services for inter-service communication
+- `socket_proxy` — only for services needing Docker API access via docker-socket-proxy
 
-Services follow consistent volume mounting:
+### Volumes
+
+Consistent mounting patterns:
 - Config: `${DOCKER_APPDATA_PATH}/<service>:/config`
 - Media: `${MEDIAS_PATH}:/data/medias`
 - Downloads: `${DOWNLOAD_PATH}:/downloads`
+- App data: `${DOCKER_APPDATA_PATH}/<service>/data:/app/data` (varies by service)
 
-**Note**: For detailed service-specific documentation (architecture, configuration, usage), refer to the `README.md` file in each service's directory (e.g., `services/monitoring/watchtower/README.md`) or in a subcategory (e.g., `monitoring/README.md`, `infrastructure/README.md`).
+Note: `DOCKER_APPDATA_PATH` is used in volume mounts only — it is NOT a container environment variable.
 
-## Common Operations
+### Labels
 
-### Adding a New Service
-
-When adding a new service to the repository:
-1. Create the service directory structure with `docker-compose.yml` and `.env.example`
-2. **Note on `.gitignore`**: Do NOT create individual `.gitignore` files in service folders. The root `.gitignore` handles all necessary patterns (`.env`, logs, data directories, etc.). Only create a service-specific `.gitignore` if there are unique patterns not covered by the root file.
-3. **IMPORTANT**: After adding the service, ask the user if they want to add a monitor for it in Uptime Kuma
-4. If yes, add the monitor configuration to `services/monitoring/uptime-kuma/setup_monitors.py` in the appropriate category section
-5. Monitor should use the container name (lowercase) and proper endpoint (IP-based for HTTP monitors)
-
-### Deploying a Service
-
-```bash
-cd services/<category>/<service-name>
-docker-compose up -d
+**Watchtower** — required on ALL services:
+```yaml
+labels:
+  - "com.centurylinklabs.watchtower.enable=true"
 ```
 
-### Checking Service Status
+## Adding a New Service
 
-```bash
-docker-compose ps
-docker-compose logs -f <service-name>
-```
+Follow this checklist:
 
-### Updating a Service
+1. **Choose category**: Place in the appropriate `services/<category>/` folder
+2. **Create directory**: `services/<category>/<service-name>/`
+3. **Create `docker-compose.yml`**: Follow patterns from existing services in the same category
+4. **Create `.env.example`**: Use `VARNAME=VARNAME` format for standard vars
+5. **Create `.env`**: Copy `.env.example` and fill with actual values from the Standard Values table
+6. **Create appdata directory**: `mkdir -p /volume2/docker/appdata/<service>/<subdirs>`
+7. **Docker API access?** → Use docker-socket-proxy pattern (see above), NEVER mount socket directly
+8. **Add watchtower label** to all containers
+9. **Do NOT create**: extra documentation files (DIRECTORY_SETUP.md, etc.), individual `.gitignore` files (root `.gitignore` handles all patterns)
+10. **Ask the user** if they want to add a monitor in Uptime Kuma
 
-```bash
-docker-compose pull
-docker-compose up -d
-```
+When in doubt, **look at existing services** as templates. Good references:
+- Simple service: `services/monitoring/uptime-kuma/`
+- Service with Docker API access: `services/monitoring/dozzle/`
+- Media service (hotio): `services/arrs/sonarr/`
 
-### Stopping a Service
+## Modifying Services
 
-```bash
-docker-compose down
-```
-
-## Monitoring Stack
-
-The homelab uses a multi-layered monitoring approach with complementary tools.
-
-**See [services/monitoring/README.md](services/monitoring/README.md) for complete monitoring stack documentation.**
-
-## Cronicle - Job Scheduler
-
-**Location**: `services/infrastructure/cronicle/`
-**Purpose**: Schedule and automate recurring tasks (cron replacement with web UI)
-**Claude Integration:** Claude can create/update/delete Cronicle jobs programmatically using the HTTP API
-
-**See [services/infrastructure/cronicle/README.md](services/infrastructure/cronicle/README.md) for complete documentation.**
+- Never commit actual `.env` files (gitignored)
+- Update `.env.example` when adding new environment variables
+- Place services in appropriate category folders
+- Each service gets its own subdirectory with `docker-compose.yml`
+- Don't modify shared infrastructure (docker-socket-proxy, networks) without asking
 
 ## Scripts
 
-Utility scripts for homelab automation and maintenance.
+Utility scripts for homelab automation and maintenance are in `scripts/`. See [scripts/README.md](scripts/README.md).
 
-**Location**: `scripts/`
-
-**See [scripts/README.md](scripts/README.md) for complete documentation.**
-
-## GitHub Actions Self-Hosted Runner
-
-**Location**: `services/infrastructure/github-runner/`
-
-**See [services/infrastructure/github-runner/README.md](services/infrastructure/github-runner/README.md) for complete documentation.**
-
-## Important Notes
-
-### Uptime Kuma 2.0 Compatibility
-
-**Issue**: The `uptime-kuma-api` Python library (v1.2.1) does NOT support Uptime Kuma 2.0+.
-
-**Impact**:
-- ❌ Cannot create new monitors via `setup_monitors.py` script (will fail with "NOT NULL constraint failed: monitor.conditions")
-- ✅ Can still create notifications via script
-- ✅ Existing monitors continue to work
-- ✅ Can update existing monitors via script
-
-**Workaround**: Create new monitors manually in Uptime Kuma UI until the library is updated.
-
-**Tracking**: The library supports Uptime Kuma 1.21.3 - 1.23.2. Wait for library update to support 2.0+.
-
-### Apprise Middleware
-
-**Purpose**: Transforms Uptime Kuma webhook payloads to Apprise API-compatible format for rich Discord notifications.
-
-**Architecture**:
-- Uptime Kuma → Middleware (`http://apprise-middleware:5000/webhook/uptime-kuma`) → Apprise API → Discord
-- Middleware extracts monitor details (name, URL, type, error, duration) and creates formatted notifications
-- ALL Uptime Kuma monitors should use the middleware notification (Uptime Kuma's webhook format is incompatible with Apprise API)
-
-**Setup**:
-- Service: `services/monitoring/apprise/middleware/`
-- Notification name in Uptime Kuma: "Apprise (uptime-kuma - Middleware)" or similar
-- Should be set as default and applied to all monitors
-
-## Development Notes
-
-### When Modifying Services
-
-1. **Environment Variables**:
-   - Never commit actual `.env` files (gitignored)
-   - Update `.env.example` when adding new variables
-   - Variables should reference root `.env` values in the format: `VARNAME=VARNAME`
-
-2. **Docker Compose Files**:
-   - Use external networks (declare as `external: true`)
-   - Follow volume mounting patterns for consistency
-   - Use `ghcr.io/hotio/*` images where available for media services
-   - Set `restart: always` for production services
-
-3. **Service Categories**:
-   - Place services in appropriate category folders
-   - Use `_` prefix for grouping folders (not individual services)
-   - Each service gets its own subdirectory with docker-compose.yml
-
-### Theme Park Integration
-
-All the services using hotio's containers support Theme Park for UI theming:
-- Environment variables: `TP_HOTIO=true`, `TP_THEME=<theme-name>`
-- Themes: `catppuccin-mocha`, `organizr`
-- Volume mount: `${DOCKER_APPDATA_PATH}/themepark/98-themepark-<service>:/etc/cont-init.d/98-themepark`
-
-## Git Workflow
-
-- Main branch: `main`
-- Use descriptive commit messages following the existing style (see recent commits)
-- Prefix commits with scope: `[global]`, `[media-download]`, `[scripts]` nor `[service-name]` if changes affects only one single service.
-- **IMPORTANT**: Do NOT add Claude Code attribution or co-authorship lines to commit messages. No "Generated with Claude Code" or "Co-Authored-By: Claude" footers.
-
-## Git Configuration
-
-This repository uses a specific SSH key configuration:
-- **Remote**: `github-personal:raaphhh/homelab.git`
-- **SSH Host**: `github-personal` (configured in ~/.ssh/config)
-- **SSH Key**: `~/.ssh/id_ed25519_personal`
-
-When cloning or working with this repository, ensure you're using the `github-personal` SSH host alias, not the direct `github.com` URL.
-
+<!--
 ## Linear Issue Management
 
-**Default Project:** All Linear issues for this homelab repository should be created in the **"self-hosted"** project unless otherwise specified.
+**Default Project:** "self-hosted"
 
 **Linear GraphQL API IDs:**
-- **Team ID**: `9bbf50c0-425a-4736-b5ac-fb98744a5830` (Raphael Grau)
-- **Project ID (self-hosted)**: `91189c04-ae99-46dc-bf34-243cb9f95fb6`
+- Team ID: `9bbf50c0-425a-4736-b5ac-fb98744a5830`
+- Project ID (self-hosted): `91189c04-ae99-46dc-bf34-243cb9f95fb6`
 
-When creating issues related to this repository, always use the "self-hosted" project by default.
+**API Key Location**: `/volume2/docker/compose/.secrets` (gitignored)
 
-### Linear MCP Not Working in Cursor/VSCode
-
-**Issue:** Linear MCP server connection fails with error `SSE MCP servers are currently not supported in native builds.`
-
-**Root Cause:**
-- Linear's official MCP server uses SSE (Server-Sent Events) transport
-- Claude Code's native binary (used by Cursor/VSCode extensions) does NOT support SSE MCP servers
-- This is a platform limitation, not a configuration issue
-- The Linear MCP configuration in `~/.claude.json` is correct but cannot be used in IDE extensions
-
-**Verification:**
-Check Claude extension logs for this error:
-```
-[ERROR] MCP server "linear" Connection failed: SSE MCP servers are currently not supported in native builds.
-```
-
-**Workaround - Use Linear GraphQL API:**
-
-Since the Linear MCP doesn't work in Cursor/VSCode, use the Linear GraphQL API directly via curl.
-
-**API Key Location**: The Linear API key is stored in `/volume2/docker/compose/.secrets` (gitignored for security).
-
-**Example Usage**:
-
+**Usage:**
 ```bash
-# Read API key from file
-LINEAR_KEY=$(grep LINEAR_API_KEY /volume2/docker/compose/.secrets | cut -d'=' -f2)
-
-# Query issue details
-curl -s -X POST https://api.linear.app/graphql \
-  -H "Authorization: $LINEAR_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"query":"query { issue(id: \"ISSUE-ID\") { id title description state { name } assignee { name } labels { nodes { name } } createdAt updatedAt } }"}' \
-  | python3 -m json.tool
-```
-
-Replace `ISSUE-ID` with the actual issue identifier (e.g., `RGR-17`).
-
-**Common Operations**:
-
-```bash
-# Update issue description
 LINEAR_KEY=$(grep LINEAR_API_KEY /volume2/docker/compose/.secrets | cut -d'=' -f2)
 curl -s -X POST https://api.linear.app/graphql \
   -H "Authorization: $LINEAR_KEY" \
   -H "Content-Type: application/json" \
-  --data-binary @/tmp/linear_mutation.json \
+  -d '{"query":"query { issue(id: \"ISSUE-ID\") { id title description state { name } assignee { name } labels { nodes { name } } } }"}' \
   | python3 -m json.tool
 ```
-
-**Note:** The Linear MCP works fine in the Claude CLI (`claude` command), but not in IDE extensions. If you need full MCP functionality, use the CLI version of Claude Code instead of the Cursor/VSCode extension.
-
-## Troubleshooting
-
-### Unresponsive Docker Containers on Synology
-
-If Docker containers become completely unresponsive (commands like `docker exec`, `docker inspect`, `docker logs` hang indefinitely), this is a known issue with Synology's ContainerManager and BTRFS storage driver.
-
-**Symptoms:**
-- All Docker commands targeting a specific container timeout
-- Container appears to be running but is not responsive
-- Cannot stop or restart the container normally
-
-**Solution:**
-Restart the ContainerManager service to reset all containers:
-
-```bash
-sudo /var/packages/ContainerManager/scripts/start-stop-status stop
-sudo /var/packages/ContainerManager/scripts/start-stop-status start
-```
-
-**Important Notes:**
-- This will restart ALL Docker containers on the system
-- Containers with `restart: always` will come back automatically
-- This is the Synology-specific way to manage Docker (not standard `systemctl`)
-- The issue is related to BTRFS and Docker's interaction with the Synology kernel
-
-### Cronicle Shell Plugin Permission Issues
-
-See [services/infrastructure/cronicle/README.md#shell-plugin-permission-issues](services/infrastructure/cronicle/README.md#shell-plugin-permission-issues) for detailed troubleshooting of Cronicle permission issues on Synology NAS.
+-->
