@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  dockhand:
+    image: fnsys/dockhand:latest
+    container_name: dockhand
+    networks:
+      - main
+      - socket_proxy
+    ports:
+      - 3000:3000
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/dockhand/data:/app/data
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - DOCKER_HOST=${DOCKER_HOST}
+    restart: always
+
+networks:
+  main:
+    external: true
+  socket_proxy:
+    external: true
