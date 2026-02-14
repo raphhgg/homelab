@@ -1,0 +1,74 @@
+services:
+  tracearr:
+    image: ghcr.io/connorgallopo/tracearr:latest
+    container_name: tracearr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - PORT=3000
+      - DATABASE_URL=postgres://tracearr:${DB_PASSWORD}@timescale:5432/tracearr
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=${JWT_SECRET}
+      - COOKIE_SECRET=${COOKIE_SECRET}
+      - CORS_ORIGIN=${CORS_ORIGIN:-*}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    depends_on:
+      timescale:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/tracearr:/config
+    networks:
+      - main
+      - tracearr-network
+    ports:
+      - 3003:3000
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  timescale:
+    image: timescale/timescaledb-ha:pg18.1-ts2.25.0
+    container_name: tracearr-db
+    shm_size: 512mb
+    environment:
+      - POSTGRES_USER=tracearr
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=tracearr
+    volumes:
+      - timescale_data:/home/postgres/pgdata/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tracearr"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    networks:
+      - tracearr-network
+
+  redis:
+    image: redis:8-alpine
+    container_name: tracearr-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    networks:
+      - tracearr-network
+
+networks:
+  main:
+    external: true
+  tracearr-network:
+    driver: bridge
+
+volumes:
+  timescale_data:
+  redis_data:
