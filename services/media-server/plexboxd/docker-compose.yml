@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  plexboxd:
+    image: ghcr.io/nichtlegacy/plexboxd:latest
+    container_name: plexboxd
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/plexboxd/logs:/app/logs
+      - ${DOCKER_APPDATA_PATH}/plexboxd/data:/app/data
+    networks:
+      - main
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  main:
+    external: true
