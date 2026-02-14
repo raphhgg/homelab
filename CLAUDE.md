@@ -18,7 +18,6 @@ These are the **actual values** used across all services. Use them when creating
 | `DOCKER_APPDATA_PATH`  | `/volume2/docker/appdata`|
 | `MEDIAS_PATH`          | `/volume3/data/medias`   |
 | `DOWNLOAD_PATH`        | `/volume2/downloads`     |
-| `DOCKER_HOST`          | `tcp://172.26.0.22:2375` |
 
 ## Service Conventions
 
@@ -36,21 +35,65 @@ Each service lives in `services/<category>/<service-name>/` with:
 - Use `ghcr.io/hotio/*` images where available for media services
 - Always declare networks as `external: true`
 
-### .env Files
+### .env Files (CRITICAL)
 
-**`.env.example`** (committed to git) uses placeholder format:
+**Every standard variable referenced in `docker-compose.yml` MUST be present** in both `.env.example` and `.env`. Cross-check the compose file's `${VAR}` references against the Standard Values table — missing variables will cause silent failures.
+
+**`.env.example`** (committed to git) — **MUST use placeholder format, NEVER actual values**:
 - Standard shared vars: `VARNAME=VARNAME` (e.g., `PUID=PUID`, `TZ=TZ`)
 - Service-specific secrets: descriptive placeholder (e.g., `API_TOKEN=your_api_token_here`)
+- `DOCKER_APPDATA_PATH`, `MEDIAS_PATH`, `DOWNLOAD_PATH` — these are **only used in volume mounts** in `docker-compose.yml`. They must be in `.env` files but are **NOT container environment variables** (never put them in the `environment:` section).
+
+WRONG `.env.example` — uses actual values:
+```
+PUID=1026
+TZ=Europe/Brussels
+DOCKER_APPDATA_PATH=/volume2/docker/appdata
+```
+
+RIGHT `.env.example` — uses placeholders:
+```
+PUID=PUID
+TZ=TZ
+DOCKER_APPDATA_PATH=DOCKER_APPDATA_PATH
+```
 
 **`.env`** (gitignored) uses **actual values** from the Standard Values table above, plus real secrets.
 
+**Commenting rules**: Do NOT add comments for standard variables (PUID, PGID, TZ, etc.) — they are self-explanatory. Only add comments for commented-out optional variables or service-specific secrets that need clarification.
+
+**Full example** — a service using PUID, PGID, TZ, DOCKER_APPDATA_PATH, and an optional API key:
+
+`.env.example`:
+```
+PUID=PUID
+PGID=PGID
+TZ=TZ
+DOCKER_APPDATA_PATH=DOCKER_APPDATA_PATH
+# Optional: override default (auto-generated on first run)
+# API_KEY=your_api_key_here
+```
+
+`.env`:
+```
+PUID=1026
+PGID=100
+TZ=Europe/Brussels
+DOCKER_APPDATA_PATH=/volume2/docker/appdata
+# Optional: override default (auto-generated on first run)
+# API_KEY=your_api_key_here
+```
+
 ### Docker Socket Proxy (CRITICAL)
 
-**NEVER mount `/var/run/docker.sock` directly into a service container.** Always use the docker-socket-proxy:
+**Only services that need Docker API access** (e.g., monitoring containers, managing other containers) should use the docker-socket-proxy. Most services do NOT need this — **do not add `DOCKER_HOST`, `socket_proxy` network, or docker socket mounts unless the service genuinely requires Docker API access.**
+
+**NEVER mount `/var/run/docker.sock` directly into a service container.** When Docker API access is needed, use the docker-socket-proxy:
 
 1. Add the `socket_proxy` network to the service
-2. Set `DOCKER_HOST=${DOCKER_HOST}` as environment variable (resolves to `tcp://172.26.0.22:2375`)
-3. Do NOT use container name (`docker-proxy`) — always use the IP address
+2. Set `DOCKER_HOST=tcp://172.26.0.22:2375` as environment variable
+3. Add `DOCKER_HOST` to both `.env.example` and `.env` (placeholder: `DOCKER_HOST=DOCKER_HOST`, actual: `DOCKER_HOST=tcp://172.26.0.22:2375`)
+4. Do NOT use container name (`docker-proxy`) — always use the IP address
 
 Reference: `services/infrastructure/docker-socket-proxy/docker-compose.yml`
 
@@ -89,7 +132,7 @@ Consistent mounting patterns:
 - Downloads: `${DOWNLOAD_PATH}:/downloads`
 - App data: `${DOCKER_APPDATA_PATH}/<service>/data:/app/data` (varies by service)
 
-Note: `DOCKER_APPDATA_PATH` is used in volume mounts only — it is NOT a container environment variable.
+**Reminder**: `DOCKER_APPDATA_PATH`, `MEDIAS_PATH`, and `DOWNLOAD_PATH` are for volume mounts only — **NEVER** add them to the `environment:` section of a compose file.
 
 ### Labels
 
@@ -105,14 +148,19 @@ Follow this checklist:
 
 1. **Choose category**: Place in the appropriate `services/<category>/` folder
 2. **Create directory**: `services/<category>/<service-name>/`
-3. **Create `docker-compose.yml`**: Follow patterns from existing services in the same category
-4. **Create `.env.example`**: Use `VARNAME=VARNAME` format for standard vars
-5. **Create `.env`**: Copy `.env.example` and fill with actual values from the Standard Values table
-6. **Create appdata directory**: `mkdir -p /volume2/docker/appdata/<service>/<subdirs>`
-7. **Docker API access?** → Use docker-socket-proxy pattern (see above), NEVER mount socket directly
-8. **Add watchtower label** to all containers
-9. **Do NOT create**: extra documentation files (DIRECTORY_SETUP.md, etc.), individual `.gitignore` files (root `.gitignore` handles all patterns)
-10. **Ask the user** if they want to add a monitor in Uptime Kuma
+3. **Check port availability (MANDATORY)**: Before writing the compose file, run this to list all used host ports (BusyBox-compatible):
+   ```bash
+   grep -rh '^\s*-\s*"*[0-9]*:[0-9]' services/*/docker-compose.yml services/*/*/docker-compose.yml 2>/dev/null | sed 's/[" ]//g' | sed 's/.*-\([0-9]*\):.*/\1/' | sort -n | uniq
+   ```
+   If your chosen port appears in the output, it is already taken — pick another available port close to the original. **Do NOT skip this step.**
+4. **Create `docker-compose.yml`**: Follow patterns from existing services in the same category
+5. **Create `.env.example`**: Use `VARNAME=VARNAME` format for standard vars. Include ALL variables referenced as `${VAR}` in the compose file.
+6. **Create `.env`**: Copy `.env.example` and fill with actual values from the Standard Values table
+7. **Create appdata directory**: `mkdir -p /volume2/docker/appdata/<service>/<subdirs>`
+8. **Docker API access?** → Only if the service needs it: use docker-socket-proxy pattern (see above), add `DOCKER_HOST` to env files. If not needed, do NOT add `DOCKER_HOST` or `socket_proxy` network.
+9. **Add watchtower label** to all containers
+10. **Do NOT create**: extra documentation files (DIRECTORY_SETUP.md, etc.), individual `.gitignore` files (root `.gitignore` handles all patterns)
+11. **Ask the user** if they want me to start the container and inspect the logs to see everything is working fine or if they still need to add some info in the config/.env first.
 
 When in doubt, **look at existing services** as templates. Good references:
 - Simple service: `services/monitoring/uptime-kuma/`
@@ -126,29 +174,3 @@ When in doubt, **look at existing services** as templates. Good references:
 - Place services in appropriate category folders
 - Each service gets its own subdirectory with `docker-compose.yml`
 - Don't modify shared infrastructure (docker-socket-proxy, networks) without asking
-
-## Scripts
-
-Utility scripts for homelab automation and maintenance are in `scripts/`. See [scripts/README.md](scripts/README.md).
-
-<!--
-## Linear Issue Management
-
-**Default Project:** "self-hosted"
-
-**Linear GraphQL API IDs:**
-- Team ID: `9bbf50c0-425a-4736-b5ac-fb98744a5830`
-- Project ID (self-hosted): `91189c04-ae99-46dc-bf34-243cb9f95fb6`
-
-**API Key Location**: `/volume2/docker/compose/.secrets` (gitignored)
-
-**Usage:**
-```bash
-LINEAR_KEY=$(grep LINEAR_API_KEY /volume2/docker/compose/.secrets | cut -d'=' -f2)
-curl -s -X POST https://api.linear.app/graphql \
-  -H "Authorization: $LINEAR_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"query":"query { issue(id: \"ISSUE-ID\") { id title description state { name } assignee { name } labels { nodes { name } } } }"}' \
-  | python3 -m json.tool
-```
--->
