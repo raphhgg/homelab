@@ -14,3 +14,6 @@ __pycache__/
 services/monitoring/apprise/config/*.yml
 services/monitoring/apprise/config/store/
 services/monitoring/apprise/config/.tmp_*
+
+# Scripts
+scripts/unmatched_assets_with_*
