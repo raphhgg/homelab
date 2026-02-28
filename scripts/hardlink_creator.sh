@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Simple Hardlink Creator for Duplicates Between Two Folders
-# Usage: ./simple_hardlink_duplicates.sh /path/to/original /path/to/copy
+# Usage: ./hardlink_creator.sh /path/to/original /path/to/copy
 # 
 # This script will:
 # 1. Find duplicate files between two folders
