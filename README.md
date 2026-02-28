@@ -1,6 +1,6 @@
 # Homelab
 
-> Self-hosted home server infrastructure on Synology NAS. Docker Compose stacks for 34+ services covering media, monitoring, automation, and more.
+> Self-hosted home server Docker Compose infrastructure.
 
 ---
 
@@ -9,8 +9,7 @@
 * [Quick Start](#quick-start)
 * [Services](#services)
 * [Common Operations](#common-operations)
-* [Theme Park Integration](#theme-park-integration)
-* [Monitoring Stack](#monitoring-stack)
+* [Monitoring](#monitoring-stack)
 * [Troubleshooting](#troubleshooting)
 
 ---
@@ -94,44 +93,10 @@ docker compose down
 
 ---
 
-## Theme Park Integration
-
-Services using hotio's containers support Theme Park for UI theming:
-
-- Environment variables: `TP_HOTIO=true`, `TP_THEME=<theme-name>`
-- Themes: `catppuccin-mocha`, `organizr`
-- Volume mount: `${DOCKER_APPDATA_PATH}/themepark/98-themepark-<service>:/etc/cont-init.d/98-themepark`
-
----
-
-## Monitoring Stack
+## Monitoring
 
 The homelab uses a multi-layered monitoring approach with complementary tools.
 
 See [services/monitoring/README.md](services/monitoring/README.md) for complete documentation.
 
 ---
-
-## Troubleshooting
-
-### Unresponsive Docker Containers on Synology
-
-If Docker containers become completely unresponsive (commands like `docker exec`, `docker inspect`, `docker logs` hang indefinitely), this is a known issue with Synology's ContainerManager and BTRFS storage driver.
-
-**Symptoms:**
-- All Docker commands targeting a specific container timeout
-- Container appears to be running but is not responsive
-- Cannot stop or restart the container normally
-
-**Solution:**
-Restart the ContainerManager service:
-
-```bash
-sudo /var/packages/ContainerManager/scripts/start-stop-status stop
-sudo /var/packages/ContainerManager/scripts/start-stop-status start
-```
-
-**Notes:**
-- This will restart ALL Docker containers on the system
-- Containers with `restart: always` will come back automatically
-- This is the Synology-specific way to manage Docker (not standard `systemctl`)

@@ -33,7 +33,7 @@ Each service lives in `services/<category>/<service-name>/` with:
 - Use `docker compose` (v2 CLI), **never** `docker-compose` (v1)
 - Set `restart: always` for all production services
 - Use `ghcr.io/hotio/*` images where available for media services
-- Always declare networks as `external: true`
+- External shared networks use `external: true`; local per-stack networks are declared without it
 
 ### .env Files (CRITICAL)
 
@@ -46,9 +46,9 @@ Each service lives in `services/<category>/<service-name>/` with:
 
 WRONG `.env.example` — uses actual values:
 ```
-PUID=1026
+PUID=1000
 TZ=Europe/Brussels
-DOCKER_APPDATA_PATH=/volume2/docker/appdata
+DOCKER_APPDATA_PATH=/home/raphh/docker/appdata
 ```
 
 RIGHT `.env.example` — uses placeholders:
@@ -76,53 +76,120 @@ DOCKER_APPDATA_PATH=DOCKER_APPDATA_PATH
 
 `.env`:
 ```
-PUID=1026
+PUID=1000
 PGID=100
 TZ=Europe/Brussels
-DOCKER_APPDATA_PATH=/volume2/docker/appdata
+DOCKER_APPDATA_PATH=/home/raphh/docker/appdata
 # Optional: override default (auto-generated on first run)
 # API_KEY=your_api_key_here
 ```
 
-### Docker Socket Proxy (CRITICAL)
+### Docker Socket Proxy — Dedicated Per-Service (CRITICAL)
 
-**Only services that need Docker API access** (e.g., monitoring containers, managing other containers) should use the docker-socket-proxy. Most services do NOT need this — **do not add `DOCKER_HOST`, `socket_proxy` network, or docker socket mounts unless the service genuinely requires Docker API access.**
+**Only services that need Docker API access** (e.g., monitoring containers, managing other containers) should use a socket proxy. Most services do NOT need this — **do not add a socket proxy unless the service genuinely requires Docker API access.**
 
-**NEVER mount `/var/run/docker.sock` directly into a service container.** When Docker API access is needed, use the docker-socket-proxy:
+**NEVER mount `/var/run/docker.sock` directly into a service container.** Each service that needs Docker API access gets its own dedicated `tecnativa/docker-socket-proxy` sidecar with **minimal permissions** (principle of least privilege), connected via a **local network** isolated to that compose stack.
 
-1. Add the `socket_proxy` network to the service
-2. Set `DOCKER_HOST=tcp://172.26.0.22:2375` as environment variable
-3. Add `DOCKER_HOST` to both `.env.example` and `.env` (placeholder: `DOCKER_HOST=DOCKER_HOST`, actual: `DOCKER_HOST=tcp://172.26.0.22:2375`)
-4. Do NOT use container name (`docker-proxy`) — always use the IP address
+#### How to add a dedicated socket proxy:
 
-Reference: `services/infrastructure/docker-socket-proxy/docker-compose.yml`
+1. Add a `<service>-proxy` container using `tecnativa/docker-socket-proxy` with only the permissions needed
+2. Add a local `socket_net` network (NOT external) — only the proxy and the app join it
+3. Hardcode `DOCKER_HOST=tcp://<service>-proxy:2375` in the app's environment (no `.env` variable needed)
+4. Add `depends_on: <service>-proxy` to the app container
+5. The proxy mounts `/var/run/docker.sock:/var/run/docker.sock:ro` — the app container does NOT
 
-Example (from uptime-kuma):
+#### Permission reference:
+
+| Permission | What it allows | Example services |
+|-----------|---------------|------------------|
+| `CONTAINERS=1` | Read container list/stats | All (minimum) |
+| `EVENTS=1` | Stream container events | Dozzle (log streaming) |
+| `IMAGES=1` | Pull/list images | Watchtower |
+| `POST=1` | Create/modify resources | Watchtower, Autopulse |
+| `DELETE=1` | Delete containers | Watchtower |
+| `NETWORKS=1` | Manage networks | Watchtower |
+| `VOLUMES=1` | Manage volumes | Watchtower |
+| `EXEC=1` | Execute in containers | Dockhand |
+| `INFO=1` | System info | Beszel-agent |
+| `VERSION=1` | Docker version | Beszel-agent |
+
+#### Example (from uptime-kuma — read-only, minimal):
 ```yaml
 services:
+  uptime-kuma-proxy:
+    image: tecnativa/docker-socket-proxy
+    container_name: uptime-kuma-proxy
+    environment:
+      - CONTAINERS=1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - socket_net
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
   uptime-kuma:
     image: louislam/uptime-kuma:2
     container_name: uptime-kuma
     networks:
-      - main
-      - socket_proxy
+      - monitoring
+      - socket_net
     environment:
-      - DOCKER_HOST=${DOCKER_HOST}
-    # NO docker.sock volume mount!
+      - DOCKER_HOST=tcp://uptime-kuma-proxy:2375
+    depends_on:
+      - uptime-kuma-proxy
 
 networks:
-  main:
+  monitoring:
     external: true
-  socket_proxy:
-    external: true
+  socket_net:
+    # Local — isolated to this compose stack
 ```
-
-**Do NOT modify the docker-socket-proxy configuration** without asking the user first — it's shared infrastructure.
 
 ### Networks
 
-- `main` — used by most services for inter-service communication
-- `socket_proxy` — only for services needing Docker API access via docker-socket-proxy
+#### External Networks (shared between compose stacks)
+
+| Network | Purpose | Services |
+|---------|---------|----------|
+| `media` | Media pipeline: arrs, media-server utils, torrent clients | sonarr, radarr, bazarr, prowlarr, profilarr, tautulli, jellyseerr, kometa, daps, imagemaid, autopulse, pulsarr, plex-auto-languages, plexboxd, lettarrboxd, tracearr, stash, qbit-main, qbit-brr, autobrr, deemix, smoked-salmon, thelounge, qui, upload-assistant |
+| `monitoring` | Interconnected monitoring services | glance, gotify, watchtower, uptime-kuma, beszel, speedtest-tracker, apprise, netronome |
+| `smart_home` | IoT and home automation | mosquitto, zigbee2mqtt |
+
+**Cross-network services** (join multiple external networks):
+- **Glance** → `monitoring` + `media` (queries sonarr, radarr, tautulli, qbittorrent APIs)
+- **Gotify** → `monitoring` + `media` (receives webhooks from media services)
+- **Apprise** → `monitoring` + `media` (notification hub for media services)
+
+**Fully isolated services** (no external network — only local or none):
+- Dozzle, Dockhand, Scrutiny, Linkwarden, Open-webui, Syncthing, Rsshub, Cloudflare-ddns
+
+**Host-mode services** (bypass Docker networking): Plex, Home-Assistant
+
+#### Local Networks (per compose stack, NOT external)
+
+| Network | Compose File | Containers |
+|---------|-------------|------------|
+| `socket_net` | Any service with a dedicated socket proxy | `<service>-proxy` + app |
+| `gotify_internal` | gotify | gotify + pushtify + gotify-middleware |
+| `apprise_internal` | apprise | apprise + apprise-middleware |
+| `glance_internal` | glance | glance + f1-api |
+| `linkwarden_internal` | linkwarden | linkwarden + postgres + meilisearch |
+| `rsshub_internal` | rsshub | rsshub + rsshub-redis |
+| `profilarr_internal` | profilarr-v2 | profilarr-v2 + profilarr-parser-v2 |
+| `tracearr-network` | tracearr | tracearr + timescale + redis |
+
+**Rule**: App containers join both the external network (for inter-service communication) and the local network (for internal services). Internal-only services (postgres, redis, sidecars) only join the local network.
+
+#### Choosing a network for a new service
+
+1. **Media pipeline** (arrs, media-server, torrents) → `media`
+2. **Monitoring** (needs to talk to other monitoring services) → `monitoring`
+3. **Smart home / IoT** → `smart_home`
+4. **Standalone** (no inter-service communication needed) → no external network
+5. **Needs Docker API** → add a local `socket_net` with dedicated proxy
+6. **Has tightly-coupled sidecars** (DB, cache, middleware) → add a local `<service>_internal` network
 
 ### Volumes
 
@@ -157,7 +224,7 @@ Follow this checklist:
 5. **Create `.env.example`**: Use `VARNAME=VARNAME` format for standard vars. Include ALL variables referenced as `${VAR}` in the compose file.
 6. **Create `.env`**: Copy `.env.example` and fill with actual values from the Standard Values table
 7. **Create appdata directory**: `mkdir -p /volume2/docker/appdata/<service>/<subdirs>`
-8. **Docker API access?** → Only if the service needs it: use docker-socket-proxy pattern (see above), add `DOCKER_HOST` to env files. If not needed, do NOT add `DOCKER_HOST` or `socket_proxy` network.
+8. **Docker API access?** → Only if the service needs it: add a dedicated socket proxy sidecar with minimal permissions (see pattern above). If not needed, do NOT add a socket proxy.
 9. **Add watchtower label** to all containers
 10. **Do NOT create**: extra documentation files (DIRECTORY_SETUP.md, etc.), individual `.gitignore` files (root `.gitignore` handles all patterns)
 11. **Ask the user** if they want me to start the container and inspect the logs to see everything is working fine or if they still need to add some info in the config/.env first.
@@ -173,4 +240,4 @@ When in doubt, **look at existing services** as templates. Good references:
 - Update `.env.example` when adding new environment variables
 - Place services in appropriate category folders
 - Each service gets its own subdirectory with `docker-compose.yml`
-- Don't modify shared infrastructure (docker-socket-proxy, networks) without asking
+- Don't modify shared infrastructure (networks) without asking
