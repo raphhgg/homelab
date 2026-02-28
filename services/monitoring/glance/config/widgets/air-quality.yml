@@ -1,0 +1,42 @@
+- type: custom-api
+  title: Air Quality
+  hide-header: true
+  cache: 10m
+  url: https://api.waqi.info/feed/geo:${LAT};${LON}/?token=${AIR_QUALITY_TOKEN}
+  template: |
+    {{ $aqi := printf "%03s" (.JSON.String "data.aqi") }}
+    {{ $aqiraw := .JSON.String "data.aqi" }}
+    {{ $updated := .JSON.String "data.time.iso" }}
+    {{ $humidity := .JSON.String "data.iaqi.h.v" }}
+    {{ $ozone := .JSON.String "data.iaqi.o3.v" }}
+    {{ $pm25 := .JSON.String "data.iaqi.pm25.v" }}
+    {{ $pressure := .JSON.String "data.iaqi.p.v" }}
+
+    <div class="flex justify-center">
+      <div class="size-h5">
+        {{ if le $aqi "050" }}
+          <div class="color-primary">Good air quality</div>
+        {{ else if le $aqi "100" }}
+          <div class="color-primary">Moderate air quality</div>
+        {{ else }}
+          <div class="color-negative">Bad air quality</div>
+        {{ end }}
+      </div>
+    </div>
+
+    </br>
+
+    <div class="margin-block-2">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; justify-items: center">
+
+        <div>
+          <div class="size-h3 color-highlight">{{ $aqiraw }}</div>
+          <div class="size-h6">AQI</div>
+        </div>
+
+        <div>
+          <div class="size-h3 color-highlight">{{ $humidity }}%</div>
+          <div class="size-h6">HUMIDITY</div>
+        </div>
+      </div>
+    </div>

@@ -1,11 +1,24 @@
-version: '3.8'
-
 services:
+  beszel-proxy:
+    image: tecnativa/docker-socket-proxy
+    container_name: beszel-proxy
+    environment:
+      - CONTAINERS=1
+      - INFO=1
+      - VERSION=1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - socket_net
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
   beszel:
     image: henrygd/beszel:latest
     container_name: beszel
     networks:
-      - main
+      - monitoring
     ports:
       - 8091:8090
     volumes:
@@ -14,46 +27,64 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - APP_URL=http://10.10.2.2:8091
+      - APP_URL=http://10.10.2.41:8091
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
   beszel-agent:
-    image: henrygd/beszel-agent:alpine
+    image: henrygd/beszel-agent-nvidia:latest
     container_name: beszel-agent
     privileged: true
     networks:
-      - main
-      - socket_proxy
-    volumes:
+      - monitoring
+      - socket_net
+    # volumes:
       # Monitor only main volumes - accurate filesystem-level usage
       # For directory-level usage (docker, downloads, movies, etc.), use Cronicle scripts
-      - /volume3:/extra-filesystems/cachedev_1__Volume3:ro
-      - /volume2:/extra-filesystems/cachedev_0__Volume2:ro
+      # - /volume3:/extra-filesystems/cachedev_1__Volume3:ro
+      # - /volume2:/extra-filesystems/cachedev_0__Volume2:ro
     environment:
-      - PORT=45876
+      - LISTEN=45876
+      - DISABLE_SSH=true
       - KEY=${BESZEL_AGENT_KEY}
-      - DOCKER_HOST=${DOCKER_HOST}
+      - TOKEN=${BESZEL_AGENT_TOKEN}
+      - HUB_URL=http://beszel:8090
+      - SYSTEM_NAME=debian-vm
+      - DOCKER_HOST=tcp://beszel-proxy:2375
+      - GPU_COLLECTOR=nvidia-smi
+      - SKIP_GPU=false
+      - EXCLUDE_SMART=/dev/sda,/dev/vda,/dev/xvda
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
       # Filesystem for Disk Usage panel
-      - FILESYSTEM=/extra-filesystems/cachedev_1__Volume3
+      # - FILESYSTEM=/extra-filesystems/cachedev_1__Volume3
       # Map the I/O stats to the physical disk to fix "Device not found in diskstats"
-      - DISK=/dev/sata1 
+      # - DISK=/dev/sata1
       # Explicitly define SMART devices with types for NAS controllers
-      - SMART_DEVICES=/dev/sata1:sat,/dev/sata2:sat,/dev/nvme0n1:nvme
-    devices:
-      - /dev/sata1:/dev/sata1
-      - /dev/sata2:/dev/sata2
-      - /dev/nvme0n1:/dev/nvme0
+      # - SMART_DEVICES=/dev/sata1:sat,/dev/sata2:sat,/dev/nvme0n1:nvme
+    # devices:
+    #   - /dev/sata1:/dev/sata1
+    #   - /dev/sata2:/dev/sata2
+    #   - /dev/nvme0n1:/dev/nvme0
     cap_add:
-      - SYS_RAWIO 
+      - SYS_RAWIO
       - SYS_ADMIN
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - utility
+    depends_on:
+      - beszel-proxy
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
+  monitoring:
     external: true
-  socket_proxy:
-    external: true
+  socket_net:

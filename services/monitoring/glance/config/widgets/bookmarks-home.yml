@@ -5,25 +5,25 @@
       # color: var(--color-primary) #220 83 75 #250 80 60
       # hide-arrow: true
       links:
-      # - title: Unifi Console
-      #   url: https://10.10.0.1/network
-      #   icon: di:unifi #/assets/icons/unifi.png
       - title: Gmail
         url: https://mail.google.com/mail/u/0/#inbox
         icon: di:gmail # /assets/icons/gmail.png
+      - title: Unifi Console
+        url: https://10.10.0.1/network
+        icon: di:unifi #/assets/icons/unifi.png
       - title: Proton Pass
         url: https://pass.proton.me
         icon: di:proton-pass # /assets/icons/proton-pass.png
       - title: Proton Mail
         url: https://mail.proton.me/u/1/inbox
         icon: di:proton-mail
-      
+              
     - title: Search
       # color: var(--color-primary) #220 83 75 #200 70 50
       # hide-arrow: true
       links:
         - title: OpenWebUI
-          url: http://10.10.2.2:8087
+          url: http://10.10.2.41:8087
           icon: /assets/icons/open-webui-light.svg
         - title: Gemini
           url: https://gemini.google.com
@@ -45,3 +45,9 @@
         - title: Linear
           url: https://linear.app/raphh/view/all-issues-1aed130b09f5
           icon: di:linear-dark # /assets/icons/linear.png
+        - title: Linkwarden
+          url: http://10.10.2.41:3002/dashboard
+          icon: /assets/icons/png/linkwarden.png
+        - title: GreenCloud CP
+          url: https://cp.green.cloud/server/f59ac139-00af-41d9-a574-29abd9075bf2
+          icon: /assets/icons/greencloud.ico

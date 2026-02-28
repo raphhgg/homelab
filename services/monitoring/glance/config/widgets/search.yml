@@ -9,3 +9,9 @@
   - title: Letterboxd
     shortcut: "!lt"
     url: https://letterboxd.com/search/{QUERY}/?adult
+  - title: Dashboard Icons
+    shortcut: "!di"
+    url: https://dashboardicons.com/icons?q={QUERY}
+  # - title: Linkwarden
+  #   shortcut: "!li"
+  #   utl: http://10.10.2.41:3002/search?q={QUERY}

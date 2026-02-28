@@ -108,15 +108,6 @@ docker-compose logs beszel-agent
 - Ping monitoring (network devices)
 - DNS records, SSL certificates
 
-**Key features:**
-- 90+ notification channels via Apprise
-- Status pages for public/team visibility
-- Uptime history and response time tracking
-- Groups and tags for organization
-
-**Automated monitor setup:**
-Run `services/monitoring/uptime-kuma/setup_monitors.py` to automatically create/update monitors for all services
-
 **Monitor Types:**
 - **HTTP monitors**: For services with web UIs/APIs (Dozzle, Beszel, Uptime Kuma, Cronicle, Plex, etc.)
   - Verifies the service is responding, not just that the container is running
@@ -125,13 +116,6 @@ Run `services/monitoring/uptime-kuma/setup_monitors.py` to automatically create/
   - Simple container status check (running/stopped)
   - No authentication or endpoint requirements
 - **Port monitors**: For raw TCP/UDP port checks (Docker Socket Proxy)
-
-**Group Monitoring Limitation:**
-- Monitors are organized in groups (infrastructure, monitoring, media-server, etc.) for better organization
-- **Known issue**: When a child monitor in a group goes down, the group shows status "Down - Child inaccessible"
-- This creates redundant alerts (individual service alert + group alert)
-- **No built-in way to disable group status** - this is a known Uptime Kuma limitation (GitHub issues #4829, #3400, #3278)
-- **Workaround**: Configure notification rules to alert only on individual monitors, not on groups (if your notification system supports filtering)
 
 ### Dozzle - Log Viewer
 
@@ -153,32 +137,11 @@ Run `services/monitoring/uptime-kuma/setup_monitors.py` to automatically create/
 **Port**: 8082 (HTTP API)
 **Access**: `http://ds423plus:8082` or `http://10.10.2.2:8082`
 
-**Purpose**: Automated Docker container update management with human-in-the-loop workflow
-
-**Architecture**: HTTP API mode with Cronicle scheduling
-
 **What it does:**
 - Monitors Docker images for updates
-- Updates containers via Cronicle-scheduled jobs
+- Updates containers
 - Cleans up old images after updates
-- Label-based whitelist for selective updates (34 containers enabled)
-
-**Configuration Strategy:**
-
-**Configuration**:
-
-**Label-based Auto-Update**:
-- Label: `com.centurylinklabs.watchtower.enable=true`
-- Behavior: Automatically updates when Cronicle job runs (daily at 11 PM)
-- Enabled on: All 34 production containers
-- Sends Discord notification via Apprise showing what was updated
-
-**See [watchtower/README.md](watchtower/README.md) for complete Watchtower documentation including:**
-- HTTP API endpoints and usage
-- Cronicle integration details
-- Workflow (Phase 1 and Phase 2 with Apprise)
-- Environment variables and configuration
-- Common operations and troubleshooting
+- Label-based whitelist for selective updates
 
 ### Gotify - Push Notification Server
 
@@ -200,38 +163,6 @@ Run `services/monitoring/uptime-kuma/setup_monitors.py` to automatically create/
 - **Watchtower**: Container update notifications (via Shoutrrr)
 - **Sonarr/Radarr**: Media download notifications (native support)
 - **Kometa**: Media library updates (native support)
-
-**Applications (category-based):**
-
-| Application | Services | Priority |
-|-------------|----------|----------|
-| `monitoring` | Uptime Kuma, Beszel, Watchtower | 8 (high) |
-| `arrs` | Sonarr, Radarr, Prowlarr, Bazarr | 5 (normal) |
-| `media-server` | Plex, Tautulli, Jellyseerr, Kometa | 5 (normal) |
-| `torrents` | qBittorrent, Autobrr, Cross-seed | 5 (normal) |
-| `infrastructure` | Cloudflare DDNS, VPNs, Cronicle | 7 (elevated) |
-| `system` | Synology DSM, manual alerts | 9 (critical) |
-
-**API Usage:**
-```bash
-# Send notification
-curl "http://gotify:80/message?token=APP_TOKEN" \
-  -F "title=Alert" \
-  -F "message=Something happened" \
-  -F "priority=5"
-
-# With JSON
-curl -X POST "http://gotify:80/message" \
-  -H "X-Gotify-Key: APP_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"title": "Alert", "message": "Details", "priority": 5}'
-```
-
-**See [gotify/README.md](gotify/README.md) for complete documentation including:**
-- Application setup and token management
-- Service integration guides
-- Mobile app setup (Android/iOS)
-- API reference
 
 ## Resources
 

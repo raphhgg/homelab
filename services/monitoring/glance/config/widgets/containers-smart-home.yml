@@ -1,12 +1,12 @@
 - type: docker-containers
   title: Smart Home
   sock-path: ${DOCKER_HOST}
-  running-only: true
+  running-only: false
   hide-by-default: true
   containers:
     home-assistant:
       name: Home Assistant
       description: Smart home automation
-      url: http://10.10.2.2:8123
+      url: http://10.10.2.41:8123
       icon: /assets/icons/home-assistant.svg
       hide: false

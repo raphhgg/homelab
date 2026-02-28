@@ -1,42 +1,42 @@
 - type: docker-containers
   title: Arrs
   sock-path: ${DOCKER_HOST}
-  running-only: true
+  running-only: false
   hide-by-default: true
   containers:
     radarr:
       name: Radarr
       description: Movie management
-      url: http://10.10.2.2:7878
+      url: http://10.10.2.41:7878
       icon: /assets/icons/radarr.svg
       hide: false
     sonarr:
       name: Sonarr
       description: TV show management
-      url: http://10.10.2.2:8988
+      url: http://10.10.2.41:8988
       icon: /assets/icons/sonarr.svg
       hide: false
     prowlarr:
       name: Prowlarr
       description: Indexer manager
-      url: http://10.10.2.2:9696
+      url: http://10.10.2.41:9696
       icon: /assets/icons/prowlarr.svg
       hide: false
     bazarr:
       name: Bazarr
       description: Subtitle management
-      url: http://10.10.2.2:6767
+      url: http://10.10.2.41:6767
       icon: /assets/icons/bazarr.svg
       hide: false
     profilarr:
       name: Profilarr
       description: Profile sync for Arrs
-      url: http://10.10.2.2:6868
+      url: http://10.10.2.41:6868
       icon: /assets/icons/profilarr.svg
       hide: false
     jellyseerr:
       name: Jellyseerr
       description: Media request management
-      url: http://10.10.2.2:5055
+      url: http://10.10.2.41:5055
       icon: /assets/icons/jellyseerr.svg
       hide: false

@@ -1,156 +1,89 @@
 # Gotify
 
-Self-hosted push notification server for mobile and desktop notifications.
-
-## Overview
-
-Gotify is the central notification hub, providing:
-- Native mobile app (Android via Play Store/F-Droid, iOS via Pushover+Pushtify)
-- Web UI for viewing all notifications
-- Simple REST API for sending messages
-- Per-service application organization with separate tokens and icons
+Self-hosted push notification server. Central hub for all homelab service notifications.
 
 ## Architecture
 
 ```
-┌─────────────────┐     ┌─────────┐     ┌──────────┐
-│ Services        │────►│ Gotify  │────►│ Pushtify │────► Pushover (iOS)
-│ (Sonarr, etc.)  │     │         │     └──────────┘
-└─────────────────┘     │         │────► Android App
-                        │         │────► Web UI
-                        └─────────┘
+Services ──► Gotify ──► Pushtify ──► Pushover (iOS)
+                   ├──► Android App
+                   └──► Web UI
 ```
 
-## Quick Start
+- **Gotify**: receives notifications from all services via REST API
+- **Pushtify**: listens to Gotify's WebSocket stream and forwards to Pushover for iOS push notifications
+- **Gotify Middleware**: reformats webhook payloads (Sonarr, Radarr, Autobrr) into richer Gotify messages with posters
 
-1. Copy `.env.example` to `.env` and configure
-2. Deploy: `docker-compose up -d`
-3. Access UI: `http://10.10.2.2:8093`
-4. Run `./setup_applications.sh` to create all apps with icons
+## Priority System
 
-## Applications & Tokens
+### Gotify Priorities (0-10)
 
-Per-service applications with icons (created via setup script):
+Gotify uses a numeric scale. Pushtify maps these to Pushover priorities:
 
-### Monitoring (Priority 8 - High)
-| Application | Token | Use For |
-|-------------|-------|---------|
-| uptime-kuma | `A7Mt4oo1Tpf1.2h` | Service availability alerts |
-| beszel | `AUUlViIRVi1R3nb` | Hardware/resource alerts |
-| watchtower | `A7TOa4DIExYNniy` | Container update notifications |
-| netronome | `AohAP..m8cRlulp` | Network monitoring |
+| Gotify | → Pushover | Pushover Name | Behavior |
+|--------|------------|---------------|----------|
+| 0      | -1         | Low           | No sound/vibration, appears in notification list only |
+| 1-3    | 0          | **Normal**    | Standard notification with sound, respects quiet hours |
+| 4-7    | 1          | High          | Bypasses quiet hours (Do Not Disturb) |
+| 8-10   | 2          | Emergency     | Repeats every 60s until manually acknowledged |
 
-### Arrs (Priority 5 - Normal)
-| Application | Token | Use For |
-|-------------|-------|---------|
-| sonarr | `AV8NuUuIPzSyBwG` | TV show grabs/imports |
-| radarr | `A8YLFLcNDsnwR6A` | Movie grabs/imports |
-| prowlarr | `AWQaRT8B537e.HQ` | Indexer events |
-| bazarr | `AUs_Uat4uMApTfM` | Subtitle downloads |
+### App Priority Assignments
 
-### Media Server (Priority 5 - Normal)
-| Application | Token | Use For |
-|-------------|-------|---------|
-| tautulli | `ADVHQeQc4SBls5_` | Plex activity |
-| jellyseerr | `ArG-liIsG6Ggk5h` | Media requests |
-| kometa | `AbWOcqwd7SO4bAu` | Library updates |
-| plex | `AvFS5o-3g-0G8mb` | Plex server alerts |
+**Priority 3** (Pushover Normal) — infrastructure monitoring, you want to notice these:
 
-### Torrents (Priority 5 - Normal)
-| Application | Token | Use For |
-|-------------|-------|---------|
-| autobrr | `AWWIS.x3hHK3WAx` | Release automation |
-| qbittorrent | `AxCQKo1XYs4Sxl1` | Torrent completions |
+| App | Description |
+|-----|-------------|
+| uptime-kuma | Service availability alerts |
+| beszel | Hardware/resource alerts |
+| netronome | Network monitoring |
+| Scrutiny | Disk S.M.A.R.T health |
 
-### System (Priority 9 - Critical)
-| Application | Token | Use For |
-|-------------|-------|---------|
-| synology | `AM9EE_qRoCmBjQy` | DSM alerts, manual notifications |
+**Priority 1** (Pushover Normal) — informational, everything else:
 
-## Priority Levels
+| App | Description |
+|-----|-------------|
+| watchtower | Container updates |
+| sonarr | TV show grabs/imports |
+| radarr | Movie grabs/imports |
+| prowlarr | Indexer events |
+| bazarr | Subtitle downloads |
+| tautulli | Plex activity |
+| jellyseerr | Media requests |
+| kometa | Library metadata updates |
+| plex | Plex server alerts |
+| autobrr | Release automation |
+| synology | DSM alerts |
 
-| Priority | Gotify | Pushover | Use Case |
-|----------|--------|----------|----------|
-| 0 | Silent | Lowest | Logged only |
-| 1-3 | Low | Low | Informational |
-| 4-7 | Normal | Normal | Downloads, updates |
-| 8-10 | High | High (bypasses DND) | Service down, critical |
+Both tiers map to Pushover Normal (sound, respects quiet hours). The split allows future differentiation if needed.
 
-## Service Configuration
+## Pushtify (Gotify → Pushover Bridge)
 
-### Shoutrrr Format (Beszel, Watchtower)
+Pushtify connects to Gotify's WebSocket and forwards messages to Pushover for iOS push notifications.
+
+Per-app Pushover tokens are configured in `.env` using the naming convention `<APPNAME>_PUSHOVER_TOKEN`. Create Pushover apps at https://pushover.net/apps.
+
+Apps without a token are silently skipped (unless `PUSHOVER_DEFAULT_TOKEN` is set as fallback).
+
+## Service Configuration Examples
+
+### Shoutrrr (Beszel, Watchtower, Netronome)
 ```
-gotify://gotify:80/TOKEN?priority=8&disabletls=yes
+gotify://gotify:80/TOKEN?disabletls=yes
 ```
+Priority is controlled by the Gotify app's `defaultPriority`, not the Shoutrrr URL.
+
+### Sonarr / Radarr
+Settings → Connect → Gotify:
+- Server: `http://gotify:80`
+- Token: use the app token from Gotify UI
 
 ### Uptime Kuma
-Settings > Notifications > Add > Gotify:
+Settings → Notifications → Gotify:
 - Server URL: `http://gotify:80`
-- Token: `A7Mt4oo1Tpf1.2h`
-- Priority: 8
-
-### Beszel
-Settings > Notifications:
-```
-gotify://gotify:80/AUUlViIRVi1R3nb?priority=8&disabletls=yes
-```
-
-### Sonarr/Radarr
-Settings > Connect > Add > Gotify:
-- Server: `http://gotify:80`
-- Token: (use sonarr/radarr token from table)
-- Priority: 5
-
-### Tautulli
-Settings > Notification Agents > Add > Gotify:
-- Gotify URL: `http://gotify:80`
-- API Key: `ADVHQeQc4SBls5_`
-
-### Autobrr
-Settings > Notifications > Add > Gotify:
-- Host: `http://gotify:80`
-- Token: `AWWIS.x3hHK3WAx`
-- Priority: 5
-
-## iOS Push Notifications (Pushtify + Pushover)
-
-Since Gotify doesn't natively support iOS push, we use Pushtify to bridge to Pushover:
-
-1. Install [Pushover app](https://pushover.net/) on iOS ($5 one-time)
-2. Get your User Key from Pushover dashboard
-3. Create a Gotify **Client** (not Application) for Pushtify
-4. Configure in `.env`:
-   ```
-   GOTIFY_CLIENT_TOKEN=<client_token>
-   PUSHOVER_USERKEY=<your_pushover_user_key>
-   ```
-
-## API Usage
-
-```bash
-# Send test notification
-curl "http://10.10.2.2:8093/message?token=AM9EE_qRoCmBjQy" \
-  -F "title=Test" \
-  -F "message=Hello from Gotify!" \
-  -F "priority=5"
-```
+- Token: use the app token from Gotify UI
 
 ## Troubleshooting
 
-### Shoutrrr "HTTP response to HTTPS client" error
-Add `&disabletls=yes` to the URL:
-```
-gotify://gotify:80/TOKEN?priority=8&disabletls=yes
-```
-
-### Notifications not forwarded to Pushover
-1. Check Pushtify logs: `docker logs pushtify`
-2. Verify GOTIFY_CLIENT_TOKEN is a **Client** token, not an Application token
-3. Verify PUSHOVER_USERKEY is correct
-
-## References
-
-- [Gotify Documentation](https://gotify.net/docs/)
-- [Shoutrrr Gotify](https://containrrr.dev/shoutrrr/v0.8/services/gotify/)
-- [Pushtify](https://github.com/sebw/pushtify)
-- [Pushover](https://pushover.net/)
+- **Shoutrrr "HTTP response to HTTPS client"**: add `&disabletls=yes` to the URL
+- **Notifications not on iOS**: check `docker logs pushtify` — verify the app is "mapped" at startup
+- **Pushover "expire must be supplied"**: Gotify priority 8+ maps to Pushover Emergency which requires retry/expire (handled by Pushtify)

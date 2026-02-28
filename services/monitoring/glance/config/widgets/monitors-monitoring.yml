@@ -3,20 +3,23 @@
   cache: 1m
   sites:
     - title: Beszel
-      url: http://10.10.2.2:8091
+      url: http://10.10.2.41:8091
       icon: /assets/icons/beszel.svg
     - title: Netronome
-      url: http://10.10.2.2:7575
+      url: http://10.10.2.41:7575
       icon: /assets/icons/png/netronome.png
     - title: Uptime Kuma
-      url: http://10.10.2.2:3001
+      url: http://10.10.2.41:3001
       icon: /assets/icons/uptime-kuma.svg    
     - title: Dozzle
-      url: http://10.10.2.2:8088
+      url: http://10.10.2.41:8088
       icon: /assets/icons/dozzle.svg 
     - title: Scrutiny
-      url: http://10.10.2.2:8092/web/dashboard
+      url: http://10.10.2.41:8092/web/dashboard
       icon: /assets/icons/scrutiny.svg
     - title: Speedtest Tracker
-      url: http://10.10.2.2:8076
+      url: http://10.10.2.41:8076
       icon: /assets/icons/speedtest.svg
+    - title: Dockhand
+      url: http://10.10.2.41:3000/
+      icon: /assets/icons/png/dockhand.png

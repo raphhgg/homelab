@@ -1,7 +1,20 @@
 services:
+  glance-proxy:
+    image: tecnativa/docker-socket-proxy
+    container_name: glance-proxy
+    environment:
+      - CONTAINERS=1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - socket_net
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
   glance:
     container_name: glance
-    image: glanceapp/glance
+    image: ghcr.io/panonim/dynacat:1.1.0
     restart: always
     env_file:
       - .env
@@ -13,8 +26,12 @@ services:
     ports:
       - 8070:8080
     networks:
-      - main
-      - socket_proxy
+      - monitoring
+      - media
+      - socket_net
+      - glance_internal
+    depends_on:
+      - glance-proxy
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
@@ -29,12 +46,14 @@ services:
     ports:
       - 4463:4463
     networks:
-      - main
+      - glance_internal
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
+  monitoring:
     external: true
-  socket_proxy:
+  media:
     external: true
+  socket_net:
+  glance_internal:

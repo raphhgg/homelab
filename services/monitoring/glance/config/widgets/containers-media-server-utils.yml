@@ -1,7 +1,7 @@
 - type: docker-containers
   title: Utils
   sock-path: ${DOCKER_HOST}
-  running-only: true
+  running-only: false
   hide-by-default: true
   containers:
     kometa:
@@ -37,12 +37,24 @@
       name: Lettarrboxd New Releases
       icon: /assets/icons/letterboxd-light.svg
       hide: false
-    # lettarrboxd:
-    #   # name: Lettarrboxd
-    #   # description: Sync Letterboxd watchlist to radarr
-    #   icon: /assets/icons/letterboxd-light.svg
-    #   hide: false
-    # lettarrboxd-new-release:
-    #   icon: /assets/icons/letterboxd-light.svg
-    #   hide: false
+    plexboxd:
+      name: Plexboxd
+      description: Discord bot to send review to Letterboxd
+      icon: di:discord
+      hide: false
+    pushtify:
+      name: Pushtify
+      description: Pushover utils for Gotify
+      icon: di:gotify
+      hide: false
+    rsshub:
+      name: Rsshub
+      description: Self-hosted RSS feeds
+      icon: /assets/icons/png/rsshub.png
+      hide: false
+    umtk:
+      name: UMTK
+      description: Upcoming Movies & TV Shows for Kometa
+      icon: /assets/icons/kometa.png
+      hide: false
       

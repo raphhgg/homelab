@@ -4,7 +4,7 @@ services:
     container_name: netronome
     user: 0000:0000
     networks:
-      - main
+      - monitoring
     ports:
       - 7575:7575
     volumes:
@@ -27,14 +27,15 @@ services:
   netronome-agent:
     image: ghcr.io/autobrr/netronome:latest
     container_name: netronome-agent
-    command: agent --config /config/agent-config.toml
+    hostname: debian-vm
+    command: agent --config /config/agent-vm.toml
     networks:
-      - main
+      - monitoring
     ports:
       - 8200:8200
     pid: host
     volumes:
-      - ${DOCKER_APPDATA_PATH}/netronome/agent-config.toml:/config/agent-config.toml:ro
+      - ${DOCKER_APPDATA_PATH}/netronome/agent-vm.toml:/config/agent-vm.toml:ro
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /volume2:/volume2:ro
@@ -43,10 +44,11 @@ services:
       - TZ=${TZ}
       - HOST_PROC=/host/proc
       - HOST_SYS=/host/sys
+      - NETRONOME__AGENT_API_KEY=${NETRONOME_AGENT_API_KEY}
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
+  monitoring:
     external: true

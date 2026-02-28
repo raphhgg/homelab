@@ -1,0 +1,16 @@
+- type: playing
+  hosts:
+    - url: plex:${PLEX_URL}
+      token: ${PLEX_TOKEN}
+  title: NOW PLAYING
+  compact: false
+  small-column: true
+  show-thumbnail: true
+  play-state: "indicator"
+  full-thumbnail: true
+  show-progress-bar: true
+  group-by-host: false
+  show-paused: true
+  show-progress-info: true
+  time-format: 24h
+  update-interval: 10s

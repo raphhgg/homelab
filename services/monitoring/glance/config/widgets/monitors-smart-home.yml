@@ -1,0 +1,13 @@
+- type: monitor
+  title: Smart Home
+  cache: 1m
+  sites:
+    - title: Home Assistant
+      url: http://10.10.2.41:8123/home-desktop/home
+      icon: /assets/icons/png/home-assistant.png
+    - title: Zigbee2MQTT
+      url: http://10.10.2.41:8090/
+      icon: di:zigbee2mqtt-light
+    - title: SMLight SLZB-MR1
+      url: http://10.10.3.108/
+      icon: /assets/icons/png/smlight.png

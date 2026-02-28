@@ -1,17 +1,33 @@
-version: '3.8'
-
 services:
+  watchtower-proxy:
+    image: tecnativa/docker-socket-proxy
+    container_name: watchtower-proxy
+    environment:
+      - CONTAINERS=1
+      - IMAGES=1
+      - NETWORKS=1
+      - VOLUMES=1
+      - POST=1
+      - DELETE=1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - socket_net
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
   watchtower:
     image: nickfedor/watchtower
     container_name: watchtower
     networks:
-      - main
-      - socket_proxy
+      - monitoring
+      - socket_net
     ports:
       - 8082:8080  # HTTP API port
     environment:
       - TZ=${TZ}
-      - DOCKER_HOST=${DOCKER_HOST}
+      - DOCKER_HOST=tcp://watchtower-proxy:2375
 
       # SCHEDULED MODE - Runs daily at 05:00 (after ImageMaid completes at 04:00)
       - WATCHTOWER_SCHEDULE=0 0 5 * * *
@@ -21,6 +37,23 @@ services:
 
       # Report mode - send single summary notification instead of per-container
       - WATCHTOWER_NOTIFICATION_REPORT=true
+
+      # Custom template: only show updated/failed containers (exclude "Fresh")
+      - |
+        WATCHTOWER_NOTIFICATION_TEMPLATE=
+        {{- if .Report -}}
+        {{- with .Report -}}
+        {{len .Scanned}} Scanned, {{len .Updated}} Updated, {{len .Failed}} Failed
+        {{- range .Updated}}
+        - {{.Name}} ({{.ImageName}}): {{.CurrentImageID.ShortID}} updated to {{.LatestImageID.ShortID}}
+        {{- end -}}
+        {{- range .Failed}}
+        - {{.Name}} ({{.ImageName}}): {{.State}}: {{.Error}}
+        {{- end -}}
+        {{- end -}}
+        {{- else -}}
+        {{range .Entries -}}{{.Message}}{{"\n"}}{{- end -}}
+        {{- end -}}
 
       # HTTP API MODE - Manual trigger via API calls (optional, alongside schedule)
       - WATCHTOWER_HTTP_API_UPDATE=true
@@ -42,12 +75,13 @@ services:
       # Logging
       - WATCHTOWER_LOG_LEVEL=info
 
+    depends_on:
+      - watchtower-proxy
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
+  monitoring:
     external: true
-  socket_proxy:
-    external: true
+  socket_net:

@@ -7,19 +7,19 @@
     qbit-main:
       name: qbit-main
       description: Primary torrent client
-      url: http://10.10.2.2:8080
+      url: http://10.10.2.41:8080
       icon: /assets/icons/qbittorrent.svg
       hide: false
     qbit-cross:
       name: qbit-cross
       description: Cross-seed torrent client
-      url: http://10.10.2.2:8084
+      url: http://10.10.2.41:8084
       icon: /assets/icons/qbittorrent.svg
       hide: false
     qbit-brr:
       name: qbit-brr
       description: Autobrr torrent client
-      url: http://10.10.2.2:8085
+      url: http://10.10.2.41:8085
       icon: /assets/icons/qbittorrent.svg
       hide: false
     cross-seed:

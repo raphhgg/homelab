@@ -1,12 +1,23 @@
-version: '3.8'
-
 services:
+  uptime-kuma-proxy:
+    image: tecnativa/docker-socket-proxy
+    container_name: uptime-kuma-proxy
+    environment:
+      - CONTAINERS=1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - socket_net
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
   uptime-kuma:
     image: louislam/uptime-kuma:2
     container_name: uptime-kuma
     networks:
-      - main
-      - socket_proxy
+      - monitoring
+      - socket_net
     ports:
       - 3001:3001
     volumes:
@@ -15,13 +26,14 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - DOCKER_HOST=${DOCKER_HOST}
+      - DOCKER_HOST=tcp://uptime-kuma-proxy:2375
+    depends_on:
+      - uptime-kuma-proxy
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
+  monitoring:
     external: true
-  socket_proxy:
-    external: true
+  socket_net:

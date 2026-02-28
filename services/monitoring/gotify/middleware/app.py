@@ -3,7 +3,7 @@ import logging
 from flask import Flask, request, jsonify
 import requests
 
-from formatters import sonarr, radarr, autobrr
+from formatters import sonarr, radarr, autobrr, uptime_kuma
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -15,12 +15,14 @@ TOKENS = {
     "sonarr": os.environ.get("SONARR_GOTIFY_TOKEN", ""),
     "radarr": os.environ.get("RADARR_GOTIFY_TOKEN", ""),
     "autobrr": os.environ.get("AUTOBRR_GOTIFY_TOKEN", ""),
+    "uptime-kuma": os.environ.get("UPTIME_KUMA_GOTIFY_TOKEN", ""),
 }
 
 FORMATTERS = {
     "sonarr": sonarr.format_webhook,
     "radarr": radarr.format_webhook,
     "autobrr": autobrr.format_webhook,
+    "uptime-kuma": uptime_kuma.format_webhook,
 }
 
 
@@ -62,10 +64,12 @@ def webhook(service):
     if not payload:
         return jsonify({"error": "invalid JSON"}), 400
 
+    log.info("[%s] payload keys: %s", service, list(payload.keys()))
+
     try:
         title, message, priority, image_url = formatter(payload)
     except Exception as e:
-        log.exception("Formatter error for %s: %s", service, e)
+        log.exception("Formatter error for %s (payload: %s): %s", service, payload, e)
         return jsonify({"error": str(e)}), 500
 
     try:

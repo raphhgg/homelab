@@ -1,18 +1,18 @@
 - type: docker-containers
   title: Sync
   sock-path: ${DOCKER_HOST}
-  running-only: true
+  running-only: false
   hide-by-default: true
   containers:
     syncthing:
       name: Syncthing
       description: File synchronization
-      url: http://10.10.2.2:8384
+      url: http://10.10.2.41:8384
       icon: /assets/icons/syncthing.svg
       hide: false
     thelounge:
       name: The Lounge
       description: IRC client
-      url: http://10.10.2.2:9001
+      url: http://10.10.2.41:9001
       icon: /assets/icons/thelounge.svg
       hide: false

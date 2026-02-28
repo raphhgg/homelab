@@ -10,3 +10,18 @@
   - title: Letterboxd
     shortcut: "!lt"
     url: https://letterboxd.com/search/{QUERY}/?adult
+  - title: Dashboard Icons
+    shortcut: "!di"
+    url: https://dashboardicons.com/icons?q={QUERY}
+  - title: Linkwarden
+    shortcut: "!li"
+    url: http://10.10.2.41:3002/search?q={QUERY}
+  - title: Radarr
+    shortcut: "!r"
+    url: http://10.10.2.41:7878/add/new?term={QUERY}
+  - title: Sonarr
+    shortcut: "!s"
+    url: http://10.10.2.41:8988/add/new?term={QUERY}
+  - title: TMDb
+    shortcut: "!tm"
+    url: https://www.themoviedb.org/search?query={QUERY}

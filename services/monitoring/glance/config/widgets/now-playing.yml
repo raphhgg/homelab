@@ -5,16 +5,17 @@
     media-server: "plex"
     base-url: ${PLEX_URL}
     api-key: ${PLEX_TOKEN}
+    compact: false
     small-column: true
-    compact: true
-    play-state: "indicator"
     show-thumbnail: true
+    play-state: "indicator"
     full-thumbnail: true
-    show-paused: true
     show-progress-bar: true
+    group-by-host: false
+    show-paused: true
     show-progress-info: true
-    progress-display: "remaining"
-    time-format: "15:04"
+    time-format: 24h
+    update-interval: 10s
   template: |
     {{ $mediaServer := .Options.StringOr "media-server" "" }}
     {{ $baseURL := .Options.StringOr "base-url" "" }}
@@ -46,7 +47,6 @@
     {{ $showPaused := .Options.BoolOr "show-paused" false }}
     {{ $showProgressBar := .Options.BoolOr "show-progress-bar" false }}
     {{ $showProgressInfo := .Options.BoolOr "show-progress-info" true }}
-    {{ $progressDisplay := .Options.StringOr "progress-display" "end-time" }}
     {{ $timeFormat := .Options.StringOr "time-format" "15:04" }}
 
     {{ $userID := "" }}
@@ -139,60 +139,6 @@
         }
         @keyframes progress-animation { to { width: 100%; } }
       </style>
-
-      <style>
-        .remaining-time {
-          font-variant-numeric: tabular-nums;
-        }
-      </style>
-      <script>
-        (function() {
-          if (window.nowPlayingTimerInitialized) return;
-          window.nowPlayingTimerInitialized = true;
-
-          function formatRemainingTime(seconds) {
-            if (seconds < 0) seconds = 0;
-            const minutes = Math.floor(seconds / 60);
-            const hours = Math.floor(minutes / 60);
-            const mins = minutes % 60;
-            if (hours > 0) {
-              return hours + 'h ' + mins + 'm';
-            }
-            return mins + 'm';
-          }
-
-          function formatEndTime(seconds, prefix) {
-            const now = new Date();
-            now.setSeconds(now.getSeconds() + seconds);
-            const hours = String(now.getHours()).padStart(2, '0');
-            const mins = String(now.getMinutes()).padStart(2, '0');
-            return prefix + hours + ':' + mins;
-          }
-
-          function updateRemainingTimes() {
-            document.querySelectorAll('.remaining-time[data-remaining-seconds]').forEach(function(el) {
-              const isPaused = el.getAttribute('data-paused') === 'true';
-              if (isPaused) return;
-
-              let remaining = parseInt(el.getAttribute('data-remaining-seconds'), 10);
-              if (isNaN(remaining) || remaining <= 0) return;
-
-              remaining -= 1;
-              el.setAttribute('data-remaining-seconds', remaining);
-
-              const displayMode = el.getAttribute('data-display-mode') || 'remaining';
-              if (displayMode === 'remaining') {
-                el.textContent = formatRemainingTime(remaining);
-              } else {
-                const prefix = el.getAttribute('data-end-prefix') || '';
-                el.textContent = formatEndTime(remaining, prefix);
-              }
-            });
-          }
-
-          setInterval(updateRemainingTimes, 1000);
-        })();
-      </script>
 
       <div class="gap-10 {{ if $isSmallColumn }}flex flex-column{{ else }}media-server-session-container--grid{{ end }}">
       {{ range $i, $session := $sessions }}
@@ -383,44 +329,34 @@
                 {{ end }}
                 <li>{{ $title }}</li>
               {{ end }}
+
+              <li>
+                {{ if and $isPlaying $showProgressBar }}
+                  <div class="flex gap-10 items-center">
+                    <div class="media-server-progress-container grow">
+                      <div
+                        class ="media-server-progress-bar"
+                        data-progress="{{ $progress }}"
+                        data-remaining="{{ $remainingSeconds }}"
+                        style="
+                          width: {{ $progress }}%;
+                          animation: progress-animation {{ $remainingSeconds }}s linear forwards;"
+                      >
+                      </div>
+                    </div>
+                    {{ if $showProgressInfo }}
+                      <p>
+                        {{ if and (not $isCompact) (not $isSmallColumn) }}
+                          ends at 
+                        {{ end }}
+                        {{ $endTime }}
+                      </p>
+                    {{ end }}
+                  </div>
+                {{ end }}
+              </li>
             </ul>
           </div>
-
-          {{ if $showProgressBar }}
-          <div class="flex gap-10 items-center margin-top-10">
-            <div class="media-server-progress-container" style="flex: 1;">
-              <div
-                class="media-server-progress-bar"
-                data-progress="{{ $progress }}"
-                data-remaining="{{ $remainingSeconds }}"
-                style="
-                  width: {{ $progress }}%;
-                  animation: progress-animation {{ $remainingSeconds }}s linear forwards;"
-              >
-              </div>
-            </div>
-            {{ if $showProgressInfo }}
-              {{ $endPrefix := "" }}
-              {{ if and (not $isCompact) (not $isSmallColumn) }}
-                {{ $endPrefix = "ends at " }}
-              {{ end }}
-              <p class="shrink-0 remaining-time" data-remaining-seconds="{{ $remainingSeconds }}" data-paused="{{ not $isPlaying }}" data-display-mode="{{ $progressDisplay }}" data-end-prefix="{{ $endPrefix }}">
-                {{ if eq $progressDisplay "remaining" }}
-                  {{ $remainingMinutes := div $remainingSeconds 60 }}
-                  {{ $remainingHours := div $remainingMinutes 60 }}
-                  {{ $remainingMins := mod $remainingMinutes 60 }}
-                  {{ if gt $remainingHours 0 }}
-                    {{ $remainingHours }}h {{ $remainingMins }}m
-                  {{ else }}
-                    {{ $remainingMins }}m
-                  {{ end }}
-                {{ else }}
-                  {{ $endPrefix }}{{ $endTime }}
-                {{ end }}
-              </p>
-            {{ end }}
-          </div>
-          {{ end }}
         </div>
         {{ end }}
       {{ end }}

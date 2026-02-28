@@ -1,7 +1,7 @@
 - type: docker-containers
   title: Notifications
   sock-path: ${DOCKER_HOST}
-  running-only: true
+  running-only: false
   hide-by-default: true
   containers:
     apprise:

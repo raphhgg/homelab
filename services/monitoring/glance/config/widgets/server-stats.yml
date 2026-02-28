@@ -2,17 +2,17 @@
   title: Server Stats
   servers:
     - type: local
-      name: ds423plus
+      name: pve
       hide-swap: false
-      hide-mountpoints-by-default: true
-      mountpoints:
-        "/mnt/volume3":
-          hide: false
-          name: hdd
-        "/mnt/volume2":
-          hide: false
-          name: nvme
-    - type: remote
-      name: ubuntu-server
-      url: http://10.10.1.111:27973
-      token: et6SyJ6wDdP2kFLMEs4eHW5AGFO7HmJd
+      # hide-mountpoints-by-default: true
+      # mountpoints:
+      #   "/mnt/volume3":
+      #     hide: false
+      #     name: hdd
+      #   "/mnt/volume2":
+      #     hide: false
+      #     name: nvme
+    # - type: remote
+    #   name: ubuntu-server
+    #   url: http://10.10.2.111:27973
+    #   token: et6SyJ6wDdP2kFLMEs4eHW5AGFO7HmJd

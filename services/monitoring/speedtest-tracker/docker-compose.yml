@@ -16,10 +16,10 @@ services:
     ports:
       - 8076:80
     networks:
-      - main
+      - monitoring
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
+  monitoring:
     external: true

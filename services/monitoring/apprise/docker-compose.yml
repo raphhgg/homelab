@@ -1,11 +1,11 @@
-version: '3.8'
-
 services:
   apprise:
     image: caronc/apprise:latest
     container_name: apprise
     networks:
-      - main
+      - monitoring
+      - media
+      - apprise_internal
     ports:
       - 8089:8000  # External:Internal (8000 used by Portainer, 8090 by SABnzbd)
     environment:
@@ -31,7 +31,7 @@ services:
       dockerfile: Dockerfile
     container_name: apprise-middleware
     networks:
-      - main
+      - apprise_internal
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -47,5 +47,8 @@ services:
       - "com.centurylinklabs.watchtower.enable=false"
 
 networks:
-  main:
+  monitoring:
     external: true
+  media:
+    external: true
+  apprise_internal:

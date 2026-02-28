@@ -137,6 +137,9 @@ def send_pushover(token, title, message, priority, image_url=None):
         "priority": priority,
         "html": "1",
     }
+    if priority == "2":
+        data["retry"] = "60"
+        data["expire"] = "3600"
 
     # Attach poster image if available
     files = None
@@ -154,6 +157,35 @@ def send_pushover(token, title, message, priority, image_url=None):
     return False
 
 
+def format_shoutrrr(body):
+    """Reformat Shoutrrr notification body into a cleaner title + message.
+
+    Input:  "[CPU] High CPU Usage - Agent: **ds423plus** | CPU: **99.7%** (threshold: 29%)"
+    Output: ("CPU Alert", "High CPU Usage\nAgent: ds423plus\nCPU: 99.7% (threshold: 29%)")
+    """
+    m = re.match(r"\[(\w+)\]\s*(.+)", body)
+    if not m:
+        return None, body
+    tag = m.group(1).upper()
+    rest = m.group(2)
+
+    # Strip markdown bold for clean parsing, we'll re-add formatting later
+    rest = re.sub(r"\*\*(.+?)\*\*", r"\1", rest)
+
+    # Split "Description - Key: val | Key: val" into lines
+    parts = re.split(r"\s*[|\-]\s*", rest, maxsplit=1)
+    description = parts[0].strip()
+    details = parts[1].strip() if len(parts) > 1 else ""
+
+    # Convert remaining "Key: val | Key: val" into separate lines
+    lines = []
+    if details:
+        for part in details.split("|"):
+            lines.append(part.strip())
+
+    return description, "\n".join(lines)
+
+
 def on_message(ws, message):
     try:
         msg = json.loads(message)
@@ -161,6 +193,11 @@ def on_message(ws, message):
         title = msg.get("title", "Gotify")
         body = msg.get("message", "")
         priority = map_priority(msg.get("priority", 0))
+
+        # Reformat generic Shoutrrr notifications
+        if title == "Shoutrrr notification":
+            shoutrrr_title, body = format_shoutrrr(body)
+            title = shoutrrr_title or "Alert"
 
         app_info = app_map.get(app_id, {})
         app_name = app_info.get("name", f"unknown-{app_id}")
