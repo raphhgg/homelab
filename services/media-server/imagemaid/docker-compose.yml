@@ -2,14 +2,14 @@ services:
   imagemaid:
     image: kometateam/imagemaid
     container_name: imagemaid
-    # Scheduled to run daily at 04:00 (after Kometa night cycle completes at ~03:00)
+    # Scheduled to run daily at 07:00 (after all Kometa runs complete)
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
       - PLEX_URL=${PLEX_URL}
       - PLEX_TOKEN=${PLEX_TOKEN}
-      - SCHEDULE=04:00|daily
+      - SCHEDULE=07:00|daily
       - MODE=remove
       - EMPTY_TRASH=True
       - CLEAN_BUNDLES=True
@@ -23,8 +23,8 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     networks:
-      - main
+      - media
 
 networks:
-  main:
+  media:
     external: true

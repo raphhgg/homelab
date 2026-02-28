@@ -8,9 +8,10 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
       - KOMETA_DEBUG=true
-      - KOMETA_TIMES=03:00|07:00|19:00
+      - KOMETA_TIMES=05:00|06:00|19:00
     volumes:
       - ${DOCKER_APPDATA_PATH}/kometa:/config:rw
+      - ${DOCKER_APPDATA_PATH}/umtk/kometa:/umtk-collections:ro
     restart: always
     deploy:
       resources:
@@ -20,8 +21,32 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     networks:
-      - main
+      - media
+
+  umtk:
+    image: netplexflix/umtk:latest
+    container_name: umtk
+    environment:
+      - CRON=0 1 * * *
+      - DOCKER=true
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/umtk/config:/app/config
+      - ${DOCKER_APPDATA_PATH}/umtk/video:/video
+      - ${DOCKER_APPDATA_PATH}/umtk/kometa:/app/kometa
+      - ${DOCKER_APPDATA_PATH}/umtk/logs:/app/logs
+      - ${DOCKER_APPDATA_PATH}/umtk/scripts:/app/scripts:ro
+      - ${DOCKER_APPDATA_PATH}/umtk/scripts/run-umtk.sh:/app/run-umtk.sh:ro
+      - ${MEDIAS_PATH}/movies/movies:/umtkmovies
+      - ${MEDIAS_PATH}/tvshows/tvshows:/umtktv
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - media
 
 networks:
-  main:
+  media:
     external: true

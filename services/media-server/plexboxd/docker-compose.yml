@@ -1,20 +1,19 @@
-version: '3.8'
-
 services:
   plexboxd:
     image: ghcr.io/nichtlegacy/plexboxd:latest
     container_name: plexboxd
     restart: always
+    shm_size: 2g
     env_file:
       - .env
     volumes:
       - ${DOCKER_APPDATA_PATH}/plexboxd/logs:/app/logs
       - ${DOCKER_APPDATA_PATH}/plexboxd/data:/app/data
     networks:
-      - main
+      - media
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
+  media:
     external: true

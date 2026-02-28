@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   thelounge:
     image: ghcr.io/thelounge/thelounge
@@ -10,7 +8,7 @@ services:
     ports:
       - 9001:9000
     networks:
-      - main
+      - media
     volumes:
       - ${DOCKER_APPDATA_PATH}/thelounge:/var/opt/thelounge
     restart: always
@@ -18,5 +16,5 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
+  media:
     external: true

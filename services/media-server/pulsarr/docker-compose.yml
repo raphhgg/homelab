@@ -1,10 +1,9 @@
-version: '3.8'
 services:
   pulsarr:
     image: lakker/pulsarr:node
     container_name: pulsarr
     networks:
-      - main
+      - media
     ports:
       - 3010:3003
     volumes:
@@ -15,5 +14,5 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
+  media:
     external: true

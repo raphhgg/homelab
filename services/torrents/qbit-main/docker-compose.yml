@@ -10,7 +10,7 @@ services:
       - UMASK=${UMASK}
       - TZ=${TZ}
       - VPN_ENABLED=true
-      - VPN_CONF=wg0-fix
+      - VPN_CONF=wg0
       - VPN_PROVIDER=pia
       - VPN_LAN_NETWORK=10.10.2.0/24
       - VPN_LAN_LEAK_ENABLED=false
@@ -25,8 +25,6 @@ services:
       - VPN_PIA_PORT_FORWARD_PERSIST=false
       - PRIVOXY_ENABLED=false
       - UNBOUND_ENABLED=false
-      - TP_HOTIO=true
-      - TP_THEME=catppuccin-mocha
       - S6_LOGGING=1
       - LIBTORRENT=v1
       - WEBUI_PORTS=8080/tcp,8080/udp
@@ -38,7 +36,6 @@ services:
       - ${DOWNLOAD_PATH}/torrents:/downloads/torrents:rw
       - ${DOWNLOAD_PATH}/music:/downloads/music:rw
       - ${MEDIAS_PATH}:/data/medias:rw
-      - ${DOCKER_APPDATA_PATH}/themepark/98-themepark-qbittorrent:/etc/cont-init.d/98-themepark:rw
     cap_add:
       - NET_ADMIN
     sysctls:
@@ -56,8 +53,8 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     networks:
-      - main
+      - media
 
 networks:
-  main:
+  media:
     external: true

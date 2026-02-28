@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   qui:
     image: ghcr.io/autobrr/qui
@@ -39,10 +37,10 @@ services:
       QUI__LOG_PATH: "/config/logs/qui.log"
     restart: always
     networks:
-      - main
+      - media
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
+  media:
     external: true

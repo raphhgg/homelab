@@ -1,0 +1,13 @@
+-- Profilarr v2 Initial State Migration
+-- Created: 2026-02-20
+-- Purpose: Snapshot of user ops before any custom migrations
+-- To restore: DELETE FROM pcd_ops WHERE origin = 'user' AND id > 62;
+--
+-- Current user ops (all inactive - test changes that were reverted):
+-- id=59: superseded - test description change on 1080p Balanced
+-- id=60: superseded - test score change on 1080p Balanced Tier 1
+-- id=61: dropped - revert of id=59
+-- id=62: dropped - revert of id=60
+--
+-- Base ops: 58 ops (id 1-58), all 'published' state from Dictionarry Database v2.0.0
+-- Max op id: 62

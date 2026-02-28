@@ -1,14 +1,8 @@
-version: '3.8'
-
 services:
   plex:
     image: ghcr.io/hotio/plex
     container_name: plex
     network_mode: host
-    # mem_limit: 8g
-    # mem_reservation: 2g
-    # memswap_limit: 10g
-    # cpu_shares: 1024
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -19,16 +13,23 @@ services:
       - PLEX_NO_AUTH_NETWORKS=${PLEX_NO_AUTH_NETWORKS}
       - PLEX_BETA_INSTALL=false
       - PLEX_PURGE_CODECS=true
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:32400/web
     volumes:
       - ${DOCKER_APPDATA_PATH}/plex/config:/config
       - ${DOCKER_APPDATA_PATH}/plex/transcode:/transcode
-      - ${MEDIAS_PATH:-/volume3/data/medias}:/data/medias
+      - ${MEDIAS_PATH}:/data/medias
     ports:
       - 32400:32400
-    devices:
-      - /dev/dri:/dev/dri
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu, utility, video]
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"

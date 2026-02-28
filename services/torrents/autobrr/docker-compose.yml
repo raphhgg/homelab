@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   autobrr:
     image: ghcr.io/autobrr/autobrr
@@ -10,7 +8,7 @@ services:
     ports:
       - 7474:7474
     networks:
-      - main
+      - media
     volumes:
       - ${DOCKER_APPDATA_PATH}/autobrr:/config
     restart: always
@@ -18,5 +16,5 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
+  media:
     external: true

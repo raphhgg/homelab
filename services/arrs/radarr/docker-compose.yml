@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   radarr:
     image: ghcr.io/hotio/radarr
@@ -20,8 +18,8 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     networks:
-      - main
+      - media
 
 networks:
-  main:
+  media:
     external: true

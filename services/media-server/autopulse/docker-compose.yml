@@ -1,11 +1,9 @@
-version: '3.8'
 services:
   autopulse:
     image: danonline/autopulse:latest
     container_name: autopulse
     networks:
-      - main
-      - socket_proxy
+      - media
     ports:
       - 2875:2875
     environment:
@@ -16,7 +14,6 @@ services:
       - AUTOPULSE__APP__DATABASE_URL=sqlite:///app/data/autopulse.db
       - AUTOPULSE__APP__USERNAME=${AUTOPULSE_USERNAME}
       - AUTOPULSE__APP__PASSWORD=${AUTOPULSE_PASSWORD}
-      - DOCKER_HOST=${DOCKER_HOST}
     volumes:
       - ${DOCKER_APPDATA_PATH}/autopulse/config.yaml:/app/config.yaml
       - ${DOCKER_APPDATA_PATH}/autopulse/data:/app/data
@@ -27,7 +24,5 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
-    external: true
-  socket_proxy:
+  media:
     external: true

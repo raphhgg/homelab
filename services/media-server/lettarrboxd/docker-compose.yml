@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   lettarrboxd:
     image: ryanpage/lettarrboxd:latest
@@ -26,7 +24,7 @@ services:
       glance.description: Sync Letterboxd watchlist to radarr
       glance.id: lettarrboxd
     networks:
-      - main
+      - media
 
   lettarrboxd-new-releases:
     image: ryanpage/lettarrboxd:latest
@@ -52,8 +50,8 @@ services:
       glance.parent: lettarrboxd
       glance.id: lettarrboxd-new-releases
     networks:
-      - main
+      - media
 
 networks:
-  main:
+  media:
     external: true

@@ -25,8 +25,6 @@ services:
       - VPN_PIA_PORT_FORWARD_PERSIST=false
       - PRIVOXY_ENABLED=false
       - UNBOUND_ENABLED=false
-      - TP_HOTIO=true
-      - TP_THEME=catppuccin-mocha
       - S6_LOGGING=1
       - LIBTORRENT=v1
       - WEBUI_PORTS=8084/tcp,8084/udp
@@ -37,7 +35,6 @@ services:
       - ${DOCKER_APPDATA_PATH}/qbit-cross:/config:rw
       - ${DOWNLOAD_PATH}/torrents:/downloads/torrents:rw
       - ${MEDIAS_PATH}:/data/medias:rw
-      - ${DOCKER_APPDATA_PATH}/themepark/98-themepark-qbittorrent:/etc/cont-init.d/98-themepark:rw
     cap_add:
       - NET_ADMIN
     sysctls:
@@ -55,8 +52,8 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     networks:
-      - main
+      - media
 
 networks:
-  main:
+  media:
     external: true

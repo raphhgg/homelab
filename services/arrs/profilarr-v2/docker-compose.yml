@@ -1,0 +1,39 @@
+services:
+  profilarr-v2:
+    image: ghcr.io/dictionarry-hub/profilarr:develop
+    container_name: profilarr-v2
+    networks:
+      - media
+      - profilarr_internal
+    ports:
+      - 6869:6868
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/profilarr-v2:/config
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - PARSER_HOST=profilarr-parser-v2
+      - PARSER_PORT=5000
+      - AUTH=local
+    depends_on:
+      - profilarr-parser-v2
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  profilarr-parser-v2:
+    image: ghcr.io/dictionarry-hub/profilarr-parser:develop
+    container_name: profilarr-parser-v2
+    networks:
+      - profilarr_internal
+    expose:
+      - "5000"
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  media:
+    external: true
+  profilarr_internal:

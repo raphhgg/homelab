@@ -3,7 +3,7 @@ services:
     image: ghcr.io/bambanah/deemix:latest
     container_name: deemix
     networks:
-      - main
+      - media
     ports:
       - 6595:6595
     volumes:
@@ -19,5 +19,5 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
+  media:
     external: true

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   cross-seed:
     image: ghcr.io/cross-seed/cross-seed
@@ -10,7 +8,7 @@ services:
     ports:
       - 2468:2468
     networks:
-      main:
+      media:
         ipv4_address: 172.21.0.130
     volumes:
       - ${DOCKER_APPDATA_PATH}/cross-seed:/config
@@ -27,7 +25,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
+  media:
     external: true
     ipam:
       driver: default

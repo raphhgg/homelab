@@ -18,7 +18,7 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     networks:
-      - main
+      - media
 
   daps-ui:
     image: monster117/daps-ui:nightly
@@ -30,7 +30,7 @@ services:
       - TZ=${TZ}
       - APP_MODE=WEB
       - UMASK=${UMASK}
-      - BORDER_SIZE=50
+      - BORDER_SIZE=26
     ports:
       - 8001:8000
     volumes:
@@ -44,8 +44,8 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     networks:
-      - main
+      - media
 
 networks:
-  main:
+  media:
     external: true

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   upload-assistant:
     image: ghcr.io/audionut/upload-assistant:web-ui
@@ -12,7 +10,7 @@ services:
     ports:
       - 8086:5000
     networks:
-      - main
+      - media
     volumes:
       - ${DOCKER_APPDATA_PATH}/upload-assistant/config.py:/Upload-Assistant/data/config.py:ro
       - ${MEDIAS_PATH}/downloads/torrents/complete:/torrent_storage_dir:ro
@@ -25,5 +23,5 @@ services:
     command: tail -f /dev/null
 
 networks:
-  main:
+  media:
     external: true

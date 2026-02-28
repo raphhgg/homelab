@@ -21,7 +21,7 @@ services:
     volumes:
       - ${DOCKER_APPDATA_PATH}/tracearr:/config
     networks:
-      - main
+      - media
       - tracearr-network
     ports:
       - 3003:3000
@@ -64,7 +64,7 @@ services:
       - tracearr-network
 
 networks:
-  main:
+  media:
     external: true
   tracearr-network:
     driver: bridge

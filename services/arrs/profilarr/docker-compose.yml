@@ -1,11 +1,9 @@
-version: '3.8'
-
 services:
   profilarr:
     image: santiagosayshey/profilarr:beta
     container_name: profilarr
     networks:
-      - main
+      - media
     ports:
       - 6868:6868
     environment:
@@ -21,5 +19,5 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
+  media:
     external: true

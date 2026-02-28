@@ -11,7 +11,7 @@ services:
     volumes:
       - ${DOCKER_APPDATA_PATH}/tautulli:/config
     networks:
-      - main
+      - media
     ports:
       - 8181:8181
     restart: always
@@ -19,5 +19,5 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
+  media:
     external: true

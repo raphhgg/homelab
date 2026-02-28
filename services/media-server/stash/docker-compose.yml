@@ -23,7 +23,7 @@ services:
       - ${DOCKER_APPDATA_PATH}/stash/blobs:/blobs
       - ${DOCKER_APPDATA_PATH}/stash/generated:/generated
     networks:
-      - main
+      - media
     logging:
       driver: "json-file"
       options:
@@ -33,5 +33,5 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
+  media:
     external: true

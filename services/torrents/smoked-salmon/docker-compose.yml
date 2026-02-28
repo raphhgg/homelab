@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   smoked-salmon:
     image: ghcr.io/smokin-salmon/smoked-salmon:latest
@@ -12,7 +10,7 @@ services:
     ports:
       - 55110:55110
     networks:
-      - main
+      - media
     volumes:
       # Mount parent music directory to allow hardlinks between subdirectories
       - ${DOWNLOAD_PATH}/music:/app/music
@@ -28,5 +26,5 @@ services:
     command: web
 
 networks:
-  main:
+  media:
     external: true
