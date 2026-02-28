@@ -1,11 +1,7 @@
-version: '3.8'
-
 services:
   open-webui:
     image: ghcr.io/open-webui/open-webui:main
     container_name: open-webui
-    networks:
-      - main
     ports:
       - 8087:8080
     volumes:
@@ -18,7 +14,3 @@ services:
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
-
-networks:
-  main:
-    external: true

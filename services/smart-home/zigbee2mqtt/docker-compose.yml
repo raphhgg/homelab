@@ -1,0 +1,21 @@
+services:
+  zigbee2mqtt:
+    image: ghcr.io/koenkk/zigbee2mqtt
+    container_name: zigbee2mqtt
+    networks:
+      - smart_home
+    ports:
+      - 8090:8080
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/zigbee2mqtt/data:/app/data
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  smart_home:
+    external: true

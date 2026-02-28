@@ -1,0 +1,17 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: mosquitto
+    networks:
+      - smart_home
+    ports:
+      - 1883:1883
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/mosquitto:/mosquitto
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  smart_home:
+    external: true

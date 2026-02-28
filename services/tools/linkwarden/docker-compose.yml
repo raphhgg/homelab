@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    restart: always
+    env_file: .env
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/linkwarden/pgdata:/var/lib/postgresql/data
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - linkwarden_internal
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.12.8
+    container_name: meilisearch
+    restart: always
+    environment:
+      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY}
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/linkwarden/meili_data:/meili_data
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - linkwarden_internal
+
+  linkwarden:
+    image: ghcr.io/linkwarden/linkwarden:latest
+    container_name: linkwarden
+    restart: always
+    ports:
+      - 3002:3000
+    depends_on:
+      - postgres
+      - meilisearch
+    environment:
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY}
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/linkwarden/data:/data/data
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - linkwarden_internal
+
+networks:
+  linkwarden_internal:

@@ -13,7 +13,7 @@ services:
     depends_on:
       - rsshub-redis
     networks:
-      - main
+      - rsshub_internal
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
@@ -22,10 +22,9 @@ services:
     container_name: rsshub-redis
     restart: always
     networks:
-      - main
+      - rsshub_internal
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
-  main:
-    external: true
+  rsshub_internal:

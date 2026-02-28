@@ -1,0 +1,805 @@
+# Bubble Card Desktop Dashboard
+# Paste this into HA > Dashboard > Edit > Raw Configuration Editor
+#
+# Prerequisites:
+# - Bubble Card installed via HACS
+# - Optional integrations: Tautulli, Sonarr, Radarr, Speedtest Tracker, Uptime Kuma, Scrutiny
+
+views:
+  - title: Home
+    path: home
+    cards:
+      # ============================================================
+      # VISIBLE CARDS (main view - wider desktop layout)
+      # ============================================================
+
+      # --- Weather ---
+      - type: custom:bubble-card
+        card_type: button
+        button_type: state
+        entity: weather.forecast_home
+        name: Weather
+        show_state: true
+        scrolling_effect: false
+        card_layout: large-2-rows
+        columns: 4
+        sub_button:
+          - icon: mdi:thermometer-low
+            entity: sensor.forecast_low_today
+            show_background: false
+            show_state: true
+            show_icon: true
+          - icon: mdi:weather-windy
+            entity: weather.forecast_home
+            attribute: wind_speed
+            show_background: false
+            show_attribute: true
+            show_icon: true
+          - icon: mdi:thermometer-high
+            entity: sensor.forecast_high_today
+            show_background: false
+            show_state: true
+            show_icon: true
+          - icon: mdi:weather-pouring
+            entity: sensor.forecast_precipitation_today
+            show_background: false
+            show_state: true
+            show_icon: true
+        styles: |
+          .bubble-button-card-container {
+            min-height: 80px;
+          }
+          .bubble-icon-container {
+            box-sizing: border-box;
+            padding: 8px;
+          }
+          .bubble-name {
+            border-radius: 2px;
+            background-color: ${
+              hass.states[entity].attributes.temperature < 10
+                ? 'var(--info-color)'
+                : hass.states[entity].attributes.temperature > 35
+                ? 'var(--error-color)'
+                : hass.states[entity].attributes.temperature > 28
+                ? 'var(--warning-color)'
+                : ''
+            };
+            height: 20px;
+            margin-left: -4px;
+            padding: 0 4px;
+            width: fit-content;
+            z-index: 1;
+          }
+          .bubble-name::after {
+            content: " · ${hass.states[entity].attributes.temperature}°C";
+          }
+          .bubble-state {
+            height: 20px;
+          }
+          .rows-2 .bubble-sub-button-container {
+            gap: 4px 8px !important;
+          }
+          .bubble-sub-button {
+            padding: 0 4px;
+          }
+          .bubble-sub-button-1 {
+            background-color: ${
+              hass.states['sensor.forecast_low_today'].state < 5
+                ? 'var(--info-color)'
+                : ''
+            };
+          }
+          .bubble-sub-button-2 {
+            background-color: ${
+              hass.states[entity].attributes.wind_speed > 50
+                ? 'var(--error-color)'
+                : hass.states[entity].attributes.wind_speed > 20
+                ? 'var(--warning-color)'
+                : ''
+            };
+          }
+          .bubble-sub-button-3 {
+            background-color: ${
+              hass.states['sensor.forecast_high_today'].state > 35
+                ? 'var(--error-color)'
+                : hass.states['sensor.forecast_high_today'].state > 28
+                ? 'var(--warning-color)'
+                : ''
+            };
+          }
+          .bubble-sub-button-4 {
+            background-color: ${
+              hass.states['sensor.forecast_precipitation_today'].state > 0
+                ? 'var(--info-color)'
+                : ''
+            };
+          }
+
+      # --- Apple TV ---
+      - type: custom:bubble-card
+        card_type: media-player
+        entity: media_player.media_player
+        name: Apple TV 4K
+        icon: mdi:apple
+        card_layout: large-2-rows
+        columns: 4
+        hide:
+          power_button: true
+        styles: |
+          .bubble-media-player-container {
+            min-height: 80px;
+            background-color: ${
+              state === 'playing'
+                ? 'rgba(var(--rgb-accent-color, 230, 145, 56), 0.15)'
+                : ''
+            };
+          }
+
+      # ============================================================
+      # POP-UPS (must come after all visible cards)
+      # ============================================================
+
+      # --- Living Room Pop-up ---
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: '#living'
+            name: Living Room
+            icon: mdi:sofa
+            entity: light.living_zone
+            bg_opacity: 75
+            bg_blur: 14
+            shadow_opacity: 0
+            width_desktop: 540px
+            margin_top_desktop: 25vh
+
+          - type: custom:bubble-card
+            card_type: separator
+            name: Lights
+            icon: mdi:lightbulb-group
+
+          - type: custom:bubble-card
+            card_type: button
+            button_type: slider
+            entity: light.living_room
+            name: All Lights
+            icon: mdi:lightbulb-group
+            show_state: true
+            card_layout: large
+            styles: |
+              .bubble-button-card-container {
+                background-color: ${
+                  state === 'on'
+                    ? (entity.attributes.rgb_color
+                      ? 'rgba(' + entity.attributes.rgb_color[0] + ',' + entity.attributes.rgb_color[1] + ',' + entity.attributes.rgb_color[2] + ',0.3)'
+                      : 'var(--accent-color)')
+                    : ''
+                };
+              }
+
+          - type: horizontal-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                entity: light.tv_backlight_left
+                name: TV Backlight Left
+                icon: mdi:television-ambient-light
+                show_state: true
+                card_layout: large
+                styles: |
+                  .bubble-button-card-container {
+                    background-color: ${
+                      state === 'on'
+                        ? (entity.attributes.rgb_color
+                          ? 'rgba(' + entity.attributes.rgb_color[0] + ',' + entity.attributes.rgb_color[1] + ',' + entity.attributes.rgb_color[2] + ',0.3)'
+                          : 'var(--accent-color)')
+                        : ''
+                    };
+                  }
+
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                entity: light.booth_backlight_left
+                name: Booth Left
+                icon: mdi:led-strip-variant
+                show_state: true
+                card_layout: large
+                styles: |
+                  .bubble-button-card-container {
+                    background-color: ${
+                      state === 'on'
+                        ? (entity.attributes.rgb_color
+                          ? 'rgba(' + entity.attributes.rgb_color[0] + ',' + entity.attributes.rgb_color[1] + ',' + entity.attributes.rgb_color[2] + ',0.3)'
+                          : 'var(--accent-color)')
+                        : ''
+                    };
+                  }
+
+          - type: horizontal-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                entity: light.tv_backlight_right
+                name: TV Backlight Right
+                icon: mdi:television-ambient-light
+                show_state: true
+                card_layout: large
+                styles: |
+                  .bubble-button-card-container {
+                    background-color: ${
+                      state === 'on'
+                        ? (entity.attributes.rgb_color
+                          ? 'rgba(' + entity.attributes.rgb_color[0] + ',' + entity.attributes.rgb_color[1] + ',' + entity.attributes.rgb_color[2] + ',0.3)'
+                          : 'var(--accent-color)')
+                        : ''
+                    };
+                  }
+
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                entity: light.booth_backlight_right
+                name: Booth Right
+                icon: mdi:led-strip-variant
+                show_state: true
+                card_layout: large
+                styles: |
+                  .bubble-button-card-container {
+                    background-color: ${
+                      state === 'on'
+                        ? (entity.attributes.rgb_color
+                          ? 'rgba(' + entity.attributes.rgb_color[0] + ',' + entity.attributes.rgb_color[1] + ',' + entity.attributes.rgb_color[2] + ',0.3)'
+                          : 'var(--accent-color)')
+                        : ''
+                    };
+                  }
+
+          - type: horizontal-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                entity: light.corner
+                name: Corner
+                icon: mdi:floor-lamp
+                show_state: true
+                card_layout: large
+                styles: |
+                  .bubble-button-card-container {
+                    background-color: ${
+                      state === 'on'
+                        ? (entity.attributes.rgb_color
+                          ? 'rgba(' + entity.attributes.rgb_color[0] + ',' + entity.attributes.rgb_color[1] + ',' + entity.attributes.rgb_color[2] + ',0.3)'
+                          : 'var(--accent-color)')
+                        : ''
+                    };
+                  }
+
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                entity: light.booth_corner
+                name: Booth Corner
+                icon: mdi:candle
+                show_state: true
+                card_layout: large
+                styles: |
+                  .bubble-button-card-container {
+                    background-color: ${
+                      state === 'on'
+                        ? (entity.attributes.rgb_color
+                          ? 'rgba(' + entity.attributes.rgb_color[0] + ',' + entity.attributes.rgb_color[1] + ',' + entity.attributes.rgb_color[2] + ',0.3)'
+                          : 'var(--accent-color)')
+                        : ''
+                    };
+                  }
+
+          - type: horizontal-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                entity: light.reading
+                name: Reading
+                icon: mdi:desk-lamp
+                show_state: true
+                card_layout: large
+                styles: |
+                  .bubble-button-card-container {
+                    background-color: ${
+                      state === 'on'
+                        ? (entity.attributes.rgb_color
+                          ? 'rgba(' + entity.attributes.rgb_color[0] + ',' + entity.attributes.rgb_color[1] + ',' + entity.attributes.rgb_color[2] + ',0.3)'
+                          : 'var(--accent-color)')
+                        : ''
+                    };
+                  }
+
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                entity: light.floor
+                name: Floor
+                icon: mdi:candle
+                show_state: true
+                card_layout: large
+                styles: |
+                  .bubble-button-card-container {
+                    background-color: ${
+                      state === 'on'
+                        ? (entity.attributes.rgb_color
+                          ? 'rgba(' + entity.attributes.rgb_color[0] + ',' + entity.attributes.rgb_color[1] + ',' + entity.attributes.rgb_color[2] + ',0.3)'
+                          : 'var(--accent-color)')
+                        : ''
+                    };
+                  }
+
+          - type: custom:bubble-card
+            card_type: separator
+            name: Scenes
+            icon: mdi:palette
+
+          - type: custom:bubble-card
+            card_type: button
+            button_type: name
+            entity: scene.living_zone_day_time_calm
+            name: Day Time Calm
+            icon: mdi:white-balance-sunny
+            card_layout: large
+            tap_action:
+              action: call-service
+              service: scene.turn_on
+              target:
+                entity_id: scene.living_zone_day_time_calm
+            styles: |
+              .bubble-button-card-container {
+                background-color: rgba(255, 180, 50, 0.15);
+              }
+              .bubble-icon {
+                color: rgb(255, 180, 50) !important;
+              }
+
+          - type: custom:bubble-card
+            card_type: button
+            button_type: name
+            entity: scene.homeassistant_1751727687796
+            name: Evening Mode
+            icon: mdi:weather-sunset
+            card_layout: large
+            tap_action:
+              action: call-service
+              service: scene.turn_on
+              target:
+                entity_id: scene.homeassistant_1751727687796
+            styles: |
+              .bubble-button-card-container {
+                background-color: rgba(255, 87, 34, 0.15);
+              }
+              .bubble-icon {
+                color: rgb(255, 87, 34) !important;
+              }
+
+      # --- Bedroom Pop-up ---
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: '#bedroom'
+            name: Bedroom
+            icon: mdi:bed
+            entity: light.bedroom_lights
+            bg_opacity: 75
+            bg_blur: 14
+            shadow_opacity: 0
+            width_desktop: 540px
+            margin_top_desktop: 25vh
+
+          - type: custom:bubble-card
+            card_type: separator
+            name: Lights
+            icon: mdi:lightbulb-group
+
+          - type: custom:bubble-card
+            card_type: button
+            button_type: slider
+            entity: light.bedroom_lights
+            name: All Lights
+            icon: mdi:lightbulb-group
+            show_state: true
+            card_layout: large
+            styles: |
+              .bubble-button-card-container {
+                background-color: ${
+                  state === 'on'
+                    ? (entity.attributes.rgb_color
+                      ? 'rgba(' + entity.attributes.rgb_color[0] + ',' + entity.attributes.rgb_color[1] + ',' + entity.attributes.rgb_color[2] + ',0.3)'
+                      : 'var(--accent-color)')
+                    : ''
+                };
+              }
+
+          - type: custom:bubble-card
+            card_type: button
+            button_type: slider
+            entity: light.ceiling
+            name: Ceiling
+            icon: mdi:ceiling-light
+            show_state: true
+            card_layout: large
+            styles: |
+              .bubble-button-card-container {
+                background-color: ${
+                  state === 'on'
+                    ? (entity.attributes.rgb_color
+                      ? 'rgba(' + entity.attributes.rgb_color[0] + ',' + entity.attributes.rgb_color[1] + ',' + entity.attributes.rgb_color[2] + ',0.3)'
+                      : 'var(--accent-color)')
+                    : ''
+                };
+              }
+
+          - type: custom:bubble-card
+            card_type: button
+            button_type: slider
+            entity: light.nightstand
+            name: Nightstand
+            icon: mdi:lamp
+            show_state: true
+            card_layout: large
+            styles: |
+              .bubble-button-card-container {
+                background-color: ${
+                  state === 'on'
+                    ? (entity.attributes.rgb_color
+                      ? 'rgba(' + entity.attributes.rgb_color[0] + ',' + entity.attributes.rgb_color[1] + ',' + entity.attributes.rgb_color[2] + ',0.3)'
+                      : 'var(--accent-color)')
+                    : ''
+                };
+              }
+
+          - type: custom:bubble-card
+            card_type: button
+            button_type: slider
+            entity: light.desk
+            name: Desk
+            icon: mdi:desk-lamp
+            show_state: true
+            card_layout: large
+            styles: |
+              .bubble-button-card-container {
+                background-color: ${
+                  state === 'on'
+                    ? (entity.attributes.rgb_color
+                      ? 'rgba(' + entity.attributes.rgb_color[0] + ',' + entity.attributes.rgb_color[1] + ',' + entity.attributes.rgb_color[2] + ',0.3)'
+                      : 'var(--accent-color)')
+                    : ''
+                };
+              }
+
+          - type: custom:bubble-card
+            card_type: separator
+            name: Scenes
+            icon: mdi:palette
+
+          - type: custom:bubble-card
+            card_type: button
+            button_type: name
+            entity: scene.bedroom_evening_mode
+            name: Evening Mode
+            icon: mdi:weather-night
+            card_layout: large
+            tap_action:
+              action: call-service
+              service: scene.turn_on
+              target:
+                entity_id: scene.bedroom_evening_mode
+            styles: |
+              .bubble-button-card-container {
+                background-color: rgba(156, 39, 176, 0.15);
+              }
+              .bubble-icon {
+                color: rgb(156, 39, 176) !important;
+              }
+
+      # --- Kitchen Pop-up ---
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: '#kitchen'
+            name: Kitchen
+            icon: mdi:stove
+            entity: light.kitchen
+            bg_opacity: 75
+            bg_blur: 14
+            shadow_opacity: 0
+            width_desktop: 540px
+            margin_top_desktop: 25vh
+
+          - type: custom:bubble-card
+            card_type: separator
+            name: Lights
+            icon: mdi:lightbulb-group
+
+          - type: custom:bubble-card
+            card_type: button
+            button_type: slider
+            entity: light.kitchen
+            name: Kitchen
+            icon: mdi:stove
+            show_state: true
+            card_layout: large
+            styles: |
+              .bubble-button-card-container {
+                background-color: ${
+                  state === 'on'
+                    ? (entity.attributes.rgb_color
+                      ? 'rgba(' + entity.attributes.rgb_color[0] + ',' + entity.attributes.rgb_color[1] + ',' + entity.attributes.rgb_color[2] + ',0.3)'
+                      : 'var(--accent-color)')
+                    : ''
+                };
+              }
+
+      # --- Media Pop-up ---
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: '#media'
+            name: Media
+            icon: mdi:television
+            bg_opacity: 75
+            bg_blur: 14
+            shadow_opacity: 0
+            width_desktop: 540px
+            margin_top_desktop: 25vh
+
+          - type: custom:bubble-card
+            card_type: media-player
+            entity: media_player.media_player
+            name: Apple TV 4K
+            icon: mdi:apple
+            card_layout: large
+            styles: |
+              .bubble-icon-container {
+                animation: ${state === 'playing' ? 'pulse' : 'none'} 2s infinite;
+              }
+              @keyframes pulse {
+                from { transform: scale(1); }
+                10% { transform: scale(1.1); }
+                20% { transform: scale(1); }
+                100% { transform: scale(1); }
+              }
+
+          - type: custom:bubble-card
+            card_type: separator
+            name: Library
+            icon: mdi:filmstrip
+
+          # Tautulli - Active Plex streams
+          - type: custom:bubble-card
+            card_type: button
+            button_type: state
+            entity: sensor.tautulli_watching
+            name: Plex Streams
+            icon: mdi:plex
+            show_state: true
+            card_layout: large
+            styles: |
+              .bubble-button-card-container {
+                background-color: ${
+                  state > 0 ? 'rgba(229, 160, 13, 0.2)' : ''
+                };
+              }
+
+          - type: horizontal-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: button
+                button_type: state
+                entity: sensor.sonarr_upcoming
+                name: Upcoming Episodes
+                icon: mdi:television-classic
+                show_state: true
+                card_layout: large
+
+              - type: custom:bubble-card
+                card_type: button
+                button_type: state
+                entity: sensor.radarr_upcoming
+                name: Upcoming Movies
+                icon: mdi:filmstrip
+                show_state: true
+                card_layout: large
+
+      # --- Infrastructure Pop-up ---
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: '#infra'
+            name: Infrastructure
+            icon: mdi:server
+            bg_opacity: 75
+            bg_blur: 14
+            shadow_opacity: 0
+            width_desktop: 540px
+            margin_top_desktop: 25vh
+
+          - type: custom:bubble-card
+            card_type: separator
+            name: Internet
+            icon: mdi:web
+
+          - type: horizontal-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: button
+                button_type: state
+                entity: sensor.speedtest_download
+                name: Download
+                icon: mdi:download
+                show_state: true
+                card_layout: large
+                styles: |
+                  .bubble-state::after {
+                    content: " Mbps";
+                    margin-left: 2px;
+                  }
+                  .bubble-button-card-container {
+                    background-color: ${
+                      state < 100 ? 'var(--error-color)' :
+                      state < 500 ? 'var(--warning-color)' : ''
+                    };
+                  }
+
+              - type: custom:bubble-card
+                card_type: button
+                button_type: state
+                entity: sensor.speedtest_upload
+                name: Upload
+                icon: mdi:upload
+                show_state: true
+                card_layout: large
+                styles: |
+                  .bubble-state::after {
+                    content: " Mbps";
+                    margin-left: 2px;
+                  }
+
+          - type: custom:bubble-card
+            card_type: separator
+            name: Services
+            icon: mdi:check-network
+
+          - type: horizontal-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: button
+                button_type: state
+                entity: binary_sensor.uptime_kuma_plex
+                name: Plex
+                icon: mdi:plex
+                show_state: true
+                card_layout: large
+                styles: |
+                  .bubble-button-card-container {
+                    background-color: ${
+                      state === 'on' ? 'var(--success-color)' : 'var(--error-color)'
+                    };
+                  }
+                  .bubble-icon {
+                    color: ${state === 'on' ? 'var(--success-color)' : 'var(--error-color)'} !important;
+                    opacity: 0.6 !important;
+                  }
+
+              - type: custom:bubble-card
+                card_type: button
+                button_type: state
+                entity: binary_sensor.uptime_kuma_home_assistant
+                name: HA
+                icon: mdi:home-assistant
+                show_state: true
+                card_layout: large
+                styles: |
+                  .bubble-button-card-container {
+                    background-color: ${
+                      state === 'on' ? 'var(--success-color)' : 'var(--error-color)'
+                    };
+                  }
+                  .bubble-icon {
+                    color: ${state === 'on' ? 'var(--success-color)' : 'var(--error-color)'} !important;
+                    opacity: 0.6 !important;
+                  }
+
+              - type: custom:bubble-card
+                card_type: button
+                button_type: state
+                entity: binary_sensor.uptime_kuma_sonarr
+                name: Sonarr
+                icon: mdi:television-classic
+                show_state: true
+                card_layout: large
+                styles: |
+                  .bubble-button-card-container {
+                    background-color: ${
+                      state === 'on' ? 'var(--success-color)' : 'var(--error-color)'
+                    };
+                  }
+                  .bubble-icon {
+                    color: ${state === 'on' ? 'var(--success-color)' : 'var(--error-color)'} !important;
+                    opacity: 0.6 !important;
+                  }
+
+          - type: custom:bubble-card
+            card_type: separator
+            name: Storage
+            icon: mdi:harddisk
+
+          - type: custom:bubble-card
+            card_type: button
+            button_type: state
+            entity: sensor.scrutiny_disk_health
+            name: Disk Health
+            icon: mdi:harddisk
+            show_state: true
+            card_layout: large
+            styles: |
+              .bubble-button-card-container {
+                background-color: ${
+                  state === 'passed' ? 'var(--success-color)' :
+                  state === 'warning' ? 'var(--warning-color)' :
+                  'var(--error-color)'
+                };
+              }
+              .bubble-icon {
+                color: ${
+                  state === 'passed' ? 'var(--success-color)' :
+                  state === 'warning' ? 'var(--warning-color)' :
+                  'var(--error-color)'
+                } !important;
+                opacity: 0.6 !important;
+              }
+
+          - type: custom:bubble-card
+            card_type: separator
+            name: Security
+            icon: mdi:shield
+
+          - type: custom:bubble-card
+            card_type: button
+            button_type: switch
+            entity: switch.doorbell
+            name: Doorbell
+            icon: mdi:bell-ring
+            show_state: true
+            card_layout: large
+
+      # ============================================================
+      # HORIZONTAL BUTTONS STACK (must be last card in view)
+      # ============================================================
+      - type: custom:bubble-card
+        card_type: horizontal-buttons-stack
+        auto_order: false
+        1_link: '#living'
+        1_name: Living
+        1_icon: mdi:sofa
+        1_entity: light.living_zone
+        2_link: '#bedroom'
+        2_name: Bedroom
+        2_icon: mdi:bed
+        2_entity: light.bedroom_lights
+        3_link: '#kitchen'
+        3_name: Kitchen
+        3_icon: mdi:stove
+        3_entity: light.kitchen
+        4_link: '#media'
+        4_name: Media
+        4_icon: mdi:television
+        4_entity: media_player.media_player
+        5_link: '#infra'
+        5_name: Infra
+        5_icon: mdi:server
