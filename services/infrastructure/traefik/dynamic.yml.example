@@ -6,6 +6,7 @@ http:
         - websecure
       middlewares:
         - allow-admin-apps
+        - tinyauth
       service: adguard-service
       tls:
         certResolver: cloudflare
@@ -16,8 +17,90 @@ http:
         - websecure
       middlewares:
         - allow-admin-apps
-        - dashboard-auth
+        - tinyauth
       service: api@internal
+      tls:
+        certResolver: cloudflare
+
+    home-assistant:
+      rule: "Host(`ha.raphh.me`)"
+      entryPoints:
+        - websecure
+      middlewares:
+        - allow-iot-enabled-apps
+        - tinyauth
+        - home-assistant-no-forwarded
+      service: home-assistant-service
+      tls:
+        certResolver: cloudflare
+
+    home-assistant-health:
+      rule: "Host(`ha.raphh.me`) && Path(`/health`)"
+      priority: 100
+      entryPoints:
+        - websecure
+      middlewares:
+        - allow-iot-enabled-apps
+        - home-assistant-no-forwarded
+        - home-assistant-health-rewrite
+      service: home-assistant-service
+      tls:
+        certResolver: cloudflare
+
+    smlight:
+      rule: "Host(`smlight.raphh.me`)"
+      entryPoints:
+        - websecure
+      middlewares:
+        - allow-iot-enabled-apps
+        - tinyauth
+      service: smlight-service
+      tls:
+        certResolver: cloudflare
+
+    plex:
+      rule: "Host(`plex.raphh.me`)"
+      entryPoints:
+        - websecure
+      middlewares:
+        - allow-default-apps
+      service: plex-service
+      tls:
+        certResolver: cloudflare
+
+    ds423plus:
+      rule: "Host(`ds423plus.raphh.me`)"
+      entryPoints:
+        - websecure
+      middlewares:
+        - allow-admin-apps
+      service: ds423plus-service
+      tls:
+        certResolver: cloudflare
+
+    glance-radarr-cover:
+      rule: "Host(`dash.raphh.me`) && PathPrefix(`/_internal/radarr-cover`)"
+      priority: 200
+      entryPoints:
+        - websecure
+      middlewares:
+        - allow-default-apps
+        - radarr-cover-auth
+        - strip-radarr-cover-prefix
+      service: radarr-cover-service
+      tls:
+        certResolver: cloudflare
+
+    glance-sonarr-cover:
+      rule: "Host(`dash.raphh.me`) && PathPrefix(`/_internal/sonarr-cover`)"
+      priority: 200
+      entryPoints:
+        - websecure
+      middlewares:
+        - allow-default-apps
+        - sonarr-cover-auth
+        - strip-sonarr-cover-prefix
+      service: sonarr-cover-service
       tls:
         certResolver: cloudflare
 
@@ -28,12 +111,54 @@ http:
         servers:
           - url: "http://10.10.2.101:80"
 
+    home-assistant-service:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://10.10.2.201:8123"
+
+    smlight-service:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://10.10.3.108"
+
+    plex-service:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://10.10.2.201:32400"
+
+    ds423plus-service:
+      loadBalancer:
+        serversTransport: dsm-insecure-transport@file
+        passHostHeader: true
+        servers:
+          - url: "https://10.10.2.2:5001"
+
+    radarr-cover-service:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://radarr:7878"
+
+    sonarr-cover-service:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://sonarr:8989"
+
+  serversTransports:
+    dsm-insecure-transport:
+      insecureSkipVerify: true
+
   middlewares:
     allow-admin-apps:
       ipAllowList:
         sourceRange:
           - "10.10.1.0/24"
           - "10.10.2.0/24"
+          - "172.22.0.0/16"
           - "127.0.0.1/32"
 
     allow-default-apps:
@@ -41,6 +166,7 @@ http:
         sourceRange:
           - "10.10.1.0/24"
           - "10.10.2.0/24"
+          - "172.22.0.0/16"
           - "127.0.0.1/32"
 
     allow-iot-enabled-apps:
@@ -49,9 +175,40 @@ http:
           - "10.10.1.0/24"
           - "10.10.2.0/24"
           - "10.10.3.0/24"
+          - "172.16.0.0/12"
           - "127.0.0.1/32"
 
-    dashboard-auth:
-      basicAuth:
-        users:
-          - "admin:REPLACE_WITH_HTPASSWD_HASH"
+    tinyauth:
+      forwardAuth:
+        address: "http://tinyauth:3000/api/auth/traefik"
+        trustForwardHeader: true
+
+    home-assistant-no-forwarded:
+      headers:
+        customRequestHeaders:
+          X-Forwarded-For: ""
+          X-Forwarded-Proto: ""
+
+    home-assistant-health-rewrite:
+      replacePath:
+        path: /manifest.json
+
+    strip-radarr-cover-prefix:
+      stripPrefix:
+        prefixes:
+          - /_internal/radarr-cover
+
+    strip-sonarr-cover-prefix:
+      stripPrefix:
+        prefixes:
+          - /_internal/sonarr-cover
+
+    radarr-cover-auth:
+      headers:
+        customRequestHeaders:
+          X-Api-Key: your_radarr_api_key
+
+    sonarr-cover-auth:
+      headers:
+        customRequestHeaders:
+          X-Api-Key: your_sonarr_api_key

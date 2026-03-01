@@ -28,6 +28,9 @@ services:
     ports:
       - 80:80
       - 443:443
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
     volumes:
       - ${DOCKER_APPDATA_PATH}/traefik/config/traefik.yml:/etc/traefik/traefik.yml:ro
       - ${DOCKER_APPDATA_PATH}/traefik/config/dynamic.yml:/etc/traefik/dynamic.yml:ro
