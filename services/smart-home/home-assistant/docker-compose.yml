@@ -8,6 +8,9 @@ services:
     environment:
       - TZ=${TZ}
       - UMASK=${UMASK}
+    dns:
+      - 10.10.2.101
+      - 1.1.1.1
     volumes:
       - ${DOCKER_APPDATA_PATH}/home-assistant:/config
     restart: always
