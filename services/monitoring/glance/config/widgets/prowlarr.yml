@@ -5,7 +5,7 @@
     url: "${PROWLARR_URL}"
     base-url: ${PROWLARR_API_URL}
     api-key: ${PROWLARR_KEY}
-    collapse-after: ${PROWLARR_COLLAPSE_AFTER}
+    collapse-after: 15
   template: |
     {{ $apiBaseUrl := .Options.StringOr "base-url" "" }}
     {{ $key := .Options.StringOr "api-key" "" }}

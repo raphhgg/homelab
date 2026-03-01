@@ -7,13 +7,13 @@
     plex:
       name: Plex
       description: Media streaming server
-      url: http://10.10.2.201:32400/web
+      url: https://plex.raphh.me/web
       icon: /assets/icons/plex.svg
       category: media-server
     tautulli:
       name: Tautulli
       description: Plex monitoring and statistics
-      url: http://10.10.2.201:8181
+      url: https://tautulli.raphh.me
       icon: /assets/icons/tautulli.svg
       category: media-server
     kometa:
@@ -36,37 +36,37 @@
     radarr:
       name: Radarr
       description: Movie management
-      url: http://10.10.2.201:7878
+      url: https://radarr.raphh.me
       icon: /assets/icons/radarr.svg
       category: arrs
     sonarr:
       name: Sonarr
       description: TV show management
-      url: http://10.10.2.201:8988
+      url: https://sonarr.raphh.me
       icon: /assets/icons/sonarr.svg
       category: arrs
     prowlarr:
       name: Prowlarr
       description: Indexer manager
-      url: http://10.10.2.201:9696
+      url: https://prowlarr.raphh.me
       icon: /assets/icons/prowlarr.svg
       category: arrs
     bazarr:
       name: Bazarr
       description: Subtitle management
-      url: http://10.10.2.201:6767
+      url: https://bazarr.raphh.me
       icon: /assets/icons/bazarr.svg
       category: arrs
     profilarr:
       name: Profilarr
       description: Profile sync for Arrs
-      url: http://10.10.2.201:6868
+      url: https://profilarr.raphh.me
       icon: /assets/icons/sonarr.svg
       category: arrs
     seerr:
       name: Seerr
       description: Media request management
-      url: http://10.10.2.201:5055
+      url: https://seerr.raphh.me
       icon: /assets/icons/jellyseerr.svg
       category: arrs
 
@@ -92,7 +92,7 @@
     autobrr:
       name: Autobrr
       description: Torrent automation
-      url: http://10.10.2.201:7474
+      url: https://autobrr.raphh.me
       icon: /assets/icons/autobrr.svg
       category: torrents
     cross-seed:
@@ -111,19 +111,19 @@
     upload-assistant:
       name: Upload Assistant
       description: Torrent upload helper
-      url: http://10.10.2.201:8086
+      url: https://upload-assistant.raphh.me
       icon: /assets/icons/github.svg
       category: tools
     daps:
       name: DAPS
       description: Poster automation
-      url: http://10.10.2.201:8002
+      url: https://daps.raphh.me
       icon: /assets/icons/github.svg
       category: tools
     daps-ui:
       name: DAPS UI
       description: DAPS web interface
-      url: http://10.10.2.201:8001
+      url: https://daps-ui.raphh.me
       icon: /assets/icons/github.svg
       category: tools
     autopulse:
@@ -134,7 +134,7 @@
     stash:
       name: Stash
       description: Media organizer
-      url: http://10.10.2.201:9999
+      url: https://stash.raphh.me
       icon: /assets/icons/stash.svg
       category: tools
     calibre-web-dl:
@@ -147,7 +147,7 @@
     beszel:
       name: Beszel
       description: Server monitoring dashboard
-      url: http://10.10.2.201:8091
+      url: https://beszel.raphh.me
       icon: /assets/icons/beszel.svg
       category: monitoring
     beszel-agent:
@@ -158,25 +158,25 @@
     dozzle:
       name: Dozzle
       description: Docker log viewer
-      url: http://10.10.2.201:8088
+      url: https://dozzle.raphh.me
       icon: /assets/icons/docker.svg
       category: monitoring
     uptime-kuma:
       name: Uptime Kuma
       description: Uptime monitoring
-      url: http://10.10.2.201:3001
+      url: https://kuma.raphh.me
       icon: /assets/icons/uptime-kuma.svg
       category: monitoring
     glance:
       name: Glance
       description: Dashboard
-      url: http://10.10.2.201:8070
+      url: https://dash.raphh.me
       icon: /assets/icons/glance.svg
       category: monitoring
     speedtest-tracker:
       name: Speedtest Tracker
       description: Internet speed monitoring
-      url: http://10.10.2.201:8076
+      url: https://speedtest.raphh.me
       icon: /assets/icons/speedtest.svg
       category: monitoring
     watchtower:
@@ -211,7 +211,7 @@
     portainer:
       name: Portainer
       description: Docker management UI
-      url: http://10.10.2.201:9000
+      url: https://thelounge.raphh.me
       icon: /assets/icons/portainer.svg
       category: infrastructure
     cronicle:
@@ -235,7 +235,7 @@
     home-assistant:
       name: Home Assistant
       description: Smart home automation
-      url: http://10.10.2.201:8123
+      url: https://ha.raphh.me
       icon: /assets/icons/home-assistant.svg
       category: smart-home
 
@@ -249,7 +249,7 @@
     thelounge:
       name: The Lounge
       description: IRC client
-      url: http://10.10.2.201:9001
+      url: https://thelounge.raphh.me
       icon: /assets/icons/thelounge.svg
       category: sync
 

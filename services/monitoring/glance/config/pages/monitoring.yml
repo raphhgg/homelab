@@ -22,7 +22,7 @@
         - $include: ../widgets/monitors-monitoring.yml
 
         # - type: iframe
-        #   source: http://10.10.2.201:7575/ # http://10.10.2.201:8091/system/9o7zk9q8y5r9d0t
+        #   source: https://netronome.raphh.me/ # https://beszel.raphh.me/system/9o7zk9q8y5r9d0t
         #   height: 800
         
        

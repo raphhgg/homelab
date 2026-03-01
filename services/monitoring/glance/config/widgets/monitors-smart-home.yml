@@ -3,11 +3,14 @@
   cache: 1m
   sites:
     - title: Home Assistant
-      url: http://10.10.2.201:8123/home-desktop/home
+      url: https://ha.raphh.me/health
       icon: /assets/icons/png/home-assistant.png
     - title: Zigbee2MQTT
-      url: http://10.10.2.201:8090/
+      url: https://z2mqtt.raphh.me/
       icon: di:zigbee2mqtt-light
+      alt-status-codes:
+        - 401
+        - 307
     - title: SMLight SLZB-MR1
       url: http://10.10.3.108/
       icon: /assets/icons/png/smlight.png

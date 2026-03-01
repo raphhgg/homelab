@@ -15,13 +15,13 @@
     url: https://dashboardicons.com/icons?q={QUERY}
   - title: Linkwarden
     shortcut: "!li"
-    url: http://10.10.2.201:3002/search?q={QUERY}
+    url: https://links.raphh.me/search?q={QUERY}
   - title: Radarr
     shortcut: "!r"
-    url: http://10.10.2.201:7878/add/new?term={QUERY}
+    url: https://radarr.raphh.me/add/new?term={QUERY}
   - title: Sonarr
     shortcut: "!s"
-    url: http://10.10.2.201:8988/add/new?term={QUERY}
+    url: https://sonarr.raphh.me/add/new?term={QUERY}
   - title: TMDb
     shortcut: "!tm"
     url: https://www.themoviedb.org/search?query={QUERY}

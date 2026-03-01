@@ -6,7 +6,7 @@
     size: "small"
     collapse: 8
     server-id: "${PLEX_SERVER_ID}"
-    tautulli-base: "http://${TAUTULLI_IP}:${TAUTULLI_PORT}"
+    tautulli-base: "${TAUTULLI_BASE_URL}"
     tautulli-key: "${TAUTULLI_API_KEY}"
   template: |
     {{ $isLarge := eq (.Options.StringOr "size" "large") "large" }}

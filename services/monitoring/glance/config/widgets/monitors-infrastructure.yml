@@ -6,9 +6,13 @@
       url: https://traefik.raphh.me
       icon: di:traefik
       alt-status-codes:
+        - 401
         - 403
+        - 307
     - title: AdGuard Home
       url: https://adguard.raphh.me
       icon: di:adguard
       alt-status-codes:
+        - 401
         - 403
+        - 307

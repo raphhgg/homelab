@@ -7,36 +7,36 @@
     radarr:
       name: Radarr
       description: Movie management
-      url: http://10.10.2.201:7878
+      url: https://radarr.raphh.me
       icon: /assets/icons/radarr.svg
       hide: false
     sonarr:
       name: Sonarr
       description: TV show management
-      url: http://10.10.2.201:8988
+      url: https://sonarr.raphh.me
       icon: /assets/icons/sonarr.svg
       hide: false
     prowlarr:
       name: Prowlarr
       description: Indexer manager
-      url: http://10.10.2.201:9696
+      url: https://prowlarr.raphh.me
       icon: /assets/icons/prowlarr.svg
       hide: false
     bazarr:
       name: Bazarr
       description: Subtitle management
-      url: http://10.10.2.201:6767
+      url: https://bazarr.raphh.me
       icon: /assets/icons/bazarr.svg
       hide: false
     profilarr:
       name: Profilarr
       description: Profile sync for Arrs
-      url: http://10.10.2.201:6868
+      url: https://profilarr.raphh.me
       icon: /assets/icons/profilarr.svg
       hide: false
     seerr:
       name: Seerr
       description: Media request management
-      url: http://10.10.2.201:5055
+      url: https://seerr.raphh.me
       icon: /assets/icons/jellyseerr.svg
       hide: false

@@ -14,4 +14,4 @@
     url: https://dashboardicons.com/icons?q={QUERY}
   # - title: Linkwarden
   #   shortcut: "!li"
-  #   utl: http://10.10.2.201:3002/search?q={QUERY}
+  #   utl: https://links.raphh.me/search?q={QUERY}

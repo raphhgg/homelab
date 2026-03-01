@@ -32,9 +32,17 @@ services:
       - media
       - socket_net
       - glance_internal
+      - traefik_socket_net
     depends_on:
       - glance-proxy
     labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_socket_net"
+      - "traefik.http.routers.glance.rule=Host(`${GLANCE_HOST}`)"
+      - "traefik.http.routers.glance.entrypoints=websecure"
+      - "traefik.http.routers.glance.tls.certresolver=cloudflare"
+      - "traefik.http.routers.glance.middlewares=allow-default-apps@file,tinyauth@file"
+      - "traefik.http.services.glance.loadbalancer.server.port=8080"
       - "com.centurylinklabs.watchtower.enable=true"
 
   f1-api:
@@ -56,6 +64,8 @@ networks:
   monitoring:
     external: true
   media:
+    external: true
+  traefik_socket_net:
     external: true
   socket_net:
   glance_internal:

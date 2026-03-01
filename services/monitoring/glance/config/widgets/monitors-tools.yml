@@ -3,28 +3,51 @@
   cache: 1m
   sites:
     - title: Prowlarr
-      url: http://10.10.2.201:9696
+      url: https://prowlarr.raphh.me
       icon: /assets/icons/prowlarr.svg
+      alt-status-codes:
+        - 401
+        - 307
     - title: Seerr
-      url: http://10.10.2.201:5055
+      url: https://seerr.raphh.me
       icon: /assets/icons/jellyseerr.svg
+      alt-status-codes:
+        - 401
+        - 307
     - title: Autobrr
-      url: http://10.10.2.201:7474
+      url: https://autobrr.raphh.me
       icon: /assets/icons/autobrr.svg
+      alt-status-codes:
+        - 401
+        - 307
     - title: Upload Assistant
-      url: http://10.10.2.201:8086
+      url: https://upload-assistant.raphh.me
       icon: mdi:cloud-upload
+      alt-status-codes:
+        - 401
+        - 307
     - title: Daps
-      url: http://10.10.2.201:8002
+      url: https://daps.raphh.me
       icon: mdi:image-multiple
+      alt-status-codes:
+        - 401
+        - 307
     - title: Stash
-      url: http://10.10.2.201:9999
+      url: https://stash.raphh.me
       icon: /assets/icons/stash.svg
+      alt-status-codes:
+        - 401
+        - 307
     - title: Gotify
-      url: http://10.10.2.201:8093
+      url: https://gotify.raphh.me
       icon: di:gotify
+      alt-status-codes:
+        - 401
+        - 307
     - title: Vaultwarden
       url: https://vault.raphh.me
       icon: di:vaultwarden-light
       alt-status-codes:
+        - 401
         - 403
+        - 307

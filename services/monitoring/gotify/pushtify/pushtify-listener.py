@@ -46,6 +46,7 @@ def fetch_gotify_apps():
         print(f"Failed to fetch Gotify applications: {e}")
         return
 
+    fresh_map = {}
     for app in apps:
         app_id = app["id"]
         name = app["name"]
@@ -53,13 +54,16 @@ def fetch_gotify_apps():
         var_name = env_var_name(name)
         token = os.environ.get(var_name, "")
 
-        app_map[app_id] = {
+        fresh_map[app_id] = {
             "name": name,
             "pushover_token": token,
         }
 
         status = "mapped" if token else "unmapped (no env var)"
         print(f"  {name} (id={app_id}): {status}")
+
+    app_map.clear()
+    app_map.update(fresh_map)
 
 
 def map_priority(priority):
@@ -198,6 +202,10 @@ def on_message(ws, message):
         if title == "Shoutrrr notification":
             shoutrrr_title, body = format_shoutrrr(body)
             title = shoutrrr_title or "Alert"
+
+        if app_id not in app_map and gotify_api_user:
+            print(f"Unknown app id={app_id}, refreshing Gotify app mapping...")
+            fetch_gotify_apps()
 
         app_info = app_map.get(app_id, {})
         app_name = app_info.get("name", f"unknown-{app_id}")

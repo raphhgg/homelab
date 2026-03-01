@@ -3,32 +3,51 @@
   cache: 1m
   sites:
     - title: Plex
-      url: http://10.10.2.201:32400/web/index.html
+      url: https://plex.raphh.me/web/index.html
       icon: /assets/icons/plex.svg
     - title: Radarr
-      url: http://10.10.2.201:7878
+      url: https://radarr.raphh.me
       icon: /assets/icons/radarr.svg
+      alt-status-codes:
+        - 401
+        - 307
     - title: Sonarr
-      url: http://10.10.2.201:8988
+      url: https://sonarr.raphh.me
       icon: /assets/icons/sonarr.svg
+      alt-status-codes:
+        - 401
+        - 307
     - title: Qui
       url: http://10.10.2.201:7476/instances/1
       icon: /assets/icons/qui.png
     - title: Daps-UI
-      url: http://10.10.2.201:8001/poster-renamer
+      url: https://daps-ui.raphh.me/poster-renamer
       icon: mdi:image-edit
-    - title: Profilarr
-      url: http://10.10.2.201:6869
-      icon: /assets/icons/profilarr.svg
-    - title: Tautulli
-      url: http://10.10.2.201:8181
-      icon: /assets/icons/tautulli.svg
-    - title: Pulsarr
-      url: http://10.10.2.201:3010/dashboard
-      icon: di:pulsarr
-      allow-insecure: true
       alt-status-codes:
+        - 401
+        - 307
+    - title: Profilarr
+      url: https://profilarr.raphh.me
+      icon: /assets/icons/profilarr.svg
+      alt-status-codes:
+        - 401
+        - 307
+    - title: Tautulli
+      url: https://tautulli.raphh.me
+      icon: /assets/icons/tautulli.svg
+      alt-status-codes:
+        - 401
+        - 307
+    - title: Pulsarr
+      url: https://pulsarr.raphh.me/dashboard
+      icon: di:pulsarr
+      alt-status-codes:
+        - 401
+        - 307
         - 403
     - title: Tracearr
-      url: http://10.10.2.201:3003/history
+      url: https://tracearr.raphh.me/history
       icon: di:tracearr
+      alt-status-codes:
+        - 401
+        - 307

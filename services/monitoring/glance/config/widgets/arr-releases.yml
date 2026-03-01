@@ -10,6 +10,7 @@
     show-grabbed: false
     interval: 60
     sort-time: asc
+    cover-proxy: https://dash.raphh.me/_internal/radarr-cover/api/v3/mediacover
     api-base-url: ${RADARR_API_URL}
     key: ${RADARR_KEY}
     url: ${RADARR_URL}
@@ -462,6 +463,7 @@
     collapse-after: 5
     show-grabbed: false
     interval: 7
+    cover-proxy: https://dash.raphh.me/_internal/sonarr-cover/api/v3/mediacover
     api-base-url: ${SONARR_API_URL}
     key: ${SONARR_KEY}
     url: ${SONARR_URL}

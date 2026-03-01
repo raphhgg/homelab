@@ -3,23 +3,44 @@
   cache: 1m
   sites:
     - title: Beszel
-      url: http://10.10.2.201:8091
+      url: https://beszel.raphh.me
       icon: /assets/icons/beszel.svg
+      alt-status-codes:
+        - 401
+        - 307
     - title: Netronome
-      url: http://10.10.2.201:7575
+      url: https://netronome.raphh.me
       icon: /assets/icons/png/netronome.png
+      alt-status-codes:
+        - 401
+        - 307
     - title: Uptime Kuma
-      url: http://10.10.2.201:3001
-      icon: /assets/icons/uptime-kuma.svg    
+      url: https://kuma.raphh.me
+      icon: /assets/icons/uptime-kuma.svg
+      alt-status-codes:
+        - 401
+        - 307
     - title: Dozzle
-      url: http://10.10.2.201:8088
+      url: https://dozzle.raphh.me
       icon: /assets/icons/dozzle.svg 
+      alt-status-codes:
+        - 401
+        - 307
     - title: Scrutiny
-      url: http://10.10.2.201:8092/web/dashboard
+      url: https://scrutiny.raphh.me/web/dashboard
       icon: /assets/icons/scrutiny.svg
+      alt-status-codes:
+        - 401
+        - 307
     - title: Speedtest Tracker
-      url: http://10.10.2.201:8076
+      url: https://speedtest.raphh.me
       icon: /assets/icons/speedtest.svg
+      alt-status-codes:
+        - 401
+        - 307
     - title: Dockhand
-      url: http://10.10.2.201:3000/
+      url: https://dockhand.raphh.me/
       icon: /assets/icons/png/dockhand.png
+      alt-status-codes:
+        - 401
+        - 307

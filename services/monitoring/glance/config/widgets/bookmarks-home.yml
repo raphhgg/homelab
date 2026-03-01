@@ -23,7 +23,7 @@
       # hide-arrow: true
       links:
         - title: OpenWebUI
-          url: http://10.10.2.201:8087
+          url: https://chat.raphh.me
           icon: /assets/icons/open-webui-light.svg
         - title: Gemini
           url: https://gemini.google.com
@@ -46,7 +46,7 @@
           url: https://linear.app/raphh/view/all-issues-1aed130b09f5
           icon: di:linear-dark # /assets/icons/linear.png
         - title: Linkwarden
-          url: http://10.10.2.201:3002/dashboard
+          url: https://links.raphh.me/dashboard
           icon: /assets/icons/png/linkwarden.png
         - title: GreenCloud CP
           url: https://cp.green.cloud/server/f59ac139-00af-41d9-a574-29abd9075bf2
