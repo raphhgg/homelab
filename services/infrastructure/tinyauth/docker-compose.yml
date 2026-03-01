@@ -1,0 +1,89 @@
+services:
+  tinyauth:
+    image: ghcr.io/steveiliop56/tinyauth:v4
+    container_name: tinyauth
+    environment:
+      - APP_URL=${TINYAUTH_APP_URL}
+      - USERS=${TINYAUTH_USERS}
+      - SECURE_COOKIE=true
+      - OAUTH_AUTO_REDIRECT=pocketid
+      - PROVIDERS_POCKETID_CLIENT_ID=${PROVIDERS_POCKETID_CLIENT_ID}
+      - PROVIDERS_POCKETID_CLIENT_SECRET=${PROVIDERS_POCKETID_CLIENT_SECRET}
+      - PROVIDERS_POCKETID_AUTH_URL=${PROVIDERS_POCKETID_AUTH_URL}
+      - PROVIDERS_POCKETID_TOKEN_URL=${PROVIDERS_POCKETID_TOKEN_URL}
+      - PROVIDERS_POCKETID_USER_INFO_URL=${PROVIDERS_POCKETID_USER_INFO_URL}
+      - PROVIDERS_POCKETID_REDIRECT_URL=${PROVIDERS_POCKETID_REDIRECT_URL}
+      - PROVIDERS_POCKETID_SCOPES=${PROVIDERS_POCKETID_SCOPES}
+      - PROVIDERS_POCKETID_NAME=Pocket ID
+    networks:
+      - traefik_socket_net
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tinyauth.rule=Host(`${TINYAUTH_HOST}`)"
+      - "traefik.http.routers.tinyauth.entrypoints=websecure"
+      - "traefik.http.routers.tinyauth.tls.certresolver=cloudflare"
+      - "traefik.http.services.tinyauth.loadbalancer.server.port=3000"
+      - "tinyauth.apps.adguard.config.domain=${ADGUARD_HOST}"
+      - "tinyauth.apps.adguard.oauth.groups=${ADGUARD_OAUTH_GROUPS}"
+      - "tinyauth.apps.kuma.config.domain=${KUMA_HOST}"
+      - "tinyauth.apps.kuma.oauth.groups=${KUMA_OAUTH_GROUPS}"
+      - "tinyauth.apps.prowlarr.config.domain=${PROWLARR_HOST}"
+      - "tinyauth.apps.prowlarr.oauth.groups=${PROWLARR_OAUTH_GROUPS}"
+      - "tinyauth.apps.sonarr.config.domain=${SONARR_HOST}"
+      - "tinyauth.apps.sonarr.oauth.groups=${SONARR_OAUTH_GROUPS}"
+      - "tinyauth.apps.radarr.config.domain=${RADARR_HOST}"
+      - "tinyauth.apps.radarr.oauth.groups=${RADARR_OAUTH_GROUPS}"
+      - "tinyauth.apps.daps.config.domain=${DAPS_HOST}"
+      - "tinyauth.apps.daps.oauth.groups=${DAPS_OAUTH_GROUPS}"
+      - "tinyauth.apps.daps-ui.config.domain=${DAPS_UI_HOST}"
+      - "tinyauth.apps.daps-ui.oauth.groups=${DAPS_UI_OAUTH_GROUPS}"
+      - "tinyauth.apps.pulsarr.config.domain=${PULSARR_HOST}"
+      - "tinyauth.apps.pulsarr.oauth.groups=${PULSARR_OAUTH_GROUPS}"
+      - "tinyauth.apps.seerr.config.domain=${SEERR_HOST}"
+      - "tinyauth.apps.seerr.oauth.groups=${SEERR_OAUTH_GROUPS}"
+      - "tinyauth.apps.stash.config.domain=${STASH_HOST}"
+      - "tinyauth.apps.stash.oauth.groups=${STASH_OAUTH_GROUPS}"
+      - "tinyauth.apps.tautulli.config.domain=${TAUTULLI_HOST}"
+      - "tinyauth.apps.tautulli.oauth.groups=${TAUTULLI_OAUTH_GROUPS}"
+      - "tinyauth.apps.tracearr.config.domain=${TRACEARR_HOST}"
+      - "tinyauth.apps.tracearr.oauth.groups=${TRACEARR_OAUTH_GROUPS}"
+      - "tinyauth.apps.beszel.config.domain=${BESZEL_HOST}"
+      - "tinyauth.apps.beszel.oauth.groups=${BESZEL_OAUTH_GROUPS}"
+      - "tinyauth.apps.dockhand.config.domain=${DOCKHAND_HOST}"
+      - "tinyauth.apps.dockhand.oauth.groups=${DOCKHAND_OAUTH_GROUPS}"
+      - "tinyauth.apps.dozzle.config.domain=${DOZZLE_HOST}"
+      - "tinyauth.apps.dozzle.oauth.groups=${DOZZLE_OAUTH_GROUPS}"
+      - "tinyauth.apps.glance.config.domain=${GLANCE_HOST}"
+      - "tinyauth.apps.glance.oauth.groups=${GLANCE_OAUTH_GROUPS}"
+      - "tinyauth.apps.gotify.config.domain=${GOTIFY_HOST}"
+      - "tinyauth.apps.gotify.oauth.groups=${GOTIFY_OAUTH_GROUPS}"
+      - "tinyauth.apps.netronome.config.domain=${NETRONOME_HOST}"
+      - "tinyauth.apps.netronome.oauth.groups=${NETRONOME_OAUTH_GROUPS}"
+      - "tinyauth.apps.speedtest-tracker.config.domain=${SPEEDTEST_TRACKER_HOST}"
+      - "tinyauth.apps.speedtest-tracker.oauth.groups=${SPEEDTEST_TRACKER_OAUTH_GROUPS}"
+      - "tinyauth.apps.home-assistant.config.domain=${HOME_ASSISTANT_HOST}"
+      - "tinyauth.apps.home-assistant.oauth.groups=${HOME_ASSISTANT_OAUTH_GROUPS}"
+      - "tinyauth.apps.zigbee2mqtt.config.domain=${ZIGBEE2MQTT_HOST}"
+      - "tinyauth.apps.zigbee2mqtt.oauth.groups=${ZIGBEE2MQTT_OAUTH_GROUPS}"
+      - "tinyauth.apps.smlight.config.domain=${SMLIGHT_HOST}"
+      - "tinyauth.apps.smlight.oauth.groups=${SMLIGHT_OAUTH_GROUPS}"
+      - "tinyauth.apps.autobrr.config.domain=${AUTOBRR_HOST}"
+      - "tinyauth.apps.autobrr.oauth.groups=${AUTOBRR_OAUTH_GROUPS}"
+      - "tinyauth.apps.upload-assistant.config.domain=${UPLOAD_ASSISTANT_HOST}"
+      - "tinyauth.apps.upload-assistant.oauth.groups=${UPLOAD_ASSISTANT_OAUTH_GROUPS}"
+      - "tinyauth.apps.thelounge.config.domain=${THELOUNGE_HOST}"
+      - "tinyauth.apps.thelounge.oauth.groups=${THELOUNGE_OAUTH_GROUPS}"
+      - "tinyauth.apps.bazarr.config.domain=${BAZARR_HOST}"
+      - "tinyauth.apps.bazarr.oauth.groups=${BAZARR_OAUTH_GROUPS}"
+      - "tinyauth.apps.profilarr-v2.config.domain=${PROFILARR_V2_HOST}"
+      - "tinyauth.apps.profilarr-v2.oauth.groups=${PROFILARR_V2_OAUTH_GROUPS}"
+      - "tinyauth.apps.scrutiny.config.domain=${SCRUTINY_HOST}"
+      - "tinyauth.apps.scrutiny.oauth.groups=${SCRUTINY_OAUTH_GROUPS}"
+      - "tinyauth.apps.traefik.config.domain=${TRAEFIK_HOST}"
+      - "tinyauth.apps.traefik.oauth.groups=${TRAEFIK_OAUTH_GROUPS}"
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  traefik_socket_net:
+    external: true
