@@ -7,6 +7,14 @@ services:
       - DOMAIN=${VAULTWARDEN_DOMAIN}
       - ADMIN_TOKEN=${ADMIN_TOKEN}
       - SIGNUPS_ALLOWED=${SIGNUPS_ALLOWED}
+      - SSO_ENABLED=${SSO_ENABLED:-false}
+      - SSO_SIGNUPS_MATCH_EMAIL=${SSO_SIGNUPS_MATCH_EMAIL:-false}
+      - SSO_ALLOW_UNKNOWN_EMAIL_VERIFICATION=${SSO_ALLOW_UNKNOWN_EMAIL_VERIFICATION:-false}
+      - SSO_PKCE=${SSO_PKCE:-true}
+      - SSO_SCOPES=${SSO_SCOPES:-email profile groups offline_access}
+      - SSO_CLIENT_ID=${SSO_CLIENT_ID:-}
+      - SSO_CLIENT_SECRET=${SSO_CLIENT_SECRET:-}
+      - SSO_AUTHORITY=${SSO_AUTHORITY:-}
     volumes:
       - ${DOCKER_APPDATA_PATH}/vaultwarden:/data
     networks:

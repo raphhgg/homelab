@@ -22,11 +22,19 @@ services:
       - ${DOCKER_APPDATA_PATH}/tracearr:/config
     networks:
       - media
+      - traefik_socket_net
       - tracearr-network
     ports:
       - 3003:3000
     restart: always
     labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_socket_net"
+      - "traefik.http.routers.tracearr.rule=Host(`${TRACEARR_HOST}`)"
+      - "traefik.http.routers.tracearr.entrypoints=websecure"
+      - "traefik.http.routers.tracearr.tls.certresolver=cloudflare"
+      - "traefik.http.routers.tracearr.middlewares=allow-default-apps@file,tinyauth@file"
+      - "traefik.http.services.tracearr.loadbalancer.server.port=3000"
       - "com.centurylinklabs.watchtower.enable=true"
 
   timescale:
@@ -65,6 +73,8 @@ services:
 
 networks:
   media:
+    external: true
+  traefik_socket_net:
     external: true
   tracearr-network:
     driver: bridge

@@ -11,6 +11,35 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
       - OLLAMA_BASE_URL=${OLLAMA_BASE_URL}
+      - ENABLE_OAUTH_SIGNUP=${OPENWEBUI_OAUTH_ENABLED}
+      - OAUTH_CLIENT_ID=${OPENWEBUI_OAUTH_CLIENT_ID}
+      - OAUTH_CLIENT_SECRET=${OPENWEBUI_OAUTH_CLIENT_SECRET}
+      - OAUTH_PROVIDER_NAME=Pocket ID
+      - OPENID_PROVIDER_URL=${OPENWEBUI_OPENID_PROVIDER_URL}
+      - OAUTH_MERGE_ACCOUNTS_BY_EMAIL=true
+      - ENABLE_OAUTH_ROLE_MANAGEMENT=true
+      - ENABLE_OAUTH_GROUP_MANAGEMENT=true
+      - ENABLE_OAUTH_GROUP_CREATION=true
+      - OAUTH_ALLOWED_ROLES=${OPENWEBUI_OAUTH_ALLOWED_ROLES}
+      - OAUTH_ADMIN_ROLES=${OPENWEBUI_OAUTH_ADMIN_ROLES}
+      - OAUTH_ROLES_CLAIM=groups
+      - OAUTH_SCOPES=openid email profile groups
+      - DEFAULT_USER_ROLE=user
+      - ENABLE_LOGIN_FORM=${OPENWEBUI_ENABLE_LOGIN_FORM}
+      - OAUTH_UPDATE_PICTURE_ON_LOGIN=true
     restart: always
     labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_socket_net"
+      - "traefik.http.routers.chat.rule=Host(`${CHAT_HOST}`)"
+      - "traefik.http.routers.chat.entrypoints=websecure"
+      - "traefik.http.routers.chat.tls.certresolver=cloudflare"
+      - "traefik.http.routers.chat.middlewares=allow-default-apps@file"
+      - "traefik.http.services.chat.loadbalancer.server.port=8080"
       - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - traefik_socket_net
+
+networks:
+  traefik_socket_net:
+    external: true
