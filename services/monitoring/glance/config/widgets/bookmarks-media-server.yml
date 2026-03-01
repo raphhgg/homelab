@@ -7,22 +7,22 @@
         color: 250 80 60
         links:
         - title: Plex
-          url: http://10.10.2.41:32400/web/index.html
+          url: http://10.10.2.201:32400/web/index.html
           icon: /assets/icons/plex.svg
         - title: Radarr
-          url: http://10.10.2.41:7878
+          url: http://10.10.2.201:7878
           icon: /assets/icons/radarr.svg
         - title: Sonarr
-          url: http://10.10.2.41:8988
+          url: http://10.10.2.201:8988
           icon: /assets/icons/sonarr.svg
         - title: Qui
-          url: http://10.10.2.41:7476/instances/1
+          url: http://10.10.2.201:7476/instances/1
           icon: /assets/icons/qui.png
         - title: Daps-UI
-          url: http://10.10.2.41:8001/poster-renamer
+          url: http://10.10.2.201:8001/poster-renamer
           icon: mdi:image-edit
         - title: Profilarr
-          url: http://10.10.2.41:6868
+          url: http://10.10.2.201:6868
           icon: /assets/icons/profilarr.svg
   - type: bookmarks
     title: Tools
@@ -31,20 +31,20 @@
         color: 200 70 50
         links:
           - title: Prowlarr
-            url: http://10.10.2.41:9696
+            url: http://10.10.2.201:9696
             icon: /assets/icons/prowlarr.svg
-          - title: Jellyseerr
-            url: http://10.10.2.41:5055
+          - title: Seerr
+            url: http://10.10.2.201:5055
             icon: /assets/icons/jellyseerr.svg
           - title: Autobrr
-            url: http://10.10.2.41:7474
+            url: http://10.10.2.201:7474
             icon: /assets/icons/autobrr.svg
           - title: Upload Assistant
-            url: http://10.10.2.41:8086
+            url: http://10.10.2.201:8086
             icon: mdi:cloud-upload
           - title: Daps
-            url: http://10.10.2.41:8002/
+            url: http://10.10.2.201:8002/
             icon: mdi:image-multiple
           - title: stash
-            url: http://10.10.2.41:9999
+            url: http://10.10.2.201:9999
             icon: /assets/icons/stash.svg

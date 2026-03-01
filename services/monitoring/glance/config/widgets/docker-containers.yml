@@ -7,13 +7,13 @@
     plex:
       name: Plex
       description: Media streaming server
-      url: http://10.10.2.41:32400/web
+      url: http://10.10.2.201:32400/web
       icon: /assets/icons/plex.svg
       category: media-server
     tautulli:
       name: Tautulli
       description: Plex monitoring and statistics
-      url: http://10.10.2.41:8181
+      url: http://10.10.2.201:8181
       icon: /assets/icons/tautulli.svg
       category: media-server
     kometa:
@@ -36,37 +36,37 @@
     radarr:
       name: Radarr
       description: Movie management
-      url: http://10.10.2.41:7878
+      url: http://10.10.2.201:7878
       icon: /assets/icons/radarr.svg
       category: arrs
     sonarr:
       name: Sonarr
       description: TV show management
-      url: http://10.10.2.41:8988
+      url: http://10.10.2.201:8988
       icon: /assets/icons/sonarr.svg
       category: arrs
     prowlarr:
       name: Prowlarr
       description: Indexer manager
-      url: http://10.10.2.41:9696
+      url: http://10.10.2.201:9696
       icon: /assets/icons/prowlarr.svg
       category: arrs
     bazarr:
       name: Bazarr
       description: Subtitle management
-      url: http://10.10.2.41:6767
+      url: http://10.10.2.201:6767
       icon: /assets/icons/bazarr.svg
       category: arrs
     profilarr:
       name: Profilarr
       description: Profile sync for Arrs
-      url: http://10.10.2.41:6868
+      url: http://10.10.2.201:6868
       icon: /assets/icons/sonarr.svg
       category: arrs
-    jellyseerr:
-      name: Jellyseerr
+    seerr:
+      name: Seerr
       description: Media request management
-      url: http://10.10.2.41:5055
+      url: http://10.10.2.201:5055
       icon: /assets/icons/jellyseerr.svg
       category: arrs
 
@@ -74,25 +74,25 @@
     qbit-main:
       name: qbit-main
       description: Primary torrent client
-      url: http://10.10.2.41:8080
+      url: http://10.10.2.201:8080
       icon: /assets/icons/qbittorrent.svg
       category: torrents
     qbit-cross:
       name: qbit-cross
       description: Cross-seed torrent client
-      url: http://10.10.2.41:8084
+      url: http://10.10.2.201:8084
       icon: /assets/icons/qbittorrent.svg
       category: torrents
     qbit-brr:
       name: qbit-brr
       description: Autobrr torrent client
-      url: http://10.10.2.41:8085
+      url: http://10.10.2.201:8085
       icon: /assets/icons/qbittorrent.svg
       category: torrents
     autobrr:
       name: Autobrr
       description: Torrent automation
-      url: http://10.10.2.41:7474
+      url: http://10.10.2.201:7474
       icon: /assets/icons/autobrr.svg
       category: torrents
     cross-seed:
@@ -103,7 +103,7 @@
     qui:
       name: QUI
       description: qBittorrent unified interface
-      url: http://10.10.2.41:7476
+      url: http://10.10.2.201:7476
       icon: /assets/icons/qui.png
       category: torrents
 
@@ -111,19 +111,19 @@
     upload-assistant:
       name: Upload Assistant
       description: Torrent upload helper
-      url: http://10.10.2.41:8086
+      url: http://10.10.2.201:8086
       icon: /assets/icons/github.svg
       category: tools
     daps:
       name: DAPS
       description: Poster automation
-      url: http://10.10.2.41:8002
+      url: http://10.10.2.201:8002
       icon: /assets/icons/github.svg
       category: tools
     daps-ui:
       name: DAPS UI
       description: DAPS web interface
-      url: http://10.10.2.41:8001
+      url: http://10.10.2.201:8001
       icon: /assets/icons/github.svg
       category: tools
     autopulse:
@@ -134,7 +134,7 @@
     stash:
       name: Stash
       description: Media organizer
-      url: http://10.10.2.41:9999
+      url: http://10.10.2.201:9999
       icon: /assets/icons/stash.svg
       category: tools
     calibre-web-dl:
@@ -147,7 +147,7 @@
     beszel:
       name: Beszel
       description: Server monitoring dashboard
-      url: http://10.10.2.41:8091
+      url: http://10.10.2.201:8091
       icon: /assets/icons/beszel.svg
       category: monitoring
     beszel-agent:
@@ -158,25 +158,25 @@
     dozzle:
       name: Dozzle
       description: Docker log viewer
-      url: http://10.10.2.41:8088
+      url: http://10.10.2.201:8088
       icon: /assets/icons/docker.svg
       category: monitoring
     uptime-kuma:
       name: Uptime Kuma
       description: Uptime monitoring
-      url: http://10.10.2.41:3001
+      url: http://10.10.2.201:3001
       icon: /assets/icons/uptime-kuma.svg
       category: monitoring
     glance:
       name: Glance
       description: Dashboard
-      url: http://10.10.2.41:8070
+      url: http://10.10.2.201:8070
       icon: /assets/icons/glance.svg
       category: monitoring
     speedtest-tracker:
       name: Speedtest Tracker
       description: Internet speed monitoring
-      url: http://10.10.2.41:8076
+      url: http://10.10.2.201:8076
       icon: /assets/icons/speedtest.svg
       category: monitoring
     watchtower:
@@ -211,13 +211,13 @@
     portainer:
       name: Portainer
       description: Docker management UI
-      url: http://10.10.2.41:9000
+      url: http://10.10.2.201:9000
       icon: /assets/icons/portainer.svg
       category: infrastructure
     cronicle:
       name: Cronicle
       description: Job scheduler
-      url: http://10.10.2.41:3012
+      url: http://10.10.2.201:3012
       icon: /assets/icons/cronicle.svg
       category: infrastructure
     cloudflare-ddns:
@@ -235,7 +235,7 @@
     home-assistant:
       name: Home Assistant
       description: Smart home automation
-      url: http://10.10.2.41:8123
+      url: http://10.10.2.201:8123
       icon: /assets/icons/home-assistant.svg
       category: smart-home
 
@@ -243,13 +243,13 @@
     syncthing:
       name: Syncthing
       description: File synchronization
-      url: http://10.10.2.41:8384
+      url: http://10.10.2.201:8384
       icon: /assets/icons/syncthing.svg
       category: sync
     thelounge:
       name: The Lounge
       description: IRC client
-      url: http://10.10.2.41:9001
+      url: http://10.10.2.201:9001
       icon: /assets/icons/thelounge.svg
       category: sync
 

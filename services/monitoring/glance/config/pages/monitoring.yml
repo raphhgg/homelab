@@ -3,8 +3,8 @@
     - size: small
       widgets:
         - $include: ../widgets/unifi.yml
-        - $include: ../widgets/server-stats.yml
         - $include: ../widgets/proxmox-ve-nodes.yml
+        - $include: ../widgets/dns-stats.yml
         - $include: ../widgets/drive-health.yml
 
     - size: full
@@ -17,11 +17,12 @@
         #     - $include: ../widgets/beszel-containers-ram.yml
         - $include: ../widgets/monitors-media-server.yml
         - $include: ../widgets/monitors-tools.yml
+        - $include: ../widgets/monitors-infrastructure.yml
         - $include: ../widgets/monitors-smart-home.yml
         - $include: ../widgets/monitors-monitoring.yml
 
         # - type: iframe
-        #   source: http://10.10.2.41:7575/ # http://10.10.2.41:8091/system/9o7zk9q8y5r9d0t
+        #   source: http://10.10.2.201:7575/ # http://10.10.2.201:8091/system/9o7zk9q8y5r9d0t
         #   height: 800
         
        

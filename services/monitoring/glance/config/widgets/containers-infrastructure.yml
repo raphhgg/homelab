@@ -4,11 +4,6 @@
   running-only: false
   hide-by-default: true
   containers:
-    docker-proxy:
-      name: Docker Proxy
-      description: Docker socket proxy
-      icon: /assets/icons/docker.svg
-      hide: false
     cloudflare-ddns:
       name: Cloudflare DDNS
       description: Dynamic DDNS updater

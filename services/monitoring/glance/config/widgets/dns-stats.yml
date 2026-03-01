@@ -1,0 +1,5 @@
+- type: dns-stats
+  service: adguard
+  url: http://10.10.2.101
+  username: admin
+  password: ${ADGUARD_PASSWORD}

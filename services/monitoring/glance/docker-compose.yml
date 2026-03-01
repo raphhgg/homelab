@@ -14,8 +14,10 @@ services:
 
   glance:
     container_name: glance
-    image: ghcr.io/panonim/dynacat:1.1.0
+    image: ghcr.io/panonim/dynacat:beta-3f1202b
     restart: always
+    dns:
+      - 10.10.2.101
     env_file:
       - .env
     volumes:

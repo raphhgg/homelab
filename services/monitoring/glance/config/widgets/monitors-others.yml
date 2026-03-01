@@ -3,23 +3,23 @@
   cache: 1m
   sites:
     - title: DSM
-      url: https://10.10.2.41:5001
+      url: https://10.10.2.201:5001
       icon: /assets/icons/synology-dsm.svg
       allow-insecure: true
       alt-status-codes:
         - 403
     - title: Home Assistant
-      url: http://10.10.2.41:8123
+      url: http://10.10.2.201:8123
       icon: /assets/icons/home-assistant.svg
     - title: Syncthing
-      url: http://10.10.2.41:8384
+      url: http://10.10.2.201:8384
       icon: /assets/icons/syncthing.svg
     - title: The Lounge
-      url: http://10.10.2.41:9001
+      url: http://10.10.2.201:9001
       icon: /assets/icons/thelounge.svg
     - title: OpenWebUI
-      url: http://10.10.2.41:8087
+      url: http://10.10.2.201:8087
       icon: /assets/icons/open-webui-light.svg
     - title: Gotify
-      url: http://10.10.2.41:8093
+      url: http://10.10.2.201:8093
       icon: /assets/icons/gotify.svg

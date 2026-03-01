@@ -27,7 +27,7 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - APP_URL=http://10.10.2.41:8091
+      - APP_URL=http://10.10.2.201:8091
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"

@@ -3,32 +3,32 @@
   cache: 1m
   sites:
     - title: Plex
-      url: http://10.10.2.41:32400/web/index.html
+      url: http://10.10.2.201:32400/web/index.html
       icon: /assets/icons/plex.svg
     - title: Radarr
-      url: http://10.10.2.41:7878
+      url: http://10.10.2.201:7878
       icon: /assets/icons/radarr.svg
     - title: Sonarr
-      url: http://10.10.2.41:8988
+      url: http://10.10.2.201:8988
       icon: /assets/icons/sonarr.svg
     - title: Qui
-      url: http://10.10.2.41:7476/instances/1
+      url: http://10.10.2.201:7476/instances/1
       icon: /assets/icons/qui.png
     - title: Daps-UI
-      url: http://10.10.2.41:8001/poster-renamer
+      url: http://10.10.2.201:8001/poster-renamer
       icon: mdi:image-edit
     - title: Profilarr
-      url: http://10.10.2.41:6869
+      url: http://10.10.2.201:6869
       icon: /assets/icons/profilarr.svg
     - title: Tautulli
-      url: http://10.10.2.41:8181
+      url: http://10.10.2.201:8181
       icon: /assets/icons/tautulli.svg
     - title: Pulsarr
-      url: http://10.10.2.41:3010/dashboard
+      url: http://10.10.2.201:3010/dashboard
       icon: di:pulsarr
       allow-insecure: true
       alt-status-codes:
         - 403
     - title: Tracearr
-      url: http://10.10.2.41:3003/history
+      url: http://10.10.2.201:3003/history
       icon: di:tracearr

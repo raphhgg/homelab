@@ -5,47 +5,47 @@
       cache: 1m
       sites:
         - title: Plex
-          url: http://10.10.2.41:32400/web/index.html
+          url: http://10.10.2.201:32400/web/index.html
           icon: /assets/icons/plex.svg
         - title: Radarr
-          url: http://10.10.2.41:7878
+          url: http://10.10.2.201:7878
           icon: /assets/icons/radarr.svg
         - title: Sonarr
-          url: http://10.10.2.41:8988
+          url: http://10.10.2.201:8988
           icon: /assets/icons/sonarr.svg
         - title: Tautulli
-          url: http://10.10.2.41:8181
+          url: http://10.10.2.201:8181
           icon: /assets/icons/tautulli.svg
         - title: Qui
-          url: http://10.10.2.41:7476/instances/1
+          url: http://10.10.2.201:7476/instances/1
           icon: /assets/icons/qui.png
         - title: Daps-UI
-          url: http://10.10.2.41:8001/poster-renamer
+          url: http://10.10.2.201:8001/poster-renamer
           icon: mdi:image-edit
     - type: monitor
       title: Tools
       cache: 1m
       sites:
         - title: Prowlarr
-          url: http://10.10.2.41:9696
+          url: http://10.10.2.201:9696
           icon: /assets/icons/prowlarr.svg
         - title: Profilarr
-          url: http://10.10.2.41:6869
+          url: http://10.10.2.201:6869
           icon: /assets/icons/profilarr.svg
-        - title: Jellyseerr
-          url: http://10.10.2.41:5055
+        - title: Seerr
+          url: http://10.10.2.201:5055
           icon: /assets/icons/jellyseerr.svg
         - title: Autobrr
-          url: http://10.10.2.41:7474
+          url: http://10.10.2.201:7474
           icon: /assets/icons/autobrr.svg
         - title: Upload Assistant
-          url: http://10.10.2.41:8086
+          url: http://10.10.2.201:8086
           icon: mdi:cloud-upload
         - title: Daps
-          url: http://10.10.2.41:8002/
+          url: http://10.10.2.201:8002/
           icon: mdi:image-multiple
         # - title: Stash
-        #   url: http://10.10.2.41:9999
+        #   url: http://10.10.2.201:9999
         #   icon: /assets/icons/stash.svg
 
 - type: group
@@ -55,16 +55,16 @@
     cache: 1m
     sites:
       - title: Netronome
-        url: http://10.10.2.41:7575
+        url: http://10.10.2.201:7575
         icon: /assets/icons/png/netronome.png
       - title: Beszel
-        url: http://10.10.2.41:8091
+        url: http://10.10.2.201:8091
         icon: /assets/icons/beszel.svg
       # - title: Gotify
-      #   url: http://10.10.2.41:8093
+      #   url: http://10.10.2.201:8093
       #   icon: /assets/icons/gotify.svg
       - title: Dozzle
-        url: http://10.10.2.41:8088
+        url: http://10.10.2.201:8088
         icon: /assets/icons/dozzle.svg
   - $include: ../widgets/monitors-smart-home.yml
   - type: monitor
@@ -72,14 +72,14 @@
     cache: 1m
     sites:
       - title: DSM
-        url: https://10.10.2.41:5001
+        url: https://10.10.2.201:5001
         icon: /assets/icons/synology-dsm.svg
         allow-insecure: true
         alt-status-codes:
           - 403
       - title: Home Assistant
-        url: http://10.10.2.41:8123
+        url: http://10.10.2.201:8123
         icon: /assets/icons/home-assistant.svg
       - title: Syncthing
-        url: http://10.10.2.41:8384
+        url: http://10.10.2.201:8384
         icon: /assets/icons/syncthing.svg

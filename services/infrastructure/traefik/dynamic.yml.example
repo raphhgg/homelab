@@ -26,7 +26,7 @@ http:
       loadBalancer:
         passHostHeader: true
         servers:
-          - url: "http://10.10.2.5:80"
+          - url: "http://10.10.2.101:80"
 
   middlewares:
     allow-admin-apps:
