@@ -1,7 +1,8 @@
 services:
-  jellyseerr:
-    image: fallenbagel/jellyseerr
-    container_name: jellyseerr
+  seerr:
+    image: ghcr.io/seerr-team/seerr:latest
+    init: true
+    container_name: seerr
     environment:
       - LOG_LEVEL=debug
       - TZ=${TZ}
@@ -9,7 +10,7 @@ services:
     ports:
       - 5055:5055
     volumes:
-      - ${DOCKER_APPDATA_PATH}/jellyseerr/config:/app/config
+      - ${DOCKER_APPDATA_PATH}/seerr/config:/app/config
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
