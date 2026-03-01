@@ -10,14 +10,14 @@ Homelab infrastructure managing Docker services organized in `services/` by cate
 
 These are the **actual values** used across all services. Use them when creating `.env` files:
 
-| Variable               | Value                    |
-|------------------------|--------------------------|
-| `PUID`                 | `1026`                   |
-| `PGID`                 | `100`                    |
-| `TZ`                   | `Europe/Brussels`        |
-| `DOCKER_APPDATA_PATH`  | `/volume2/docker/appdata`|
-| `MEDIAS_PATH`          | `/volume3/data/medias`   |
-| `DOWNLOAD_PATH`        | `/volume2/downloads`     |
+| Variable               | Value                       |
+|------------------------|-----------------------------|
+| `PUID`                 | `1000`                      |
+| `PGID`                 | `100`                       |
+| `TZ`                   | `Europe/Brussels`           |
+| `DOCKER_APPDATA_PATH`  | `/home/raphh/docker/appdata`|
+| `MEDIAS_PATH`          | `/mnt/data/medias`          |
+| `DOWNLOAD_PATH`        | `/mnt/downloads`            |
 
 ## Service Conventions
 
