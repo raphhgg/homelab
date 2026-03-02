@@ -1,0 +1,35 @@
+services:
+  pulse:
+    image: rcourtman/pulse:latest
+    container_name: pulse
+    init: true
+    restart: always
+    environment:
+      - TZ=${TZ}
+      - PULSE_PUBLIC_URL=${PULSE_PUBLIC_URL}
+      - PULSE_TRUSTED_PROXY_CIDRS=${PULSE_TRUSTED_PROXY_CIDRS}
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/pulse:/data
+      - ${DOCKER_APPDATA_PATH}/pulse/proxmox-ca.crt:/etc/ssl/certs/proxmox-ca.crt:ro
+    extra_hosts:
+      - ${PVE_HOSTNAME}:${PVE_HOST_IP}
+    ports:
+      - 7655:7655
+    networks:
+      - monitoring
+      - traefik_socket_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_socket_net"
+      - "traefik.http.routers.pulse.rule=Host(`${PULSE_HOST}`)"
+      - "traefik.http.routers.pulse.entrypoints=websecure"
+      - "traefik.http.routers.pulse.tls.certresolver=cloudflare"
+      - "traefik.http.routers.pulse.middlewares=allow-default-apps@file,tinyauth@file"
+      - "traefik.http.services.pulse.loadbalancer.server.port=7655"
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  monitoring:
+    external: true
+  traefik_socket_net:
+    external: true
