@@ -1,8 +1,8 @@
-$include: ../../widgets/weather.yml
-$include: ../../widgets/air-quality.yml     
-$include: ../../widgets/weather-7days.yml 
-$include: ../../widgets/now-playing-dynacat.yml
-$include: ../../widgets/markets.yml
+- $include: ../../widgets/weather.yml
+- $include: ../../widgets/air-quality.yml
+- $include: ../../widgets/weather-7days.yml
+- $include: ../../widgets/now-playing-dynacat.yml
+- $include: ../../widgets/markets.yml
 # $include: ../../widgets/f1-next-race.yml
 # $include: ../../widgets/f1-next-race-detailed.yml
 # $include: ../../widgets/f1-drivers-standings.yml

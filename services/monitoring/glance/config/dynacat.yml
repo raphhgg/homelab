@@ -1,5 +1,6 @@
 server:
   assets-path: /app/assets
+  proxied: true
 
 auth:
   secret-key: ${AUTH_SECRET_KEY}
