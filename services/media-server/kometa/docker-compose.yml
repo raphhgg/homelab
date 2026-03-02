@@ -47,6 +47,27 @@ services:
     networks:
       - media
 
+  daps-umtk-sync:
+    build:
+      context: ./umtk-poster-sync
+    image: umtk-poster-sync:latest
+    container_name: daps-umtk-sync
+    user: "${PUID}:${PGID}"
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/daps/scripts:/scripts:ro
+      - ${DOCKER_APPDATA_PATH}/daps/posters:/posters:ro
+      - ${DOCKER_APPDATA_PATH}/kometa/assets:/kometa:rw
+      - ${DOCKER_APPDATA_PATH}/umtk/kometa:/umtk-collections:ro
+      - ${MEDIAS_PATH}/movies/movies:/umtkmovies:ro
+      - ${MEDIAS_PATH}/tvshows/tvshows:/umtktv:ro
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - media
+
 networks:
   media:
     external: true
