@@ -1,0 +1,24 @@
+services:
+  unpackerr:
+    image: golift/unpackerr
+    container_name: unpackerr
+    user: ${PUID}:${PGID}
+    environment:
+      - TZ=${TZ}
+      - UN_RADARR_0_URL=${UN_RADARR_0_URL}
+      - UN_RADARR_0_API_KEY=${UN_RADARR_0_API_KEY}
+      - UN_RADARR_0_PATHS_0=/data/medias/downloads/torrents
+      - UN_RADARR_0_PROTOCOLS=torrent
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/unpackerr:/config
+      - ${DOWNLOAD_PATH}:/downloads
+      - ${MEDIAS_PATH}:/data/medias
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - media
+
+networks:
+  media:
+    external: true
