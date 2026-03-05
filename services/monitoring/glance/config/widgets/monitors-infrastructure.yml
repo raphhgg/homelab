@@ -2,8 +2,17 @@
   title: Infrastructure
   cache: 1m
   sites:
+    - title: Cloudflare DDNS
+      url: https://dash.cloudflare.com
+      icon: /assets/icons/cloudflare.svg
+      alt-status-codes:
+        - 401
+        - 403
+        - 307
     - title: Traefik
       url: https://traefik.raphh.me
+      check-url: https://traefik.raphh.me
+      timeout: 8s
       icon: di:traefik
       alt-status-codes:
         - 401
@@ -11,8 +20,31 @@
         - 307
     - title: AdGuard Home
       url: https://adguard.raphh.me
-      icon: di:adguard
+      check-url: http://10.10.2.101/
+      timeout: 8s
+      icon: /assets/icons/adguard-home.svg
       alt-status-codes:
+        - 302
+        - 401
+        - 403
+        - 307
+    - title: Pocket ID
+      url: https://id.ext.raphh.me/settings/apps
+      check-url: http://pocket-id:1411/
+      timeout: 8s
+      icon: di:pocket-id-light
+      alt-status-codes:
+        - 302
+        - 401
+        - 403
+        - 307
+    - title: TinyAuth
+      url: https://auth.raphh.me/login
+      check-url: http://tinyauth:3000/
+      timeout: 8s
+      icon: di:tinyauth
+      alt-status-codes:
+        - 302
         - 401
         - 403
         - 307

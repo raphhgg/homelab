@@ -1,6 +1,7 @@
 - $include: ../../widgets/speedtest.yml
 - $include: ../../widgets/qbittorrent.yml
 - $include: ../../widgets/proxmox-ve-nodes.yml
+- $include: ../../widgets/linkwarden.yml
 # - type: group
 #   widgets:
 #   - type: to-do

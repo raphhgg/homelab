@@ -4,48 +4,65 @@
   sites:
     - title: Prowlarr
       url: https://prowlarr.raphh.me
+      check-url: http://prowlarr:9696
+      timeout: 8s
       icon: /assets/icons/prowlarr.svg
       alt-status-codes:
         - 401
         - 307
     - title: Seerr
       url: https://seerr.raphh.me
+      check-url: http://seerr:5055
+      timeout: 8s
       icon: /assets/icons/jellyseerr.svg
       alt-status-codes:
         - 401
         - 307
     - title: Autobrr
       url: https://autobrr.raphh.me
+      check-url: http://autobrr:7474
+      timeout: 8s
       icon: /assets/icons/autobrr.svg
       alt-status-codes:
         - 401
         - 307
     - title: Upload Assistant
       url: https://upload-assistant.raphh.me
+      check-url: http://upload-assistant:5000
+      timeout: 8s
       icon: mdi:cloud-upload
       alt-status-codes:
         - 401
         - 307
     - title: Daps
       url: https://daps.raphh.me
+      check-url: http://daps:8000/
+      timeout: 8s
       icon: mdi:image-multiple
       alt-status-codes:
         - 401
         - 307
     - title: Stash
       url: https://stash.raphh.me
+      check-url: http://stash:9999/
+      timeout: 8s
       icon: /assets/icons/stash.svg
       alt-status-codes:
+        - 302
         - 401
         - 307
     - title: Gotify
       url: https://gotify.raphh.me
+      check-url: http://gotify/
+      timeout: 8s
       icon: di:gotify
       alt-status-codes:
         - 401
         - 307
     - title: Vaultwarden
       url: https://vault.raphh.me
+      check-url: http://vaultwarden/
+      timeout: 8s
       icon: di:vaultwarden-light
       alt-status-codes:
         - 401

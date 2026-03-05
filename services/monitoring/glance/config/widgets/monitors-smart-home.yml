@@ -4,13 +4,18 @@
   sites:
     - title: Home Assistant
       url: https://ha.raphh.me/health
+      check-url: http://10.10.2.201:8123/
+      timeout: 8s
       icon: /assets/icons/png/home-assistant.png
     - title: Zigbee2MQTT
       url: https://z2mqtt.raphh.me/
+      check-url: http://zigbee2mqtt:8080/
+      timeout: 8s
       icon: di:zigbee2mqtt-light
       alt-status-codes:
         - 401
         - 307
     - title: SMLight SLZB-MR1
       url: http://10.10.3.108/
+      timeout: 8s
       icon: /assets/icons/png/smlight.png

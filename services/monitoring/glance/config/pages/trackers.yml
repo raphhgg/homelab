@@ -149,6 +149,9 @@
                   color: 120 70 50
                   hide-arrow: true
                   links:
+                    - title: Orpheus
+                      url: https://orpheus.network/forums.php?action=viewforum&forumid=39
+                      icon: https://orpheus.network/favicon.ico
                     - title: Anthelion
                       url: https://anthelion.me/forums.php?action=viewforum&forumid=29
                       icon: https://anthelion.me/favicon.ico

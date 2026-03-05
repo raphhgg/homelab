@@ -52,7 +52,7 @@ services:
     restart: always
     environment:
       - TIMEZONE=${TZ}
-      - TRACK_COLOUR=#e10600
+      - TRACK_COLOUR=${F1_TRACK_COLOUR}
       - EVENT_DETAIL=main
     ports:
       - 4463:4463

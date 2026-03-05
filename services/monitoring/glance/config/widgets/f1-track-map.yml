@@ -6,7 +6,10 @@
   title: Track Map
   cache: 1d
   url: http://f1-api:4463/f1/next_race/
+  options:
+    f1-api-base-url: ${F1_API_BASE_URL}
   template: |
+    {{ $f1ApiBaseURL := .Options.StringOr "f1-api-base-url" "" }}
     {{ $races := .JSON.Array "race" }}
     {{ if eq (len $races) 0 }}
     <div class="flex flex-column gap-10">
@@ -18,12 +21,14 @@
       {{ $session := index $races 0 }}
       <p class="color-highlight">{{ $session.String "circuit.circuitName" }}</p>
       <p class="size-h6">{{ $session.String "circuit.city" }}, {{ $session.String "circuit.country" }}</p>
-      <div style="margin-block: 0.5rem;">
+      <div style="margin-block: 1.25rem;">
+        {{ if ne $f1ApiBaseURL "" }}
         <img
-          src="http://f1-api:4463/f1/next_map/"
+          src="{{ $f1ApiBaseURL }}/f1/next_map/"
           onerror="this.style.display='none'"
           style="max-width: 100%; height: auto; border-radius: 8px;"
         />
+        {{ end }}
       </div>
     </div>
     {{ end }}

@@ -28,7 +28,7 @@
        
     - size: small
       widgets:
-        - $include: ../widgets/containers-infrastructure.yml
+        - $include: ../widgets/containers-utils.yml
         # - $include: ../widgets/containers-notifications.yml
-        - $include: ../widgets/containers-media-server-utils.yml
+        # - $include: ../widgets/containers-media-server-utils.yml
         

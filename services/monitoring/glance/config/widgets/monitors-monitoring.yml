@@ -4,43 +4,67 @@
   sites:
     - title: Beszel
       url: https://beszel.raphh.me
+      check-url: http://beszel:8090
+      timeout: 8s
       icon: /assets/icons/beszel.svg
       alt-status-codes:
         - 401
         - 307
     - title: Netronome
       url: https://netronome.raphh.me
+      check-url: http://netronome:7575
+      timeout: 8s
       icon: /assets/icons/png/netronome.png
       alt-status-codes:
         - 401
         - 307
     - title: Uptime Kuma
       url: https://kuma.raphh.me
+      check-url: http://uptime-kuma:3001
+      timeout: 8s
       icon: /assets/icons/uptime-kuma.svg
       alt-status-codes:
+        - 302
         - 401
         - 307
     - title: Dozzle
       url: https://dozzle.raphh.me
+      check-url: http://dozzle:8080/
+      timeout: 8s
       icon: /assets/icons/dozzle.svg 
       alt-status-codes:
         - 401
         - 307
     - title: Scrutiny
       url: https://scrutiny.raphh.me/web/dashboard
+      check-url: http://scrutiny:8080/web/dashboard
+      timeout: 8s
       icon: /assets/icons/scrutiny.svg
       alt-status-codes:
         - 401
         - 307
     - title: Speedtest Tracker
       url: https://speedtest.raphh.me
+      check-url: http://speedtest-tracker/
+      timeout: 8s
       icon: /assets/icons/speedtest.svg
       alt-status-codes:
+        - 302
         - 401
         - 307
     - title: Dockhand
       url: https://dockhand.raphh.me/
+      check-url: http://dockhand:3000/
+      timeout: 8s
       icon: /assets/icons/png/dockhand.png
+      alt-status-codes:
+        - 401
+        - 307
+    - title: Pulse
+      url: https://pulse.raphh.me/proxmox/overview
+      check-url: http://pulse:7655/api/updates/status
+      timeout: 8s
+      icon: di:pulse
       alt-status-codes:
         - 401
         - 307

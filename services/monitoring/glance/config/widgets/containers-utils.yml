@@ -1,0 +1,81 @@
+- type: docker-containers
+  title: Containers
+  sock-path: ${DOCKER_HOST}
+  running-only: false
+  hide-by-default: true
+  containers:
+    kometa:
+      name: Kometa
+      description: Plex metadata manager
+      icon: /assets/icons/kometa.png
+      hide: false
+    imagemaid:
+      name: ImageMaid
+      description: Plex image cleanup
+      icon: /assets/icons/image-maid.png
+      hide: false
+    plex-auto-languages:
+      name: Plex-Auto-Languages
+      description: Automatic audio/subtitle selection
+      icon: /assets/icons/plex.svg
+      hide: false
+    autopulse:
+      name: Autopulse
+      description: Media processing automation
+      icon: /assets/icons/github-white.svg
+      hide: false
+    cross-seed:
+      name: Cross-Seed
+      description: Download once, seed everywhere
+      icon: /assets/icons/png/cross-seed.png
+      hide: false
+    lettarrboxd:
+      name: Lettarrboxd
+      icon: /assets/icons/letterboxd-light.svg
+      hide: false
+    lettarboxd-new-releases:
+      name: Lettarrboxd New Releases
+      icon: /assets/icons/letterboxd-light.svg
+      hide: false
+    plexboxd:
+      name: Plexboxd
+      description: Discord bot to send review to Letterboxd
+      icon: di:discord
+      hide: false
+    pushtify:
+      name: Pushtify
+      description: Pushover utils for Gotify
+      icon: di:gotify
+      hide: false
+    rsshub:
+      name: Rsshub
+      description: Self-hosted RSS feeds
+      icon: /assets/icons/png/rsshub.png
+      hide: false
+    umtk:
+      name: UMTK
+      description: Upcoming Movies & TV Shows for Kometa
+      icon: /assets/icons/kometa.png
+      hide: false
+    daps-umtk-sync:
+      name: DAPS & UMTK Sync
+      description: Daps-UI & UMTK Sync
+      icon: /assets/icons/kometa.png
+      hide: false
+    github-actions-runner:
+      name: GitHub Runner
+      description: Self-hosted Actions runner
+      icon: /assets/icons/github-white.svg
+      hide: false
+    watchtower:
+      name: Watchtower
+      description: Container auto-updater
+      icon: /assets/icons/watchtower.svg
+      hide: false
+    unpackerr:
+      name: Unpackerr
+      description: Extract files so Radarr or Sonarr can import them
+      icon: /assets/icons/github-white.svg
+      hide: false
+
+      

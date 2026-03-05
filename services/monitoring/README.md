@@ -38,7 +38,6 @@ Layer 5: Alerting → Gotify + Discord (Notify me)
 
 **Note on filesystem monitoring:**
 - Monitors volume-level usage (Volume1/Volume2 overall)
-- For directory-level usage (docker, downloads, movies, etc.), use Cronicle-scheduled scripts
 - BTRFS subvolumes show total volume usage, not individual directory size
 
 **Architecture:**
@@ -109,7 +108,7 @@ docker-compose logs beszel-agent
 - DNS records, SSL certificates
 
 **Monitor Types:**
-- **HTTP monitors**: For services with web UIs/APIs (Dozzle, Beszel, Uptime Kuma, Cronicle, Plex, etc.)
+- **HTTP monitors**: For services with web UIs/APIs (Dozzle, Beszel, Uptime Kuma, Plex, etc.)
   - Verifies the service is responding, not just that the container is running
   - Detects frozen/crashed services even if container appears running
 - **Docker monitors**: For background services without HTTP interfaces (Watchtower, Cloudflare DDNS, GitHub Actions runner)

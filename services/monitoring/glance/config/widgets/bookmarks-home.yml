@@ -8,15 +8,15 @@
       - title: Gmail
         url: https://mail.google.com/mail/u/0/#inbox
         icon: di:gmail # /assets/icons/gmail.png
+      - title: Proton Mail
+        url: https://mail.proton.me/u/1/inbox
+        icon: di:proton-mail
       - title: Unifi Console
         url: https://10.10.0.1/network
         icon: di:unifi #/assets/icons/unifi.png
       - title: Proton Pass
         url: https://pass.proton.me
         icon: di:proton-pass # /assets/icons/proton-pass.png
-      - title: Proton Mail
-        url: https://mail.proton.me/u/1/inbox
-        icon: di:proton-mail
               
     - title: Search
       # color: var(--color-primary) #220 83 75 #200 70 50
@@ -39,15 +39,12 @@
         - title: Reddit
           url: https://www.reddit.com
           icon: /assets/icons/reddit.svg
-        - title: Letterboxd
-          url: https://letterboxd.com
-          icon: /assets/icons/letterboxd-light.svg
         - title: Linear
           url: https://linear.app/raphh/view/all-issues-1aed130b09f5
           icon: di:linear-dark # /assets/icons/linear.png
-        - title: Linkwarden
-          url: https://links.raphh.me/dashboard
-          icon: /assets/icons/png/linkwarden.png
+        - title: Pocket ID
+          url: https://id.ext.raphh.me/settings/apps
+          icon: di:pocket-id-light # /assets/icons/linear.png
         - title: GreenCloud CP
           url: https://cp.green.cloud/server/f59ac139-00af-41d9-a574-29abd9075bf2
           icon: /assets/icons/greencloud.ico

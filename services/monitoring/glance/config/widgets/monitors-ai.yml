@@ -4,6 +4,8 @@
   sites:
     - title: OpenWebUI
       url: https://chat.raphh.me
+      check-url: http://open-webui:8080/
+      timeout: 8s
       icon: /assets/icons/open-webui-light.svg
       alt-status-codes:
         - 401

@@ -4,49 +4,69 @@
   sites:
     - title: Plex
       url: https://plex.raphh.me/web/index.html
+      check-url: http://10.10.2.201:32400/web/index.html
+      timeout: 8s
       icon: /assets/icons/plex.svg
     - title: Radarr
       url: https://radarr.raphh.me
+      check-url: http://radarr:7878
+      timeout: 8s
       icon: /assets/icons/radarr.svg
       alt-status-codes:
         - 401
         - 307
     - title: Sonarr
       url: https://sonarr.raphh.me
+      check-url: http://sonarr:8989
+      timeout: 8s
       icon: /assets/icons/sonarr.svg
       alt-status-codes:
         - 401
         - 307
     - title: Qui
       url: http://10.10.2.201:7476/instances/1
+      timeout: 8s
       icon: /assets/icons/qui.png
     - title: Daps-UI
       url: https://daps-ui.raphh.me/poster-renamer
+      check-url: http://daps-ui:8000/
+      timeout: 8s
       icon: mdi:image-edit
       alt-status-codes:
         - 401
         - 307
     - title: Profilarr
       url: https://profilarr.raphh.me
+      check-url: http://profilarr-v2:6868
+      timeout: 8s
       icon: /assets/icons/profilarr.svg
       alt-status-codes:
+        - 302
         - 401
         - 307
     - title: Tautulli
       url: https://tautulli.raphh.me
+      check-url: http://tautulli:8181
+      timeout: 8s
       icon: /assets/icons/tautulli.svg
       alt-status-codes:
+        - 303
         - 401
         - 307
     - title: Pulsarr
       url: https://pulsarr.raphh.me/dashboard
+      check-url: http://pulsarr:3003/health
+      timeout: 8s
       icon: di:pulsarr
       alt-status-codes:
+        - 302
         - 401
         - 307
         - 403
     - title: Tracearr
       url: https://tracearr.raphh.me/history
+      check-url: http://tracearr:3000/history
+      timeout: 8s
       icon: di:tracearr
       alt-status-codes:
         - 401

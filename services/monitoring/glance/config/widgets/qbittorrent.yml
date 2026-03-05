@@ -1,5 +1,6 @@
 - type: custom-api
   title: qBittorrent
+  title-url: http://10.10.2.201:7476/instances/1
   cache: 10s
   subrequests:
     main_transfer:
@@ -8,16 +9,16 @@
       url: http://${QBITTORRENT_MAIN_IP}/api/v2/torrents/info
       parameters:
         filter: active
-    cross_transfer:
-      url: http://${QBITTORRENT_CROSS_IP}/api/v2/transfer/info
-    cross_active:
-      url: http://${QBITTORRENT_CROSS_IP}/api/v2/torrents/info
-      parameters:
-        filter: active
-    cross_seeding:
-      url: http://${QBITTORRENT_CROSS_IP}/api/v2/torrents/info
-      parameters:
-        filter: seeding
+    # cross_transfer:
+    #   url: http://${QBITTORRENT_CROSS_IP}/api/v2/transfer/info
+    # cross_active:
+    #   url: http://${QBITTORRENT_CROSS_IP}/api/v2/torrents/info
+    #   parameters:
+    #     filter: active
+    # cross_seeding:
+    #   url: http://${QBITTORRENT_CROSS_IP}/api/v2/torrents/info
+      # parameters:
+      #   filter: seeding
     brr_transfer:
       url: http://${QBITTORRENT_BRR_IP}/api/v2/transfer/info
     brr_active:
@@ -27,9 +28,6 @@
   template: |
     {{ $mainTransfer := .Subrequest "main_transfer" }}
     {{ $mainActive := .Subrequest "main_active" }}
-    {{ $crossTransfer := .Subrequest "cross_transfer" }}
-    {{ $crossActive := .Subrequest "cross_active" }}
-    {{ $crossSeeding := .Subrequest "cross_seeding" }}
     {{ $brrTransfer := .Subrequest "brr_transfer" }}
     {{ $brrActive := .Subrequest "brr_active" }}
 
@@ -61,36 +59,6 @@
           <div>
             <div class="color-highlight size-h4">{{ len ($mainActive.JSON.Array "") }}</div>
             <div class="size-h6">ACTIVE</div>
-          </div>
-        </div>
-        {{ else }}
-        <div class="color-negative size-sm">Error connecting</div>
-        {{ end }}
-      </div>
-
-      <hr style="border: 0; border-top: 1px solid var(--color-separator); margin: 12px 0;">
-
-      <!-- QBIT-CROSS -->
-      <div>
-        <div class="size-h5 color-subdue" style="margin-bottom: 6px;">QBIT-CROSS</div>
-        {{ if and (eq $crossTransfer.Response.StatusCode 200) (eq $crossActive.Response.StatusCode 200) (eq $crossSeeding.Response.StatusCode 200) }}
-        <div class="flex justify-between text-center">
-          <div>
-            {{ $ulSpeed := $crossTransfer.JSON.Float "up_info_speed" }}
-            {{ if lt $ulSpeed 1048576.0 }}
-              <div class="color-highlight size-h4">{{ printf "%.0f KiB/s" (div $ulSpeed 1024.0) }}</div>
-            {{ else }}
-              <div class="color-highlight size-h4">{{ printf "%.1f MiB/s" (div $ulSpeed 1048576.0) }}</div>
-            {{ end }}
-            <div class="size-h6">UPLOADING</div>
-          </div>
-          <div>
-            <div class="color-highlight size-h4">{{ len ($crossActive.JSON.Array "") }}</div>
-            <div class="size-h6">ACTIVE</div>
-          </div>
-          <div>
-            <div class="color-highlight size-h4">{{ len ($crossSeeding.JSON.Array "") }}</div>
-            <div class="size-h6">SEEDING</div>
           </div>
         </div>
         {{ else }}
