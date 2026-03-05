@@ -9,7 +9,7 @@ services:
       - PGID=${PGID}
       - UMASK=${UMASK}
       - CF_API_TOKEN=${CF_API_TOKEN}
-      - DOMAINS=raphh.me, www.raphh.me
+      - DOMAINS=raphh.me, *.raphh.me
       - PROXIED=true
     restart: always
     labels: 

@@ -104,6 +104,18 @@ http:
       tls:
         certResolver: cloudflare
 
+    glance-f1-api:
+      rule: "Host(`dash.raphh.me`) && PathPrefix(`/_internal/f1-api`)"
+      priority: 200
+      entryPoints:
+        - websecure
+      middlewares:
+        - allow-default-apps
+        - strip-f1-api-prefix
+      service: f1-api-service
+      tls:
+        certResolver: cloudflare
+
   services:
     adguard-service:
       loadBalancer:
@@ -147,6 +159,12 @@ http:
         passHostHeader: true
         servers:
           - url: "http://sonarr:8989"
+
+    f1-api-service:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://f1-api:4463"
 
   serversTransports:
     dsm-insecure-transport:
@@ -202,6 +220,11 @@ http:
       stripPrefix:
         prefixes:
           - /_internal/sonarr-cover
+
+    strip-f1-api-prefix:
+      stripPrefix:
+        prefixes:
+          - /_internal/f1-api
 
     radarr-cover-auth:
       headers:

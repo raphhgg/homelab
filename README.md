@@ -49,6 +49,7 @@ Media management applications: Sonarr, Radarr, Prowlarr, Bazarr, Profilarr, Cali
 ### media-server/
 - Plex and related: Plex, Kometa, ImageMaid, Plex-Auto-Languages, Plex-Trakt-Sync
 - Other: Tautulli, Trailarr, Jellyseerr, Stash, Lettarrboxd
+- Remote access guide: [Plex via Pangolin + Pocket ID](services/media-server/plex/README.md)
 
 ### infrastructure/
 - Cloudflare DDNS

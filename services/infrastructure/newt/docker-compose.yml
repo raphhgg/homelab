@@ -1,0 +1,17 @@
+services:
+  newt:
+    image: fosrl/newt:latest
+    container_name: newt
+    environment:
+      - PANGOLIN_ENDPOINT=${PANGOLIN_ENDPOINT}
+      - NEWT_ID=${NEWT_ID}
+      - NEWT_SECRET=${NEWT_SECRET}
+    networks:
+      - traefik_socket_net
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  traefik_socket_net:
+    external: true
