@@ -29,6 +29,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
       - APP_URL=https://${BESZEL_HOST}
+      - DISABLE_PASSWORD_AUTH=true
     restart: always
     labels:
       - "traefik.enable=true"
@@ -36,7 +37,7 @@ services:
       - "traefik.http.routers.beszel.rule=Host(`${BESZEL_HOST}`)"
       - "traefik.http.routers.beszel.entrypoints=websecure"
       - "traefik.http.routers.beszel.tls.certresolver=cloudflare"
-      - "traefik.http.routers.beszel.middlewares=allow-admin-apps@file,tinyauth@file"
+      - "traefik.http.routers.beszel.middlewares=allow-admin-apps@file"
       - "traefik.http.services.beszel.loadbalancer.server.port=8090"
       - "com.centurylinklabs.watchtower.enable=true"
 
@@ -47,11 +48,6 @@ services:
     networks:
       - monitoring
       - socket_net
-    # volumes:
-      # Monitor only main volumes - accurate filesystem-level usage
-      # For directory-level usage (docker, downloads, movies, etc.), use Cronicle scripts
-      # - /volume3:/extra-filesystems/cachedev_1__Volume3:ro
-      # - /volume2:/extra-filesystems/cachedev_0__Volume2:ro
     environment:
       - LISTEN=45876
       - DISABLE_SSH=true
@@ -65,16 +61,6 @@ services:
       - EXCLUDE_SMART=/dev/sda,/dev/vda,/dev/xvda
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility
-      # Filesystem for Disk Usage panel
-      # - FILESYSTEM=/extra-filesystems/cachedev_1__Volume3
-      # Map the I/O stats to the physical disk to fix "Device not found in diskstats"
-      # - DISK=/dev/sata1
-      # Explicitly define SMART devices with types for NAS controllers
-      # - SMART_DEVICES=/dev/sata1:sat,/dev/sata2:sat,/dev/nvme0n1:nvme
-    # devices:
-    #   - /dev/sata1:/dev/sata1
-    #   - /dev/sata2:/dev/sata2
-    #   - /dev/nvme0n1:/dev/nvme0
     cap_add:
       - SYS_RAWIO
       - SYS_ADMIN

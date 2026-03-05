@@ -5,6 +5,12 @@ services:
     user: ${PUID}:${PGID}
     environment:
       - TZ=${TZ}
+      - AUTOBRR__OIDC_ENABLED=${AUTOBRR__OIDC_ENABLED}
+      - AUTOBRR__OIDC_ISSUER=${AUTOBRR__OIDC_ISSUER}
+      - AUTOBRR__OIDC_CLIENT_ID=${AUTOBRR__OIDC_CLIENT_ID}
+      - AUTOBRR__OIDC_CLIENT_SECRET=${AUTOBRR__OIDC_CLIENT_SECRET}
+      - AUTOBRR__OIDC_REDIRECT_URL=${AUTOBRR__OIDC_REDIRECT_URL}
+      - AUTOBRR__OIDC_DISABLE_BUILT_IN_LOGIN=${AUTOBRR__OIDC_DISABLE_BUILT_IN_LOGIN:-false}
     ports:
       - 7474:7474
     networks:
@@ -19,7 +25,7 @@ services:
       - "traefik.http.routers.autobrr.rule=Host(`${AUTOBRR_HOST}`)"
       - "traefik.http.routers.autobrr.entrypoints=websecure"
       - "traefik.http.routers.autobrr.tls.certresolver=cloudflare"
-      - "traefik.http.routers.autobrr.middlewares=allow-admin-apps@file,tinyauth@file"
+      - "traefik.http.routers.autobrr.middlewares=allow-admin-apps@file"
       - "traefik.http.services.autobrr.loadbalancer.server.port=7474"
       - "com.centurylinklabs.watchtower.enable=true"
 

@@ -24,7 +24,7 @@ services:
       - "traefik.http.routers.pulse.rule=Host(`${PULSE_HOST}`)"
       - "traefik.http.routers.pulse.entrypoints=websecure"
       - "traefik.http.routers.pulse.tls.certresolver=cloudflare"
-      - "traefik.http.routers.pulse.middlewares=allow-default-apps@file,tinyauth@file"
+      - "traefik.http.routers.pulse.middlewares=allow-default-apps@file"
       - "traefik.http.services.pulse.loadbalancer.server.port=7655"
       - "com.centurylinklabs.watchtower.enable=true"
 
