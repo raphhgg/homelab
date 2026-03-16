@@ -1,0 +1,29 @@
+services:
+  umtk:
+    image: netplexflix/umtk:develop
+    container_name: umtk
+    environment:
+      - CRON=0 1 * * *
+      - DOCKER=true
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - DAPS_UMTK_SYNC_RUN_TOKEN=${DAPS_UMTK_SYNC_RUN_TOKEN}
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/umtk/config:/app/config
+      - ${DOCKER_APPDATA_PATH}/umtk/video:/video
+      - ${DOCKER_APPDATA_PATH}/umtk/kometa:/app/kometa
+      - ${DOCKER_APPDATA_PATH}/umtk/logs:/app/logs
+      - ${DOCKER_APPDATA_PATH}/umtk/scripts:/app/scripts:ro
+      - ${DOCKER_APPDATA_PATH}/umtk/scripts/run-umtk.sh:/app/run-umtk.sh:ro
+      - ${MEDIAS_PATH}/movies:/umtkmovies
+      - ${MEDIAS_PATH}/tvshows:/umtktv
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - media
+
+networks:
+  media:
+    external: true

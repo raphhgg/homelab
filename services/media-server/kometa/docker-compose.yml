@@ -23,51 +23,6 @@ services:
     networks:
       - media
 
-  umtk:
-    image: netplexflix/umtk:latest
-    container_name: umtk
-    environment:
-      - CRON=0 1 * * *
-      - DOCKER=true
-      - TZ=${TZ}
-      - PUID=${PUID}
-      - PGID=${PGID}
-    volumes:
-      - ${DOCKER_APPDATA_PATH}/umtk/config:/app/config
-      - ${DOCKER_APPDATA_PATH}/umtk/video:/video
-      - ${DOCKER_APPDATA_PATH}/umtk/kometa:/app/kometa
-      - ${DOCKER_APPDATA_PATH}/umtk/logs:/app/logs
-      - ${DOCKER_APPDATA_PATH}/umtk/scripts:/app/scripts:ro
-      - ${DOCKER_APPDATA_PATH}/umtk/scripts/run-umtk.sh:/app/run-umtk.sh:ro
-      - ${MEDIAS_PATH}/movies/movies:/umtkmovies
-      - ${MEDIAS_PATH}/tvshows/tvshows:/umtktv
-    restart: always
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-    networks:
-      - media
-
-  daps-umtk-sync:
-    build:
-      context: ./umtk-poster-sync
-    image: umtk-poster-sync:latest
-    container_name: daps-umtk-sync
-    user: "${PUID}:${PGID}"
-    environment:
-      - TZ=${TZ}
-    volumes:
-      - ${DOCKER_APPDATA_PATH}/daps/scripts:/scripts:ro
-      - ${DOCKER_APPDATA_PATH}/daps/posters:/posters:ro
-      - ${DOCKER_APPDATA_PATH}/kometa/assets:/kometa:rw
-      - ${DOCKER_APPDATA_PATH}/umtk/kometa:/umtk-collections:ro
-      - ${MEDIAS_PATH}/movies/movies:/umtkmovies:ro
-      - ${MEDIAS_PATH}/tvshows/tvshows:/umtktv:ro
-    restart: always
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-    networks:
-      - media
-
 networks:
   media:
     external: true
