@@ -3,9 +3,9 @@
     - size: small
       widgets:
         - $include: ../widgets/unifi.yml
-        - $include: ../widgets/proxmox-ve-nodes.yml
+        # - $include: ../widgets/proxmox-ve-nodes.yml
         - $include: ../widgets/dns-stats.yml
-        - $include: ../widgets/drive-health.yml
+        # - $include: ../widgets/drive-health.yml
 
     - size: full
       widgets:

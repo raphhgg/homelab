@@ -34,9 +34,6 @@ Gotify uses a numeric scale. Pushtify maps these to Pushover priorities:
 | App | Description |
 |-----|-------------|
 | uptime-kuma | Service availability alerts |
-| beszel | Hardware/resource alerts |
-| netronome | Network monitoring |
-| Scrutiny | Disk S.M.A.R.T health |
 
 **Priority 1** (Pushover Normal) — informational, everything else:
 
@@ -66,7 +63,7 @@ Apps without a token are silently skipped (unless `PUSHOVER_DEFAULT_TOKEN` is se
 
 ## Service Configuration Examples
 
-### Shoutrrr (Beszel, Watchtower, Netronome)
+### Shoutrrr (Watchtower)
 ```
 gotify://gotify:80/TOKEN?disabletls=yes
 ```

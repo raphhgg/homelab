@@ -15,7 +15,7 @@
                   hide-arrow: true
                   links:
                     - title: Orpheus
-                      url: https://orpheus.network/
+                      url: https://orpheus.network/user.php?id=37450
                       icon: https://orpheus.network/favicon.ico
                 - title: Mid Tier
                   color: 250 80 60
@@ -61,15 +61,25 @@
                   color: 280 70 60
                   hide-arrow: true
                   links:
-                    - title: My Anonamouse
-                      url: https://www.myanonamouse.net
-                      icon: https://www.myanonamouse.net/favicon.ico
+                    # Music
+                    - title: Concertos
+                      url: https://concertos.live/
+                      icon: https://concertos.live/favicon.ico
+                      # Sports
                     - title: Racing4Everyone
                       url: https://racing4everyone.eu
                       icon: https://www.google.com/s2/favicons?domain=racing4everyone.eu&sz=64
                     - title: SportsCult
                       url: https://sportscult.org
                       icon: https://www.google.com/s2/favicons?domain=sportscult.org&sz=64
+                    - title: F1Carreras
+                      url: https://f1carreras.xyz/
+                      icon: https://f1carreras.xyz/favicon.ico
+                      # Ebooks / Audiobooks
+                    - title: MyAnonamouse
+                      url: https://www.myanonamouse.net
+                      icon: https://www.myanonamouse.net/favicon.ico
+                      # Niche Cinema
                     - title: CinemaZ
                       url: https://cinemaz.to
                       icon: https://www.google.com/s2/favicons?domain=cinemaz.to&sz=64
@@ -79,6 +89,10 @@
                     - title: Secret Cinema
                       url: https://secret-cinema.pw/
                       icon: https://secret-cinema.pw/favicon.ico
+                    - title: AnimeZ
+                      url: https://beta.animez.to/
+                      icon: https://beta.animez.to/favicon.ico
+                      # Old Content
                     - title: Cathode-Ray.Tube
                       url: https://www.cathode-ray.tube/index.php
                       icon: https://www.cathode-ray.tube/favicon.ico
@@ -91,9 +105,6 @@
                     - title: DocsPedia
                       url: https://docspedia.world
                       icon: https://docspedia.world/favicon.ico
-                    - title: AnimeTorrents
-                      url: https://animetorrents.me
-                      icon: https://animetorrents.me/favicon.ico
 
             # Others Tab
             - type: bookmarks

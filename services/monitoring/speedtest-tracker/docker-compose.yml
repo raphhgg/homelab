@@ -3,6 +3,9 @@ services:
     container_name: speedtest-tracker
     image: lscr.io/linuxserver/speedtest-tracker:latest
     restart: always
+    dns:
+      - 10.10.2.101
+      - 1.1.1.1
     environment:
       - PUID=${PUID}
       - PGID=${PGID}

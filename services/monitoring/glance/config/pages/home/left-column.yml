@@ -1,12 +1,4 @@
 - $include: ../../widgets/speedtest.yml
 - $include: ../../widgets/qbittorrent.yml
-- $include: ../../widgets/proxmox-ve-nodes.yml
+# - $include: ../../widgets/proxmox-ve-nodes.yml
 - $include: ../../widgets/linkwarden.yml
-# - type: group
-#   widgets:
-#   - type: to-do
-#     title: Todo 1
-#     id: todos1
-#   - type: to-do
-#     title: Todo 2
-#     id: todo2

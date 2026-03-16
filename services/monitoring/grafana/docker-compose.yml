@@ -1,0 +1,25 @@
+services:
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    user: "${PUID}:${PGID}"
+    networks:
+      - monitoring
+    ports:
+      - 3004:3000
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/grafana/data:/var/lib/grafana
+      - ./provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./dashboards:/var/lib/grafana/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GF_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_ADMIN_PASSWORD}
+      - GF_PLUGINS_PREINSTALL=alexanderzobnin-zabbix-app,yesoreyeram-infinity-datasource
+      - TZ=${TZ}
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  monitoring:
+    external: true

@@ -50,6 +50,9 @@ services:
     container_name: f1-api
     image: skyallinott/f1_api:latest
     restart: always
+    dns:
+      - 10.10.2.101
+      - 1.1.1.1
     environment:
       - TIMEZONE=${TZ}
       - TRACK_COLOUR=${F1_TRACK_COLOUR}

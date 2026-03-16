@@ -164,20 +164,22 @@ def send_pushover(token, title, message, priority, image_url=None):
 def format_shoutrrr(body):
     """Reformat Shoutrrr notification body into a cleaner title + message.
 
-    Input:  "[CPU] High CPU Usage - Agent: **ds423plus** | CPU: **99.7%** (threshold: 29%)"
-    Output: ("CPU Alert", "High CPU Usage\nAgent: ds423plus\nCPU: 99.7% (threshold: 29%)")
+    Input:  "[CPU ALERT] High CPU Usage - Agent: **ds423plus** | CPU: **99.7%** (threshold: 29%)"
+    Output: ("High CPU Usage", "Agent: ds423plus\nCPU: 99.7% (threshold: 29%)")
     """
-    m = re.match(r"\[(\w+)\]\s*(.+)", body)
-    if not m:
-        return None, body
-    tag = m.group(1).upper()
-    rest = m.group(2)
+    rest = body.strip()
+
+    # Shoutrrr may include a bracketed prefix with spaces/symbols, e.g.:
+    # [CPU ALERT], [NETRONOME], [watchtower/update]
+    m = re.match(r"^\[[^\]]+\]\s*(.+)$", rest)
+    if m:
+        rest = m.group(1).strip()
 
     # Strip markdown bold for clean parsing, we'll re-add formatting later
     rest = re.sub(r"\*\*(.+?)\*\*", r"\1", rest)
 
-    # Split "Description - Key: val | Key: val" into lines
-    parts = re.split(r"\s*[|\-]\s*", rest, maxsplit=1)
+    # Split "Description - Key: val | Key: val" into title + details
+    parts = re.split(r"\s+-\s+|\s+\|\s+|\n", rest, maxsplit=1)
     description = parts[0].strip()
     details = parts[1].strip() if len(parts) > 1 else ""
 
@@ -187,7 +189,9 @@ def format_shoutrrr(body):
         for part in details.split("|"):
             lines.append(part.strip())
 
-    return description, "\n".join(lines)
+    # Keep message non-empty even when details are missing
+    formatted_body = "\n".join(lines) if lines else rest
+    return (description or None), formatted_body
 
 
 def on_message(ws, message):

@@ -13,6 +13,7 @@ services:
       - ${DOCKER_APPDATA_PATH}/pulse/proxmox-ca.crt:/etc/ssl/certs/proxmox-ca.crt:ro
     extra_hosts:
       - ${PVE_HOSTNAME}:${PVE_HOST_IP}
+      - id.ext.raphh.me:10.10.2.201
     ports:
       - 7655:7655
     networks:
