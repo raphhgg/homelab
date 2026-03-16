@@ -15,6 +15,8 @@ services:
       - SSO_CLIENT_ID=${SSO_CLIENT_ID:-}
       - SSO_CLIENT_SECRET=${SSO_CLIENT_SECRET:-}
       - SSO_AUTHORITY=${SSO_AUTHORITY:-}
+    dns:
+      - 1.1.1.1
     volumes:
       - ${DOCKER_APPDATA_PATH}/vaultwarden:/data
     networks:

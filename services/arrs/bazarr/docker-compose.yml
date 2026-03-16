@@ -12,7 +12,7 @@ services:
     volumes:
       - ${DOCKER_APPDATA_PATH}/bazarr:/config
       - ${MEDIAS_PATH:-/volume3/data/medias}:/data/medias
-    restart: unless-stopped
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_socket_net"
