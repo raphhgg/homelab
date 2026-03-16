@@ -153,17 +153,16 @@ networks:
 
 | Network | Purpose | Services |
 |---------|---------|----------|
-| `media` | Media pipeline: arrs, media-server utils, torrent clients | sonarr, radarr, bazarr, prowlarr, profilarr, tautulli, jellyseerr, kometa, daps, imagemaid, autopulse, pulsarr, plex-auto-languages, plexboxd, lettarrboxd, tracearr, stash, qbit-main, qbit-brr, autobrr, deemix, smoked-salmon, thelounge, qui, upload-assistant |
-| `monitoring` | Interconnected monitoring services | glance, gotify, watchtower, uptime-kuma, beszel, speedtest-tracker, apprise, netronome |
+| `media` | Media pipeline: arrs, media-server utils, torrent clients | sonarr, radarr, bazarr, prowlarr, profilarr, tautulli, jellyseerr, kometa, daps, imagemaid, autopulse, pulsarr, plex-auto-languages, plexboxd, lettarrboxd, tracearr, stash, qbit-main, qbit-brr, autobrr, thelounge, qui, upload-assistant |
+| `monitoring` | Interconnected monitoring services | glance, gotify, watchtower, uptime-kuma, speedtest-tracker |
 | `smart_home` | IoT and home automation | mosquitto, zigbee2mqtt |
 
 **Cross-network services** (join multiple external networks):
 - **Glance** → `monitoring` + `media` (queries sonarr, radarr, tautulli, qbittorrent APIs)
 - **Gotify** → `monitoring` + `media` (receives webhooks from media services)
-- **Apprise** → `monitoring` + `media` (notification hub for media services)
 
 **Fully isolated services** (no external network — only local or none):
-- Dozzle, Dockhand, Scrutiny, Linkwarden, Open-webui, Syncthing, Rsshub, Cloudflare-ddns
+- Dozzle, Linkwarden, Open-webui, Syncthing, Rsshub, Cloudflare-ddns
 
 **Host-mode services** (bypass Docker networking): Plex, Home-Assistant
 
@@ -173,7 +172,6 @@ networks:
 |---------|-------------|------------|
 | `socket_net` | Any service with a dedicated socket proxy | `<service>-proxy` + app |
 | `gotify_internal` | gotify | gotify + pushtify + gotify-middleware |
-| `apprise_internal` | apprise | apprise + apprise-middleware |
 | `glance_internal` | glance | glance + f1-api |
 | `linkwarden_internal` | linkwarden | linkwarden + postgres + meilisearch |
 | `rsshub_internal` | rsshub | rsshub + rsshub-redis |
