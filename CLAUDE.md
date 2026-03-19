@@ -154,7 +154,7 @@ networks:
 | Network | Purpose | Services |
 |---------|---------|----------|
 | `media` | Media pipeline: arrs, media-server utils, torrent clients | sonarr, radarr, bazarr, prowlarr, profilarr, tautulli, jellyseerr, kometa, daps, imagemaid, autopulse, pulsarr, plex-auto-languages, plexboxd, lettarrboxd, tracearr, stash, qbit-main, qbit-brr, autobrr, thelounge, qui, upload-assistant |
-| `monitoring` | Interconnected monitoring services | glance, gotify, watchtower, uptime-kuma, speedtest-tracker |
+| `monitoring` | Interconnected monitoring services | glance, gotify, watchtower, uptime-kuma |
 | `smart_home` | IoT and home automation | mosquitto, zigbee2mqtt |
 
 **Cross-network services** (join multiple external networks):

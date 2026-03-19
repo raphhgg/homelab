@@ -57,7 +57,7 @@ Media management applications: Sonarr, Radarr, Prowlarr, Bazarr, Profilarr, Cali
 - VPN gateways (gluetun, gluetun-brr, gluetun-cross)
 
 ### monitoring/
-Dozzle, Glance, Gotify, Speedtest Tracker, Uptime Kuma, Watchtower
+Dozzle, Glance, Gotify, Grafana, Uptime Kuma, Watchtower
 
 ### Other
 - **home-assistant/**: Smart home automation
