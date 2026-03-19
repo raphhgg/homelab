@@ -3,7 +3,7 @@
 #
 # Prerequisites:
 # - Bubble Card installed via HACS
-# - Optional integrations: Tautulli, Sonarr, Radarr, Speedtest Tracker, Uptime Kuma, Scrutiny
+# - Optional integrations: Tautulli, Sonarr, Radarr, Uptime Kuma, Scrutiny
 
 views:
   - title: Home
@@ -628,47 +628,6 @@ views:
             shadow_opacity: 0
             width_desktop: 540px
             margin_top_desktop: 25vh
-
-          - type: custom:bubble-card
-            card_type: separator
-            name: Internet
-            icon: mdi:web
-
-          - type: horizontal-stack
-            cards:
-              - type: custom:bubble-card
-                card_type: button
-                button_type: state
-                entity: sensor.speedtest_download
-                name: Download
-                icon: mdi:download
-                show_state: true
-                card_layout: large
-                styles: |
-                  .bubble-state::after {
-                    content: " Mbps";
-                    margin-left: 2px;
-                  }
-                  .bubble-button-card-container {
-                    background-color: ${
-                      state < 100 ? 'var(--error-color)' :
-                      state < 500 ? 'var(--warning-color)' : ''
-                    };
-                  }
-
-              - type: custom:bubble-card
-                card_type: button
-                button_type: state
-                entity: sensor.speedtest_upload
-                name: Upload
-                icon: mdi:upload
-                show_state: true
-                card_layout: large
-                styles: |
-                  .bubble-state::after {
-                    content: " Mbps";
-                    margin-left: 2px;
-                  }
 
           - type: custom:bubble-card
             card_type: separator
