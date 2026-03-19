@@ -30,6 +30,18 @@
       "tooltip": "Switch to PVE Nodes dashboard",
       "type": "link",
       "url": "/d/pve-nodes-hardware"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "Networking",
+      "tooltip": "Switch to Networking dashboard",
+      "type": "link",
+      "url": "/d/networking"
     }
   ],
   "panels": [
@@ -626,6 +638,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "decimals": 0,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -685,7 +698,8 @@
           "mode": 0,
           "options": {
             "showDisabledItems": false,
-            "skipEmptyValues": false
+            "skipEmptyValues": false,
+            "useTrends": "false"
           },
           "refId": "A"
         }
@@ -703,6 +717,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "decimals": 0,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -766,7 +781,8 @@
           "mode": 0,
           "options": {
             "showDisabledItems": false,
-            "skipEmptyValues": false
+            "skipEmptyValues": false,
+            "useTrends": "false"
           },
           "refId": "A"
         }
@@ -2375,7 +2391,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 24,
+        "w": 18,
         "x": 0,
         "y": 28
       },
@@ -2404,7 +2420,24 @@
         "opdataField": false,
         "pageSize": 20,
         "problemTimeline": true,
-        "resizedColumns": [],
+        "resizedColumns": [
+          {
+            "id": "expander",
+            "value": 789
+          },
+          {
+            "id": "name",
+            "value": 529
+          },
+          {
+            "id": "priority",
+            "value": 207
+          },
+          {
+            "id": "lastchange",
+            "value": 184
+          }
+        ],
         "severityField": true,
         "showDatasourceName": false,
         "showTags": false,
@@ -2519,6 +2552,186 @@
       ],
       "title": "Problem List",
       "type": "alexanderzobnin-zabbix-triggers-panel"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "dffb1lwkvgidce"
+      },
+      "description": "Docker containers that are not currently running.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "": {
+                        "color": "dark-red",
+                        "index": 0,
+                        "text": "Removed"
+                      },
+                      "created": {
+                        "color": "blue",
+                        "index": 2,
+                        "text": "Created"
+                      },
+                      "exited": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Exited"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 18,
+        "y": 28
+      },
+      "id": 26,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Container"
+          }
+        ]
+      },
+      "pluginVersion": "12.4.1",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "name",
+              "text": "Container",
+              "type": "string"
+            },
+            {
+              "selector": "lastvalue",
+              "text": "Status",
+              "type": "string"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "dffb1lwkvgidce"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "parser": "backend",
+          "refId": "A",
+          "root_selector": "result",
+          "source": "url",
+          "type": "json",
+          "url": "http://10.10.2.102/zabbix/api_jsonrpc.php",
+          "url_options": {
+            "data": "{\"jsonrpc\": \"2.0\", \"method\": \"item.get\", \"params\": {\"hostids\": [\"10778\"], \"search\": {\"key_\": \"docker.container_info.state.status\"}, \"output\": [\"name\", \"lastvalue\"], \"sortfield\": \"name\", \"sortorder\": \"ASC\", \"limit\": 200}, \"id\": 1}",
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          }
+        }
+      ],
+      "title": "Stopped Containers",
+      "transformations": [
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "notEqual",
+                  "options": {
+                    "value": "running"
+                  }
+                },
+                "fieldName": "Status"
+              }
+            ],
+            "match": "all",
+            "type": "include"
+          }
+        },
+        {
+          "id": "extractFields",
+          "options": {
+            "format": "regexp",
+            "regExp": "/^Container \\/(?<ContainerName>[^:]+): Status$/",
+            "replace": false,
+            "source": "Container"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Container": true
+            },
+            "indexByName": {
+              "ContainerName": 0,
+              "Status": 1
+            },
+            "renameByName": {
+              "ContainerName": "Container"
+            }
+          }
+        }
+      ],
+      "type": "table"
     }
   ],
   "preload": false,
@@ -2553,7 +2766,10 @@
         "type": "query"
       },
       {
-        "current": {},
+        "current": {
+          "text": "debian-vm",
+          "value": "debian-vm"
+        },
         "datasource": {
           "type": "alexanderzobnin-zabbix-datasource",
           "uid": "effamc6nzi6f4f"

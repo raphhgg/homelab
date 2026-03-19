@@ -9,4 +9,14 @@ providers:
     editable: true
     updateIntervalSeconds: 30
     options:
-      path: /var/lib/grafana/dashboards
+      path: /var/lib/grafana/dashboards/proxmox
+
+  - name: Networking
+    orgId: 1
+    folder: Networking
+    type: file
+    disableDeletion: false
+    editable: true
+    updateIntervalSeconds: 30
+    options:
+      path: /var/lib/grafana/dashboards/networking

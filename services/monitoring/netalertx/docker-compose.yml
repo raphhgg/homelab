@@ -1,0 +1,30 @@
+services:
+  netalertx:
+    image: ghcr.io/jokob-sk/netalertx:latest
+    container_name: netalertx
+    network_mode: host
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+      - NET_ADMIN
+      - NET_BIND_SERVICE
+      - NET_RAW
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/netalertx:/data
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.netalertx.rule=Host(`${NETALERTX_HOST}`)"
+      - "traefik.http.routers.netalertx.entrypoints=websecure"
+      - "traefik.http.routers.netalertx.tls.certresolver=cloudflare"
+      - "traefik.http.routers.netalertx.middlewares=netalertx-lan@docker,tinyauth@file"
+      - "traefik.http.services.netalertx.loadbalancer.server.port=20211"
+      - "traefik.http.middlewares.netalertx-lan.ipallowlist.sourcerange=10.10.0.0/24,10.10.1.0/24,10.10.2.0/24,10.10.3.0/24,10.10.4.0/24,127.0.0.1/32,172.22.0.0/16"
+      - "com.centurylinklabs.watchtower.enable=true"
