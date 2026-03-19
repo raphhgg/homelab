@@ -1,4 +1,3 @@
-- $include: ../../widgets/speedtest.yml
 - $include: ../../widgets/qbittorrent.yml
-# - $include: ../../widgets/proxmox-ve-nodes.yml
 - $include: ../../widgets/linkwarden.yml
+- $include: ../../widgets/bookmarks-general.yml

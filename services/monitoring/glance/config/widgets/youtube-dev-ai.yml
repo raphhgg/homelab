@@ -1,7 +1,7 @@
 - type: videos
   # collapse-after: 10 # vertical-list
   collapse-after-rows: 10 # grid-cards
-  style: grid-cards # vertical-list # horizontal-cards # 
+  style: horizontal-cards #grid-cards # vertical-list # horizontal-cards # 
   channels:
     # AI Hardware / Coding
     - UCajiMK_CY9icRhLepS8_3ug # Alex Ziskind
@@ -21,7 +21,6 @@
     - UCYeiozh-4QwuC1sjgCmB92w # Devops Toolbox
     - UCWQaM7SpSECp9FELz-cHzuQ # Dreams of Code    
     - UCo71RUe6DX4w-Vd47rFLXPg # typecraft  
-
 
   playlists:
     - PL2Fq-K0QdOQiJpufsnhEd1z3xOv2JMHuk # The Standup

@@ -2,7 +2,7 @@
   widgets:
   - $include: ../../widgets/bookmarks-media-server.yml
   - type: bookmarks
-    title: Tools
+    title: General
     groups:
       - title: Title
         color: 200 70 50

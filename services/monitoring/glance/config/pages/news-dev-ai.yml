@@ -1,5 +1,7 @@
 - name: Dev & AI
   slug: news-dev-ai
+  head-widgets:
+    - $include: ../widgets/youtube-dev-ai.yml
   columns:
     - size: full
       widgets:
@@ -7,7 +9,9 @@
           max-columns: 2
           widgets:
           - $include: ../widgets/reddit-news-ai.yml
-          - $include: ../widgets/youtube-dev-ai.yml
+          - $include: ../widgets/twitter-ai.yml
+          # - $include: ../widgets/youtube-dev-ai.yml
+
           
 
 

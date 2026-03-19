@@ -1,7 +1,7 @@
 - type: videos
   # collapse-after: 10 # vertical-list
   collapse-after-rows: 10 # grid-cards
-  style: grid-cards # vertical-list # horizontal-cards # 
+  style: horizontal-cards #grid-cards # vertical-list # horizontal-cards # 
   channels:
     # Homelab / Self-hosted
     - UCv6J_jJa8GJqFwQNgNrMuww # ServeTheHome

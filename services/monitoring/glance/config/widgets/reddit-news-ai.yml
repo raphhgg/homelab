@@ -13,12 +13,13 @@
       <<: *reddit-home
     - subreddit: ClaudeCode
       <<: *reddit-home
-    - subreddit: LocalLLaMA
+    - subreddit: codex
       <<: *reddit-home
-    - subreddit: ollama
+    - subreddit: LocalLLaMA
       <<: *reddit-home
     - subreddit: LocalLLM
       <<: *reddit-home
     - subreddit: unsloth
       <<: *reddit-home
-    - $include: twitter-ai.yml
+    # - $include: twitter-ai.yml
+    #   <<: *reddit-home

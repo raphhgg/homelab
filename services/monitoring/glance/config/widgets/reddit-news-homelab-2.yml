@@ -1,0 +1,23 @@
+- type: group
+  title: Homelab
+  define: &reddit-home
+    type: reddit
+    style: vertical-list
+    show-flairs: true
+    show-thumbnails: true
+    limit: 25
+    collapse-after: 20
+    sort-by: hot
+  widgets:
+    - subreddit: Proxmox
+      <<: *reddit-home
+    - subreddit: truenas
+      <<: *reddit-home
+    # - type: rss
+    #   title: selfh.st
+    #   style: detailed-list #horizontal-cards # detailed-list
+    #     # single-line-titles: true
+    #   collapse-after: 15
+    #   feeds:
+    #     - url: https://selfh.st/rss
+    #       title: "selfh.st"

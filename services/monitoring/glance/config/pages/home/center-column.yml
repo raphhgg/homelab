@@ -1,4 +1,4 @@
 - $include: ../../widgets/welcome-header.yml
 - $include: ../../widgets/search-noheader.yml
 - $include: ../../widgets/monitors-home.yml
-- $include: ../../widgets/bookmarks-home.yml
+# - $include: ../../widgets/bookmarks-home.yml

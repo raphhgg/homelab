@@ -1,5 +1,7 @@
 - name: Homelab
   slug: news-homelab
+  head-widgets:
+    - $include: ../widgets/youtube-homelab.yml
   columns:
     - size: full
       widgets:
@@ -7,4 +9,4 @@
           max-columns: 2
           widgets:
           - $include: ../widgets/reddit-news-homelab.yml
-          - $include: ../widgets/youtube-homelab.yml
+          - $include: ../widgets/reddit-news-homelab-2.yml

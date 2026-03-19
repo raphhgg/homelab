@@ -34,7 +34,7 @@ pages:
 - $include: pages/home/home.yml
 - $include: pages/trackers.yml
 - $include: pages/medias.yml
-- $include: pages/monitoring.yml
+# - $include: pages/monitoring.yml
 - $include: pages/news.yml
 - $include: pages/news-homelab.yml
 - $include: pages/news-dev-ai.yml
