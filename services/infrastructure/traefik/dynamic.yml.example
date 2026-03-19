@@ -78,6 +78,29 @@ http:
       tls:
         certResolver: cloudflare
 
+    zabbix:
+      rule: "Host(`zabbix.raphh.me`)"
+      entryPoints:
+        - websecure
+      middlewares:
+        - allow-admin-apps
+        - zabbix-root-redirect
+        - tinyauth
+      service: zabbix-service
+      tls:
+        certResolver: cloudflare
+
+    truenas:
+      rule: "Host(`truenas.raphh.me`)"
+      entryPoints:
+        - websecure
+      middlewares:
+        - allow-admin-apps
+        - tinyauth
+      service: truenas-service
+      tls:
+        certResolver: cloudflare
+
     glance-radarr-cover:
       rule: "Host(`dash.raphh.me`) && PathPrefix(`/_internal/radarr-cover`)"
       priority: 200
@@ -148,6 +171,19 @@ http:
         servers:
           - url: "https://10.10.2.2:5001"
 
+    zabbix-service:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://10.10.2.102"
+
+    truenas-service:
+      loadBalancer:
+        serversTransport: truenas-insecure-transport@file
+        passHostHeader: true
+        servers:
+          - url: "https://10.10.2.202"
+
     radarr-cover-service:
       loadBalancer:
         passHostHeader: true
@@ -168,6 +204,8 @@ http:
 
   serversTransports:
     dsm-insecure-transport:
+      insecureSkipVerify: true
+    truenas-insecure-transport:
       insecureSkipVerify: true
 
   middlewares:
@@ -235,3 +273,9 @@ http:
       headers:
         customRequestHeaders:
           X-Api-Key: your_sonarr_api_key
+
+    zabbix-root-redirect:
+      redirectRegex:
+        regex: "^https://zabbix\\.raphh\\.me/$"
+        replacement: "https://zabbix.raphh.me/zabbix/"
+        permanent: true
