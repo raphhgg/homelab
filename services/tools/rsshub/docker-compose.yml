@@ -13,6 +13,7 @@ services:
     depends_on:
       - rsshub-redis
     networks:
+      - monitoring
       - rsshub_internal
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
@@ -27,4 +28,6 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
+  monitoring:
+    external: true
   rsshub_internal:
