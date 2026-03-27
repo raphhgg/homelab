@@ -18,7 +18,7 @@ services:
       - ${DOCKER_APPDATA_PATH}/autopulse/config.yaml:/app/config.yaml
       - ${DOCKER_APPDATA_PATH}/autopulse/data:/app/data
       - ${DOCKER_APPDATA_PATH}/autopulse/scripts:/app/scripts
-      - ${MEDIAS_PATH}:/data/medias:ro
+      - /mnt/data/media:/data/medias:ro
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"

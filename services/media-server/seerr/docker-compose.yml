@@ -18,7 +18,7 @@ services:
       - "traefik.http.routers.seerr.rule=Host(`${SEERR_HOST}`)"
       - "traefik.http.routers.seerr.entrypoints=websecure"
       - "traefik.http.routers.seerr.tls.certresolver=cloudflare"
-      - "traefik.http.routers.seerr.middlewares=allow-default-apps@file,tinyauth@file"
+      - "traefik.http.routers.seerr.middlewares=allow-default-apps@file"
       - "traefik.http.services.seerr.loadbalancer.server.port=5055"
       - "com.centurylinklabs.watchtower.enable=true"
     networks:

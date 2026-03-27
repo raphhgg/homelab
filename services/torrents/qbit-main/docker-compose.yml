@@ -32,9 +32,26 @@ services:
       - 1.1.1.1
       - 1.0.0.1
     volumes:
-      - ${DOCKER_APPDATA_PATH}/qbit-main:/config:rw
-      - ${DOWNLOAD_PATH}/torrents:/downloads/torrents:rw
-      - ${MEDIAS_PATH}:/data/medias:rw
+      - type: bind
+        source: ${DOCKER_APPDATA_PATH}/qbit-main
+        target: /config
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${DOWNLOAD_PATH}/torrents
+        target: /downloads/torrents
+        bind:
+          create_host_path: false
+      - type: bind
+        source: /mnt/data/media
+        target: /data/medias
+        bind:
+          create_host_path: false
+      - type: bind
+        source: /mnt/data/torrents
+        target: /data/medias/downloads/torrents
+        bind:
+          create_host_path: false
     cap_add:
       - NET_ADMIN
     sysctls:

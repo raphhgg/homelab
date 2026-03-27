@@ -13,7 +13,7 @@ services:
       - ${DOCKER_APPDATA_PATH}/daps:/config:rw
       - ${DOCKER_APPDATA_PATH}/daps/posters:/posters:rw
       - ${DOCKER_APPDATA_PATH}/kometa/assets:/kometa:rw
-      - ${MEDIAS_PATH}:/data/medias
+      - /mnt/data/media:/data/medias
     restart: always
     labels:
       - "traefik.enable=true"

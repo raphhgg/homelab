@@ -10,7 +10,7 @@ services:
       - TP_THEME=organizr
     volumes:
       - ${DOCKER_APPDATA_PATH}/radarr:/config
-      - ${MEDIAS_PATH}:/data/medias
+      - /mnt/data:/data
       - ${DOCKER_APPDATA_PATH}/themepark/98-themepark-radarr:/etc/cont-init.d/98-themepark
     ports:
       - 7878:7878

@@ -10,7 +10,7 @@ services:
       - TP_THEME=organizr
     volumes:
       - ${DOCKER_APPDATA_PATH}/sonarr:/config:rw
-      - ${MEDIAS_PATH}:/data/medias
+      - /mnt/data:/data
       - ${DOCKER_APPDATA_PATH}/themepark/98-themepark-sonarr:/etc/cont-init.d/98-themepark
     ports:
       - 8988:8989

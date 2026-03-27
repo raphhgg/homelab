@@ -12,7 +12,8 @@ services:
     volumes:
       - ${DOCKER_APPDATA_PATH}/unpackerr:/config
       - ${DOWNLOAD_PATH}:/downloads
-      - ${MEDIAS_PATH}:/data/medias
+      - /mnt/data/media:/data/medias
+      - /mnt/data/torrents:/data/medias/downloads/torrents
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"

@@ -14,10 +14,8 @@ services:
       - ${DOCKER_APPDATA_PATH}/umtk/video:/video
       - ${DOCKER_APPDATA_PATH}/umtk/kometa:/app/kometa
       - ${DOCKER_APPDATA_PATH}/umtk/logs:/app/logs
-      - ${DOCKER_APPDATA_PATH}/umtk/scripts:/app/scripts:ro
-      - ${DOCKER_APPDATA_PATH}/umtk/scripts/run-umtk.sh:/app/run-umtk.sh:ro
-      - ${MEDIAS_PATH}/movies:/umtkmovies
-      - ${MEDIAS_PATH}/tvshows:/umtktv
+      - /mnt/data/media/movies:/umtkmovies
+      - /mnt/data/media/tvshows:/umtktv
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
