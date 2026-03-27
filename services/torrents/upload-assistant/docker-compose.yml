@@ -14,8 +14,8 @@ services:
       - traefik_socket_net
     volumes:
       - ${DOCKER_APPDATA_PATH}/upload-assistant/config.py:/Upload-Assistant/data/config.py:ro
-      - ${MEDIAS_PATH}/downloads/torrents/complete:/torrent_storage_dir:ro
-      - ${MEDIAS_PATH}:/data/medias:ro
+      - /mnt/data/torrents/complete:/torrent_storage_dir:ro
+      - /mnt/data/media:/data/medias:ro
       - ${DOCKER_APPDATA_PATH}/qbit-main/data/BT_backup:/BT_backup:ro
       - ${DOCKER_APPDATA_PATH}/upload-assistant/tmp:/Upload-Assistant/tmp
     restart: always
@@ -29,6 +29,30 @@ services:
       - "traefik.http.services.upload-assistant.loadbalancer.server.port=5000"
       - "com.centurylinklabs.watchtower.enable=true"
     command: tail -f /dev/null
+
+  upload-assistant-cli:
+    image: ghcr.io/audionut/upload-assistant:latest
+    container_name: upload-assistant-cli
+    user: ${PUID}:${PGID}
+    environment:
+      - TZ=${TZ}
+      - TORRENT_STORAGE_DIR=/torrents
+      - DATA_DIR=/data/medias
+    networks:
+      - media
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/upload-assistant/config.py:/Upload-Assistant/data/config.py:ro
+      - /mnt/data/torrents/complete:/torrent_storage_dir:ro
+      - /mnt/data/media:/data/medias:ro
+      - ${DOCKER_APPDATA_PATH}/qbit-main/data/BT_backup:/BT_backup:ro
+      - ${DOCKER_APPDATA_PATH}/upload-assistant/tmp:/Upload-Assistant/tmp
+    restart: always
+    healthcheck:
+      disable: true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    entrypoint: /bin/sh
+    command: -c "tail -f /dev/null"
 
 networks:
   media:
