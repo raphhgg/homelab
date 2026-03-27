@@ -60,7 +60,7 @@
     #         - 307
     #     - title: Profilarr
     #       url: https://profilarr.raphh.me
-    #       check-url: http://profilarr-v2:6868
+    #       check-url: http://profilarr:6868
     #       timeout: 8s
     #       icon: /assets/icons/profilarr.svg
     #       alt-status-codes:
@@ -130,27 +130,11 @@
         check-url: http://10.10.2.201:8123/
         timeout: 8s
         icon: /assets/icons/home-assistant.svg
-      # - title: Pulse
-      #   url: https://pulse.raphh.me/proxmox/overview
-      #   check-url: http://pulse:7655/api/updates/status
-      #   timeout: 8s
-      #   icon: di:pulse
-      #   alt-status-codes:
-      #     - 401
-      #     - 307
       # - title: Gotify
       #   url: https://gotify.raphh.me
       #   check-url: http://gotify/
       #   timeout: 8s
       #   icon: /assets/icons/gotify.svg
-      #   alt-status-codes:
-      #     - 401
-      #     - 307
-      # - title: Dozzle
-      #   url: https://dozzle.raphh.me
-      #   check-url: http://dozzle:8080/
-      #   timeout: 8s
-      #   icon: /assets/icons/dozzle.svg
       #   alt-status-codes:
       #     - 401
       #     - 307

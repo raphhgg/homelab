@@ -37,7 +37,7 @@
         - 307
     - title: Profilarr
       url: https://profilarr.raphh.me
-      check-url: http://profilarr-v2:6868
+      check-url: http://profilarr:6868
       timeout: 8s
       icon: /assets/icons/profilarr.svg
       alt-status-codes:
