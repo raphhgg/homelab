@@ -210,6 +210,38 @@ def match_self_test_type(text: str, wanted_type: str):
     return True
 
 
+def successful_self_tests(data):
+    tests = []
+
+    ata_table = data.get("ata_smart_self_test_log", {}).get("standard", {}).get("table", [])
+    for entry in ata_table:
+        status = str(entry.get("status", {}).get("string", ""))
+        desc = str(entry.get("type", {}).get("string", "")) or str(entry.get("description", ""))
+        lifetime_hours = entry.get("lifetime_hours")
+        tests.append(
+            {
+                "status": status,
+                "description": desc,
+                "lifetime_hours": lifetime_hours,
+            }
+        )
+
+    nvme_table = data.get("nvme_self_test_log", {}).get("table", [])
+    for entry in nvme_table:
+        status = str(entry.get("self_test_result", {}).get("string", ""))
+        desc = str(entry.get("self_test_code", {}).get("string", ""))
+        lifetime_hours = entry.get("power_on_hours")
+        tests.append(
+            {
+                "status": status,
+                "description": desc,
+                "lifetime_hours": lifetime_hours,
+            }
+        )
+
+    return tests
+
+
 def device_name(device: str):
     return clean_device(device).replace('/dev/', '')
 
@@ -371,14 +403,13 @@ def nvme_text_metric(device: str, metric_name: str):
 def last_pass_epoch(device: str, test_type: str = "any"):
     data = smartctl_json(device)
     text = smartctl_text(device)
-    table = data.get("ata_smart_self_test_log", {}).get("standard", {}).get("table", [])
     now = int(datetime.now(timezone.utc).timestamp())
     power_on_hours = data.get("power_on_time", {}).get("hours")
-    for entry in table:
-        status = str(entry.get("status", {}).get("string", "")).lower()
+    for entry in successful_self_tests(data):
+        status = str(entry.get("status", "")).lower()
         if "completed without error" not in status:
             continue
-        test_desc = str(entry.get("type", {}).get("string", "")) or str(entry.get("description", ""))
+        test_desc = str(entry.get("description", ""))
         if not match_self_test_type(test_desc, test_type):
             continue
         lifetime_hours = entry.get("lifetime_hours")
@@ -412,12 +443,11 @@ def last_pass_epoch(device: str, test_type: str = "any"):
 def last_pass_text(device: str, test_type: str = "any"):
     data = smartctl_json(device)
     text = smartctl_text(device)
-    table = data.get("ata_smart_self_test_log", {}).get("standard", {}).get("table", [])
-    for entry in table:
-        status = str(entry.get("status", {}).get("string", "")).lower()
+    for entry in successful_self_tests(data):
+        status = str(entry.get("status", "")).lower()
         if "completed without error" not in status:
             continue
-        test_desc = str(entry.get("type", {}).get("string", "")) or str(entry.get("description", ""))
+        test_desc = str(entry.get("description", ""))
         if not match_self_test_type(test_desc, test_type):
             continue
         lifetime_hours = entry.get("lifetime_hours")
@@ -480,12 +510,11 @@ def format_relative_date(epoch):
 def last_pass_text_value(device: str, test_type: str = "any"):
     data = smartctl_json(device)
     text = smartctl_text(device)
-    table = data.get("ata_smart_self_test_log", {}).get("standard", {}).get("table", [])
-    for entry in table:
-        status = str(entry.get("status", {}).get("string", "")).lower()
+    for entry in successful_self_tests(data):
+        status = str(entry.get("status", "")).lower()
         if "completed without error" not in status:
             continue
-        test_desc = str(entry.get("type", {}).get("string", "")) or str(entry.get("description", ""))
+        test_desc = str(entry.get("description", ""))
         if not match_self_test_type(test_desc, test_type):
             continue
         lifetime_hours = entry.get("lifetime_hours")
@@ -515,13 +544,10 @@ def last_pass_text_value(device: str, test_type: str = "any"):
 
 
 def selftest_summary(device: str):
-    info = smartctl_json(device)
-    protocol = normalize_name(str(info.get("device", {}).get("protocol", "")) or str(info.get("device", {}).get("type", "")))
     short_value = "None"
     long_value = "None"
-    if protocol == "ata":
-        short_value = last_pass_text_value(device, "short")
-        long_value = last_pass_text_value(device, "long")
+    short_value = last_pass_text_value(device, "short")
+    long_value = last_pass_text_value(device, "long")
     print(json.dumps({
         "Drive": device_name(device),
         "Short": short_value,

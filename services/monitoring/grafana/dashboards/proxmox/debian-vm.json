@@ -42,6 +42,18 @@
       "tooltip": "Switch to Networking dashboard",
       "type": "link",
       "url": "/d/networking"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "TrueNAS Storage",
+      "tooltip": "Switch to TrueNAS Storage dashboard",
+      "type": "link",
+      "url": "/d/truenas-storage"
     }
   ],
   "panels": [
@@ -1422,7 +1434,7 @@
       "targets": [
         {
           "application": {
-            "filter": "CPU"
+            "filter": ""
           },
           "countTriggers": false,
           "countTriggersBy": "",
@@ -1431,7 +1443,68 @@
             "uid": "effamc6nzi6f4f"
           },
           "evaltype": "0",
-          "functions": [],
+          "functions": [
+            {
+              "def": {
+                "category": "Filter",
+                "defaultParams": [
+                  5,
+                  "avg"
+                ],
+                "name": "top",
+                "params": [
+                  {
+                    "name": "number",
+                    "type": "int"
+                  },
+                  {
+                    "name": "value",
+                    "options": [
+                      "avg",
+                      "min",
+                      "max",
+                      "sum",
+                      "count",
+                      "median",
+                      "first",
+                      "last"
+                    ],
+                    "type": "string"
+                  }
+                ]
+              },
+              "params": [
+                10,
+                "last"
+              ],
+              "text": "top(10, last)"
+            },
+            {
+              "def": {
+                "category": "Alias",
+                "defaultParams": [
+                  "/(.*)/",
+                  "$1"
+                ],
+                "name": "replaceAlias",
+                "params": [
+                  {
+                    "name": "regexp",
+                    "type": "string"
+                  },
+                  {
+                    "name": "newAlias",
+                    "type": "string"
+                  }
+                ]
+              },
+              "params": [
+                "/Container \\/([^:]+): .*/",
+                "$1"
+              ],
+              "text": "replaceAlias(/Container \\/([^:]+): .*/, $1)"
+            }
+          ],
           "group": {
             "filter": "$group"
           },
@@ -1439,7 +1512,7 @@
             "filter": "$host"
           },
           "item": {
-            "filter": "/CPU utilization|CPU user time|CPU system time|CPU iowait time/"
+            "filter": "/CPU percent usage$/"
           },
           "itemTag": {
             "filter": ""
@@ -1469,8 +1542,9 @@
           "textFilter": ""
         }
       ],
-      "title": "CPU History",
-      "type": "timeseries"
+      "title": "Container CPU Usage",
+      "type": "timeseries",
+      "description": "CPU percent usage per Docker container on the selected host."
     },
     {
       "datasource": {

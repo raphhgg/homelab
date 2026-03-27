@@ -42,6 +42,18 @@
       "tooltip": "Switch to Debian VM dashboard",
       "type": "link",
       "url": "/d/debian-vm"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "TrueNAS Storage",
+      "tooltip": "Switch to TrueNAS Storage dashboard",
+      "type": "link",
+      "url": "/d/truenas-storage"
     }
   ],
   "panels": [

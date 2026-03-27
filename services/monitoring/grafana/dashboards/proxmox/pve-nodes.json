@@ -42,6 +42,18 @@
       "tooltip": "Switch to Networking dashboard",
       "type": "link",
       "url": "/d/networking"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "TrueNAS Storage",
+      "tooltip": "Switch to TrueNAS Storage dashboard",
+      "type": "link",
+      "url": "/d/truenas-storage"
     }
   ],
   "panels": [
@@ -1337,7 +1349,9 @@
       "id": 6,
       "options": {
         "legend": {
-          "calcs": [],
+          "calcs": [
+            "lastNotNull"
+          ],
           "displayMode": "table",
           "placement": "bottom",
           "showLegend": false
@@ -1345,14 +1359,14 @@
         "tooltip": {
           "hideZeros": false,
           "mode": "multi",
-          "sort": "none"
+          "sort": "desc"
         }
       },
       "pluginVersion": "12.4.1",
       "targets": [
         {
           "application": {
-            "filter": "CPU"
+            "filter": ""
           },
           "countTriggers": false,
           "countTriggersBy": "",
@@ -1361,15 +1375,76 @@
             "uid": "effamc6nzi6f4f"
           },
           "evaltype": "0",
-          "functions": [],
+          "functions": [
+            {
+              "def": {
+                "category": "Filter",
+                "defaultParams": [
+                  5,
+                  "avg"
+                ],
+                "name": "top",
+                "params": [
+                  {
+                    "name": "number",
+                    "type": "int"
+                  },
+                  {
+                    "name": "value",
+                    "options": [
+                      "avg",
+                      "min",
+                      "max",
+                      "sum",
+                      "count",
+                      "median",
+                      "first",
+                      "last"
+                    ],
+                    "type": "string"
+                  }
+                ]
+              },
+              "params": [
+                10,
+                "last"
+              ],
+              "text": "top(10, last)"
+            },
+            {
+              "def": {
+                "category": "Alias",
+                "defaultParams": [
+                  "/(.*)/",
+                  "$1"
+                ],
+                "name": "replaceAlias",
+                "params": [
+                  {
+                    "name": "regexp",
+                    "type": "string"
+                  },
+                  {
+                    "name": "newAlias",
+                    "type": "string"
+                  }
+                ]
+              },
+              "params": [
+                "/(?:VM|LXC).*\\/([^(]+?)\\s*\\(.*\\)\\]:.*/",
+                "$1"
+              ],
+              "text": "replaceAlias(/(?:VM|LXC).*\\/([^(]+?)\\s*\\(.*\\)\\]:.*/, $1)"
+            }
+          ],
           "group": {
-            "filter": "$group"
+            "filter": "Proxmox-API"
           },
           "host": {
-            "filter": "$host"
+            "filter": "Proxmox-API"
           },
           "item": {
-            "filter": "/CPU utilization|CPU user time|CPU system time|CPU iowait time/"
+            "filter": "/$host.*CPU usage/"
           },
           "itemTag": {
             "filter": ""
@@ -1399,8 +1474,9 @@
           "textFilter": ""
         }
       ],
-      "title": "CPU History",
-      "type": "timeseries"
+      "title": "VM / LXC CPU Usage",
+      "type": "timeseries",
+      "description": "CPU usage per VM and LXC container on the selected node."
     },
     {
       "datasource": {
@@ -1927,10 +2003,10 @@
                   {
                     "options": {
                       "nvme0": {
-                        "text": "WD Black (nvme0)"
+                        "text": "Intel U.2 #1 (nvme0)"
                       },
                       "nvme1": {
-                        "text": "Intel U.2 #1 (nvme1)"
+                        "text": "WD Black (nvme1)"
                       },
                       "nvme2": {
                         "text": "Intel U.2 #2 (nvme2)"
@@ -2021,6 +2097,24 @@
       "title": "Latest S.M.A.R.T Tests",
       "transformations": [
         {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "notEqual",
+                  "options": {
+                    "value": ""
+                  }
+                },
+                "fieldName": "Last value"
+              }
+            ],
+            "match": "all",
+            "type": "include"
+          }
+        },
+        {
           "id": "extractFields",
           "options": {
             "format": "json",
@@ -2099,10 +2193,10 @@
                   {
                     "options": {
                       "nvme0": {
-                        "text": "WD Black (nvme0)"
+                        "text": "Intel U.2 #1 (nvme0)"
                       },
                       "nvme1": {
-                        "text": "Intel U.2 #1 (nvme1)"
+                        "text": "WD Black (nvme1)"
                       },
                       "nvme2": {
                         "text": "Intel U.2 #2 (nvme2)"
@@ -2372,7 +2466,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "WD Black (nvme0)"
+                "value": "Intel U.2 #1 (nvme0)"
               }
             ]
           },
@@ -2384,7 +2478,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "Intel U.2 #1 (nvme1)"
+                "value": "WD Black (nvme1)"
               }
             ]
           },
