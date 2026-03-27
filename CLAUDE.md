@@ -100,18 +100,18 @@ DOCKER_APPDATA_PATH=/home/raphh/docker/appdata
 
 #### Permission reference:
 
-| Permission | What it allows | Example services |
-|-----------|---------------|------------------|
-| `CONTAINERS=1` | Read container list/stats | All (minimum) |
-| `EVENTS=1` | Stream container events | Dozzle (log streaming) |
-| `IMAGES=1` | Pull/list images | Watchtower |
-| `POST=1` | Create/modify resources | Watchtower, Autopulse |
-| `DELETE=1` | Delete containers | Watchtower |
-| `NETWORKS=1` | Manage networks | Watchtower |
-| `VOLUMES=1` | Manage volumes | Watchtower |
-| `EXEC=1` | Execute in containers | Dockhand |
-| `INFO=1` | System info | Beszel-agent |
-| `VERSION=1` | Docker version | Beszel-agent |
+| Permission     | What it allows            | Example services       |
+| -------------- | ------------------------- | ---------------------- |
+| `CONTAINERS=1` | Read container list/stats | All (minimum)          |
+| `EVENTS=1`     | Stream container events   | Log streaming tools    |
+| `IMAGES=1`     | Pull/list images          | Watchtower             |
+| `POST=1`       | Create/modify resources   | Watchtower, Autopulse  |
+| `DELETE=1`     | Delete containers         | Watchtower             |
+| `NETWORKS=1`   | Manage networks           | Watchtower             |
+| `VOLUMES=1`    | Manage volumes            | Watchtower             |
+| `EXEC=1`       | Execute in containers     | Dockhand               |
+| `INFO=1`       | System info               | Beszel-agent           |
+| `VERSION=1`    | Docker version            | Beszel-agent           |
 
 #### Example (from uptime-kuma — read-only, minimal):
 ```yaml
@@ -151,32 +151,32 @@ networks:
 
 #### External Networks (shared between compose stacks)
 
-| Network | Purpose | Services |
-|---------|---------|----------|
-| `media` | Media pipeline: arrs, media-server utils, torrent clients | sonarr, radarr, bazarr, prowlarr, profilarr, tautulli, jellyseerr, kometa, daps, imagemaid, autopulse, pulsarr, plex-auto-languages, plexboxd, lettarrboxd, tracearr, stash, qbit-main, qbit-brr, autobrr, thelounge, qui, upload-assistant |
-| `monitoring` | Interconnected monitoring services | glance, gotify, watchtower, uptime-kuma |
-| `smart_home` | IoT and home automation | mosquitto, zigbee2mqtt |
+| Network      | Purpose                                                   | Services                                                                                                                                                                                                                                    |
+| ------------ | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `media`      | Media pipeline: arrs, media-server utils, torrent clients | sonarr, radarr, bazarr, prowlarr, profilarr, tautulli, jellyseerr, kometa, daps, imagemaid, autopulse, pulsarr, plex-auto-languages, plexboxd, lettarrboxd, tracearr, stash, qbit-main, qbit-brr, autobrr, thelounge, qui, upload-assistant |
+| `monitoring` | Interconnected monitoring services                        | glance, gotify, watchtower, uptime-kuma                                                                                                                                                                                                     |
+| `smart_home` | IoT and home automation                                   | mosquitto, zigbee2mqtt                                                                                                                                                                                                                      |
 
 **Cross-network services** (join multiple external networks):
 - **Glance** → `monitoring` + `media` (queries sonarr, radarr, tautulli, qbittorrent APIs)
 - **Gotify** → `monitoring` + `media` (receives webhooks from media services)
 
 **Fully isolated services** (no external network — only local or none):
-- Dozzle, Linkwarden, Open-webui, Syncthing, Rsshub, Cloudflare-ddns
+- Linkwarden, Open-webui, Syncthing, Rsshub, Cloudflare-ddns
 
 **Host-mode services** (bypass Docker networking): Plex, Home-Assistant
 
 #### Local Networks (per compose stack, NOT external)
 
-| Network | Compose File | Containers |
-|---------|-------------|------------|
-| `socket_net` | Any service with a dedicated socket proxy | `<service>-proxy` + app |
-| `gotify_internal` | gotify | gotify + pushtify + gotify-middleware |
-| `glance_internal` | glance | glance + f1-api |
-| `linkwarden_internal` | linkwarden | linkwarden + postgres + meilisearch |
-| `rsshub_internal` | rsshub | rsshub + rsshub-redis |
-| `profilarr_internal` | profilarr-v2 | profilarr-v2 + profilarr-parser-v2 |
-| `tracearr-network` | tracearr | tracearr + timescale + redis |
+| Network               | Compose File                              | Containers                            |
+| --------------------- | ----------------------------------------- | ------------------------------------- |
+| `socket_net`          | Any service with a dedicated socket proxy | `<service>-proxy` + app               |
+| `gotify_internal`     | gotify                                    | gotify + pushtify + gotify-middleware |
+| `glance_internal`     | glance                                    | glance + f1-api                       |
+| `linkwarden_internal` | linkwarden                                | linkwarden + postgres + meilisearch   |
+| `rsshub_internal`     | rsshub                                    | rsshub + rsshub-redis                 |
+| `profilarr_internal`  | profilarr-v2                              | profilarr-v2 + profilarr-parser-v2    |
+| `tracearr-network`    | tracearr                                  | tracearr + timescale + redis          |
 
 **Rule**: App containers join both the external network (for inter-service communication) and the local network (for internal services). Internal-only services (postgres, redis, sidecars) only join the local network.
 
@@ -229,7 +229,7 @@ Follow this checklist:
 
 When in doubt, **look at existing services** as templates. Good references:
 - Simple service: `services/monitoring/uptime-kuma/`
-- Service with Docker API access: `services/monitoring/dozzle/`
+- Service with Docker API access: `services/monitoring/watchtower/`
 - Media service (hotio): `services/arrs/sonarr/`
 
 ## Modifying Services

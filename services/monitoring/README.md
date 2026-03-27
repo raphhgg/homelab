@@ -6,15 +6,13 @@ The homelab uses a multi-layered monitoring approach with complementary tools.
 
 ```
 Layer 1: Availability → Uptime Kuma (Is it alive?)
-Layer 2: Logs → Dozzle (What happened?)
-Layer 3: Updates → Watchtower (Is it up to date?)
-Layer 4: Alerting → Gotify + Discord (Notify me)
+Layer 2: Updates → Watchtower (Is it up to date?)
+Layer 3: Alerting → Gotify + Discord (Notify me)
 ```
 
 ## When to use what
 
 - Service went down? → Check Uptime Kuma for uptime status
-- Service behaving oddly? → Check Dozzle for error logs
 - Container updates? → Check Discord channel for Watchtower notifications (updates run daily at 3 AM)
 
 ## Services
@@ -35,27 +33,13 @@ Layer 4: Alerting → Gotify + Discord (Notify me)
 - DNS records, SSL certificates
 
 **Monitor Types:**
-- **HTTP monitors**: For services with web UIs/APIs (Dozzle, Beszel, Uptime Kuma, Plex, etc.)
+- **HTTP monitors**: For services with web UIs/APIs (Beszel, Uptime Kuma, Plex, etc.)
   - Verifies the service is responding, not just that the container is running
   - Detects frozen/crashed services even if container appears running
 - **Docker monitors**: For background services without HTTP interfaces (Watchtower, Cloudflare DDNS, GitHub Actions runner)
   - Simple container status check (running/stopped)
   - No authentication or endpoint requirements
 - **Port monitors**: For raw TCP/UDP port checks (Docker Socket Proxy)
-
-### Dozzle - Log Viewer
-
-**Location**: `services/monitoring/dozzle/`
-**Port**: 8088
-**Access**: `http://ds423plus:8088` or `http://10.10.2.2:8088`
-
-**Purpose**: Real-time Docker container log viewing
-
-**Key features:**
-- Live streaming logs
-- SQL queries on log data
-- Shell access to containers
-- Multi-host support
 
 ### Watchtower - Container Update Automation
 
@@ -92,6 +76,5 @@ Layer 4: Alerting → Gotify + Discord (Notify me)
 ## Resources
 
 - **Uptime Kuma**: [Official Documentation](https://github.com/louislam/uptime-kuma)
-- **Dozzle**: [Official Documentation](https://dozzle.dev/)
 - **Watchtower**: [Official Documentation](https://containrrr.dev/watchtower/)
 - **Gotify**: [Official Documentation](https://gotify.net/docs/) | [GitHub](https://github.com/gotify/server)
