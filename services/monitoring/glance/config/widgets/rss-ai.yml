@@ -1,0 +1,19 @@
+- type: group
+  title: AI
+  define: &rss-ai
+    type: rss
+    style: detailed-list
+    collapse-after: 15
+  widgets:
+  - title: X/AI
+    <<: *rss-ai
+    feeds:
+      - url: http://rsshub:1200/twitter/list/2034908613840409003
+        title: "X/AI"
+  - title: AI Blogs
+    <<: *rss-ai
+    feeds:
+      - url: https://developers.openai.com/rss.xml
+        title: "developers.openai.com"
+      - url: http://rsshub:1200/anthropic/engineering
+        title: "anthropic.com/engineering"
