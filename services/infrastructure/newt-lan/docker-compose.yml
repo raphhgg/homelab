@@ -1,0 +1,12 @@
+services:
+  newt-lan:
+    image: fosrl/newt:latest
+    container_name: newt-lan
+    network_mode: host
+    environment:
+      - PANGOLIN_ENDPOINT=${PANGOLIN_ENDPOINT}
+      - NEWT_ID=${NEWT_ID}
+      - NEWT_SECRET=${NEWT_SECRET}
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
