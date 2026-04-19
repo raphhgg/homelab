@@ -22,7 +22,6 @@ scripts/
 services/media-server/heimdall/
 services/media-server/umtk-custom-poster-sync/
 services/media-server/wizarr-invite-broker/
-services/media-server/stash/
 services/media-server/dev/
 
 # Local agent/operator instructions
