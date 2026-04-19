@@ -1,5 +1,7 @@
 .env
 .env.local
+.claude/
+.codex
 .DS_Store
 settings.local.json
 .secrets
