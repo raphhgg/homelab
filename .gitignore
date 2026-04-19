@@ -17,6 +17,7 @@ __pycache__/
 
 # Scripts
 scripts/
+docs/
 
 # Nested service repos managed separately
 services/media-server/heimdall/
