@@ -1,103 +1,75 @@
 # Homelab
 
-> Self-hosted home server Docker Compose infrastructure.
+> Docker Compose stacks for a self-hosted home server.
 
----
+This repo is the source of truth for my live homelab configuration. It is useful as a working reference, but it is not a one-command starter kit for arbitrary environments.
 
-## Table Of Contents
+## What This Repo Contains
 
-* [Quick Start](#quick-start)
-* [Services](#services)
-* [Common Operations](#common-operations)
-* [Monitoring](#monitoring-stack)
-* [Troubleshooting](#troubleshooting)
+Services are organized under `services/` by category:
 
----
+- `arrs/`: media management applications such as Sonarr, Radarr, Prowlarr, Bazarr, and Profilarr
+- `torrents/`: qBittorrent instances and related automation tools
+- `media-server/`: Plex-adjacent services, request flows, metadata tools, and media utilities
+- `infrastructure/`: ingress, authentication, DDNS, and supporting network services
+- `monitoring/`: uptime, notifications, dashboards, and update automation
+- `smart-home/`: Home Assistant, Mosquitto, Zigbee2MQTT
+- `tools/`: utility services such as Open WebUI, RSSHub, Syncthing, and Vaultwarden
 
-## Quick Start
+Some stacks are tightly coupled to my network, storage layout, and existing external services. Read each service directory before assuming it is portable as-is.
 
-1. **Clone the repo:**
-   ```bash
-   git clone <your-repo-url>
-   cd homelab
-   ```
-2. **Set up environment variables:**
-   ```bash
-   cd services/<category>/<service-name>
-   cp .env.example .env
-   # Edit .env with your actual values
-   ```
-3. **Deploy a service:**
-   ```bash
-   docker compose up -d
-   ```
+## How To Use This Repo
 
----
+The normal flow for a service is:
 
-## Services
+```bash
+cd services/<category>/<service-name>
+cp .env.example .env
+$EDITOR .env
+docker compose up -d
+```
 
-Services are organized in `services/` by category:
+Before starting a stack:
 
-### arrs/
-Media management applications: Sonarr, Radarr, Prowlarr, Bazarr, Profilarr, Calibre
-
-### torrents/
-- qBittorrent instances (qbit-main, qbit-brr, qbit-cross)
-- Torrent automation (autobrr, cross-seed, qbit_manage)
-- Tools (unpackerr, upload-assistant, qui, mam_seedboxapi, thelounge)
-
-### media-server/
-- Plex and related: Plex, Kometa, ImageMaid, Plex-Auto-Languages, Plex-Trakt-Sync
-- Other: Tautulli, Trailarr, Jellyseerr, Stash, Lettarrboxd
-- Remote access guide: [Plex via Pangolin + Pocket ID](services/media-server/plex/README.md)
-
-### infrastructure/
-- Cloudflare DDNS
-- Docker Socket Proxy
-- VPN gateways (gluetun, gluetun-brr, gluetun-cross)
-
-### monitoring/
-Glance, Gotify, Grafana, Uptime Kuma, Watchtower
-
-### Other
-- **home-assistant/**: Smart home automation
-- **open-webui/**: AI chat interface
-- **syncthing/**: File synchronization
-- **rsshub/**: RSS feed generation
-
----
+- read that service's `docker-compose.yml`
+- fill in `.env` with values appropriate for your environment
+- verify required networks, volumes, and external dependencies already exist
+- check service-specific READMEs when present
 
 ## Common Operations
 
-### Deploying a Service
+Deploy or refresh a stack:
+
 ```bash
 cd services/<category>/<service-name>
 docker compose up -d
 ```
 
-### Checking Service Status
+Inspect a stack:
+
 ```bash
+cd services/<category>/<service-name>
 docker compose ps
-docker compose logs -f <service-name>
+docker compose logs -f
 ```
 
-### Updating a Service
+Pull newer images:
+
 ```bash
+cd services/<category>/<service-name>
 docker compose pull
 docker compose up -d
 ```
 
-### Stopping a Service
+Stop a stack:
+
 ```bash
+cd services/<category>/<service-name>
 docker compose down
 ```
 
----
+## Notes
 
-## Monitoring
-
-The homelab uses a multi-layered monitoring approach with complementary tools.
-
-See [services/monitoring/README.md](services/monitoring/README.md) for complete documentation.
-
----
+- Real secrets live in local `.env` files and must not be committed.
+- Service examples in this repo are uneven in portability. Some are generic templates, some are environment-specific working configs.
+- Remote access and SSO examples in this repo should be treated as patterns to adapt, not drop-in values.

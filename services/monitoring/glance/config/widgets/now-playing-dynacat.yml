@@ -1,6 +1,6 @@
 - type: playing
   hosts:
-    - url: plex:https://plex.raphh.me
+    - url: plex:https://plex.ext.raphh.me
       token: ${PLEX_TOKEN}
   title: NOW PLAYING
   compact: false

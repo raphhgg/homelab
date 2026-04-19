@@ -44,12 +44,12 @@ services:
           create_host_path: false
       - type: bind
         source: /mnt/data/media
-        target: /data/medias
+        target: /data/media
         bind:
           create_host_path: false
       - type: bind
         source: /mnt/data/torrents
-        target: /data/medias/downloads/torrents
+        target: /data/torrents
         bind:
           create_host_path: false
     cap_add:

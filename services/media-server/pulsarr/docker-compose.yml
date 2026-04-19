@@ -1,7 +1,16 @@
 services:
   pulsarr:
-    image: lakker/pulsarr:node
+    image: lakker/pulsarr:latest
     container_name: pulsarr
+    env_file:
+      - .env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    dns:
+      - 1.1.1.1
+      - 9.9.9.9
     networks:
       - media
       - traefik_socket_net

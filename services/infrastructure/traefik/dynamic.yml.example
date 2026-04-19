@@ -59,7 +59,7 @@ http:
         certResolver: cloudflare
 
     plex:
-      rule: "Host(`plex.raphh.me`)"
+      rule: "Host(`plex.ext.raphh.me`)"
       entryPoints:
         - websecure
       middlewares:

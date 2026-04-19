@@ -16,7 +16,8 @@ services:
       - TZ=${TZ}
       - PARSER_HOST=profilarr-parser
       - PARSER_PORT=5000
-      - AUTH=local
+      - ORIGIN=https://${PROFILARR_HOST}
+      - AUTH=none
     depends_on:
       - profilarr-parser
     restart: always

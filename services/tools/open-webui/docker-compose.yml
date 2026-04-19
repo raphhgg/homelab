@@ -1,6 +1,6 @@
 services:
   open-webui:
-    image: ghcr.io/open-webui/open-webui:main
+    image: ghcr.io/open-webui/open-webui:v0.8.5
     container_name: open-webui
     ports:
       - 8087:8080
@@ -10,7 +10,21 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
+      - WEBUI_URL=${WEBUI_URL}
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
       - OLLAMA_BASE_URL=${OLLAMA_BASE_URL}
+      - DEFAULT_MODELS=${DEFAULT_MODELS}
+      - DEFAULT_PINNED_MODELS=${DEFAULT_PINNED_MODELS}
+      - ENABLE_MEMORIES=${ENABLE_MEMORIES}
+      - ENABLE_FOLDERS=${ENABLE_FOLDERS}
+      - ENABLE_NOTES=${ENABLE_NOTES}
+      - ENABLE_CHANNELS=${ENABLE_CHANNELS}
+      - ENABLE_COMMUNITY_SHARING=${ENABLE_COMMUNITY_SHARING}
+      - AIOHTTP_CLIENT_TIMEOUT=${AIOHTTP_CLIENT_TIMEOUT}
+      - AIOHTTP_CLIENT_TIMEOUT_MODEL_LIST=${AIOHTTP_CLIENT_TIMEOUT_MODEL_LIST}
+      - AIOHTTP_CLIENT_TIMEOUT_OPENAI_MODEL_LIST=${AIOHTTP_CLIENT_TIMEOUT_OPENAI_MODEL_LIST}
+      - AIOHTTP_CLIENT_TIMEOUT_TOOL_SERVER=${AIOHTTP_CLIENT_TIMEOUT_TOOL_SERVER}
+      - CORS_ALLOW_ORIGIN=${CORS_ALLOW_ORIGIN}
       - ENABLE_OAUTH_SIGNUP=${OPENWEBUI_OAUTH_ENABLED}
       - OAUTH_CLIENT_ID=${OPENWEBUI_OAUTH_CLIENT_ID}
       - OAUTH_CLIENT_SECRET=${OPENWEBUI_OAUTH_CLIENT_SECRET}
@@ -27,6 +41,12 @@ services:
       - DEFAULT_USER_ROLE=user
       - ENABLE_LOGIN_FORM=${OPENWEBUI_ENABLE_LOGIN_FORM}
       - OAUTH_UPDATE_PICTURE_ON_LOGIN=true
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    dns:
+      - 1.1.1.1
+      - 9.9.9.9
+      - 10.10.2.101
     restart: always
     labels:
       - "traefik.enable=true"

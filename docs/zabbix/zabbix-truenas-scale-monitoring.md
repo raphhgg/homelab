@@ -16,25 +16,25 @@ It covers:
 - We query TrueNAS from Proxmox using `qm guest exec`, then expose results via `zabbix_agent2` user parameters.
 - HBA temp uses best-effort command probing:
   - `storcli /c0 show temperature`
-  - `/mnt/Vault/monitoring/bin/storcli64 /c0 show temperature`
+  - `<persistent-storcli-path> /c0 show temperature`
   - `sas3ircu 0 DISPLAY` (last-resort parse)
 
 ## 1) Prepare standalone `storcli64` in TrueNAS (recommended)
 
-On `truenas-vm` shell:
+On your TrueNAS VM shell:
 
 ```bash
-install -d -m 755 /mnt/Vault/monitoring/bin
+install -d -m 755 <persistent-storcli-dir>
 # Copy your downloaded storcli64 binary there
-chmod 755 /mnt/Vault/monitoring/bin/storcli64
+chmod 755 <persistent-storcli-dir>/storcli64
 ```
 
 Notes:
 
-- Path is on pool storage, so it survives OS updates/reboots.
-- Default collector path is `/mnt/Vault/monitoring/bin/storcli64`.
+- Path should live on persistent storage so it survives OS updates and reboots.
+- Default collector path in the script should be overridden if your environment uses a different location.
 
-## 2) Install collector on Proxmox node (`pve`)
+## 2) Install collector on the Proxmox node that can run `qm guest exec`
 
 Copy and run:
 
@@ -55,17 +55,17 @@ Collector behavior:
 
 Defaults:
 
-- `TRUENAS_VM_ID=202`
-- `TRUENAS_STORCLI64_PATH=/mnt/Vault/monitoring/bin/storcli64`
+- `TRUENAS_VM_ID=<truenas-vm-id>`
+- `TRUENAS_STORCLI64_PATH=<persistent-storcli-path>`
 
 Override per command if needed:
 
 ```bash
-TRUENAS_VM_ID=202 TRUENAS_STORCLI64_PATH=/mnt/Vault/monitoring/bin/storcli64 \
+TRUENAS_VM_ID=<truenas-vm-id> TRUENAS_STORCLI64_PATH=<persistent-storcli-path> \
   /usr/local/bin/zabbix-truenas-scale.py summary_json
 ```
 
-## 3) Exposed Zabbix keys (on host `pve`)
+## 3) Exposed Zabbix keys (on the collector host)
 
 - `truenas.hba.temp` (numeric, `-1` when unavailable)
 - `truenas.hba.telemetry` (`1`/`0`)
@@ -247,5 +247,5 @@ sudo -u zabbix zabbix_agent2 -t 'truenas.summary.metric[drive_temp_max_c]'
 
 If `truenas.hba.telemetry=0`:
 
-- verify `storcli64` exists and is executable at `/mnt/Vault/monitoring/bin/storcli64`
+- verify `storcli64` exists and is executable at the path configured in `TRUENAS_STORCLI64_PATH`
 - inspect `truenas.hba.error` value for parse/command failure details

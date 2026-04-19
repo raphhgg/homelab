@@ -3,7 +3,7 @@
   cache: 1m
   sites:
     - title: Plex
-      url: https://plex.raphh.me/web/index.html
+      url: https://plex.ext.raphh.me/web/index.html
       check-url: http://10.10.2.201:32400/web/index.html
       timeout: 8s
       icon: /assets/icons/plex.svg

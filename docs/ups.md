@@ -48,7 +48,7 @@ Edit `/etc/nut/upsd.users` and add a local user so the monitor service can secur
 
 ```ini
 [upsmon]
-password = secretpassword
+password = <choose-a-strong-local-password>
 upsmon master
 
 ```
@@ -58,7 +58,7 @@ upsmon master
 Edit `/etc/nut/upsmon.conf` and configure the monitor to watch the UPS and trigger a graceful shutdown when the battery is critical:
 
 ```ini
-MONITOR cyberpower@localhost 1 upsmon secretpassword master
+MONITOR cyberpower@localhost 1 upsmon <same-password-as-above> master
 SHUTDOWNCMD "/sbin/shutdown -h now"
 POWERDOWNFLAG /etc/killpower
 

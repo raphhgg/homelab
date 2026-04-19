@@ -5,7 +5,7 @@ This guide documents the current setup and the repeatable process to extend it.
 ## Current status (single node)
 
 - `Proxmox VE by HTTP` template is linked on host `Proxmox-API` and collecting cluster/node/VM/LXC/storage data.
-- Proxmox node host (for example `pve`) has:
+- Proxmox node host (for example `<node-hostname>`) has:
   - `Linux by Zabbix agent`
   - `SMART by Zabbix agent 2`
 - SMART plugin works with:
@@ -74,7 +74,7 @@ Create token file (example):
 
 ```bash
 cat >/etc/zabbix/check_pve.token <<'EOF'
-zabbix-plugin@pve!zbx-plugin=<PUT_SECRET_HERE>
+<pve-api-user>@<realm>!<token-id>=<PUT_SECRET_HERE>
 EOF
 chown root:zabbix /etc/zabbix/check_pve.token
 chmod 640 /etc/zabbix/check_pve.token
@@ -90,7 +90,7 @@ API_ENDPOINT="${1:?api endpoint required}"
 MODE="${2:?mode required}"
 NODE="${3:-}"
 TOKEN_FILE="/etc/zabbix/check_pve.token"
-API_USER="${PVE_API_USER:-zabbix-plugin@pve}"
+API_USER="${PVE_API_USER:-<pve-api-user>@<realm>}"
 
 BASE=(python3 /opt/check_pve/check_pve.py -e "$API_ENDPOINT" -u "$API_USER" -T "$TOKEN_FILE" -m "$MODE" -k)
 if [[ -n "$NODE" && "$NODE" != "-" ]]; then

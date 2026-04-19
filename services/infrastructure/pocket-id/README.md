@@ -21,14 +21,14 @@ Use native OIDC when:
 ## Shared Prerequisites
 
 Before integrating any new service:
-- Ensure `https://id.raphh.me` and `https://auth.raphh.me` are reachable
-- Ensure DNS rewrites resolve `*.raphh.me` to Traefik (`10.10.2.201`) on LAN
+- Ensure your Pocket ID issuer URL and TinyAuth URL are reachable
+- Ensure local DNS or your reverse proxy resolves service domains to the correct ingress endpoint
 - Ensure Traefik has a router for the service domain
 - Ensure Pocket ID user groups exist for access control (example: `admins`)
 - Keep all secrets in `.env` (never hardcode in compose files)
 
 Recommended naming:
-- App URL: `https://<service>.raphh.me`
+- App URL: `https://<service>.example.com`
 - Pocket ID client name: `<service>-oidc` (for native OIDC)
 - TinyAuth app key: `<service>`
 
@@ -43,7 +43,7 @@ Use this when the app does not support OIDC.
 In `services/infrastructure/tinyauth/docker-compose.yml`, add labels on `tinyauth`:
 
 ```yaml
-- "tinyauth.apps.<service>.config.domain=<service>.raphh.me"
+- "tinyauth.apps.<service>.config.domain=<service>.example.com"
 - "tinyauth.apps.<service>.oauth.groups=<pocketid_group>"
 ```
 
@@ -52,7 +52,7 @@ Then wire variables in `services/infrastructure/tinyauth/.env.example` and `.env
 Example variables:
 
 ```env
-SERVICE_HOST=<service>.raphh.me
+SERVICE_HOST=<service>.example.com
 SERVICE_OAUTH_GROUPS=admins
 ```
 
@@ -90,11 +90,11 @@ tinyauth:
 Useful checks:
 
 ```bash
-curl -k -i -H "Accept: text/html" https://<service>.raphh.me/
-curl -k -i https://auth.raphh.me/login
+curl -k -i -H "Accept: text/html" https://<service>.example.com/
+curl -k -i https://auth.example.com/login
 ```
 
-Expected first response: `307` redirect to `auth.raphh.me/login?...`
+Expected first response: `307` redirect to your TinyAuth login flow.
 
 ---
 
@@ -118,7 +118,7 @@ In service `.env.example` add placeholders, for example:
 SSO_ENABLED=false
 SSO_CLIENT_ID=your_client_id
 SSO_CLIENT_SECRET=your_client_secret
-SSO_AUTHORITY=https://id.raphh.me
+SSO_AUTHORITY=https://id.example.com
 ```
 
 In service `.env` set real values and enable SSO.
@@ -141,7 +141,7 @@ If behavior does not match env:
 Useful checks:
 
 ```bash
-curl -k -I https://id.raphh.me/.well-known/openid-configuration
+curl -k -I https://id.example.com/.well-known/openid-configuration
 ```
 
 Expected: `200`.
@@ -150,7 +150,7 @@ Expected: `200`.
 
 ## Common Pitfalls
 
-- DNS split-brain: client resolves public Cloudflare IP instead of local Traefik IP
+- DNS split-brain: client resolves the wrong ingress IP or bypasses your intended proxy path
 - Wrong callback URL in Pocket ID client (must be exact)
 - Group mismatch (`admins` in TinyAuth but user not in that Pocket ID group)
 - Non-HTML clients hitting forward-auth path get `401` instead of redirect (normal)
@@ -159,9 +159,9 @@ Expected: `200`.
 
 ## Standard Validation Checklist
 
-- [ ] `nslookup <service>.raphh.me` returns `10.10.2.201` on client
-- [ ] `https://id.raphh.me` opens from same client
-- [ ] `https://auth.raphh.me/login` opens from same client
+- [ ] `nslookup <service>.example.com` returns the expected ingress IP on client
+- [ ] `https://id.example.com` opens from same client
+- [ ] `https://auth.example.com/login` opens from same client
 - [ ] Pocket ID user is in required group
 - [ ] Traefik route and middleware chain are correct
 - [ ] Login flow returns to expected service URL
@@ -185,14 +185,14 @@ Use these as starting blocks when integrating a new service.
 1) Add to `services/infrastructure/tinyauth/.env.example`:
 
 ```env
-MYSERVICE_HOST=mysvc.your_domain
+MYSERVICE_HOST=mysvc.example.com
 MYSERVICE_OAUTH_GROUPS=admins
 ```
 
-2) Add to `services/infrastructure/tinyauth/.env`:
+2) Add to `services/infrastructure/tinyauth/.env` with your real domain:
 
 ```env
-MYSERVICE_HOST=mysvc.raphh.me
+MYSERVICE_HOST=mysvc.example.com
 MYSERVICE_OAUTH_GROUPS=admins
 ```
 
@@ -209,7 +209,7 @@ MYSERVICE_OAUTH_GROUPS=admins
 http:
   routers:
     myservice:
-      rule: "Host(`mysvc.raphh.me`)"
+      rule: "Host(`mysvc.example.com`)"
       entryPoints:
         - websecure
       middlewares:
@@ -224,7 +224,7 @@ http:
       loadBalancer:
         passHostHeader: true
         servers:
-          - url: "http://10.10.2.123:8080"
+          - url: "http://myservice:8080"
 ```
 
 5) Restart relevant stacks:
@@ -247,7 +247,7 @@ docker compose -f services/infrastructure/traefik/docker-compose.yml up -d
 OIDC_ENABLED=OIDC_ENABLED
 OIDC_CLIENT_ID=your_client_id
 OIDC_CLIENT_SECRET=your_client_secret
-OIDC_ISSUER=https://id.your_domain
+OIDC_ISSUER=https://id.example.com
 ```
 
 3) Add real values to service `.env`:
@@ -256,7 +256,7 @@ OIDC_ISSUER=https://id.your_domain
 OIDC_ENABLED=true
 OIDC_CLIENT_ID=real_client_id
 OIDC_CLIENT_SECRET=real_client_secret
-OIDC_ISSUER=https://id.raphh.me
+OIDC_ISSUER=https://id.example.com
 ```
 
 4) Restart service and test SSO login path.
@@ -264,7 +264,7 @@ OIDC_ISSUER=https://id.raphh.me
 ### Smoke test snippet (both patterns)
 
 ```bash
-nslookup mysvc.raphh.me
-curl -k -I https://id.raphh.me/.well-known/openid-configuration
-curl -k -i -H "Accept: text/html" https://mysvc.raphh.me/
+nslookup mysvc.example.com
+curl -k -I https://id.example.com/.well-known/openid-configuration
+curl -k -i -H "Accept: text/html" https://mysvc.example.com/
 ```

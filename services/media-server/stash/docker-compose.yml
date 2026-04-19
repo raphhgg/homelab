@@ -17,7 +17,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKER_APPDATA_PATH}/stash/config:/root/.stash
-      - /mnt/downloads/nsfw:/data
+      - /mnt/data/media/nsfw:/data
       - ${DOCKER_APPDATA_PATH}/stash/metadata:/metadata
       - ${DOCKER_APPDATA_PATH}/stash/cache:/cache
       - ${DOCKER_APPDATA_PATH}/stash/blobs:/blobs

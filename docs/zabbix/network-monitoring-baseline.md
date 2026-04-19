@@ -78,9 +78,9 @@ Use HTTP agent items where possible.
 
 Create these on the same host (or a dedicated synthetic-check host):
 
-- `icmpping[10.10.0.1,,,,5]` (gateway reachability)
-- `icmppingloss[10.10.0.1,,,,5]` (gateway packet loss %)
-- `icmppingsec[10.10.0.1,,,,5]` (gateway latency seconds)
+- `icmpping[<gateway-ip>,,,,5]` (gateway reachability)
+- `icmppingloss[<gateway-ip>,,,,5]` (gateway packet loss %)
+- `icmppingsec[<gateway-ip>,,,,5]` (gateway latency seconds)
 - `icmpping[1.1.1.1,,,,5]`
 - `icmppingloss[1.1.1.1,,,,5]`
 - `icmppingsec[1.1.1.1,,,,5]`
@@ -99,9 +99,9 @@ Create these on the same host (or a dedicated synthetic-check host):
 ### SmokePing
 
 - Service down: `last(/<host>/smokeping.status)=0` for 5m
-- Gateway loss warning: `min(/<host>/icmppingloss[10.10.0.1,,,,5],10m)>1`
-- Gateway loss high: `min(/<host>/icmppingloss[10.10.0.1,,,,5],5m)>5`
-- Gateway latency high: `avg(/<host>/icmppingsec[10.10.0.1,,,,5],10m)>0.03`
+- Gateway loss warning: `min(/<host>/icmppingloss[<gateway-ip>,,,,5],10m)>1`
+- Gateway loss high: `min(/<host>/icmppingloss[<gateway-ip>,,,,5],5m)>5`
+- Gateway latency high: `avg(/<host>/icmppingsec[<gateway-ip>,,,,5],10m)>0.03`
 - Internet latency high (Cloudflare DNS): `avg(/<host>/icmppingsec[1.1.1.1,,,,5],10m)>0.05`
 
 ## 6) Grafana Panels (Zabbix datasource)
