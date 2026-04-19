@@ -18,7 +18,7 @@ fi
 
 export BROKER_ENV_FILE
 export WIZARR_ENV_FILE
-export BUNDLE_NAME="${BUNDLE_NAME:-Plex + Pocket ID + Seerr + Discord}"
+export BUNDLE_NAME="${BUNDLE_NAME:-Plex + Discord}"
 
 python3 - <<'PY'
 import datetime as dt
@@ -70,7 +70,18 @@ wizarr_db = Path(f"{appdata}/wizarr/database/database.db")
 if not wizarr_db.exists():
     raise SystemExit(f"ERROR: Wizarr DB not found: {wizarr_db}")
 
-bundle_name = os.environ.get("BUNDLE_NAME", "Plex + Pocket ID + Seerr + Discord")
+bundle_name = os.environ.get("BUNDLE_NAME", "Plex + Discord")
+
+with sqlite3.connect(str(wizarr_db)) as conn:
+    cur = conn.cursor()
+    bundle_row = cur.execute(
+        "SELECT id FROM wizard_bundle WHERE name = ?", (bundle_name,)
+    ).fetchone()
+
+if not bundle_row:
+    raise SystemExit(f"ERROR: Bundle not found: {bundle_name}")
+
+bundle_id = int(bundle_row[0])
 
 flow_response = requests.post(
     f"{broker_url}/api/admin/flow-invites",
@@ -96,13 +107,6 @@ invite_code = path_parts[1]
 
 with sqlite3.connect(str(wizarr_db)) as conn:
     cur = conn.cursor()
-    bundle_row = cur.execute(
-        "SELECT id FROM wizard_bundle WHERE name = ?", (bundle_name,)
-    ).fetchone()
-    if not bundle_row:
-        raise SystemExit(f"ERROR: Bundle not found: {bundle_name}")
-    bundle_id = int(bundle_row[0])
-
     cur.execute(
         "UPDATE invitation SET wizard_bundle_id = ? WHERE code = ?",
         (bundle_id, invite_code),
@@ -126,11 +130,22 @@ if isinstance(expires_unix, int):
         "%Y-%m-%d %H:%M:%S UTC"
     )
 
+
+def mask_token(token: str) -> str:
+    token = str(token or "")
+    if not token:
+        return ""
+    if len(token) <= 8:
+        return "[redacted]"
+    return f"{token[:4]}...{token[-4:]}"
+
 print("Invite created successfully")
 print(f"- Broker URL: {broker_data.get('invite_url', '')}")
 print(f"- Wizarr URL: {wizarr_invite_url}")
 print(f"- Bundle: {bundle_name}")
-print(f"- Token: {broker_data.get('token', '')}")
+masked_token = mask_token(broker_data.get("token", ""))
+if masked_token:
+    print(f"- Token: {masked_token} (masked)")
 if expires_local:
     print(f"- Expires at: {expires_local}")
     print(f"- Expires at (UTC): {expires_utc}")

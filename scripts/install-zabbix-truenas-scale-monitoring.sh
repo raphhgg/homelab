@@ -32,8 +32,8 @@ import time
 from pathlib import Path
 
 
-VMID = os.getenv("TRUENAS_VM_ID", "202")
-STORCLI64_PATH = os.getenv("TRUENAS_STORCLI64_PATH", "/mnt/Vault/monitoring/bin/storcli64")
+VMID = os.getenv("TRUENAS_VM_ID", "").strip()
+STORCLI64_PATH = os.getenv("TRUENAS_STORCLI64_PATH", "/usr/local/bin/storcli64")
 QM_TIMEOUT = int(os.getenv("TRUENAS_QM_TIMEOUT", "45"))
 CACHE_PATH = Path(os.getenv("TRUENAS_CACHE_PATH", "/tmp/zabbix-truenas-scale-summary.json"))
 CACHE_LOCK_PATH = Path(str(CACHE_PATH) + ".lock")
@@ -48,6 +48,8 @@ JOBS_LIMIT = int(os.getenv("TRUENAS_JOBS_LIMIT", "20"))
 
 
 def run_qm_guest_exec(command):
+    if not VMID:
+        raise RuntimeError("TRUENAS_VM_ID is not set")
     proc = subprocess.run(
         ["/usr/bin/sudo", "-n", "/usr/sbin/qm", "guest", "exec", VMID, "--", *command],
         text=True,

@@ -2,6 +2,13 @@
 # CyberPower UPS Setup Script for Proxmox (NUT)
 # Hardware: CyberPower CP1600EPFCLCD
 
+UPSMON_PASSWORD="${UPS_MONITOR_PASSWORD:-}"
+
+if [[ -z "${UPSMON_PASSWORD}" ]]; then
+  echo "ERROR: set UPS_MONITOR_PASSWORD before running this script." >&2
+  exit 1
+fi
+
 echo "Starting NUT installation and configuration..."
 
 # 1. Install NUT packages
@@ -24,18 +31,18 @@ sed -i 's/MODE=none/MODE=standalone/g' /etc/nut/nut.conf
 
 # 4. Set Up Local Credentials
 echo "Configuring /etc/nut/upsd.users..."
-cat << 'EOF' >> /etc/nut/upsd.users
+cat <<EOF >> /etc/nut/upsd.users
 
 [upsmon]
-password = secretpassword
+password = ${UPSMON_PASSWORD}
 upsmon master
 EOF
 
 # 5. Configure the Monitor and Shutdown Command
 echo "Configuring /etc/nut/upsmon.conf..."
-cat << 'EOF' >> /etc/nut/upsmon.conf
+cat <<EOF >> /etc/nut/upsmon.conf
 
-MONITOR cyberpower@localhost 1 upsmon secretpassword master
+MONITOR cyberpower@localhost 1 upsmon ${UPSMON_PASSWORD} master
 SHUTDOWNCMD "/sbin/shutdown -h now"
 POWERDOWNFLAG /etc/killpower
 EOF

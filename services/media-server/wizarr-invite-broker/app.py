@@ -1,5 +1,6 @@
 import html
 import os
+import re
 import secrets
 import sqlite3
 import time
@@ -23,6 +24,9 @@ WIZARR_BASE_URL = os.getenv("WIZARR_BASE_URL", "").rstrip("/")
 WIZARR_PUBLIC_URL = os.getenv("WIZARR_PUBLIC_URL", WIZARR_BASE_URL).rstrip("/")
 WIZARR_API_KEY = os.getenv("WIZARR_API_KEY", "")
 INVITE_SERVER_NAME = os.getenv("INVITE_SERVER_NAME", "raphh's media server")
+UUID_RE = re.compile(
+    r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+)
 
 
 def parse_group_ids() -> list[str]:
@@ -142,6 +146,15 @@ def invite_url(token: str) -> str:
 def create_pocket_signup_link() -> tuple[str, str]:
     if not POCKET_ID_BASE_URL or not POCKET_ID_API_KEY:
         raise RuntimeError("Pocket ID API configuration is incomplete")
+
+    invalid_group_ids = [
+        group_id for group_id in POCKET_SIGNUP_USER_GROUP_IDS if not UUID_RE.match(group_id)
+    ]
+    if invalid_group_ids:
+        raise RuntimeError(
+            "POCKET_SIGNUP_USER_GROUP_IDS must contain Pocket ID group IDs (UUIDs), "
+            f"not names: {', '.join(invalid_group_ids)}"
+        )
 
     payload = {
         "ttl": POCKET_SIGNUP_TOKEN_TTL,

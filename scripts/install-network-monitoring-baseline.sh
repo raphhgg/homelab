@@ -6,6 +6,7 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 NETALERTX_STACK_DIR="${REPO_ROOT}/services/monitoring/netalertx"
 SMOKEPING_STACK_DIR="${REPO_ROOT}/services/monitoring/smokeping"
+NETALERTX_ENV_FILE="${NETALERTX_STACK_DIR}/.env"
 
 ARP_SYSCTL_FILE="/etc/sysctl.d/99-netalertx-arp.conf"
 
@@ -31,16 +32,29 @@ require_cmd() {
   fi
 }
 
+read_env_value() {
+  local file="$1"
+  local key="$2"
+  [[ -f "${file}" ]] || return 1
+  awk -F= -v wanted="${key}" '$1 == wanted {print substr($0, index($0, "=") + 1); exit}' "${file}"
+}
+
 echo "==> Checking required commands"
 require_cmd docker
 require_cmd curl
 require_cmd /usr/sbin/sysctl
 
+APPDATA_ROOT="${DOCKER_APPDATA_PATH:-$(read_env_value "${NETALERTX_ENV_FILE}" "DOCKER_APPDATA_PATH" || true)}"
+if [[ -z "${APPDATA_ROOT}" ]]; then
+  echo "Error: DOCKER_APPDATA_PATH is not set and could not be read from ${NETALERTX_ENV_FILE}" >&2
+  exit 1
+fi
+
 echo "==> Ensuring appdata directories exist"
 mkdir -p \
-  "/home/raphh/docker/appdata/netalertx/config" \
-  "/home/raphh/docker/appdata/netalertx/db" \
-  "/home/raphh/docker/appdata/smokeping/config"
+  "${APPDATA_ROOT}/netalertx/config" \
+  "${APPDATA_ROOT}/netalertx/db" \
+  "${APPDATA_ROOT}/smokeping/config"
 
 echo "==> Applying persistent ARP tuning for NetAlertX"
 run_as_root /bin/sh -c "cat > '${ARP_SYSCTL_FILE}' <<'EOF'
