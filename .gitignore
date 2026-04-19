@@ -1,6 +1,7 @@
 .env
 .env.local
 .claude/
+.claudeignore
 .codex
 .DS_Store
 settings.local.json
@@ -13,19 +14,16 @@ __pycache__/
 *.pyo
 *.pyd
 .Python
-services/monitoring/apprise/config/*.yml
-services/monitoring/apprise/config/store/
-services/monitoring/apprise/config/.tmp_*
 
 # Scripts
 scripts/
-scripts/unmatched_assets_with_*
 
 # Nested service repos managed separately
 services/media-server/heimdall/
 services/media-server/umtk-custom-poster-sync/
 services/media-server/wizarr-invite-broker/
 services/media-server/stash/
+services/media-server/dev/
 
 # Local agent/operator instructions
 AGENTS.md
