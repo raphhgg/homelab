@@ -2,15 +2,13 @@
 
 > Docker Compose stacks for a self-hosted homelab.
 
-This repo is the source of truth for my live Docker Compose stacks. It is meant to be a reusable reference for people running their own homelab, not a one-command starter kit for arbitrary environments.
+This repo is a working set of Docker Compose stacks for a self-hosted homelab. It is meant to be a reusable reference for people running their own homelab, not a one-command starter kit for arbitrary environments.
 
 ## Repo Contract
 
 This repository contains Docker Compose stacks only.
 
 Infrastructure runbooks, host-level setup notes, and operational helper scripts are intentionally out of scope for this repo. Those belong in a separate companion repo so the public contract here stays focused on Docker services rather than machine provisioning.
-
-In this workspace, that companion material now lives in a sibling `homelab-infra/` folder outside this repo.
 
 ## What This Repo Contains
 
@@ -101,7 +99,7 @@ docker compose down
 
 - Real secrets live in local `.env` files and must not be committed.
 - Remote access, SSO, and ingress examples in this repo should be treated as patterns to adapt, not drop-in values.
-- Local-only or private service repos should live outside this repo entirely. In this workspace they now live in the sibling `compose-private/` folder.
+- Local-only or private service repos should live outside this repo entirely.
 
 ## Contributing
 

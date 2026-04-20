@@ -6,14 +6,14 @@ Everything below is a reusable pattern, not a drop-in config. Replace domains, i
 
 ## Architecture
 
-- Identity: Pocket ID (`https://id.ext.raphh.me`)
-- Access gateway: Pangolin resource (`https://plex.ext.raphh.me`)
+- Identity: Pocket ID (`https://id.example.com`)
+- Access gateway: Pangolin resource (`https://plex.example.com`)
 - Media permissions: Plex users/library sharing
 - Internal upstream: Plex origin such as `http://plex-host-or-container:32400`
 
 Request flow:
 
-1. User opens `https://plex.ext.raphh.me`
+1. User opens `https://plex.example.com`
 2. Pangolin checks access policy for the resource
 3. User authenticates with Pocket ID
 4. Pangolin forwards traffic to your Plex origin (`http://plex-host-or-container:32400`)
@@ -30,7 +30,7 @@ Recommended Plex settings:
 - In Plex network settings, set `Custom server access URLs` to:
 
 ```
-https://plex.ext.raphh.me
+https://plex.example.com
 ```
 
 Plex auth should remain enabled.
@@ -40,25 +40,25 @@ Plex auth should remain enabled.
 Use each system for a specific responsibility:
 
 - Pocket ID: user identity (who the user is)
-- Pangolin: network/resource access (who can reach `plex.ext.raphh.me`)
+- Pangolin: network/resource access (who can reach `plex.example.com`)
 - Plex: media permissions (what they can watch/manage)
 
 ## User Onboarding Checklist
 
 1. Create user in Pocket ID
-   - Ensure user can log in to `https://id.ext.raphh.me`
+   - Ensure user can log in to `https://id.example.com`
    - Ensure user has at least one working passkey
 
 2. Grant Pangolin access
    - Confirm user exists in Pangolin (auto-provision or manual)
-   - Assign a role/user policy that allows `plex.ext.raphh.me`
+   - Assign a role/user policy that allows `plex.example.com`
 
 3. Grant Plex library access
    - Invite user in Plex
    - Assign allowed libraries/restrictions
 
 4. Validate end-to-end
-   - Open `https://plex.ext.raphh.me` from external network
+   - Open `https://plex.example.com` from external network
    - Confirm flow: Pocket ID login -> Plex loads -> playback works
 
 ## User Offboarding Checklist
@@ -69,5 +69,5 @@ Use each system for a specific responsibility:
 
 ## Notes
 
-- `id.ext.raphh.me` should not be protected by Pangolin auth (avoid auth recursion)
+- `id.example.com` should not be protected by Pangolin auth (avoid auth recursion)
 - Keep one internal Pangolin owner account as break-glass admin access
