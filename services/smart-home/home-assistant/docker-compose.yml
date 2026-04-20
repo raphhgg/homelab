@@ -9,8 +9,8 @@ services:
       - TZ=${TZ}
       - UMASK=${UMASK}
     dns:
-      - 10.10.2.101
-      - 1.1.1.1
+      - ${HOME_ASSISTANT_DNS_PRIMARY}
+      - ${HOME_ASSISTANT_DNS_SECONDARY}
     volumes:
       - ${DOCKER_APPDATA_PATH}/home-assistant:/config
     restart: always

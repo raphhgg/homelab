@@ -1,6 +1,6 @@
 # Pocket ID Integration Blueprint
 
-This guide is a reusable blueprint for adding authentication to a new service in this homelab.
+This guide is a reusable blueprint for adding authentication to a new service.
 
 It covers two patterns:
 - Pattern A: service behind Traefik + TinyAuth (forward-auth gate)
@@ -254,8 +254,8 @@ OIDC_ISSUER=https://id.example.com
 
 ```env
 OIDC_ENABLED=true
-OIDC_CLIENT_ID=real_client_id
-OIDC_CLIENT_SECRET=real_client_secret
+OIDC_CLIENT_ID=your_client_id
+OIDC_CLIENT_SECRET=your_client_secret
 OIDC_ISSUER=https://id.example.com
 ```
 

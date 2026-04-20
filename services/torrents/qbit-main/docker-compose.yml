@@ -12,7 +12,7 @@ services:
       - VPN_ENABLED=true
       - VPN_CONF=wg0
       - VPN_PROVIDER=pia
-      - VPN_LAN_NETWORK=10.10.2.0/24
+      - VPN_LAN_NETWORK=${VPN_LAN_NETWORK}
       - VPN_LAN_LEAK_ENABLED=false
       - VPN_AUTO_PORT_FORWARD=true
       - VPN_KEEP_LOCAL_DNS=true

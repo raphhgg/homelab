@@ -26,5 +26,5 @@ services:
       - "traefik.http.routers.netalertx.tls.certresolver=cloudflare"
       - "traefik.http.routers.netalertx.middlewares=netalertx-lan@docker,tinyauth@file"
       - "traefik.http.services.netalertx.loadbalancer.server.port=20211"
-      - "traefik.http.middlewares.netalertx-lan.ipallowlist.sourcerange=10.10.0.0/24,10.10.1.0/24,10.10.2.0/24,10.10.3.0/24,10.10.4.0/24,127.0.0.1/32,172.22.0.0/16"
+      - "traefik.http.middlewares.netalertx-lan.ipallowlist.sourcerange=${NETALERTX_ALLOWED_CIDRS}"
       - "com.centurylinklabs.watchtower.enable=true"

@@ -44,9 +44,9 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     dns:
-      - 1.1.1.1
-      - 9.9.9.9
-      - 10.10.2.101
+      - ${OPENWEBUI_DNS_PRIMARY}
+      - ${OPENWEBUI_DNS_SECONDARY}
+      - ${OPENWEBUI_DNS_TERTIARY}
     restart: always
     labels:
       - "traefik.enable=true"

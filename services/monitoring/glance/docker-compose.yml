@@ -48,8 +48,8 @@ services:
     image: skyallinott/f1_api:latest
     restart: always
     dns:
-      - 10.10.2.101
-      - 1.1.1.1
+      - ${F1_API_DNS_PRIMARY}
+      - ${F1_API_DNS_SECONDARY}
     environment:
       - TIMEZONE=${TZ}
       - TRACK_COLOUR=${F1_TRACK_COLOUR}

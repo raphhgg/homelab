@@ -2,18 +2,21 @@
 
 This setup exposes Plex externally through Pangolin, with Pocket ID as the login provider.
 
+Everything below is a reusable pattern, not a drop-in config. Replace domains, internal upstream addresses, and access policies to match your own environment.
+
 ## Architecture
 
 - Identity: Pocket ID (`https://id.ext.raphh.me`)
 - Access gateway: Pangolin resource (`https://plex.ext.raphh.me`)
 - Media permissions: Plex users/library sharing
+- Internal upstream: Plex origin such as `http://plex-host-or-container:32400`
 
 Request flow:
 
 1. User opens `https://plex.ext.raphh.me`
 2. Pangolin checks access policy for the resource
 3. User authenticates with Pocket ID
-4. Pangolin forwards traffic to Plex (`http://10.10.2.201:32400`)
+4. Pangolin forwards traffic to your Plex origin (`http://plex-host-or-container:32400`)
 5. Plex applies its own account/library permissions
 
 ## Plex Remote Access Setting

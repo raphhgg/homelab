@@ -60,6 +60,7 @@ Expect to change at least some of the following:
 
 - bind-mount paths such as appdata, media libraries, and download directories
 - host ports and external Docker networks
+- private IPs, LAN CIDRs, and internal DNS resolvers used by some stacks
 - reverse proxy, DNS, and authentication wiring
 - service-specific secrets and API credentials
 - hardware-specific integrations such as GPUs, Zigbee adapters, or host networking
