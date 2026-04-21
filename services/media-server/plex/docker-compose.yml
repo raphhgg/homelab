@@ -3,6 +3,7 @@ services:
     image: ghcr.io/hotio/plex
     container_name: plex
     network_mode: host
+    runtime: nvidia
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -23,13 +24,6 @@ services:
       - ${MEDIAS_PATH}:/data/medias
     ports:
       - 32400:32400
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu, utility, video]
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
