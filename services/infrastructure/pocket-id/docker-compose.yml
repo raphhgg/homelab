@@ -20,7 +20,8 @@ services:
       - "traefik.http.routers.pocket-id.tls.certresolver=cloudflare"
       - "traefik.http.routers.pocket-id.middlewares=allow-admin-apps@file"
       - "traefik.http.services.pocket-id.loadbalancer.server.port=1411"
-      - "com.centurylinklabs.watchtower.enable=true"
+      # Pocket ID is part of the authentication control plane; update it deliberately.
+      - "com.centurylinklabs.watchtower.enable=false"
 
 networks:
   traefik_socket_net:

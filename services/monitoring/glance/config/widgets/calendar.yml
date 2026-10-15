@@ -10,7 +10,7 @@
     - url: https://p127-caldav.icloud.com/published/2/MTMxNTQ1OTU3NDEzMTU0NR4SEjrnqUAGiBn9gTcko-JhtIT_X65L8hIJYSxaKNKpiom5OGG9rNoYOA4MJ2KlpVD5ymRMvPGV5oMRU0cHlQM
       name: Private Trackers
     # Arr releases (iCal feeds)
-    - url: http://sonarr:8989/feed/v3/calendar/Sonarr.ics?apikey=e3d546a29d164cfb9c77e95adf2a2c35
+    - url: http://sonarr:8989/feed/v3/calendar/Sonarr.ics?apikey=${SONARR_API_KEY}
       name: TV Shows
-    - url: http://radarr:7878/feed/v3/calendar/Radarr.ics?apikey=65aa12a2c361442299ccd95c5db036c0
+    - url: http://radarr:7878/feed/v3/calendar/Radarr.ics?apikey=${RADARR_API_KEY}
       name: Movies

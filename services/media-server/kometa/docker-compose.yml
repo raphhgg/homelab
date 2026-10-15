@@ -12,6 +12,10 @@ services:
     volumes:
       - ${DOCKER_APPDATA_PATH}/kometa:/config:rw
       - ${DOCKER_APPDATA_PATH}/umtk/kometa:/umtk-collections:ro
+      - ${DOCKER_APPDATA_PATH}/kometa/patches/operations.py:/modules/operations.py:ro
+      - ${DOCKER_APPDATA_PATH}/kometa/patches/plex.py:/modules/plex.py:ro
+      - ${DOCKER_APPDATA_PATH}/kometa/patches/mdblist.py:/modules/mdblist.py:ro
+      - ${DOCKER_APPDATA_PATH}/kometa/patches/cache.py:/modules/cache.py:ro
     restart: always
     deploy:
       resources:
@@ -22,6 +26,22 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
     networks:
       - media
+
+  kometa-letterboxd-rss-sync:
+    build: ./letterboxd-rss-sync
+    container_name: kometa-letterboxd-rss-sync
+    network_mode: host
+    environment:
+      - TZ=${TZ}
+      - LETTERBOXD_RSS_URL=https://letterboxd.com/raphh11/rss/
+      - KOMETA_CONFIG_PATH=/config/config.yml
+      - SYNC_INTERVAL_MINUTES=30
+      - PLEX_URL=http://127.0.0.1:32400
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/kometa:/config:rw
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
 
 networks:
   media:

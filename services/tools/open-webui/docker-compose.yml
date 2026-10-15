@@ -1,6 +1,6 @@
 services:
   open-webui:
-    image: ghcr.io/open-webui/open-webui:v0.8.5
+    image: ghcr.io/open-webui/open-webui:v0.11.0
     container_name: open-webui
     ports:
       - 8087:8080
@@ -13,6 +13,32 @@ services:
       - WEBUI_URL=${WEBUI_URL}
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
       - OLLAMA_BASE_URL=${OLLAMA_BASE_URL}
+      - ENABLE_WEB_SEARCH=${ENABLE_WEB_SEARCH}
+      - ENABLE_WEB_SEARCH_CONFIRMATION=${ENABLE_WEB_SEARCH_CONFIRMATION}
+      - WEB_SEARCH_ENGINE=${WEB_SEARCH_ENGINE}
+      - WEB_SEARCH_RESULT_COUNT=${WEB_SEARCH_RESULT_COUNT}
+      - ENABLE_CODE_EXECUTION=${ENABLE_CODE_EXECUTION}
+      - CODE_EXECUTION_ENGINE=${CODE_EXECUTION_ENGINE}
+      - ENABLE_CODE_INTERPRETER=${ENABLE_CODE_INTERPRETER}
+      - CODE_INTERPRETER_ENGINE=${CODE_INTERPRETER_ENGINE}
+      - USER_PERMISSIONS_FEATURES_WEB_SEARCH=${USER_PERMISSIONS_FEATURES_WEB_SEARCH}
+      - USER_PERMISSIONS_FEATURES_CODE_INTERPRETER=${USER_PERMISSIONS_FEATURES_CODE_INTERPRETER}
+      - OPENAI_API_BASE_URL=${OPENAI_API_BASE_URL}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_API_CONFIGS=${OPENAI_API_CONFIGS}
+      - >-
+        TERMINAL_SERVER_CONNECTIONS=[{"id":"llm-workspace","name":"llm-workspace",
+        "enabled":true,"url":"http://open-terminal:8000","key":"${OPEN_TERMINAL_API_KEY}",
+        "auth_type":"bearer","config":{"access_grants":[{"principal_type":"user",
+        "principal_id":"*","permission":"read"}]}}]
+      - TASK_MODEL_EXTERNAL=${TASK_MODEL_EXTERNAL}
+      - ENABLE_CONTEXT_COMPACTION=${ENABLE_CONTEXT_COMPACTION}
+      - CONTEXT_COMPACTION_TOKEN_THRESHOLD=${CONTEXT_COMPACTION_TOKEN_THRESHOLD}
+      - CONTEXT_COMPACTION_TOKEN_CAP=${CONTEXT_COMPACTION_TOKEN_CAP}
+      - CONTEXT_COMPACTION_RETENTION_PERCENTAGE=${CONTEXT_COMPACTION_RETENTION_PERCENTAGE}
+      - DEFAULT_MODEL_METADATA=${DEFAULT_MODEL_METADATA}
+      - DEFAULT_MODEL_PARAMS=${DEFAULT_MODEL_PARAMS}
+      - MODEL_ORDER_LIST=${MODEL_ORDER_LIST}
       - DEFAULT_MODELS=${DEFAULT_MODELS}
       - DEFAULT_PINNED_MODELS=${DEFAULT_PINNED_MODELS}
       - ENABLE_MEMORIES=${ENABLE_MEMORIES}
@@ -41,6 +67,9 @@ services:
       - DEFAULT_USER_ROLE=user
       - ENABLE_LOGIN_FORM=${OPENWEBUI_ENABLE_LOGIN_FORM}
       - OAUTH_UPDATE_PICTURE_ON_LOGIN=true
+    depends_on:
+      open-terminal:
+        condition: service_healthy
     extra_hosts:
       - "host.docker.internal:host-gateway"
     dns:
@@ -59,7 +88,35 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
     networks:
       - traefik_socket_net
+      - open_webui_internal
+
+  open-terminal:
+    image: ghcr.io/open-webui/open-terminal:slim
+    container_name: open-terminal
+    environment:
+      - OPEN_TERMINAL_API_KEY=${OPEN_TERMINAL_API_KEY}
+      - OPEN_TERMINAL_MAX_SESSIONS=2
+    volumes:
+      - ${OPEN_TERMINAL_WORKSPACE}:/home/user/workspace
+    restart: always
+    mem_limit: 2g
+    cpus: "2.0"
+    pids_limit: 512
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=512m
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8000/health >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+      start_period: 15s
+    networks:
+      - open_webui_internal
 
 networks:
   traefik_socket_net:
     external: true
+  open_webui_internal:
+    internal: true

@@ -7,13 +7,12 @@ services:
       - TZ=${TZ}
       - UN_RADARR_0_URL=${UN_RADARR_0_URL}
       - UN_RADARR_0_API_KEY=${UN_RADARR_0_API_KEY}
-      - UN_RADARR_0_PATHS_0=/data/medias/downloads/torrents
+      - UN_RADARR_0_PATHS_0=/data/torrents
       - UN_RADARR_0_PROTOCOLS=torrent
     volumes:
       - ${DOCKER_APPDATA_PATH}/unpackerr:/config
       - ${DOWNLOAD_PATH}:/downloads
-      - /mnt/data/media:/data/medias
-      - /mnt/data/torrents:/data/medias/downloads/torrents
+      - /mnt/data:/data
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"

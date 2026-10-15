@@ -50,6 +50,8 @@ services:
       - "tinyauth.apps.tracearr.oauth.groups=${TRACEARR_OAUTH_GROUPS}"
       - "tinyauth.apps.glance.config.domain=${GLANCE_HOST}"
       - "tinyauth.apps.glance.oauth.groups=${GLANCE_OAUTH_GROUPS}"
+      - "tinyauth.apps.aso-radar.config.domain=app-ideas.raphh.me"
+      - "tinyauth.apps.aso-radar.oauth.groups=${GLANCE_OAUTH_GROUPS}"
       - "tinyauth.apps.gotify.config.domain=${GOTIFY_HOST}"
       - "tinyauth.apps.gotify.oauth.groups=${GOTIFY_OAUTH_GROUPS}"
       - "tinyauth.apps.home-assistant.config.domain=${HOME_ASSISTANT_HOST}"
@@ -78,7 +80,8 @@ services:
       - "tinyauth.apps.truenas.oauth.groups=${TRUENAS_OAUTH_GROUPS}"
       - "tinyauth.apps.traefik.config.domain=${TRAEFIK_HOST}"
       - "tinyauth.apps.traefik.oauth.groups=${TRAEFIK_OAUTH_GROUPS}"
-      - "com.centurylinklabs.watchtower.enable=true"
+      # TinyAuth is part of the authentication control plane; update it deliberately.
+      - "com.centurylinklabs.watchtower.enable=false"
 
 networks:
   traefik_socket_net:

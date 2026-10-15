@@ -9,15 +9,15 @@
       collapse-after: 8
       # sort-by: new
   widgets:
-    - subreddit: MovieSuggestions
-      <<: *reddit-movies
-    - subreddit: televisionsuggestions
-      <<: *reddit-movies
-    - subreddit: Letterboxd
-      <<: *reddit-movies
-    - subreddit: LetterboxdTopFour
-      <<: *reddit-movies
-    - subreddit: MovieRecommendations
-      <<: *reddit-movies
-    - subreddit: Cinephiles
-      <<: *reddit-movies
+      - subreddit: MovieSuggestions
+        <<: *reddit-movies
+      - subreddit: televisionsuggestions
+        <<: *reddit-movies
+      - subreddit: Letterboxd
+        <<: *reddit-movies
+      - subreddit: LetterboxdTopFour
+        <<: *reddit-movies
+      - subreddit: MovieRecommendations
+        <<: *reddit-movies
+      - subreddit: Cinephiles
+        <<: *reddit-movies

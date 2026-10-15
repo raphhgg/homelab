@@ -5,25 +5,25 @@ services:
     network_mode: host
     runtime: nvidia
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - UMASK=${UMASK}
-      - TZ=${TZ}
-      - PLEX_CLAIM=${PLEX_CLAIM}
-      - PLEX_ADVERTISE_URL=${PLEX_ADVERTISE_URL}
-      - PLEX_NO_AUTH_NETWORKS=${PLEX_NO_AUTH_NETWORKS}
-      - PLEX_BETA_INSTALL=false
-      - PLEX_PURGE_CODECS=true
-      - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
+    - PUID=${PUID}
+    - PGID=${PGID}
+    - UMASK=${UMASK}
+    - TZ=${TZ}
+    - PLEX_CLAIM=${PLEX_CLAIM}
+    - PLEX_ADVERTISE_URL=${PLEX_ADVERTISE_URL}
+    - PLEX_NO_AUTH_NETWORKS=
+    - PLEX_BETA_INSTALL=false
+    - PLEX_PURGE_CODECS=true
+    - NVIDIA_VISIBLE_DEVICES=all
+    - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:32400/web
     volumes:
-      - ${DOCKER_APPDATA_PATH}/plex/config:/config
-      - ${DOCKER_APPDATA_PATH}/plex/transcode:/transcode
-      - ${MEDIAS_PATH}:/data/medias
+    - ${DOCKER_APPDATA_PATH}/plex/config:/config
+    - ${DOCKER_APPDATA_PATH}/plex/transcode:/transcode
+    - ${MEDIAS_PATH}:/data/medias
     ports:
-      - 32400:32400
+    - 32400:32400
     restart: always
     labels:
-      - "com.centurylinklabs.watchtower.enable=true"
+    - com.centurylinklabs.watchtower.enable=true

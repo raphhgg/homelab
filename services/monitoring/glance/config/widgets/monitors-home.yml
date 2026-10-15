@@ -50,6 +50,15 @@
     #   title: Tools
     #   cache: 5m
     #   sites:
+    - type: monitor
+      title: App Ideas
+      cache: 5m
+      sites:
+        - title: ASO Radar
+          url: https://app-ideas.raphh.me
+          check-url: http://aso-radar-dashboard/index.html
+          timeout: 8s
+          icon: mdi:lightbulb-on-outline
     #     - title: Prowlarr
     #       url: https://prowlarr.raphh.me
     #       check-url: http://prowlarr:9696

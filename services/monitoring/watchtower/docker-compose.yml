@@ -15,7 +15,9 @@ services:
       - socket_net
     restart: always
     labels:
-      - "com.centurylinklabs.watchtower.enable=true"
+      # The socket proxy is Watchtower's Docker control plane; never update it
+      # from the Watchtower process that depends on it.
+      - "com.centurylinklabs.watchtower.enable=false"
 
   watchtower:
     image: nickfedor/watchtower
@@ -79,7 +81,8 @@ services:
       - watchtower-proxy
     restart: always
     labels:
-      - "com.centurylinklabs.watchtower.enable=true"
+      # Keep Watchtower itself outside its own update set.
+      - "com.centurylinklabs.watchtower.enable=false"
 
 networks:
   monitoring:

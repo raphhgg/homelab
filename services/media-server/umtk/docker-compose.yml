@@ -11,11 +11,12 @@ services:
       - DAPS_UMTK_SYNC_RUN_TOKEN=${DAPS_UMTK_SYNC_RUN_TOKEN}
     volumes:
       - ${DOCKER_APPDATA_PATH}/umtk/config:/app/config
+      - ${DOCKER_APPDATA_PATH}/umtk/patches/sitecustomize.py:/usr/local/lib/python3.11/site-packages/sitecustomize.py:ro
       - ${DOCKER_APPDATA_PATH}/umtk/video:/video
       - ${DOCKER_APPDATA_PATH}/umtk/kometa:/app/kometa
       - ${DOCKER_APPDATA_PATH}/umtk/logs:/app/logs
-      - /mnt/data/media/movies:/umtkmovies
-      - /mnt/data/media/tvshows:/umtktv
+      - /mnt/data/media/umtk-movies:/umtkmovies
+      - /mnt/data/media/umtk-tv:/umtktv
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"

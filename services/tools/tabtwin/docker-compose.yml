@@ -1,0 +1,45 @@
+name: tabtwin
+
+services:
+  tabtwin-db:
+    image: postgres:16-alpine
+    container_name: tabtwin-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: tabtwin
+      POSTGRES_PASSWORD: ${TABTWIN_DB_PASSWORD}
+      POSTGRES_DB: tabtwin
+    volumes:
+      - ${DOCKER_APPDATA_PATH}/tabtwin/pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tabtwin -d tabtwin"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+    networks:
+      - tabtwin
+
+  tabtwin-api:
+    build:
+      context: ./build
+      dockerfile: Dockerfile
+    container_name: tabtwin-api
+    restart: unless-stopped
+    ports:
+      - "47821:47821"
+    environment:
+      DATABASE_URL: postgres://tabtwin:${TABTWIN_DB_PASSWORD}@tabtwin-db:5432/tabtwin
+      PORT: "47821"
+      BIND: "0.0.0.0"
+      ALLOWED_HOSTS: "127.0.0.1,localhost,api,tabtwin-api,10.10.2.201,100.105.16.75"
+      BOOTSTRAP_TOKEN: ${BOOTSTRAP_TOKEN}
+      DEV_DEVICE_TOKEN: ${DEV_DEVICE_TOKEN}
+    depends_on:
+      tabtwin-db:
+        condition: service_healthy
+    networks:
+      - tabtwin
+
+networks:
+  tabtwin:
+    name: tabtwin

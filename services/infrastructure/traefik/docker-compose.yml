@@ -3,43 +3,45 @@ services:
     image: tecnativa/docker-socket-proxy
     container_name: traefik-proxy
     environment:
-      - CONTAINERS=1
-      - EVENTS=1
-      - NETWORKS=1
-      - INFO=1
-      - PING=1
-      - VERSION=1
+    - CONTAINERS=1
+    - EVENTS=1
+    - NETWORKS=1
+    - INFO=1
+    - PING=1
+    - VERSION=1
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+    - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
-      - socket_net
+    - control_net
     restart: always
     labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-
+    - com.centurylinklabs.watchtower.enable=true
   traefik:
     image: traefik:v3.6.9
     container_name: traefik
     depends_on:
-      - traefik-proxy
+    - traefik-proxy
     environment:
-      - DOCKER_HOST=tcp://traefik-proxy:2375
-      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
+    - DOCKER_HOST=tcp://traefik-proxy:2375
+    - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
     ports:
-      - 80:80
-      - 443:443
+    - 80:80
+    - 443:443
     dns:
-      - 1.1.1.1
-      - 1.0.0.1
+    - 1.1.1.1
+    - 1.0.0.1
     volumes:
-      - ${DOCKER_APPDATA_PATH}/traefik/config/traefik.yml:/etc/traefik/traefik.yml:ro
-      - ${DOCKER_APPDATA_PATH}/traefik/config/dynamic.yml:/etc/traefik/dynamic.yml:ro
-      - ${DOCKER_APPDATA_PATH}/traefik/acme:/letsencrypt
+    - ${DOCKER_APPDATA_PATH}/traefik/config/traefik.yml:/etc/traefik/traefik.yml:ro
+    - ${DOCKER_APPDATA_PATH}/traefik/config/dynamic.yml:/etc/traefik/dynamic.yml:ro
+    - ${DOCKER_APPDATA_PATH}/traefik/acme:/letsencrypt
     networks:
-      - socket_net
+    - socket_net
+    - control_net
     restart: always
     labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-
+    - com.centurylinklabs.watchtower.enable=true
 networks:
-  socket_net:
+  socket_net: null
+  control_net:
+    external: true
+    name: traefik_control_net

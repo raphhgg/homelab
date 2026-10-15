@@ -13,6 +13,7 @@ services:
       - ${HOME_ASSISTANT_DNS_SECONDARY}
     volumes:
       - ${DOCKER_APPDATA_PATH}/home-assistant:/config
+      - ${DOCKER_APPDATA_PATH}/plex/config/Preferences.xml:/run/secrets/plex_preferences.xml:ro
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"

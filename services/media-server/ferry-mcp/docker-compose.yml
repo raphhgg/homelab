@@ -1,0 +1,22 @@
+services:
+  ferry-mcp:
+    build:
+      context: ./src
+      dockerfile: apps/mcp/Dockerfile
+    image: ferry-mcp:local
+    container_name: ferry-mcp
+    ports:
+      - "8765:8765"
+    env_file:
+      - .env
+    environment:
+      MCP_TRANSPORT: http
+      MCP_HOST: 0.0.0.0
+      MCP_PORT: "8765"
+    networks:
+      - media
+    restart: always
+
+networks:
+  media:
+    external: true

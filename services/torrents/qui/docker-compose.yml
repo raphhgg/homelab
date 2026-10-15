@@ -36,6 +36,13 @@ services:
       # Log file path (inside container)
       # If not defined, logs to stdout
       QUI__LOG_PATH: "/config/logs/qui.log"
+      # Pocket ID OIDC
+      QUI__OIDC_ENABLED: "true"
+      QUI__OIDC_ISSUER: "https://id.ext.raphh.me"
+      QUI__OIDC_CLIENT_ID: "${QUI_OIDC_CLIENT_ID}"
+      QUI__OIDC_CLIENT_SECRET: "${QUI_OIDC_CLIENT_SECRET}"
+      QUI__OIDC_REDIRECT_URL: "https://qui.raphh.me/api/auth/oidc/callback"
+      QUI__OIDC_DISABLE_BUILT_IN_LOGIN: "false"
     restart: always
     networks:
       - media
@@ -46,7 +53,7 @@ services:
       - "traefik.http.routers.qui.rule=Host(`${QUI_HOST}`)"
       - "traefik.http.routers.qui.entrypoints=websecure"
       - "traefik.http.routers.qui.tls.certresolver=cloudflare"
-      - "traefik.http.routers.qui.middlewares=allow-admin-apps@file,tinyauth@file"
+      - "traefik.http.routers.qui.middlewares=allow-admin-apps@file"
       - "traefik.http.services.qui.loadbalancer.server.port=7476"
       - "com.centurylinklabs.watchtower.enable=true"
 

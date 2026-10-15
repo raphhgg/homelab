@@ -1,0 +1,19 @@
+{
+  "name": "@tabtwin/extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node ./build.mjs",
+    "watch": "node ./build.mjs --watch",
+    "lint": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@tabtwin/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.1.4",
+    "esbuild": "^0.25.9",
+    "typescript": "~5.8.3"
+  }
+}

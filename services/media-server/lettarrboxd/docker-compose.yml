@@ -1,11 +1,14 @@
 services:
   lettarrboxd:
-    image: ryanpage/lettarrboxd:latest
+    image: local/lettarrboxd:pr43-55ac402
+    build:
+      context: ./lettarrboxd-pr43
     container_name: lettarrboxd
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
+      - NODE_OPTIONS=--dns-result-order=ipv4first
       - LETTERBOXD_URL=${LETTERBOXD_URL}
       - RADARR_API_URL=http://radarr:7878
       - RADARR_API_KEY=${RADARR_API_KEY}
@@ -14,12 +17,13 @@ services:
       - CHECK_INTERVAL_MINUTES=10
       - RADARR_MINIMUM_AVAILABILITY=released
       - RADARR_ADD_UNMONITORED=false
-      - DRY_RUN=true
+      # Add every movie from the personal Letterboxd watchlist to Radarr and search immediately.
+      - DRY_RUN=false
     volumes:
       - ${DOCKER_APPDATA_PATH}/lettarrboxd:/data
-    restart: always
+    restart: unless-stopped
     labels:
-      com.centurylinklabs.watchtower.enable: true
+      com.centurylinklabs.watchtower.enable: false
       glance.name: Lettarrboxd
       glance.description: Sync Letterboxd watchlist to radarr
       glance.id: lettarrboxd
@@ -27,12 +31,15 @@ services:
       - media
 
   lettarrboxd-new-releases:
-    image: ryanpage/lettarrboxd:latest
+    image: local/lettarrboxd:pr43-55ac402
+    build:
+      context: ./lettarrboxd-pr43
     container_name: lettarrboxd-new-releases
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
+      - NODE_OPTIONS=--dns-result-order=ipv4first
       - LETTERBOXD_URL=${LETTERBOXD_URL_NEW_RELEASES}
       - RADARR_API_URL=http://radarr:7878
       - RADARR_API_KEY=${RADARR_API_KEY}
@@ -41,12 +48,12 @@ services:
       - CHECK_INTERVAL_MINUTES=10
       - RADARR_MINIMUM_AVAILABILITY=announced
       - RADARR_ADD_UNMONITORED=false
-      # - DRY_RUN=true
+      - DRY_RUN=false
     volumes:
       - ${DOCKER_APPDATA_PATH}/lettarrboxd-new-releases:/data
-    restart: always
+    restart: unless-stopped
     labels:
-      com.centurylinklabs.watchtower.enable: true
+      com.centurylinklabs.watchtower.enable: false
       glance.parent: lettarrboxd
       glance.id: lettarrboxd-new-releases
     networks:

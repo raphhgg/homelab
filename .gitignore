@@ -14,3 +14,9 @@ __pycache__/
 *.pyo
 *.pyd
 .Python
+
+*.bak*
+.harness/
+# temp, watched (secrets inline) - do not commit
+services/tools/agents-mcp/
+services/tools/agents-mcp-operator/

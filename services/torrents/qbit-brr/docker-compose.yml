@@ -21,7 +21,7 @@ services:
       - VPN_PIA_USER=${VPN_PIA_USER}
       - VPN_PIA_PASS=${VPN_PIA_PASS}
       - VPN_PIA_PREFERRED_REGION=${VPN_PIA_PREFERRED_REGION}
-      - VPN_PIA_DIP_TOKEN=no
+      - VPN_PIA_DIP_TOKEN=${VPN_PIA_DIP_TOKEN}
       - VPN_PIA_PORT_FORWARD_PERSIST=false
       - PRIVOXY_ENABLED=false
       - UNBOUND_ENABLED=false
@@ -35,6 +35,19 @@ services:
       - type: bind
         source: ${DOCKER_APPDATA_PATH}/qbit-brr
         target: /config
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./scripts
+        target: /scripts
+        read_only: true
+      - type: bind
+        source: /home/raphh/docker/appdata/stash/config
+        target: /stash-config
+        read_only: true
+      - type: bind
+        source: /mnt/data
+        target: /data
         bind:
           create_host_path: false
       - type: bind
