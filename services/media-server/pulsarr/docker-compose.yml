@@ -16,7 +16,7 @@ services:
       - media
       - traefik_socket_net
     ports:
-      - 3010:3003
+      - 127.0.0.1:3010:3003
     volumes:
       - ${DOCKER_APPDATA_PATH}/pulsarr/data:/app/data
       - .env:/app/.env

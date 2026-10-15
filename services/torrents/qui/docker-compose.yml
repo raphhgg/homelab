@@ -3,7 +3,7 @@ services:
     image: ghcr.io/autobrr/qui
     container_name: qui
     ports:
-      - "7476:7476"
+      - "127.0.0.1:7476:7476"
     volumes:
       - ${DOCKER_APPDATA_PATH}/qui:/config
       - /mnt/data/media:/data/media:rw

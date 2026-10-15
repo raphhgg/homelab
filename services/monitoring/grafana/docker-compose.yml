@@ -7,7 +7,7 @@ services:
       - monitoring
       - traefik_socket_net
     ports:
-      - 3004:3000
+      - 127.0.0.1:3004:3000
     volumes:
       - ${DOCKER_APPDATA_PATH}/grafana/data:/var/lib/grafana
       - ./provisioning/dashboards:/etc/grafana/provisioning/dashboards

@@ -8,7 +8,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     ports:
-      - 8357:8000
+      - 127.0.0.1:8357:8000
     volumes:
       - ${DOCKER_APPDATA_PATH}/posterflow:/config:rw
       - ${DOCKER_APPDATA_PATH}/daps/posters:/posters:rw

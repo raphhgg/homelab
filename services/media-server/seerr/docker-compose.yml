@@ -9,7 +9,7 @@ services:
       - PORT=5055 #optional
       - NODE_TLS_REJECT_UNAUTHORIZED=0  # skip verify: plex.direct cert vs IP HTTPS
     ports:
-      - 5055:5055
+      - 127.0.0.1:5055:5055
     volumes:
       - ${DOCKER_APPDATA_PATH}/seerr/config:/app/config
     restart: always

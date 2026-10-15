@@ -7,7 +7,7 @@ services:
       - traefik_socket_net
       - profilarr_internal
     ports:
-      - 6869:6868
+      - 127.0.0.1:6869:6868
     volumes:
       - ${DOCKER_APPDATA_PATH}/profilarr-v2:/config
     environment:

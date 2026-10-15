@@ -6,7 +6,7 @@ services:
       - smart_home
       - traefik_socket_net
     ports:
-      - 8090:8080
+      - 127.0.0.1:8090:8080
     volumes:
       - ${DOCKER_APPDATA_PATH}/zigbee2mqtt/data:/app/data
     environment:

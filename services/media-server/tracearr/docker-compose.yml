@@ -25,7 +25,7 @@ services:
       - traefik_socket_net
       - tracearr-network
     ports:
-      - 3003:3000
+      - 127.0.0.1:3003:3000
     restart: always
     labels:
       - "traefik.enable=true"

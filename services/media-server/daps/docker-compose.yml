@@ -8,7 +8,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     ports:
-      - 8002:8000
+      - 127.0.0.1:8002:8000
     volumes:
       - ${DOCKER_APPDATA_PATH}/daps:/config:rw
       - ${DOCKER_APPDATA_PATH}/daps/posters:/posters:rw
@@ -40,7 +40,7 @@ services:
       - UMASK=${UMASK}
       - BORDER_SIZE=26
     ports:
-      - 8001:8000
+      - 127.0.0.1:8001:8000
     volumes:
       - ${DOCKER_APPDATA_PATH}/daps-ui:/config:rw
       - ${DOCKER_APPDATA_PATH}/daps/posters:/posters:rw

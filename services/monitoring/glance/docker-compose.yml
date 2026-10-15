@@ -24,7 +24,7 @@ services:
       - /volume2:/mnt/volume2:ro
       - /volume3:/mnt/volume3:ro
     ports:
-      - 8070:8080
+      - 127.0.0.1:8070:8080
     networks:
       - monitoring
       - media

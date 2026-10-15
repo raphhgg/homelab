@@ -3,7 +3,7 @@ services:
     image: ghcr.io/open-webui/open-webui:v0.11.0
     container_name: open-webui
     ports:
-      - 8087:8080
+      - 127.0.0.1:8087:8080
     volumes:
       - ${DOCKER_APPDATA_PATH}/open-webui:/app/backend/data
     environment:

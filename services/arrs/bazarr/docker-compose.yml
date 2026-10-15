@@ -8,7 +8,7 @@ services:
       - UMASK=${UMASK}
       - TZ=${TZ}
     ports:
-      - 6767:6767
+      - 127.0.0.1:6767:6767
     volumes:
       - ${DOCKER_APPDATA_PATH}/bazarr:/config
       - /mnt/data:/data
