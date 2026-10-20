@@ -3,7 +3,7 @@ services:
     container_name: qbit-brr
     image: ghcr.io/hotio/qbittorrent:release-5.1.3
     ports:
-      - 8085:8085
+      - 127.0.0.1:8085:8085
     environment:
       - PUID=${PUID}
       - PGID=${PGID}

@@ -9,7 +9,7 @@ services:
     volumes:
       - ${DOCKER_APPDATA_PATH}/prowlarr:/config
     ports:
-      - 9696:9696
+      - 127.0.0.1:9696:9696
     restart: always
     labels:
       - "traefik.enable=true"
