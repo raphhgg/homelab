@@ -14,7 +14,7 @@ services:
       - media
       - traefik_socket_net
     ports:
-      - 8181:8181
+      - 127.0.0.1:8181:8181
     restart: always
     labels:
       - "traefik.enable=true"

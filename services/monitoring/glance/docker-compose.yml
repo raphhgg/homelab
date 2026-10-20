@@ -54,10 +54,9 @@ services:
       - TIMEZONE=${TZ}
       - TRACK_COLOUR=${F1_TRACK_COLOUR}
       - EVENT_DETAIL=main
-    ports:
-      - 4463:4463
     networks:
       - glance_internal
+      - traefik_socket_net
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 

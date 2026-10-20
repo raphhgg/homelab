@@ -35,7 +35,7 @@ services:
       - WATCHTOWER_SCHEDULE=0 0 5 * * *
 
       # Notifications via Shoutrrr (Discord + Gotify)
-      - WATCHTOWER_NOTIFICATION_URL=discord://${WATCHTOWER_DISCORD_TOKEN}@${WATCHTOWER_DISCORD_WEBHOOK_ID} gotify://gotify/${GOTIFY_WATCHTOWER_TOKEN}?priority=5&disabletls=yes
+      - WATCHTOWER_NOTIFICATION_URL=discord://${WATCHTOWER_DISCORD_TOKEN}@${WATCHTOWER_DISCORD_WEBHOOK_ID}
 
       # Report mode - send single summary notification instead of per-container
       - WATCHTOWER_NOTIFICATION_REPORT=true

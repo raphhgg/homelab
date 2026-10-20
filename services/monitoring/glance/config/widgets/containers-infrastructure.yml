@@ -4,11 +4,6 @@
   running-only: false
   hide-by-default: true
   containers:
-    cloudflare-ddns:
-      name: Cloudflare DDNS
-      description: Dynamic DDNS updater
-      icon: /assets/icons/cloudflare.svg
-      hide: false
     github-actions-runner:
       name: GitHub Runner
       description: Self-hosted Actions runner
