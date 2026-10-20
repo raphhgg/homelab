@@ -1,0 +1,9 @@
+services:
+  tailnet-dns:
+    build: .
+    image: tailnet-dns:local
+    container_name: tailnet-dns
+    network_mode: host
+    volumes:
+      - ./dnsmasq.conf:/etc/dnsmasq.conf:ro
+    restart: always
