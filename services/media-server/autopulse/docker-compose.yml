@@ -5,7 +5,7 @@ services:
     networks:
       - media
     ports:
-      - 2875:2875
+      - 127.0.0.1:2875:2875
     environment:
       - PUID=${PUID}
       - PGID=${PGID}

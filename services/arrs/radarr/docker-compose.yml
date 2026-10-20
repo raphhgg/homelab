@@ -13,7 +13,7 @@ services:
       - /mnt/data:/data
       - ${DOCKER_APPDATA_PATH}/themepark/98-themepark-radarr:/etc/cont-init.d/98-themepark
     ports:
-      - 7878:7878
+      - 127.0.0.1:7878:7878
     restart: always
     labels:
       - "traefik.enable=true"

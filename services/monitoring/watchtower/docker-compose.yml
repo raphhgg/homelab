@@ -26,7 +26,7 @@ services:
       - monitoring
       - socket_net
     ports:
-      - 8082:8080  # HTTP API port
+      - 127.0.0.1:8082:8080  # HTTP API port
     environment:
       - TZ=${TZ}
       - DOCKER_HOST=tcp://watchtower-proxy:2375
