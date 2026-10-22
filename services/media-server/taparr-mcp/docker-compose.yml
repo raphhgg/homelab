@@ -1,10 +1,10 @@
 services:
-  ferry-mcp:
+  taparr-mcp:
     build:
       context: ./src
       dockerfile: apps/mcp/Dockerfile
-    image: ferry-mcp:local
-    container_name: ferry-mcp
+    image: taparr-mcp:local
+    container_name: taparr-mcp
     ports:
       - "8765:8765"
     env_file:
