@@ -1,6 +1,6 @@
 services:
   kometa:
-    image: kometateam/kometa:nightly
+    image: kometateam/kometa:nightly@sha256:a92f2ff823e8e203d9d408ad88cd47ef9de56c25cb475c0579be0ded613a6be6  # 2.5.3-build13, pinned 2026-10-16
     container_name: kometa
     user: "${PUID}:${PGID}"
     environment:
@@ -12,10 +12,6 @@ services:
     volumes:
       - ${DOCKER_APPDATA_PATH}/kometa:/config:rw
       - ${DOCKER_APPDATA_PATH}/umtk/kometa:/umtk-collections:ro
-      - ${DOCKER_APPDATA_PATH}/kometa/patches/operations.py:/modules/operations.py:ro
-      - ${DOCKER_APPDATA_PATH}/kometa/patches/plex.py:/modules/plex.py:ro
-      - ${DOCKER_APPDATA_PATH}/kometa/patches/mdblist.py:/modules/mdblist.py:ro
-      - ${DOCKER_APPDATA_PATH}/kometa/patches/cache.py:/modules/cache.py:ro
     restart: always
     deploy:
       resources:
@@ -23,7 +19,7 @@ services:
           memory: 512M
           cpus: "0.5"
     labels:
-      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.enable=false"
     networks:
       - media
 
